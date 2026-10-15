@@ -51,6 +51,14 @@ export default {
     ayarlar: 'Settings',
   },
 
+  anlar: {
+    baslik: 'Language Moments',
+    alt: 'Build language skills through short moments',
+    aciklama: 'Community posts are not available yet. They will appear when safety and moderation are ready.',
+    basla: 'Practise with scenarios',
+    guvenlik: 'Posting and comments will launch after moderation is ready.',
+  },
+
   karsilama: {
     adim: 'Step {n} of 4',
     merhaba: 'Welcome!',
