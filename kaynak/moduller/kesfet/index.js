@@ -23,7 +23,7 @@ function ciz(kok, b) {
         ),
       ),
       h('div', { class: 'kft-etiketler', 'aria-label': t('kesfet.filtreBaslik') },
-        ['dil', 'seviye', 'hedef'].map((k) => h('span', { class: 'kft-etiket' }, t('kesfet.filtre.' + k))),
+        [t('kesfet.filtre.dil'), t('kesfet.filtre.seviye'), t('kesfet.filtre.hedef')].map((metin) => h('span', { class: 'kft-etiket' }, metin)),
       ),
       durumKutusu('bos', t('kesfet.partnerBos')),
     ),
