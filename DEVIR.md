@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.2.4 tasarim-kesfet-v0.2.2 dalında, v0.2.1 deneme üzerine; ana dal kaynak sürümü kontrol sırasında v0.2.0 (8780227). Canlı Vercel sürümü ayrıca doğrulanmalı; dal sürümü yayın kanıtı değildir.
+- **Sürüm:** v0.2.5 tasarim-kesfet-v0.2.2 dalında, v0.2.1 deneme üzerine; ana dal kaynak sürümü kontrol sırasında v0.2.0 (8780227). Canlı Vercel sürümü ayrıca doğrulanmalı; dal sürümü yayın kanıtı değildir.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · uygulayıcı Codex; Claude incelemesi bekleniyor.
 - **Depo:** `hakantaman21/helloworld` · Vercel projesi: `helloworld` (Hakan 21). Canlı ve deneme linkleri Vercel → helloworld → Deployments'ta.
 - **Ne çalışıyor:** İlk açılış (4 adım), dört sekme, yapay zekâ partnerle demo konuşma (senaryolar, sabah/akşam araması, tanışma, hata tekrarı), karne, Hata Hafızası, profil/gelişim, ayarlar, İngilizce + Türkçe arayüz. Veri yalnız cihazda.
@@ -14,6 +14,15 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.2.5 — 16.10.2026
+
+- **Yapan:** ChatGPT. Profil ekranına sonraki adım önerisi (Hata Hafızası vadesi veya önerilen senaryo), ölçüm sınırı açıklaması, TR/EN metinleri eklendi.
+- **Korunan:** Haftalık/aylık karne, paylaşım, seviye yolu, etkin günler.
+- **Yapılmayan:** Gerçek ELSA fonem ölçümü, bağımsız doğrulanmış ustalık modeli, sunucu.
+- **Test:** Derleme/robot/Android testleri henüz çalıştırılmadı. PR #3 taslak ve merge yok.
+- **İnceleme:** Profil önerisi ve arayüzün kod/test denetimi, Claude geri bildirimi.
+
 
 ## v0.2.4 — 16.10.2026
 
