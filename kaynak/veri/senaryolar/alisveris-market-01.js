@@ -3,9 +3,9 @@ export default {
   alan: 'alisveris',
   seviye: 'A1',
   baslik: { tr: 'Markette ürün aramak', en: 'Finding things at the supermarket' },
-  durum: 'Süpermarkettesin; aradığın ürünü bulamıyorsun ve bir görevliye soruyorsun.',
-  roller: { koc: 'Market görevlisi', aksan: 'İngiliz' },
-  gorev: { aciklama: 'Aradığın ürünün nerede olduğunu sor ve teşekkür et.', kelimeler: ['where', 'milk', 'bread', 'eggs', 'cheese', 'apples', 'water'] },
+  durum: { tr: 'Süpermarkettesin; aradığın ürünü bulamıyorsun ve bir görevliye soruyorsun.', en: 'You are in a supermarket, can’t find what you need and ask a staff member.' },
+  roller: { koc: { tr: 'Market görevlisi', en: 'Shop assistant' }, aksan: 'İngiliz' },
+  gorev: { aciklama: { tr: 'Aradığın ürünün nerede olduğunu sor ve teşekkür et.', en: 'Ask where the item you need is and say thank you.' }, kelimeler: ['where', 'milk', 'bread', 'eggs', 'cheese', 'apples', 'water'] },
   hedefKaliplar: [
     { kalip: 'Excuse me, where is the ...?', anahtar: 'Where is' },
     { kalip: 'Do you have ...?', anahtar: 'Do you have' },
@@ -47,5 +47,5 @@ export default {
   },
   kapanis: 'You’re welcome. Have a nice day!',
   karneOdagi: ['people-are', 'can-to'],
-  kulturelNot: 'İngiltere’de marketlerde poşet ücretlidir; kendi çantanı getirmek yaygındır.',
+  kulturelNot: { tr: 'İngiltere\u2019de marketlerde poşet ücretlidir; kendi çantanı getirmek yaygındır.', en: 'In the UK, carrier bags cost money; many people bring their own bag.' },
 };

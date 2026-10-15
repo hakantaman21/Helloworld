@@ -1,12 +1,11 @@
 # Konuşma Koçu
 
-Günlük yaşam İngilizcesini konuşarak öğreten, kullanıcıyı tanıyan tek bir koç etrafında kurulu uygulama.
-Ana döngü: **koçla hazırlan → (ileride) insanla konuş → koçla pekiştir.**
-Tüm kararlar ve yasalar **Konuşma Koçu — Anayasa** belgesindedir; kısa kurallar için `KURALLAR.md`.
+Dil pratiği platformu: gerçek kişilerle (topluluk) ya da her an hazır yapay zekâ partnerle İngilizce konuşma pratiği.
+Tüm kararlar `ANAYASA.md`'de, kısa kurallar `KURALLAR.md`'de, güncel durum `DEVIR.md`'dedir.
 
 ## Hızlı başlangıç
 
-- **Denemek:** `teslim/KonusmaKocu-v<sürüm>.html` dosyasını Chrome'da aç. Kurulum gerekmez.
+- **Denemek:** Vercel deneme linki (Vercel → helloworld → Deployments). İstenirse `npm run derle` ile `teslim/` altında tek dosya da üretilir.
 - **Derlemek:** `npm run derle` (yalnız Node.js gerekir, paket kurulmaz).
 - **Yayınlamak:** Projeyi GitHub'a gönder; Vercel `npm run build` çalıştırıp `dist/` klasörünü yayınlar (`vercel.json` hazır).
 
@@ -52,10 +51,4 @@ genel/                 manifest, servis çalışanı, simge (Vercel sürümüne 
 
 ## Devir notu
 
-**Son durum (15.10.2026, v0.1.0):** İlk taslak tamamlandı. Robot 24 denetimin tamamını geçiyor, kendi sınamasında 8 ihlalin hepsini yakalıyor. Tüm ekranlar başsız Chrome'da gezildi, telefon genişliğinde (390 px) açık ve koyu temada kontrol edildi.
-
-**Açık kararlar:** uygulamanın kalıcı adı · koçun adı ve kişiliği (şimdilik "Koç", `metinler/tr.js` → `koc.ad`) · canlı ses AI sağlayıcısı · sunucu (Vercel mi, Türkiye'de VPS mi) · paketler ve günlük dakika kotaları · GitHub deposunun adı.
-
-**Bilinen eksikler:** modüllerin kendi testleri henüz yok (sözleşmedeki 6. madde) · ergen ve akademik profiller yok · 4 yaşam alanı boş ("Yakında").
-
-**Sıradaki mantıklı adım:** Koçun adı ve kişiliğini belirleyip metin tablosuna ve koç diline işlemek; ardından kalan yaşam alanlarına senaryo eklemek.
+Güncel durum ve sürüm kayıtları `DEVIR.md`'dedir. Yeni bir yapay zekâ işe oradan başlar.

@@ -2,7 +2,7 @@
 import './hafiza.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, altGezinme, ustBaslik, durumKutusu, yerlestir } from '../../cekirdek/arayuz.js';
-import { t } from '../../cekirdek/metin.js';
+import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { vadesiGelenler, OGRENILDI_SERISI } from '../../cekirdek/hafiza.js';
 import { tarihAnahtari, kisaTarih } from '../../cekirdek/zaman.js';
@@ -24,7 +24,7 @@ function ogeKarti(k) {
     h('p', { class: 'hfz-dogru', lang: 'en' }, k.dogru),
     k.kullanici && k.kullanici !== k.dogru ? h('p', { class: 'b-kucuk', lang: k.tur === 'kelime' ? 'tr' : 'en' }, t('hafiza.sen', { metin: k.kullanici })) : null,
     h('div', { class: 'hfz-alt' },
-      h('span', { class: 'b-kucuk' }, t('hafiza.kaynak', { baglam: k.baglam, tarih: kisaTarih(k.sonGorulme) })),
+      h('span', { class: 'b-kucuk' }, t('hafiza.kaynak', { baglam: yerel(k.baglam), tarih: kisaTarih(k.sonGorulme) })),
       h('span', { class: 'hfz-seri', 'aria-label': t('hafiza.tekrar', { n: Math.min(k.seri, OGRENILDI_SERISI) }) },
         Array.from({ length: OGRENILDI_SERISI }, (_, i) => h('span', { class: i < k.seri ? 'hfz-nokta hfz-nokta-dolu' : 'hfz-nokta' }))),
     ),
@@ -48,7 +48,7 @@ function ciz(kok, b) {
   else liste = h('div', { class: 'b-yigin' }, siralama.map(ogeKarti));
 
   yerlestir(kok, 
-    ustBaslik({ baslik: t('hafiza.baslik'), alt: t('hafiza.alt') }),
+    ustBaslik({ tabela: t('gezinme.pratik'), baslik: t('hafiza.baslik'), alt: t('hafiza.alt'), geri: () => b.geri('/bugun') }),
     tum.length ? h('div', { class: 'b-kart hfz-ozet', role: 'status' }, t('hafiza.durum', { n: vadesi.length, m: ogrenilen })) : null,
     h('div', { class: 'b-cipler', role: 'radiogroup', 'aria-label': t('hafiza.turEtiket') },
       TURLER.map((tur) => h('button', {
@@ -66,14 +66,14 @@ function ciz(kok, b) {
         b.git('/gorusme?tur=tekrar');
       },
     }, t('hafiza.pratik')),
-    altGezinme('/hafiza'),
+    altGezinme('/bugun'),
   );
   return null;
 }
 
 export default {
   kimlik: 'hafiza',
-  surum: '0.1.0',
+  surum: '0.2.0',
   onek: 'hfz',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'hafiza'],

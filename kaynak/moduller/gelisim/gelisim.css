@@ -37,3 +37,20 @@
   .gls-gun-aktif { background: var(--renk-iyi); }
   .gls-gun-bugun { background: transparent; border: 2px solid var(--renk-vurgu); }
 }
+
+@layer moduller {
+  .gls-profil { display: flex; align-items: flex-start; gap: var(--bosluk-3); }
+  .gls-avatar {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: var(--kose-tam);
+    background: var(--renk-vurgu-acik);
+    color: var(--renk-vurgu-acik-metin);
+    font-size: 22px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

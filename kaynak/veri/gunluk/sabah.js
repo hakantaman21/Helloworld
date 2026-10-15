@@ -4,9 +4,9 @@ export default {
   alan: 'gunluk',
   seviye: 'tum',
   baslik: { tr: 'Sabah araması', en: 'Morning call' },
-  durum: 'Koç sabah arar; kullanıcı gününü ve planlarını anlatır.',
-  roller: { koc: 'Koç', aksan: 'Amerikan' },
-  gorev: { aciklama: 'Bugün yapacağın en az iki şeyi söyle.', kelimeler: ['going to', 'will', 'plan', 'today', 'have to', 'want to'] },
+  durum: { tr: 'Koç sabah arar; kullanıcı gününü ve planlarını anlatır.', en: 'The coach calls in the morning; the user talks about the day ahead.' },
+  roller: { koc: { tr: 'Koç', en: 'Coach' }, aksan: 'Amerikan' },
+  gorev: { aciklama: { tr: 'Bugün yapacağın en az iki şeyi söyle.', en: 'Say at least two things you will do today.' }, kelimeler: ['going to', 'will', 'plan', 'today', 'have to', 'want to'] },
   hedefKaliplar: [
     { kalip: 'Today I’m going to ...', anahtar: 'going to' },
     { kalip: 'First I have to ..., then ...', anahtar: 'have to' },

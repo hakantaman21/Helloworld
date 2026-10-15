@@ -3,9 +3,9 @@ export default {
   alan: 'ulasim',
   seviye: 'A1',
   baslik: { tr: 'Yol sormak', en: 'Asking for directions' },
-  durum: 'Yabancı bir şehirdesin ve tren istasyonuna nasıl gideceğini bir yerel halka soruyorsun.',
-  roller: { koc: 'Yoldan geçen biri', aksan: 'İngiliz' },
-  gorev: { aciklama: 'İstasyonun yolunu sor, tarifi anladığını göster ve teşekkür et.', kelimeler: ['station', 'where', 'left', 'right', 'straight'] },
+  durum: { tr: 'Yabancı bir şehirdesin ve tren istasyonuna nasıl gideceğini birine soruyorsun.', en: 'You are in a new city and ask someone how to get to the train station.' },
+  roller: { koc: { tr: 'Yoldan geçen biri', en: 'Passer-by' }, aksan: 'İngiliz' },
+  gorev: { aciklama: { tr: 'İstasyonun yolunu sor, tarifi anladığını göster ve teşekkür et.', en: 'Ask the way to the station, show you understood and say thank you.' }, kelimeler: ['station', 'where', 'left', 'right', 'straight'] },
   hedefKaliplar: [
     { kalip: 'Excuse me, how do I get to the ...?', anahtar: 'How do I get' },
     { kalip: 'Is it far from here?', anahtar: 'Is it far' },
@@ -43,5 +43,5 @@ export default {
   },
   kapanis: 'Have a good trip!',
   karneOdagi: ['can-to', 'want-to'],
-  kulturelNot: 'İngiltere’de yol sorarken “Excuse me” ile başlamak çok önemlidir; doğrudan soru kaba algılanabilir.',
+  kulturelNot: { tr: 'İngiltere’de yol sorarken “Excuse me” ile başlamak çok önemlidir; doğrudan soru kaba algılanabilir.', en: 'In the UK, starting with “Excuse me” really matters when asking for directions; a direct question can sound rude.' },
 };

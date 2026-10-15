@@ -4,9 +4,9 @@ export default {
   alan: 'gunluk',
   seviye: 'tum',
   baslik: { tr: 'Tanışma', en: 'Getting to know you' },
-  durum: 'Koç kendini tanıtır ve kullanıcıyı tanımaya çalışır.',
-  roller: { koc: 'Koç', aksan: 'Amerikan' },
-  gorev: { aciklama: 'Kendini birkaç cümleyle tanıt.', kelimeler: ['i am', 'i’m', 'im', 'my name', 'i live', 'i work', 'i like'] },
+  durum: { tr: 'Yapay zekâ partner kendini tanıtır ve kullanıcıyı tanımaya çalışır.', en: 'The AI partner introduces itself and gets to know the user.' },
+  roller: { koc: { tr: 'Koç', en: 'Coach' }, aksan: 'Amerikan' },
+  gorev: { aciklama: { tr: 'Kendini birkaç cümleyle tanıt.', en: 'Introduce yourself in a few sentences.' }, kelimeler: ['i am', 'i’m', 'im', 'my name', 'i live', 'i work', 'i like'] },
   hedefKaliplar: [
     { kalip: 'I’m from ...', anahtar: 'I\u2019m from' },
     { kalip: 'I work as a ... / I’m a student.', anahtar: 'I work' },

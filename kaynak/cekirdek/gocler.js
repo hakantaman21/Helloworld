@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 1;
+export const GUNCEL_SEMA = 2;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -33,5 +33,18 @@ export const gocler = {
     tamamlananSenaryolar: {},
     aramaDurumu: {},
     olcum: { aiCagrisi: 0, tahminiMaliyet: 0 },
+  }),
+
+  // 1 → 2: platform yönü (v0.2.0). Arayüz dili, ana dil, öğrenilen dil, rol ve 18 yaş / topluluk kuralları onayı.
+  2: (eski) => ({
+    ...eski,
+    profil: {
+      ...eski.profil,
+      anaDil: eski.profil.anaDil || null,
+      ogrenilenDil: 'en',
+      rol: eski.profil.rol || 'ogrenen',
+      yasOnayi: false,
+      ayarlar: { ...eski.profil.ayarlar, arayuzDili: eski.profil.ayarlar.arayuzDili || null },
+    },
   }),
 };

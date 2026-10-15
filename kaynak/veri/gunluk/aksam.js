@@ -4,9 +4,9 @@ export default {
   alan: 'gunluk',
   seviye: 'tum',
   baslik: { tr: 'Akşam araması', en: 'Evening call' },
-  durum: 'Koç akşam arar; kullanıcı gününün nasıl geçtiğini geçmiş zamanla anlatır.',
-  roller: { koc: 'Koç', aksan: 'Amerikan' },
-  gorev: { aciklama: 'Bugün yaptığın en az iki şeyi geçmiş zamanla anlat.', kelimeler: ['went', 'had', 'did', 'was', 'were', 'worked', 'watched', 'ate', 'met'] },
+  durum: { tr: 'Koç akşam arar; kullanıcı gününün nasıl geçtiğini geçmiş zamanla anlatır.', en: 'The coach calls in the evening; the user describes the day in the past tense.' },
+  roller: { koc: { tr: 'Koç', en: 'Coach' }, aksan: 'Amerikan' },
+  gorev: { aciklama: { tr: 'Bugün yaptığın en az iki şeyi geçmiş zamanla anlat.', en: 'Describe at least two things you did today, in the past tense.' }, kelimeler: ['went', 'had', 'did', 'was', 'were', 'worked', 'watched', 'ate', 'met'] },
   hedefKaliplar: [
     { kalip: 'Today I went to ...', anahtar: 'went' },
     { kalip: 'It was really ...', anahtar: 'It was' },

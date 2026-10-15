@@ -63,6 +63,12 @@ const IKONLAR = {
   gonder: '<path d="M4 12l16-8-6 16-3-7z"/>',
   nokta: '<circle cx="12" cy="12" r="5"/>',
   dalgaCizgi: '<path d="M3 12c3-4 5 4 9 0s6 4 9 0"/>',
+  sohbet: '<path d="M4 5h16v11H9l-5 4z"/>',
+  pusula: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+  kisi: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
+  yildiz: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',
+  kalkan: '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/>',
+  kilit: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
 };
 
 export function ikon(ad, boyut = 22, kalinlik = 2) {
@@ -93,11 +99,12 @@ export function ustBaslik({ tabela, baslik, alt, sag, geri }) {
   );
 }
 
+// Dört sekme (Anayasa bölüm 4): Sohbetler · Keşfet · Pratik · Profil
 const GEZINME = [
-  { yol: '/bugun', ikon: 'ev', anahtar: 'gezinme.bugun' },
-  { yol: '/senaryolar', ikon: 'harita', anahtar: 'gezinme.senaryolar' },
-  { yol: '/hafiza', ikon: 'liste', anahtar: 'gezinme.hafiza' },
-  { yol: '/gelisim', ikon: 'grafik', anahtar: 'gezinme.gelisim' },
+  { yol: '/sohbetler', ikon: 'sohbet', anahtar: 'gezinme.sohbetler' },
+  { yol: '/kesfet', ikon: 'pusula', anahtar: 'gezinme.kesfet' },
+  { yol: '/bugun', ikon: 'mikrofon', anahtar: 'gezinme.pratik' },
+  { yol: '/gelisim', ikon: 'kisi', anahtar: 'gezinme.profil' },
 ];
 
 export function altGezinme(aktifYol) {
@@ -110,6 +117,11 @@ export function altGezinme(aktifYol) {
       }, ikon(g.ikon), t(g.anahtar))),
     ),
   );
+}
+
+// Y26: yapay zekâ içerikleri her zaman bu etiketi taşır; yapay zekâ kendini insan gibi göstermez.
+export function yzEtiketi() {
+  return h('span', { class: 'b-cip b-yz', title: t('ortak.yzAciklama') }, ikon('yildiz', 14, 2.2), t('ortak.yz'));
 }
 
 // Y18: boş, yükleniyor, hata, çevrimdışı durumları için ortak kutu.

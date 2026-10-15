@@ -4,9 +4,9 @@ export default {
   alan: 'alisveris',
   seviye: 'A2',
   baslik: { tr: 'Kafede sipariş', en: 'Ordering at a café' },
-  durum: 'Bir kafedesin; kendine içecek ve atıştırmalık sipariş ediyorsun.',
-  roller: { koc: 'Barista', aksan: 'Amerikan' },
-  gorev: { aciklama: 'Bir içecek sipariş et, boyutunu söyle ve ödemeyi yap.', kelimeler: ['coffee', 'latte', 'tea', 'cappuccino', 'americano', 'tea', 'water', 'juice'] },
+  durum: { tr: 'Bir kafedesin; kendine içecek ve atıştırmalık sipariş ediyorsun.', en: 'You are at a café, ordering a drink and a snack.' },
+  roller: { koc: { tr: 'Barista', en: 'Barista' }, aksan: 'Amerikan' },
+  gorev: { aciklama: { tr: 'Bir içecek sipariş et, boyutunu söyle ve ödemeyi yap.', en: 'Order a drink, say the size and pay.' }, kelimeler: ['coffee', 'latte', 'tea', 'cappuccino', 'americano', 'tea', 'water', 'juice'] },
   hedefKaliplar: [
     { kalip: 'I’d like a ..., please.', anahtar: 'I\u2019d like' },
     { kalip: 'Can I have a ...?', anahtar: 'Can I have' },
@@ -58,5 +58,5 @@ export default {
   },
   kapanis: 'Here you go! Have a wonderful day.',
   karneOdagi: ['how-much', 'want-to', 'can-to'],
-  kulturelNot: 'ABD’de kafelerde bahşiş kutusu ya da ödeme ekranında bahşiş seçeneği sık görülür; zorunlu değildir.',
+  kulturelNot: { tr: 'ABD\u2019de kafelerde bahşiş kutusu ya da ödeme ekranında bahşiş seçeneği sık görülür; zorunlu değildir.', en: 'In US cafés you often see a tip jar or a tip option on the payment screen; tipping is not required.' },
 };

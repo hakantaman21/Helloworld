@@ -6,3 +6,8 @@
   .bgn-siradaki { font-size: 12px; font-weight: 700; color: var(--renk-vurgu-metin); }
   .bgn-ok { color: var(--renk-soluk); }
 }
+
+@layer moduller {
+  .bgn-arac { gap: 6px; min-height: 120px; }
+  .bgn-arac-pasif { opacity: 0.6; border-style: dashed; }
+}

@@ -1,6 +1,6 @@
 // "Koç arıyor" ekranı. Uygulama açıkken arama saati gelince ya da Bugün kartından açılır.
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, yerlestir } from '../../cekirdek/arayuz.js';
+import { h, ikon, yerlestir, yzEtiketi } from '../../cekirdek/arayuz.js';
 import { t } from '../../cekirdek/metin.js';
 import { ertele, reddet } from '../../cekirdek/zamanlayici.js';
 import { duyur } from '../../cekirdek/duyuru.js';
@@ -20,6 +20,7 @@ export const gelenArama = ekran({
       h('div', { class: 'ara-gelen-koc', 'aria-hidden': 'true' }, ikon('dalga', 56, 2)),
       h('h1', { class: 'ara-gelen-ad' }, t('koc.ad')),
       h('p', { class: 'ara-gelen-alt' }, t('arama.geliyor')),
+      yzEtiketi(),
       h('p', { class: 'ara-gelen-konu' }, t(`arama.konu.${tur}`)),
       h('div', { class: 'b-buyut' }),
       h('div', { class: 'ara-gelen-secenekler' },

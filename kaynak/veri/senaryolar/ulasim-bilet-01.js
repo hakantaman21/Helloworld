@@ -3,9 +3,9 @@ export default {
   alan: 'ulasim',
   seviye: 'A2',
   baslik: { tr: 'Tren bileti almak', en: 'Buying a train ticket' },
-  durum: 'Tren istasyonundaki gişedesin; başka bir şehre bilet alıyorsun.',
-  roller: { koc: 'Gişe görevlisi', aksan: 'İngiliz' },
-  gorev: { aciklama: 'Gideceğin yeri ve saati söyle, bilet türünü seç ve peronu öğren.', kelimeler: ['ticket', 'return', 'single', 'one-way', 'platform'] },
+  durum: { tr: 'Tren istasyonundaki gişedesin; başka bir şehre bilet alıyorsun.', en: 'You are at the station ticket office, buying a ticket to another city.' },
+  roller: { koc: { tr: 'Gişe görevlisi', en: 'Ticket clerk' }, aksan: 'İngiliz' },
+  gorev: { aciklama: { tr: 'Gideceğin yeri ve saati söyle, bilet türünü seç ve peronu öğren.', en: 'Say where and when you want to go, choose the ticket type and find out the platform.' }, kelimeler: ['ticket', 'return', 'single', 'one-way', 'platform'] },
   hedefKaliplar: [
     { kalip: 'I’d like a return ticket to ..., please.', anahtar: 'ticket to' },
     { kalip: 'What time is the next train?', anahtar: 'What time' },
@@ -48,5 +48,5 @@ export default {
   },
   kapanis: 'Here’s your ticket. Have a nice journey!',
   karneOdagi: ['want-to', 'how-much'],
-  kulturelNot: 'İngiltere’de “return” gidiş-dönüş, “single” tek yön demektir; ABD’de “round trip” ve “one-way” denir.',
+  kulturelNot: { tr: 'İngiltere’de “return” gidiş-dönüş, “single” tek yön demektir; ABD’de “round trip” ve “one-way” denir.', en: 'In the UK, “return” means a round trip and “single” means one-way; in the US people say “round trip” and “one-way”.' },
 };

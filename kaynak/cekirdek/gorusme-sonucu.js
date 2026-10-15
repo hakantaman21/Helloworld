@@ -9,7 +9,7 @@ const TELAFFUZ_ESIGI = 60;
 
 export function sonucuIsle(ozet) {
   const kaynakEtiketi = `konusma-kocu/${ozet.senaryoId}`;
-  const baglam = ozet.baslik.tr;
+  const baglam = ozet.baslik; // { tr, en }: ekranda yerel() ile gösterilir
 
   // 1. Hata Hafızası kayıtları (ortak format)
   const kayitlar = [];

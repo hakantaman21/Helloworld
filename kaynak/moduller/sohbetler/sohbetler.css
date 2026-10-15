@@ -1,0 +1,15 @@
+@layer moduller {
+  .shb-avatar {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: var(--kose-tam);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Y26: yapay zekâ avatarı insan avatarından farklı biçimdedir (köşeli ve koyu) */
+  .shb-avatar-yz { border-radius: var(--kose-kucuk); background: var(--renk-gece); color: var(--renk-gece-vurgu); }
+  .shb-metin { display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0; }
+  .shb-ad { font-size: var(--yazi-govde); font-weight: 600; }
+}

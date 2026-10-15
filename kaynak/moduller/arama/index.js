@@ -5,7 +5,7 @@ import { gorusme } from './gorusme.js';
 
 export default {
   kimlik: 'arama',
-  surum: '0.1.0',
+  surum: '0.2.0',
   onek: 'ara',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'ai', 'ses', 'izin', 'hafiza', 'zamanlayici'],

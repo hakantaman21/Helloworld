@@ -99,6 +99,7 @@
     font-weight: 600;
   }
   .b-cip-vurgu { background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); border-color: transparent; }
+  .b-yz { display: inline-flex; align-items: center; gap: 4px; background: var(--renk-gece); color: var(--renk-gece-metin); border-color: transparent; white-space: nowrap; }
   .b-cip-iyi { background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); border-color: transparent; }
 
   .b-satir { display: flex; align-items: center; gap: var(--bosluk-3); }

@@ -1,8 +1,8 @@
 // Görüşme ekranı. Yalnız dört öğe öne çıkar: koç, canlı altyazı, ipucu çekmecesi, bitir (Anayasa bölüm 4).
 // Y19: konuşma sırasında düzeltme gösterilmez; düzeltmeler karnede toplanır.
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, durumKutusu, onayIste, yerlestir } from '../../cekirdek/arayuz.js';
-import { t } from '../../cekirdek/metin.js';
+import { h, ikon, durumKutusu, onayIste, yerlestir, yzEtiketi } from '../../cekirdek/arayuz.js';
+import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { oturumBaslat } from '../../cekirdek/ai/adaptor.js';
 import { destek, soyle, sus, dinle } from '../../cekirdek/ses/ses-hatti.js';
@@ -58,8 +58,8 @@ export const gorusme = ekran({
     }
 
     const kaynak = oturum.kaynak;
-    const baslik = tur === 'senaryo' ? kaynak.baslik.tr : t(`gorusme.baslik.${tur}`);
-    const kocAdi = tur === 'senaryo' ? kaynak.roller.koc : t('koc.ad');
+    const baslik = tur === 'senaryo' ? yerel(kaynak.baslik) : t(`gorusme.baslik.${tur}`);
+    const kocAdi = tur === 'senaryo' ? yerel(kaynak.roller.koc) : t('koc.ad');
 
     // --- durum ---
     let aktif = true;
@@ -116,7 +116,7 @@ export const gorusme = ekran({
       h('header', { class: 'ara-ust' },
         h('div', { class: 'b-ust-metin' },
           h('h1', { class: 'ara-baslik' }, baslik),
-          h('div', { class: 'b-satir' }, sureOgesi, ilerlemeOgesi),
+          h('div', { class: 'b-satir' }, yzEtiketi(), sureOgesi, ilerlemeOgesi),
         ),
         mikCip,
       ),
@@ -124,7 +124,7 @@ export const gorusme = ekran({
         avatar,
         h('p', { class: 'ara-koc-adi' }, kocAdi),
         durumOgesi,
-        tur === 'senaryo' ? h('p', { class: 'b-kucuk ara-gorev' }, t('gorusme.gorev', { gorev: kaynak.gorev.aciklama })) : null,
+        tur === 'senaryo' ? h('p', { class: 'b-kucuk ara-gorev' }, t('gorusme.gorev', { gorev: yerel(kaynak.gorev.aciklama) })) : null,
       ),
       altyazi,
       h('div', { class: 'b-buyut' }),

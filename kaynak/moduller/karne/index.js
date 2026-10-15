@@ -2,7 +2,7 @@
 import './karne.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, durumKutusu, farkCiz, yerlestir } from '../../cekirdek/arayuz.js';
-import { t } from '../../cekirdek/metin.js';
+import { t, yerel } from '../../cekirdek/metin.js';
 import { al, degistir } from '../../cekirdek/depo.js';
 import { itirazEt } from '../../cekirdek/hafiza.js';
 import { siradaki } from '../../cekirdek/gunluk.js';
@@ -112,7 +112,7 @@ function ciz(kok, b) {
 
   const sira = siradaki();
   const siraMetni = sira === 'senaryo'
-    ? t('karne.sirada', { metin: t('bugun.siradaMetin.senaryo', { ad: oneriSenaryo().senaryo.baslik.tr }) })
+    ? t('karne.sirada', { metin: t('bugun.siradaMetin.senaryo', { ad: yerel(oneriSenaryo().senaryo.baslik) }) })
     : sira ? t('karne.sirada', { metin: t(`bugun.siradaMetin.${sira}`, { saat: v.profil.ayarlar[sira === 'sabah' ? 'sabahSaati' : 'aksamSaati'] }) })
     : t('karne.siradaTamam');
   const dakika = Math.max(0.1, Math.round((g.sureSn / 60) * 10) / 10);
@@ -120,7 +120,7 @@ function ciz(kok, b) {
   yerlestir(kok, 
     h('header', { class: 'b-ust' },
       h('div', { class: 'b-ust-metin' },
-        h('div', { class: 'b-tabela' }, t('karne.tabela', { baslik: g.baslik.tr })),
+        h('div', { class: 'b-tabela' }, t('karne.tabela', { baslik: yerel(g.baslik) })),
         h('h1', { class: 'b-baslik' }, t('karne.baslik')),
         h('p', { class: 'b-altbaslik' }, g.gorevTamam ? t('karne.ozetIyi') : t('karne.ozetDevam')),
       ),
@@ -146,7 +146,7 @@ function ciz(kok, b) {
     ),
     h('div', { class: g.eklenenHafiza ? 'b-kart krn-hafiza' : 'b-kart' },
       g.eklenenHafiza ? t('karne.hafizaEklendi', { n: g.eklenenHafiza }) : t('karne.hafizaYok')),
-    g.kulturelNot ? h('div', { class: 'b-kart' }, h('span', { class: 'b-ust-etiket' }, t('karne.kulturelNot')), h('p', null, g.kulturelNot)) : null,
+    g.kulturelNot ? h('div', { class: 'b-kart' }, h('span', { class: 'b-ust-etiket' }, t('karne.kulturelNot')), h('p', null, yerel(g.kulturelNot))) : null,
     h('div', { class: 'b-yigin krn-son' },
       h('p', { class: 'b-kucuk krn-ortali' }, siraMetni),
       h('button', { class: 'b-dugme b-dugme-ana', onClick: () => b.git('/bugun') }, t('karne.bugunDon')),
@@ -157,7 +157,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'karne',
-  surum: '0.1.0',
+  surum: '0.2.0',
   onek: 'krn',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'hafiza', 'ses'],

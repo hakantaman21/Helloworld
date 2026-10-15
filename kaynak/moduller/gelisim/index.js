@@ -1,7 +1,7 @@
 // Gelişim: haftalık/aylık Büyüme Karnesi (paylaşılabilir kart), seviye yolu, haftanın günleri ve seri.
 import './gelisim.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, altGezinme, ustBaslik, durumKutusu, ikon, yerlestir } from '../../cekirdek/arayuz.js';
+import { h, altGezinme, durumKutusu, ikon, yerlestir } from '../../cekirdek/arayuz.js';
 import { t } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { donemOzeti, dondurmaHakki } from '../../cekirdek/gunluk.js';
@@ -95,16 +95,26 @@ function ciz(kok, b) {
   const hafta = haftaBaslangici(bugun);
 
   yerlestir(kok, 
-    ustBaslik({
-      baslik: t('gelisim.baslik'),
-      sag: h('div', { class: 'b-cipler', role: 'radiogroup', 'aria-label': t('gelisim.donem') },
-        ['hafta', 'ay'].map((d) => h('button', {
-          class: 'b-dugme b-dugme-cerceve gls-donem',
-          role: 'radio',
-          'aria-checked': d === donem ? 'true' : 'false',
-          onClick: () => { donem = d; ciz(kok, b); },
-        }, t(`gelisim.${d}`)))),
-    }),
+    h('header', { class: 'gls-profil' },
+      h('span', { class: 'gls-avatar', 'aria-hidden': 'true' }, (v.profil.ad || '?').charAt(0).toLocaleUpperCase()),
+      h('div', { class: 'b-ust-metin b-buyut' },
+        h('div', { class: 'b-tabela' }, t('gelisim.baslik')),
+        h('h1', { class: 'b-baslik' }, v.profil.ad),
+        h('div', { class: 'b-cipler' },
+          h('span', { class: 'b-cip b-cip-vurgu' }, v.profil.seviye),
+          h('span', { class: 'b-cip' }, t(`gelisim.rol.${v.profil.rol || 'ogrenen'}`)),
+          v.profil.anaDil ? h('span', { class: 'b-cip' }, t('gelisim.anaDil', { dil: t(`diller.${v.profil.anaDil}`) })) : null,
+        ),
+      ),
+      h('a', { class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', href: '#/ayarlar', 'aria-label': t('gelisim.ayarlar') }, ikon('ayar', 20)),
+    ),
+    h('div', { class: 'b-cipler', role: 'radiogroup', 'aria-label': t('gelisim.donem') },
+      ['hafta', 'ay'].map((d) => h('button', {
+        class: 'b-dugme b-dugme-cerceve gls-donem',
+        role: 'radio',
+        'aria-checked': d === donem ? 'true' : 'false',
+        onClick: () => { donem = d; ciz(kok, b); },
+      }, t(`gelisim.${d}`)))),
     hicVeriYok ? durumKutusu('bos', t('gelisim.bos')) : h('section', { class: 'gls-karne', 'aria-label': t('gelisim.paylasimBaslik') },
       h('span', { class: 'gls-karne-baslik' }, t('gelisim.karneBaslik', { aralik: ozet.aralik })),
       h('div', { class: 'b-izgara-2' },
@@ -146,7 +156,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'gelisim',
-  surum: '0.1.0',
+  surum: '0.2.0',
   onek: 'gls',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'gunluk'],

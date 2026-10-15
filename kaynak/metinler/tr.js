@@ -4,6 +4,16 @@ export default {
   uygulama: { ad: 'Konuşma Koçu' },
   koc: { ad: 'Koç' },
 
+  ortak: {
+    yz: 'Yapay zekâ',
+    yzAciklama: 'Bu bir yapay zekâ; gerçek bir kişi değil.',
+  },
+
+  diller: {
+    tr: 'Türkçe', en: 'İngilizce', es: 'İspanyolca', ar: 'Arapça', de: 'Almanca',
+    fr: 'Fransızca', ru: 'Rusça', pt: 'Portekizce', fa: 'Farsça', diger: 'Diğer',
+  },
+
   genel: {
     geri: 'Geri',
     kapat: 'Kapat',
@@ -21,29 +31,46 @@ export default {
 
   gezinme: {
     etiket: 'Ana gezinme',
-    bugun: 'Bugün',
-    senaryolar: 'Senaryolar',
-    hafiza: 'Hafıza',
-    gelisim: 'Gelişim',
+    sohbetler: 'Sohbetler',
+    kesfet: 'Keşfet',
+    pratik: 'Pratik',
+    profil: 'Profil',
   },
 
   ekran: {
     karsilama: 'Hoş geldin',
-    bugun: 'Bugün',
+    bugun: 'Pratik',
+    sohbetler: 'Sohbetler',
+    kesfet: 'Keşfet',
     gelenArama: 'Koç arıyor',
     gorusme: 'Görüşme',
     karne: 'Konuşma karnesi',
     senaryolar: 'Senaryolar',
     senaryoAlani: 'Senaryo alanı',
     hafiza: 'Hata Hafızası',
-    gelisim: 'Gelişim',
-    ayarlar: 'Profil ve ayarlar',
+    gelisim: 'Profil',
+    ayarlar: 'Ayarlar',
   },
 
   karsilama: {
-    adim: 'Adım {n} / 3',
-    merhaba: 'Merhaba! Ben {koc}.',
-    tanitim: 'Her gün birkaç dakika seninle İngilizce konuşacağım. Önce seni biraz tanıyayım.',
+    adim: 'Adım {n} / 4',
+    merhaba: 'Hoş geldin!',
+    tanitim: 'Burada İngilizceyi konuşarak öğrenirsin: gerçek kişilerle ya da her an hazır yapay zekâ partnerinle.',
+    dilSoru: 'Uygulama dili',
+    anaDilSoru: 'Ana dilin',
+    rolSoru: 'Burada ne yapmak istiyorsun?',
+    rol: { ogrenen: 'İngilizce pratik yapmak', yardimci: 'İngilizce öğrenenlere yardım etmek' },
+    anaDilEksik: 'Ana dilini seç.',
+    rolEksik: 'Burada ne yapmak istediğini seç.',
+    kurallarBaslik: 'Topluluk kuralları',
+    kurallar: {
+      1: 'Bu topluluk 18 yaş ve üstü içindir.',
+      2: 'Burası dil pratiği içindir; flört ve satış yasaktır.',
+      3: 'Herkese saygılı ol; taciz ve spam anında kapatılır.',
+      4: 'Rahatsız olduğun her şeyi tek dokunuşla şikâyet edebilir ve engelleyebilirsin.',
+    },
+    yasOnay: '18 yaşından büyüğüm ve topluluk kurallarını kabul ediyorum.',
+    yasEksik: 'Devam etmek için 18 yaş onayını ve kuralları kabul etmen gerekiyor.',
     adSoru: 'Sana nasıl seslenelim?',
     adYerTutucu: 'Adın',
     hisSoru: 'İngilizce konuşurken kendini nasıl hissediyorsun?',
@@ -54,8 +81,8 @@ export default {
     izinAciklama: 'Konuşmanı yalnızca o an metne çeviririm. Ses kaydı saklanmaz; istediğin zaman yazarak da konuşabilirsin.',
     izinVer: 'Mikrofona izin ver',
     yaziliDevam: 'Şimdilik yazarak konuşayım',
-    tanismaBaslik: 'Hadi tanışalım',
-    tanismaAciklama: 'Yaklaşık 1 dakikalık kısa bir sohbet. Seviyeni bu sohbetten anlayacağım; sınav yok.',
+    tanismaBaslik: 'Yapay zekâ partnerinle tanış',
+    tanismaAciklama: 'Yaklaşık 1 dakikalık kısa bir sohbet. Seviyeni bu sohbetten anlayacağız; sınav yok.',
     tanismaBasla: 'Tanışmaya başla',
     tanismaAtla: 'Sonra yaparım',
   },
@@ -93,7 +120,38 @@ export default {
     devamBaslik: 'Yarım kalan konuşma',
     devamAlt: '{baslik} · kaldığın yerden devam et',
     konus: 'Konuş',
-    profil: 'Profil ve ayarlar',
+    profil: 'Ayarlar',
+    araclarBaslik: 'Pratik araçları',
+    arac: {
+      senaryolar: 'Senaryolar', senaryolarAlt: 'Gerçek hayat sahneleri, rol yapma',
+      hafiza: 'Hata Hafızası', hafizaAlt: 'Tekrar sırası gelen: {n}',
+      telaffuz: 'Telaffuz koçu', telaffuzAlt: 'Yakında: harf harf puanlama',
+      partner: 'Gerçek partner', partnerAlt: 'Topluluk yakında açılıyor',
+    },
+  },
+
+  sohbetler: {
+    baslik: 'Sohbetler',
+    alt: 'Gerçek kişilerle ve yapay zekâ partnerinle konuşmaların',
+    yzBolum: 'Yapay zekâ partnerin',
+    yzKart: '{koc} · her an hazır',
+    yzKartAlt: 'Konuşmaya başlamak için dokun',
+    gecmisBolum: 'Son konuşmalar',
+    gecmisBos: 'Henüz bir konuşma yok.',
+    insanBolum: 'Gerçek kişiler',
+    insanBos: 'Topluluk henüz açılmadı. Hesaplar ve güvenlik önlemleri hazır olunca gerçek partnerlerinle sohbetlerin burada olacak.',
+    kesfeteGit: 'Keşfet’e bak',
+  },
+
+  kesfet: {
+    baslik: 'Keşfet',
+    alt: 'Dil partnerleri ve topluluk',
+    partnerBaslik: 'Partner bul',
+    partnerBos: 'Topluluk açılınca İngilizce pratik yapan kişileri hedefine ve seviyene göre burada bulacaksın.',
+    yzBaslik: 'Bu sırada yapay zekâ partnerin hazır',
+    yzAlt: 'Partner beklemeden hemen konuşabilirsin.',
+    yzDugme: 'Yapay zekâyla konuş',
+    kurallarBaslik: 'Topluluk kuralları',
   },
 
   arama: {
@@ -149,7 +207,7 @@ export default {
   },
 
   karne: {
-    tabela: 'Bugün › {baslik}',
+    tabela: 'Pratik › {baslik}',
     baslik: 'Konuşma karnesi',
     ozetIyi: 'Görevi tamamladın. Güzel konuştun!',
     ozetDevam: 'Konuşmaya devam ettin; görevi bir dahaki sefere tamamlarız.',
@@ -174,10 +232,10 @@ export default {
     hafizaEklendi: 'Hata Hafızası’na {n} öğe eklendi. Sonraki sohbetlerde tekrar karşına çıkacaklar.',
     hafizaYok: 'Hata Hafızası’na yeni öğe eklenmedi.',
     kulturelNot: 'Kültür notu',
-    ceviriBaslik: 'TÜRKÇE SÖYLEDİĞİN KELİMELER',
+    ceviriBaslik: 'KENDİ DİLİNDE SÖYLEDİĞİN KELİMELER',
     sirada: 'Sırada: {metin}',
     siradaTamam: 'Bugünkü döngü tamam.',
-    bugunDon: 'Bugün’e dön',
+    bugunDon: 'Pratik’e dön',
     bos: 'Henüz bir konuşma yapmadın. Karnen ilk konuşmadan sonra burada olacak.',
     seviyeBelirlendi: 'Tanışmadan tahmini seviyen: {s}. İstediğin zaman Ayarlar’dan değiştirebilirsin.',
     demoNot: 'Demo ölçüm',
@@ -242,7 +300,10 @@ export default {
   },
 
   gelisim: {
-    baslik: 'Gelişim',
+    baslik: 'Profil',
+    rol: { ogrenen: 'Öğreniyor', yardimci: 'Yardımcı partner' },
+    anaDil: 'Ana dil: {dil}',
+    ayarlar: 'Ayarlar',
     donem: 'Dönem',
     hafta: 'Hafta',
     ay: 'Ay',
@@ -266,7 +327,10 @@ export default {
   },
 
   ayarlar: {
-    baslik: 'Profil ve ayarlar',
+    baslik: 'Ayarlar',
+    tabela: 'Profil',
+    arayuzDili: 'Uygulama dili',
+    rol: 'Rolün',
     ad: 'Adın',
     seviye: 'Seviyen',
     saatler: 'Koç arama saatleri',

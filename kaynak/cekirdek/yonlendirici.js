@@ -23,7 +23,7 @@ function ciz() {
   const { id, parametreler, adres } = coz();
   const veri = al();
 
-  if (!veri.profil.kurulumTamam && id !== 'karsilama' && id !== 'gorusme' && id !== 'karne') {
+  if ((!veri.profil.kurulumTamam || !veri.profil.yasOnayi) && id !== 'karsilama' && id !== 'gorusme' && id !== 'karne') {
     git('/karsilama', { degistir: true });
     return;
   }

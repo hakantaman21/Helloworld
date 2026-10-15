@@ -365,8 +365,11 @@ async function asenkronDenetimler(kaynak, sonuclar) {
       if (kimlikler.has(s.kimlik)) h.push(`${ad}: kimlik iki kez kullanılmış`);
       kimlikler.add(s.kimlik);
       if (!s.baslik || !s.baslik.tr || !s.baslik.en) h.push(`${ad}: başlık Türkçe ve İngilizce olmalı`);
-      if (!s.roller || !s.roller.koc || !s.roller.aksan) h.push(`${ad}: rol ve aksan eksik`);
-      if (!s.gorev || !s.gorev.aciklama || !Array.isArray(s.gorev.kelimeler)) h.push(`${ad}: görev açıklaması ve başarı kelimeleri eksik`);
+      const ikiDilli = (d) => d && typeof d === 'object' && d.tr && d.en;
+      if (!s.roller || !ikiDilli(s.roller.koc) || !s.roller.aksan) h.push(`${ad}: rol (tr + en) ve aksan eksik`);
+      if (!s.gorev || !ikiDilli(s.gorev.aciklama) || !Array.isArray(s.gorev.kelimeler)) h.push(`${ad}: görev açıklaması (tr + en) ve başarı kelimeleri eksik`);
+      if (!ikiDilli(s.durum)) h.push(`${ad}: durum tr + en olmalı`);
+      if (s.kulturelNot !== null && !ikiDilli(s.kulturelNot)) h.push(`${ad}: kültürel not null ya da tr + en olmalı`);
       if (!s.acilis || !s.acilis.koc) h.push(`${ad}: açılış repliği yok`);
       if (!s.seviyeVaryasyonlari || !s.seviyeVaryasyonlari.alt || !s.seviyeVaryasyonlari.ust) h.push(`${ad}: seviye varyasyonları eksik`);
       for (const k of s.karneOdagi || []) if (!kurallar.includes(k)) h.push(`${ad}: karne odağı "${k}" bilinen bir kural değil`);
@@ -432,6 +435,58 @@ async function asenkronDenetimler(kaynak, sonuclar) {
     if (existsSync(katmanlar) && !/erisim;/.test(oku(katmanlar))) h23.push('erisim katmanı en son katman değil');
     ekle('Y23', 'Animasyonlar "hareketi azalt" ayarına uyar', h23);
   }
+
+  // Y24: devir kaydı
+  {
+    const h = [];
+    const surum = (oku(join(kaynak, 'cekirdek', 'surum.js')).match(/SURUM = '([^']+)'/) || [])[1];
+    const devir = join(KOK, 'DEVIR.md');
+    if (!existsSync(devir)) h.push('DEVIR.md yok');
+    else {
+      const metin = oku(devir);
+      if (!/^## Şu anki durum/m.test(metin)) h.push('DEVIR.md: "## Şu anki durum" bölümü yok');
+      const bas = metin.search(new RegExp(`^## v${surum.replace(/\./g, '\\.')}\\b`, 'm'));
+      if (bas < 0) h.push(`DEVIR.md: v${surum} kaydı yok`);
+      else {
+        const bolum = metin.slice(bas).split(/\n## /)[0];
+        if (!/^- \*\*Yapan:\*\*\s*\S+/m.test(bolum)) h.push(`DEVIR.md: v${surum} kaydında "Yapan" bilgisi yok`);
+      }
+    }
+    ekle('Y24', 'Her sürümün devir kaydı ve yapanı yazılı', h);
+  }
+
+  // Y25: arayüz dilleri aynı anahtarları ve aynı yer tutucuları taşır
+  {
+    const h = [];
+    const duzlestir = (o, on = '') => Object.entries(o).flatMap(([k, d]) => (d && typeof d === 'object' ? duzlestir(d, `${on}${k}.`) : [[`${on}${k}`, d]]));
+    const tablolar = {};
+    for (const ad of dosyalar(join(kaynak, 'metinler'), ['.js'])) {
+      tablolar[ad.split(/[\\/]/).pop().replace('.js', '')] = new Map(duzlestir((await import(pathToFileURL(ad).href)).default));
+    }
+    const diller = Object.keys(tablolar);
+    const tum = new Set(diller.flatMap((d) => [...tablolar[d].keys()]));
+    for (const anahtar of tum) {
+      for (const d of diller) if (!tablolar[d].has(anahtar)) h.push(`${d}.js: "${anahtar}" eksik`);
+      const yerTutucular = diller.filter((d) => tablolar[d].has(anahtar)).map((d) => [...String(tablolar[d].get(anahtar)).matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort().join(','));
+      if (new Set(yerTutucular).size > 1) h.push(`"${anahtar}": yer tutucular dillerde farklı`);
+    }
+    const metin = oku(join(kaynak, 'cekirdek', 'metin.js'));
+    for (const d of diller) if (!new RegExp(`ARAYUZ_DILLERI = \\[[^\\]]*'${d}'`).test(metin)) h.push(`metin.js: "${d}" ARAYUZ_DILLERI listesinde yok`);
+    ekle('Y25', 'Her metin anahtarı tüm arayüz dillerinde var', h);
+  }
+
+  // Y26: yapay zekâ her zaman etiketli
+  {
+    const h = [];
+    for (const yol of [['moduller', 'arama', 'gorusme.js'], ['moduller', 'arama', 'gelen-arama.js'], ['moduller', 'sohbetler', 'index.js'], ['moduller', 'kesfet', 'index.js']]) {
+      const d = join(kaynak, ...yol);
+      if (existsSync(d) && !/yzEtiketi\(\)/.test(oku(d))) h.push(`${yol.join('/')}: yapay zekâ etiketi yok`);
+    }
+    if (!/export function yzEtiketi[\s\S]{0,200}t\('ortak\.yz'\)/.test(oku(join(kaynak, 'cekirdek', 'arayuz.js')))) h.push('arayuz.js: yzEtiketi() ortak.yz metnini kullanmıyor');
+    ekle('Y26', 'Yapay zekâ içerikleri her zaman "yapay zekâ" etiketi taşır', h);
+  }
+  ekle('Y27', '18 yaş altı hesaplar yetişkinlerle eşleşmez', [], 'topluluk modülüyle (Evre 3) robota eklenecek');
+  ekle('Y28', 'Her kullanıcı içeriğinde şikâyet ve engelleme var', [], 'topluluk modülüyle (Evre 3) robota eklenecek');
   return sonuclar;
 }
 

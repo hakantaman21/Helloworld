@@ -2,7 +2,7 @@
 import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ustBaslik, onayIste, yerlestir } from '../../cekirdek/arayuz.js';
-import { t } from '../../cekirdek/metin.js';
+import { t, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { al, degistir, sifirla, disaAktarMetni } from '../../cekirdek/depo.js';
 import { siradaki } from '../../cekirdek/gunluk.js';
 import { simdiAra } from '../../cekirdek/zamanlayici.js';
@@ -47,7 +47,22 @@ function ciz(kok, b) {
   };
 
   yerlestir(kok, 
-    ustBaslik({ tabela: t('gezinme.bugun'), baslik: t('ayarlar.baslik'), geri: () => b.geri('/bugun') }),
+    ustBaslik({ tabela: t('ayarlar.tabela'), baslik: t('ayarlar.baslik'), geri: () => b.geri('/gelisim') }),
+
+    h('section', { class: 'b-kart ayr-bolum' },
+      secimGrubu({
+        etiket: t('ayarlar.arayuzDili'),
+        secenekler: ARAYUZ_DILLERI.map((d) => [d, d.toUpperCase()]),
+        aktif: a.arayuzDili,
+        degisti: (d) => { degistir((v) => { v.profil.ayarlar.arayuzDili = d; }); dilAyarla(d); ciz(kok, b); },
+      }),
+      secimGrubu({
+        etiket: t('ayarlar.rol'),
+        secenekler: ['ogrenen', 'yardimci'].map((r) => [r, t(`gelisim.rol.${r}`)]),
+        aktif: p.rol,
+        degisti: (r) => ayarKaydet((pr) => { pr.rol = r; }),
+      }),
+    ),
 
     h('section', { class: 'b-kart ayr-bolum' },
       h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-ad' }, t('ayarlar.ad')), adGirdisi),
@@ -142,7 +157,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'ayarlar',
-  surum: '0.1.0',
+  surum: '0.2.0',
   onek: 'ayr',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'zamanlayici'],

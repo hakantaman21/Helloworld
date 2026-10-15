@@ -4,9 +4,9 @@ export default {
   alan: 'gunluk',
   seviye: 'tum',
   baslik: { tr: 'Hata tekrarı', en: 'Error Memory practice' },
-  durum: 'Koç, Hata Hafızası’ndaki öğeleri yeni sorular içinde tekrar kullandırır.',
-  roller: { koc: 'Koç', aksan: 'Amerikan' },
-  gorev: { aciklama: 'Her soruda öğeyi doğru biçimde kullan.', kelimeler: [] },
+  durum: { tr: 'Koç, Hata Hafızası\u2019ndaki öğeleri yeni sorular içinde tekrar kullandırır.', en: 'The coach has the user reuse Error Memory items in new questions.' },
+  roller: { koc: { tr: 'Koç', en: 'Coach' }, aksan: 'Amerikan' },
+  gorev: { aciklama: { tr: 'Her soruda öğeyi doğru biçimde kullan.', en: 'Use each item correctly in your answer.' }, kelimeler: [] },
   hedefKaliplar: [],
   anahtarKelimeler: [],
   acilis: {

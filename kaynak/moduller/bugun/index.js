@@ -2,7 +2,7 @@
 import './bugun.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, altGezinme, yerlestir } from '../../cekirdek/arayuz.js';
-import { t } from '../../cekirdek/metin.js';
+import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { gunKaydi, siradaki, seriHesapla, bugunkuSenaryo } from '../../cekirdek/gunluk.js';
 import { vadesiGelenler } from '../../cekirdek/hafiza.js';
@@ -34,6 +34,17 @@ function donguOgesi({ baslik, alt, durum, onClick }) {
   );
 }
 
+function aracKarti({ href, ikonAdi, baslik, alt, pasif }) {
+  const icerik = [
+    h('span', { class: 'b-ikon-daire' }, ikon(ikonAdi, 18)),
+    h('span', { class: 'bgn-oge-baslik' }, baslik),
+    h('span', { class: 'b-kucuk' }, alt),
+  ];
+  return pasif
+    ? h('div', { class: 'b-kart bgn-arac bgn-arac-pasif', 'aria-disabled': 'true' }, icerik)
+    : h('a', { class: 'b-kart bgn-arac', href }, icerik);
+}
+
 function ciz(kok, b) {
   kok.classList.add('b-ekran-gezinmeli');
   const v = al();
@@ -53,7 +64,7 @@ function ciz(kok, b) {
 
   let siradaMetni;
   if (sira === 'sabah') siradaMetni = t('bugun.siradaMetin.sabah', { saat: ayar.sabahSaati });
-  else if (sira === 'senaryo') siradaMetni = t('bugun.siradaMetin.senaryo', { ad: oneri.baslik.tr });
+  else if (sira === 'senaryo') siradaMetni = t('bugun.siradaMetin.senaryo', { ad: yerel(oneri.baslik) });
   else if (sira === 'aksam') siradaMetni = t('bugun.siradaMetin.aksam', { saat: ayar.aksamSaati });
   else siradaMetni = t('bugun.siradaMetin.tamam');
 
@@ -92,7 +103,7 @@ function ciz(kok, b) {
         onClick: () => baslat('sabah'),
       }),
       donguOgesi({
-        baslik: gun.senaryo && bugunkuSenaryo() ? bugunkuSenaryo().baslik.tr : oneri.baslik.tr,
+        baslik: gun.senaryo && bugunkuSenaryo() ? yerel(bugunkuSenaryo().baslik) : yerel(oneri.baslik),
         alt: gun.senaryo ? t('bugun.tamamlandi') : t('bugun.senaryoAlt', { alan: alanAdi(oneri.alan) }),
         durum: durumu('senaryo'),
         onClick: senaryoyaGit,
@@ -104,13 +115,14 @@ function ciz(kok, b) {
         onClick: () => baslat('aksam'),
       }),
     ),
-    h('a', { class: 'b-kart b-kart-satir', href: '#/hafiza' },
-      h('span', { class: 'b-ikon-daire' }, ikon('liste', 18)),
-      h('span', { class: 'bgn-oge-metin' },
-        h('span', { class: 'bgn-oge-baslik' }, t('bugun.hafizaBaslik')),
-        h('span', { class: 'b-kucuk' }, t('bugun.hafizaAlt', { n: vadesi.length })),
+    h('section', { class: 'b-yigin', 'aria-labelledby': 'bgn-araclar' },
+      h('h2', { class: 'b-bolum-baslik', id: 'bgn-araclar' }, t('bugun.araclarBaslik')),
+      h('div', { class: 'b-izgara-2' },
+        aracKarti({ href: '#/senaryolar', ikonAdi: 'harita', baslik: t('bugun.arac.senaryolar'), alt: t('bugun.arac.senaryolarAlt') }),
+        aracKarti({ href: '#/hafiza', ikonAdi: 'liste', baslik: t('bugun.arac.hafiza'), alt: t('bugun.arac.hafizaAlt', { n: vadesi.length }) }),
+        aracKarti({ ikonAdi: 'ses', baslik: t('bugun.arac.telaffuz'), alt: t('bugun.arac.telaffuzAlt'), pasif: true }),
+        aracKarti({ href: '#/kesfet', ikonAdi: 'kisi', baslik: t('bugun.arac.partner'), alt: t('bugun.arac.partnerAlt') }),
       ),
-      h('span', { class: 'bgn-ok' }, ikon('sag', 20)),
     ),
     h('button', { class: 'b-dugme b-dugme-ana b-ana-eylem', onClick: () => baslat(sira || 'senaryo') },
       ikon('mikrofon', 22), t('bugun.konus')),
@@ -120,7 +132,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'bugun',
-  surum: '0.1.0',
+  surum: '0.2.0',
   onek: 'bgn',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'gunluk', 'hafiza', 'zamanlayici'],
