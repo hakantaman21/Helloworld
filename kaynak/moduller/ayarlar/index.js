@@ -46,6 +46,22 @@ function ciz(kok, b) {
     return g;
   };
 
+  const diller = ['tr', 'en', 'es', 'ar', 'de', 'fr', 'ru', 'pt', 'fa', 'diger'];
+  const dilSecimi = (kimlik, etiket, alan) => {
+    const sec = h('select', { id: kimlik, class: 'b-girdi', 'aria-label': etiket },
+      h('option', { value: '' }, t('ayarlar.dilSeciniz')),
+      diller.map((d) => h('option', { value: d }, t('diller.' + d))),
+    );
+    sec.value = p[alan] || '';
+    sec.addEventListener('change', () => ayarKaydet((pr) => { pr[alan] = sec.value || null; }));
+    return h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: kimlik }, etiket), sec);
+  };
+  const hedefGirdisi = h('input', { id: 'ayr-hedef', class: 'b-girdi', type: 'text', maxlength: 120, value: p.dilHedefi || '', placeholder: t('ayarlar.hedefOrnek') });
+  hedefGirdisi.addEventListener('change', () => ayarKaydet((pr) => { pr.dilHedefi = hedefGirdisi.value.trim().slice(0, 120); }));
+  const tanitimGirdisi = h('textarea', { id: 'ayr-tanitim', class: 'b-girdi', rows: 3, maxlength: 300, placeholder: t('ayarlar.tanitimOrnek') });
+  tanitimGirdisi.value = p.kendiniTanim || '';
+  tanitimGirdisi.addEventListener('change', () => ayarKaydet((pr) => { pr.kendiniTanim = tanitimGirdisi.value.trim().slice(0, 300); }));
+
   yerlestir(kok, 
     ustBaslik({ tabela: t('ayarlar.tabela'), baslik: t('ayarlar.baslik'), geri: () => b.geri('/gelisim') }),
 
@@ -72,6 +88,15 @@ function ciz(kok, b) {
         aktif: p.seviye,
         degisti: (s) => ayarKaydet((pr) => { pr.seviye = s; }),
       }),
+    ),
+
+    h('section', { class: 'b-kart ayr-bolum', 'aria-label': t('ayarlar.dilProfili') },
+      h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.dilProfili')),
+      dilSecimi('ayr-ana-dil', t('ayarlar.anaDil'), 'anaDil'),
+      dilSecimi('ayr-ogrenilen-dil', t('ayarlar.ogrenilenDil'), 'ogrenilenDil'),
+      h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-hedef' }, t('ayarlar.dilHedefi')), hedefGirdisi),
+      h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-tanitim' }, t('ayarlar.tanitim')), tanitimGirdisi),
+      h('p', { class: 'b-kucuk' }, t('ayarlar.profilGizlilik')),
     ),
 
     h('section', { class: 'b-kart ayr-bolum' },
@@ -165,7 +190,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'ayarlar',
-  surum: '0.2.6',
+  surum: '0.2.7',
   onek: 'ayr',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'zamanlayici'],
