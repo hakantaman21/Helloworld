@@ -1,3 +1,11 @@
+## Profil kimlik kartı — 16.10.2026 / ChatGPT
+
+- Profil üstüne ana dil, öğrenilen dil, mevcut seviye ve konuşma pratiği hedefi görünümü eklendi; mevcut büyüme karnesi ve ölçüm açıklamaları korunuyor.
+- Bilinmeyen dil için boş durum ve yerel depolama/gizlilik açıklaması gösteriliyor; kamuya açık profil veya sosyal bağlantı varmış gibi davranılmıyor.
+- Türkçe/İngilizce etiketler ve `gls-` kapsamlı CSS eklendi; yeni important yok. Tek ayarlar erişimi korunuyor.
+- Önemli sınır: Düzenle mevcut ayarlar ekranına gider; bu ekranda ana dil/öğrenilen dil/hedef alanları henüz düzenlenemiyor. Bu özellik tamamlandı denmemeli.
+- Testler çalıştırılmadı: derleme, robot, mobil ve erişilebilirlik. Main/deneme merge yok.
+
 ## Pratik ve Dil Anları görev ayrımı — 16.10.2026 / ChatGPT
 
 - Pratik ekranına açık AI / gerçek kişi seçimi eklendi; AI mevcut demo senaryoya, gerçek kişi Bağlantı keşfine gider. Canlı insan görüşmesi henüz yok.
