@@ -337,6 +337,14 @@ export default {
   },
 
   gelisim: {
+    siradakiEtiket: 'YOUR SUGGESTED NEXT STEP',
+    tekrarBaslik: 'Time to review: {n} items',
+    tekrarAciklama: 'Review due items in Error Memory. This suggestion is not a proficiency decision.',
+    pratikBaslik: 'Try another conversation',
+    pratikAciklama: 'Practise with a scenario suited to your current level. A single session does not establish mastery.',
+    baslatDugme: 'Continue',
+    olcumAciklamaBaslik: 'What do these numbers mean?',
+    olcumAciklama: 'Minutes, words and active days summarize on-device records. The fluency indicator uses available session data; it is not a standardized test, pronunciation score or validated language proficiency measure.',
     baslik: 'Profile',
     rol: { ogrenen: 'Learning', yardimci: 'Helper partner' },
     anaDil: 'Native language: {dil}',
