@@ -350,6 +350,7 @@ export default {
   },
 
   gelisim: {
+    kimlik: { baslik: 'My language profile', duzenle: 'Edit', anaDil: 'Native language', hedefDil: 'Learning', seviye: 'Level', hedef: 'Goal', hedefAciklama: 'Speaking practice', belirtilmedi: 'Not specified yet', gizlilik: 'These details currently stay on your device; no public profile has been created.' },
     siradakiEtiket: 'YOUR SUGGESTED NEXT STEP',
     tekrarBaslik: 'Time to review: {n} items',
     tekrarAciklama: 'Review due items in Error Memory. This suggestion is not a proficiency decision.',
