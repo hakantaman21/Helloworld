@@ -4,7 +4,6 @@ import './kesfet.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, altGezinme, ustBaslik, durumKutusu, yzEtiketi, yerlestir } from '../../cekirdek/arayuz.js';
 import { t } from '../../cekirdek/metin.js';
-import { oneriSenaryo } from '../../cekirdek/oneri.js';
 
 function ciz(kok, b) {
   kok.classList.add('b-ekran-gezinmeli');
@@ -12,7 +11,6 @@ function ciz(kok, b) {
   const partner = h('div', { class: 'kft-sonuc', role: 'region', 'aria-live': 'polite' });
   const insanDugme = h('button', { type: 'button', class: 'kft-sekme', onClick: () => sec('insan') }, t('kesfet.insanSekme'));
   const yzDugme = h('button', { type: 'button', class: 'kft-sekme', onClick: () => sec('yz') }, t('kesfet.yzSekme'));
-  const konus = () => b.git(`/gorusme?tur=senaryo&id=${oneriSenaryo().senaryo.kimlik}`);
   function sec(yeni) {
     secim = yeni;
     insanDugme.setAttribute('aria-pressed', String(secim === 'insan'));
@@ -42,7 +40,7 @@ function ciz(kok, b) {
           ),
         ),
         h('p', { class: 'kft-demo-not' }, t('kesfet.demoAciklama')),
-        h('button', { class: 'b-dugme b-dugme-ana', type: 'button', onClick: konus }, ikon('mikrofon', 20), t('kesfet.yzDugme')),
+        h('button', { class: 'b-dugme b-dugme-ana', type: 'button', onClick: () => b.git('/bugun') }, ikon('mikrofon', 20), t('kesfet.pratigeGit')),
       );
     }
   }
@@ -52,7 +50,7 @@ function ciz(kok, b) {
       h('span', { class: 'b-ust-etiket' }, t('kesfet.heroEtiket')),
       h('h2', { class: 'b-bolum-baslik', id: 'kft-giris' }, t('kesfet.heroBaslik')),
       h('p', { class: 'b-kucuk kft-hero-alt' }, t('kesfet.heroAlt')),
-      h('button', { class: 'b-dugme b-dugme-ana', type: 'button', onClick: konus }, ikon('oynat', 20), t('kesfet.hizliPratik')),
+      h('button', { class: 'b-dugme b-dugme-ana', type: 'button', onClick: () => b.git('/bugun') }, ikon('sag', 20), t('kesfet.pratigeGit')),
     ),
     h('section', { class: 'b-yigin', 'aria-label': t('kesfet.secimBaslik') },
       h('div', { class: 'kft-sekmeler', role: 'group', 'aria-label': t('kesfet.secimBaslik') }, insanDugme, yzDugme),
@@ -78,7 +76,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'kesfet',
-  surum: '0.2.2',
+  surum: '0.2.7',
   onek: 'kft',
   semaSurumu: 1,
   cekirdekServisleri: ['metin'],
