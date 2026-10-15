@@ -56,6 +56,11 @@ function ciz(kok, b) {
   const yarim = yarimKalan();
   const seri = seriHesapla();
 
+  const pratikSecenekleri = [
+    { baslik: t('bugun.hizli.baslik'), alt: t('bugun.hizli.alt'), ikonAdi: 'mikrofon', git: () => b.git(`/gorusme?tur=senaryo&id=${oneri.kimlik}`) },
+    { baslik: t('bugun.hedefli.baslik'), alt: t('bugun.hedefli.alt'), ikonAdi: 'harita', git: () => b.git('/senaryolar') },
+    { baslik: t('bugun.tekrar.baslik'), alt: t('bugun.tekrar.alt', { n: vadesi.length }), ikonAdi: 'liste', git: () => b.git('/hafiza') },
+  ];
   const senaryoyaGit = () => b.git(`/gorusme?tur=senaryo&id=${oneri.kimlik}`);
   const baslat = (tur) => {
     if (tur === 'senaryo') senaryoyaGit();
@@ -82,6 +87,25 @@ function ciz(kok, b) {
     h('div', { class: 'b-cipler' },
       h('span', { class: 'b-cip b-cip-vurgu' }, t('bugun.seri', { n: seri })),
       h('span', { class: 'b-cip' }, t('bugun.seviye', { s: v.profil.seviye })),
+    ),
+    h('section', { class: 'b-kart bgn-hizli', 'aria-labelledby': 'bgn-hizli-baslik' },
+      h('span', { class: 'b-ust-etiket' }, t('bugun.hizliEtiket')),
+      h('h2', { class: 'b-bolum-baslik', id: 'bgn-hizli-baslik' }, t('bugun.hizliBaslik')),
+      h('p', { class: 'b-kucuk' }, t('bugun.hizliAciklama')),
+      h('button', { class: 'b-dugme b-dugme-ana', type: 'button', onClick: senaryoyaGit },
+        ikon('mikrofon', 20), t('bugun.hizliDugme')),
+    ),
+    h('section', { class: 'b-yigin', 'aria-labelledby': 'bgn-yollar' },
+      h('h2', { class: 'b-bolum-baslik', id: 'bgn-yollar' }, t('bugun.yollarBaslik')),
+      h('div', { class: 'bgn-yollar' }, pratikSecenekleri.map((secenek) =>
+        h('button', { class: 'b-kart b-kart-satir b-kart-tiklanir bgn-yol', type: 'button', onClick: secenek.git },
+          h('span', { class: 'b-ikon-daire' }, ikon(secenek.ikonAdi, 20)),
+          h('span', { class: 'bgn-oge-metin' },
+            h('span', { class: 'bgn-oge-baslik' }, secenek.baslik),
+            h('span', { class: 'b-kucuk' }, secenek.alt),
+          ),
+          ikon('sag', 18),
+        ))),
     ),
     h('div', { class: 'b-kart bgn-tabela', role: 'status' },
       h('span', { class: 'b-ust-etiket' }, t('bugun.sirada')),
@@ -132,7 +156,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'bugun',
-  surum: '0.2.0',
+  surum: '0.2.4',
   onek: 'bgn',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'gunluk', 'hafiza', 'zamanlayici'],
