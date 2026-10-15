@@ -1,0 +1,4 @@
+@layer moduller {
+  .anl-kart { align-items: stretch; gap: var(--bosluk-4); }
+  .anl-bilgi { font-size: var(--yazi-kucuk); color: var(--renk-soluk); }
+}
