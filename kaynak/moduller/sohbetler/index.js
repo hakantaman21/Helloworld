@@ -5,7 +5,6 @@ import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, altGezinme, ustBaslik, durumKutusu, yzEtiketi, yerlestir } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
-import { oneriSenaryo } from '../../cekirdek/oneri.js';
 import { kisaTarih } from '../../cekirdek/zaman.js';
 
 const SON_KONUSMA_SAYISI = 30;
@@ -13,7 +12,6 @@ const SON_KONUSMA_SAYISI = 30;
 function ciz(kok, b) {
   kok.classList.add('b-ekran-gezinmeli');
   const gecmis = (al().gorusmeler || []).slice(0, SON_KONUSMA_SAYISI);
-  const baslat = () => b.git(`/gorusme?tur=senaryo&id=${oneriSenaryo().senaryo.kimlik}`);
   let filtre = 'tum';
   let arama = '';
   const liste = h('div', { class: 'shb-liste', role: 'region', 'aria-live': 'polite' });
@@ -25,7 +23,7 @@ function ciz(kok, b) {
     const gorunen = gecmis.filter(g => yerel(g.baslik).toLocaleLowerCase().includes(arama));
     const yzVar = t('sohbetler.yzKart', { koc: t('koc.ad') }).toLocaleLowerCase().includes(arama);
     yerlestir(liste,
-      filtre !== 'insan' && yzVar ? h('button', { class: 'b-kart b-kart-satir b-kart-tiklanir b-kart-vurgulu', type: 'button', onClick: baslat },
+      filtre !== 'insan' && yzVar ? h('div', { class: 'b-kart b-kart-satir' },
         h('span', { class: 'shb-avatar shb-avatar-yz', 'aria-hidden': 'true' }, ikon('dalga', 22)),
         h('span', { class: 'shb-metin' },
           h('span', { class: 'shb-ad' }, t('sohbetler.yzKart', { koc: t('koc.ad') })),
@@ -52,11 +50,8 @@ function ciz(kok, b) {
   );
   yerlestir(kok,
     ustBaslik({ baslik: t('sohbetler.baslik'), alt: t('sohbetler.alt') }),
-    h('section', { class: 'b-kart shb-basla', 'aria-labelledby': 'shb-basla-baslik' },
-      h('h2', { class: 'b-bolum-baslik', id: 'shb-basla-baslik' }, t('sohbetler.hizliBaslik')),
-      h('p', { class: 'b-kucuk' }, t('sohbetler.hizliAlt')),
-      h('button', { type: 'button', class: 'b-dugme b-dugme-ana', onClick: baslat }, ikon('mikrofon', 20), t('sohbetler.hizliDugme')),
-    ),
+    h('p', { class: 'b-kucuk shb-bilgi' }, t('sohbetler.gecmisBilgi')),
+    h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => b.git('/kesfet') }, t('sohbetler.yeniKisi'), ikon('sag', 18)),
     h('section', { class: 'b-yigin', 'aria-label': t('sohbetler.listeBaslik') },
       h('label', { class: 'b-etiket', for: 'shb-arama' }, t('sohbetler.ara')),
       h('div', { class: 'shb-arama' }, ikon('pusula', 18), aramaKutusu),
@@ -71,7 +66,7 @@ function ciz(kok, b) {
 }
 export default {
   kimlik: 'sohbetler',
-  surum: '0.2.3',
+  surum: '0.2.7',
   onek: 'shb',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'metin'],
