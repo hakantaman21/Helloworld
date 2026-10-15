@@ -338,6 +338,14 @@ export default {
   },
 
   gelisim: {
+    siradakiEtiket: 'SANA ÖNERİLEN SONRAKİ ADIM',
+    tekrarBaslik: 'Tekrar zamanı: {n} öğe',
+    tekrarAciklama: 'Hata Hafızası’nda zamanı gelen öğeleri gözden geçir. Bu öneri bir seviye kararı değildir.',
+    pratikBaslik: 'Yeni bir konuşma dene',
+    pratikAciklama: 'Mevcut seviyene uygun bir senaryoyla pratik yap. Sonuçlar tek başına ustalık kanıtı sayılmaz.',
+    baslatDugme: 'Devam et',
+    olcumAciklamaBaslik: 'Bu rakamlar ne anlama geliyor?',
+    olcumAciklama: 'Dakika, kelime ve etkin gün sayısı cihazdaki kayıtların özetidir. Akıcılık göstergesi mevcut oturum verilerine dayanır; standartlaştırılmış bir sınav, telaffuz puanı veya doğrulanmış dil yeterliği değildir.',
     baslik: 'Profil',
     rol: { ogrenen: 'Öğreniyor', yardimci: 'Yardımcı partner' },
     anaDil: 'Ana dil: {dil}',
