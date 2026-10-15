@@ -1,3 +1,12 @@
+## 0.2.7 — 16.10.2026 · Anayasal bölüm ayrımı
+
+- Sohbet geçmiş iletişim odağına taşındı; hızlı pratik kartı kaldırıldı.
+- Bağlantı'da konuşma eylemleri Pratik ekranına yönlendirildi.
+- Üst profil ve ayarlar kontrolleri merkezi yönlendiriciyle çalışır.
+- Beşli menü adları ve TR/EN açıklamaları uyumlaştırıldı.
+- Eski fonksiyonlar üzerine CSS yaması eklenmedi; yeni important yok.
+- Derleme/robot/mobil testleri henüz çalıştırılmadı; ana/deneme merge yok.
+
 ## 0.2.6 — 16.10.2026 · Beşli menü ve English Prime esinli görünüm
 
 - Ana menü: Sohbet, Bağlantı, Dil Anları, AI, Profil.
