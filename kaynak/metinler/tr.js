@@ -57,6 +57,7 @@ export default {
   },
 
   anlar: {
+    baglantiyaGit: 'Yeni kişiler keşfet',
     baslik: 'Dil Anları',
     alt: 'Kısa paylaşımlarla dilini geliştir',
     aciklama: 'Topluluk gönderileri henüz açık değil. Güvenli paylaşım ve moderasyon hazır olduğunda burada görünecek.',
