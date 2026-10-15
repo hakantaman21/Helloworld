@@ -1,3 +1,12 @@
+## Profil düzenleme ve veri göçü — 16.10.2026 / ChatGPT
+
+- Ayarlar ekranına ana dil, öğrenilen dil, kişisel dil hedefi ve kısa tanıtım düzenleme alanları eklendi; değişiklikler mevcut `degistir` deposuna kaydedilir.
+- Profil ekranı kişisel dil hedefini mevcut genel hedef yerine gösterir; mevcut büyüme karnesi korunur.
+- Şema 4→5 göçü `dilHedefi` alanını mevcut verileri koruyarak ekler.
+- TR/EN metinler eklendi; EN alt menüde eksik `gezinme.baglanti`, `gezinme.dilAnlari` ve `ekran.dilAnlari` tamamlandı.
+- Mevcut dil seçimi uygulamanın desteklediği dil etiketleriyle sınırlıdır; `diger` genel kategoridir. Toplulukta kamuya açık profil hâlâ yok.
+- Çalıştırılmış derleme, robot, mobil ve şema göç testi yok. Main/deneme değişmedi.
+
 ## Profil kimlik kartı — 16.10.2026 / ChatGPT
 
 - Profil üstüne ana dil, öğrenilen dil, mevcut seviye ve konuşma pratiği hedefi görünümü eklendi; mevcut büyüme karnesi ve ölçüm açıklamaları korunuyor.
