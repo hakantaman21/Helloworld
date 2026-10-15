@@ -54,3 +54,10 @@
     justify-content: center;
   }
 }
+
+@layer moduller {
+  .gls-siradaki { gap: var(--bosluk-3); background: var(--renk-vurgu-acik); }
+  .gls-siradaki .b-kucuk { color: var(--renk-vurgu-acik-metin); }
+  .gls-aciklama { gap: var(--bosluk-2); }
+  .gls-aciklama summary { cursor: pointer; min-height: 48px; display: flex; align-items: center; }
+}
