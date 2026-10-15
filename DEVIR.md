@@ -1,3 +1,11 @@
+## Vercel Preview derleme engeli — 16.10.2026 / ChatGPT
+
+- Kullanıcı Vercel Preview logunu iletti: commit `8882d8b`, `npm run build` dört ihlal ile durdu (Y4: bugun.css, gelisim.css; Y16b: kesfet/index.js, sohbetler/index.js).
+- Y4 için modüle özgü `bgn-hizli-alt` ve `gls-siradaki-alt` sınıfları CSS ve ilgili metin elemanlarına eklendi.
+- Y16b için hesaplanmış çeviri anahtarları yerine doğrudan `t('...')` çağrıları kullanıldı.
+- Kalite denetçisi gevşetilmedi, `!important` eklenmedi.
+- **Henüz derleme ve Vercel yeniden dağıtım sonucu doğrulanmadı.** Kullanıcının logu eski commit'e aitti. Yeni Preview çıktısı incelenmeli.
+
 ## Profil düzenleme ve veri göçü — 16.10.2026 / ChatGPT
 
 - Ayarlar ekranına ana dil, öğrenilen dil, kişisel dil hedefi ve kısa tanıtım düzenleme alanları eklendi; değişiklikler mevcut `degistir` deposuna kaydedilir.
