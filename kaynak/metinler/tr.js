@@ -355,6 +355,7 @@ export default {
   },
 
   gelisim: {
+    kimlik: { baslik: 'Dil profilim', duzenle: 'Düzenle', anaDil: 'Ana dil', hedefDil: 'Öğrenilen dil', seviye: 'Seviye', hedef: 'Hedef', hedefAciklama: 'Konuşma pratiği', belirtilmedi: 'Henüz belirtilmedi', gizlilik: 'Bu bilgiler şu an cihazında tutulur; herkese açık bir profil oluşturulmadı.' },
     siradakiEtiket: 'SANA ÖNERİLEN SONRAKİ ADIM',
     tekrarBaslik: 'Tekrar zamanı: {n} öğe',
     tekrarAciklama: 'Hata Hafızası’nda zamanı gelen öğeleri gözden geçir. Bu öneri bir seviye kararı değildir.',
