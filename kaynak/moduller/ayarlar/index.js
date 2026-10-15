@@ -96,6 +96,14 @@ function ciz(kok, b) {
         aktif: a.kocHizi,
         degisti: (k) => ayarKaydet((pr) => { pr.ayarlar.kocHizi = k; }),
       }),
+      h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.gorunumBaslik')),
+      secimGrubu({
+        etiket: t('ayarlar.gorunum'),
+        aciklama: t('ayarlar.gorunumAciklama'),
+        secenekler: ['dengeli', 'kompakt'].map((k) => [k, t('ayarlar.gorunumSecenek.' + k)]),
+        aktif: a.gorunum || 'dengeli',
+        degisti: (k) => ayarKaydet((pr) => { pr.ayarlar.gorunum = k; }),
+      }),
       secimGrubu({
         etiket: t('ayarlar.tema'),
         secenekler: ['sistem', 'acik', 'koyu'].map((k) => [k, t(`ayarlar.temaSecenek.${k}`)]),
@@ -157,7 +165,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'ayarlar',
-  surum: '0.2.0',
+  surum: '0.2.6',
   onek: 'ayr',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'zamanlayici'],
