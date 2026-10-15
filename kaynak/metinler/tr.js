@@ -131,6 +131,17 @@ export default {
   },
 
   sohbetler: {
+    hizliBaslik: 'Hemen konuşmaya başla',
+    hizliAlt: 'Beklemeden yapay zekâ partnerinle kısa bir konuşma yap.',
+    hizliDugme: 'Konuşmaya başla',
+    ara: 'Konuşmalarda ara',
+    filtreBaslik: 'Konuşma türü',
+    tumFiltre: 'Tümü',
+    yzFiltre: 'Yapay zekâ',
+    insanFiltre: 'İnsanlar',
+    listeBaslik: 'Konuşmalar ve partnerler',
+    aramaBos: 'Aramana uygun bir konuşma bulunamadı.',
+    insanBilgi: 'Gerçek kişi mesajlaşması henüz açılmadı; burada yalnızca cihazındaki yapay zekâ pratikleri listelenir.',
     baslik: 'Sohbetler',
     alt: 'Gerçek kişilerle ve yapay zekâ partnerinle konuşmaların',
     yzBolum: 'Yapay zekâ partnerin',
