@@ -109,6 +109,7 @@ export default {
   },
 
   bugun: {
+    partnerSecim: { baslik: 'Kiminle pratik yapacaksın?', yz: 'AI ile pratik', insan: 'Gerçek kişi', bilgi: 'AI demo koç hazırdır. Gerçek kişilerle konuşma, güvenli topluluk açıldığında kullanılabilir.' },
     hizliEtiket: 'KONUŞMAYA HAZIR MISIN?',
     hizliBaslik: '5 dakikada konuşmaya başla',
     hizliAciklama: 'Seviyene uygun bir senaryo açılır. Demo koç gerçek dil seviyeni veya telaffuzunu puanlamaz.',
