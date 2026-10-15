@@ -3,6 +3,15 @@
 Her teslimde sürüm bir artar ve en üste bir kayıt eklenir (Y10). Test robotu, `kaynak/cekirdek/surum.js`,
 `package.json` ve buradaki son kaydın aynı olduğunu denetler.
 
+## 0.2.2 — 16.10.2026 · Keşfet kullanıcı deneyimi ilk dalga
+
+- HelloTalk referansı: insan/AI keşif ayrımı, eşleşme kriterlerinin açık sunumu; sahte profil veya canlı durum yok.
+- Speak referansı: ilk ekranda tek dokunuşla kısa konuşma.
+- ELSA referansı: telaffuz çalışma yolu; gerçek ses düzeyi puanı varmış gibi gösterilmez.
+- İki dilli metinler, erişilebilir 48 px sekmeler, mobil kartlar, açılır topluluk kuralları.
+- Başlangıç dalı: deneme v0.2.1. Ayrı tasarım dalı; ana dala aktarılmadı.
+- İnceleme: GitHub PR ve gerçek cihaz/robot testi bekleniyor.
+
 ## 0.2.1 — 15.10.2026 · Demo ölçümlerinin ayrılması
 
 - Demo telaffuz, akıcılık ve seviye puanları kaldırıldı; profil seviyesi ve Hata Hafızası demo ile değişmez.
