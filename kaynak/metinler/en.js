@@ -146,6 +146,8 @@ export default {
   },
 
   sohbetler: {
+    gecmisBilgi: 'Your past messages and conversations are here. Use Connect to meet people and Practice to train speaking.',
+    yeniKisi: 'Discover people',
     hizliBaslik: 'Start speaking now',
     hizliAlt: 'Have a short conversation with your AI partner without waiting.',
     hizliDugme: 'Start speaking',
@@ -170,6 +172,7 @@ export default {
   },
 
   kesfet: {
+    pratigeGit: 'Go to Practice',
     heroEtiket: 'START NOW',
     heroBaslik: 'Learn by speaking, grow with practice',
     heroAlt: 'Find a real partner or practise immediately with AI.',
