@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 3;
+export const GUNCEL_SEMA = 4;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -59,4 +59,12 @@ export const gocler = {
       sonGorusme: temizle(eski.sonGorusme),
     };
   },
+  // 3 → 4: kullanıcı görünüm tercihi. Eski kayıtlar korunur.
+  4: (eski) => ({
+    ...eski,
+    profil: {
+      ...eski.profil,
+      ayarlar: { ...eski.profil.ayarlar, gorunum: eski.profil.ayarlar.gorunum || 'dengeli' },
+    },
+  }),
 };
