@@ -1,3 +1,10 @@
+## Anayasa uyum kaydı — 16.10.2026 / ChatGPT
+
+- ANAYASA.md dört sekme ve zorunlu sıcak palet tanımlarını kullanıcının son beş sekme, mat siyah/gri, English Prime UX kararlarıyla uyumlaştıracak şekilde güncellendi.
+- Korunan hükümler: önce konuşma, insan/AI dürüst ayrımı, 18+ başlangıç, gizlilik, güvenli topluluk, çok dillilik, erişilebilirlik, Y1–Y28.
+- Kalite kaynağı: MIMARI_KALITE_KURALLARI.md; yeni important ve CSS yaması yığılması yasak.
+- Bu teslim belge/karar uyumlaştırmasıdır; UI kodunun tümü tamamlanmış veya test edilmiş değildir. Ana/deneme dalı değişmedi.
+
 ## v0.2.6 — 16.10.2026 / ChatGPT / Beşli menü
 
 - Kullanıcı kararı: Sohbet · Bağlantı · Dil Anları · AI · Profil; sol üst profil, sağ üst ayarlar.
