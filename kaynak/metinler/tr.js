@@ -97,6 +97,14 @@ export default {
   },
 
   bugun: {
+    hizliEtiket: 'KONUŞMAYA HAZIR MISIN?',
+    hizliBaslik: '5 dakikada konuşmaya başla',
+    hizliAciklama: 'Seviyene uygun bir senaryo açılır. Demo koç gerçek dil seviyeni veya telaffuzunu puanlamaz.',
+    hizliDugme: 'Şimdi konuş',
+    yollarBaslik: 'Nasıl pratik yapmak istersin?',
+    hizli: { baslik: 'Hızlı konuş', alt: 'Önerilen senaryoyla hemen başla' },
+    hedefli: { baslik: 'Senaryo seç', alt: 'Günlük yaşam durumlarından birini çalış' },
+    tekrar: { baslik: 'Hata Hafızası', alt: 'Tekrar zamanı gelen {n} öğeyi incele' },
     selam: { sabah: 'Günaydın, {ad}', ogle: 'İyi günler, {ad}', aksam: 'İyi akşamlar, {ad}' },
     seri: 'Seri: {n} gün',
     seviye: 'Seviye: {s}',
