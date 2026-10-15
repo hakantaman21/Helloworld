@@ -97,7 +97,7 @@ function ciz(kok, b) {
     h('section', { class: 'b-kart bgn-hizli', 'aria-labelledby': 'bgn-hizli-baslik' },
       h('span', { class: 'b-ust-etiket' }, t('bugun.hizliEtiket')),
       h('h2', { class: 'b-bolum-baslik', id: 'bgn-hizli-baslik' }, t('bugun.hizliBaslik')),
-      h('p', { class: 'b-kucuk' }, t('bugun.hizliAciklama')),
+      h('p', { class: 'b-kucuk bgn-hizli-alt' }, t('bugun.hizliAciklama')),
       h('button', { class: 'b-dugme b-dugme-ana', type: 'button', onClick: senaryoyaGit },
         ikon('mikrofon', 20), t('bugun.hizliDugme')),
     ),
