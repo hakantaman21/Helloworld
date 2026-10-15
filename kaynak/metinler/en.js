@@ -380,6 +380,10 @@ export default {
   },
 
   ayarlar: {
+    gorunumBaslik: 'Appearance and customization',
+    gorunum: 'Card density',
+    gorunumAciklama: 'Comfortable spacing or compact cards for less scrolling.',
+    gorunumSecenek: { dengeli: 'Comfortable', kompakt: 'Compact' },
     baslik: 'Settings',
     tabela: 'Profile',
     arayuzDili: 'App language',
