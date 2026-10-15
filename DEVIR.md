@@ -5,9 +5,10 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.2.7 · dal `tasarim-besli-menu-v0.2.6` (PR #4, taban `tasarim-kesfet-v0.2.2`). `main` ve `deneme` değişmedi; merge Hakan onayıyla.
+- **Sürüm:** v0.2.7 · `deneme` dalında (16.10.2026, Hakan onayıyla `tasarim-besli-menu-v0.2.6` hızlı birleştirildi; PR #3 ve #4 kapandı). `main` (canlı) hâlâ v0.2.0; canlıya alma PR #2 ile, ayrı Hakan onayıyla.
+- **Çalışma kuralı:** Yeni iş `deneme`'den açılan yeni dalda yapılır; aynı dalda aynı anda tek yazan (issue #1, madde 4).
 - **Derleme:** `npm run build` 16.10.2026'da Claude tarafından çalıştırıldı: denetçi ihlali 0, dağıtım denetimi geçti. Vercel Preview sonucu ayrıca doğrulanmalı (Vercel kaynak sınırı uyarısı görülmüştü).
-- **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · PR #2, #3, #4 açık.
+- **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · açık PR: #2 (deneme → main).
 - **Ayrıntılı devir:** ChatGPT'nin 16.10.2026 notu `DEVIR_2026-10-16_CHATGPT.md` (P0 derleme maddesi bu sürümde Claude tarafından kapatıldı).
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
 - **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma (senaryolar, aramalar, tanışma, hata tekrarı), karne, Hata Hafızası, profil dil kimliği ve düzenleme, görünüm tercihi, TR + EN arayüz. Veri yalnız cihazda.
