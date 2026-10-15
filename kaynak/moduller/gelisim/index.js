@@ -131,7 +131,7 @@ function ciz(kok, b) {
     h('section', { class: 'b-kart gls-siradaki', 'aria-labelledby': 'gls-sonraki-adim' },
       h('span', { class: 'b-ust-etiket' }, t('gelisim.siradakiEtiket')),
       h('h2', { class: 'b-bolum-baslik', id: 'gls-sonraki-adim' }, tekrarSayisi ? t('gelisim.tekrarBaslik', { n: tekrarSayisi }) : t('gelisim.pratikBaslik')),
-      h('p', { class: 'b-kucuk' }, tekrarSayisi ? t('gelisim.tekrarAciklama') : t('gelisim.pratikAciklama')),
+      h('p', { class: 'b-kucuk gls-siradaki-alt' }, tekrarSayisi ? t('gelisim.tekrarAciklama') : t('gelisim.pratikAciklama')),
       h('button', { class: 'b-dugme b-dugme-ana', type: 'button', onClick: () => b.git(tekrarSayisi ? '/hafiza' : `/gorusme?tur=senaryo&id=${oneri.kimlik}`) },
         ikon('oynat', 18), t('gelisim.baslatDugme')),
     ),
