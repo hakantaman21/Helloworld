@@ -385,6 +385,10 @@ export default {
   },
 
   ayarlar: {
+    gorunumBaslik: 'Görünüm ve özelleştirme',
+    gorunum: 'Kart yerleşimi',
+    gorunumAciklama: 'Dengeli görünüm daha ferah; kompakt görünüm daha az kaydırma gerektirir.',
+    gorunumSecenek: { dengeli: 'Dengeli', kompakt: 'Kompakt' },
     baslik: 'Ayarlar',
     tabela: 'Profil',
     arayuzDili: 'Uygulama dili',
