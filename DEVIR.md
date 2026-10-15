@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.3.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.2.7'de (16.10.2026, PR #2 ile Hakan onayıyla). Canlıya alma yine yalnız Hakan onayıyla.
+- **Sürüm:** v0.4.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.2.7'de (16.10.2026, PR #2 ile Hakan onayıyla). Canlıya alma yine yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,16 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.4.0
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan HelloTalk ekran görüntüleriyle: "Butonlar, öğeler çok büyük, kompakt değil; sayfa çok kaydırılıyor; profil detaylarında çevrimiçi bilgi, yaş, ülke, otomatik eşleşme eksik. HelloTalk'ı araştır, daha mantıklı ve kullanıcı dostu birleştir."
+- **Ne:** Çekirdek: `htUst`, `htIkon`, `sekmeler`, `dilCifti`, `seviyeNoktalari` (arayuz.js); `test-gorunum.js` (yaş rozeti, etkinlik metni, rozetler); test-modu.js: `takipte/takipDegistir/takipSayisi`, `selamVer/selamVerildi`, `aktiflik`, `yerelSaat`, `eslesme` + `enIyiEslesmeler` (kural tabanlı uyum puanı, nedenleriyle), hazır TEST yorumları. Yönlendiricideki ortak üst şerit kaldırıldı; `ustBaslik({ ikon })` artık ince çubuk çizer.
+- **Ekranlar:** sohbetler, kesfet, dil-anlari, bugun, gelisim, mesaj (kişi profili + sohbet başlığı) yeniden düzenlendi; ayarlar kutuları 3 sütun.
+- **Veri:** 10 test profili; yeni alanlar `kullanici, yas, cinsiyet, saatDilimi, sonAktifDk, katildiGun, meslek, gezilecek, rozetler`. `v.test` içine `takip`, `selamlar` (varsayılanla birleşir, göç gerekmedi).
+- **Dürüstlük:** Çevrimiçi/yaş/rozet yalnız TEST profillerinde ve "test verisidir" notuyla; beğeni sayısı uydurulmaz. Sekmeler 48px dokunma alanını korur (Y13).
+- **Durum:** `deneme` dalında; canlı (main) yalnız Hakan "canlıya al" derse.
 
 ## v0.3.0
 

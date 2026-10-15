@@ -1,10 +1,11 @@
 // Gelişim: haftalık/aylık Büyüme Karnesi (paylaşılabilir kart), seviye yolu, haftanın günleri ve seri.
 import './gelisim.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d } from '../../cekirdek/arayuz.js';
+import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d, htUst, htIkon, dilCifti } from '../../cekirdek/arayuz.js';
+import { testAnlari, takipSayisi } from '../../cekirdek/test-modu.js';
 import { t } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
-import { donemOzeti, dondurmaHakki } from '../../cekirdek/gunluk.js';
+import { donemOzeti, dondurmaHakki, seriHesapla } from '../../cekirdek/gunluk.js';
 import { tarihAnahtari, gunEkle, haftaBaslangici, kisaTarih } from '../../cekirdek/zaman.js';
 import { SEVIYE_SIRASI, oneriSenaryo } from '../../cekirdek/oneri.js';
 import { vadesiGelenler } from '../../cekirdek/hafiza.js';
@@ -96,50 +97,41 @@ function ciz(kok, b) {
   const hafta = haftaBaslangici(bugun);
   const tekrarSayisi = vadesiGelenler().length;
   const oneri = oneriSenaryo().senaryo;
+  const seri = seriHesapla();
+  const benimAnSayisi = testAnlari().filter((a) => a.benim).length;
 
   yerlestir(kok, 
-    h('header', { class: 'gls-profil' },
-      h('span', { class: 'gls-avatar', 'aria-hidden': 'true' }, (v.profil.ad || '?').charAt(0).toLocaleUpperCase()),
-      h('div', { class: 'b-ust-metin b-buyut' },
-        h('div', { class: 'b-tabela' }, t('gelisim.baslik')),
-        h('h1', { class: 'b-baslik' }, v.profil.ad),
-        h('div', { class: 'b-cipler' },
-          h('span', { class: 'b-cip b-cip-vurgu' }, v.profil.seviye),
-          h('span', { class: 'b-cip' }, t(`gelisim.rol.${v.profil.rol || 'ogrenen'}`)),
-          v.profil.anaDil ? h('span', { class: 'b-cip' }, t('gelisim.anaDil', { dil: t(`diller.${v.profil.anaDil}`) })) : null,
-        ),
+    htUst({
+      sol: h('span', { class: 'gls-seri-hap', title: t('ht.gunlukSeri') }, ikon3d('seri', 22), String(seri)),
+      baslik: t('gezinme.profil'),
+      sag: [
+        htIkon('paylas', t('gelisim.paylas'), () => paylas(ozet)),
+        htIkon(ikon3d('ayarlar', 28), t('ayarlar.baslik'), () => b.git('/ayarlar')),
+      ],
+    }),
+    h('button', { type: 'button', class: 'gls-ben', onClick: () => b.git('/ayarlar'), 'aria-label': t('gelisim.kimlik.duzenle') },
+      h('span', { class: 'b-av b-av-ben gls-ben-av', 'aria-hidden': 'true' }, (v.profil.ad || '?').charAt(0).toLocaleUpperCase()),
+      h('span', { class: 'gls-ben-ic' },
+        h('span', { class: 'gls-ben-ad' }, h('b', null, v.profil.ad || '?'), h('span', { class: 'b-etiket-hap' }, v.profil.seviye)),
+        dilCifti(v.profil.anaDil || 'tr', v.profil.ogrenilenDil || 'en', v.profil.seviye),
+        h('span', { class: 'gls-ben-sayilar' }, h('b', null, String(takipSayisi())), ` ${t('ht.takipEdilenSayi')}`, h('b', null, ' 0'), ` ${t('ht.takipci')}`),
       ),
+      ikon('sag', 20),
     ),
-    h('nav', { class: 'b-kart b-menu gls-menu', 'aria-label': t('gelisim.menu.baslik') },
-      [
-        ['ayarlar', '/ayarlar', 'ayarlar'],
-        ['hafiza', '/hafiza', 'hafiza'],
-        ['senaryo', '/senaryolar', 'senaryolar'],
-        ['anlar', '/dil-anlari', 'anlar'],
-        ['baglanti', '/kesfet', 'baglanti'],
-      ].map(([ik, yol, anahtar]) => h('button', { type: 'button', class: 'b-menu-satir', onClick: () => b.git(yol) },
-        ikon3d(ik, 40),
-        h('span', { class: 'b-menu-metin' }, h('b', null, t(`gelisim.menu.${anahtar}.baslik`)), h('span', null, t(`gelisim.menu.${anahtar}.alt`))),
-        ikon('sag', 18),
-      )),
+    h('div', { class: 'gls-istat' },
+      h('button', { type: 'button', class: 'gls-istat-kutu', onClick: () => b.git('/bugun') },
+        h('span', { class: 'gls-istat-deger' }, ikon3d('seri', 26), String(seri)), h('span', null, t('ht.gunlukSeri'))),
+      h('button', { type: 'button', class: 'gls-istat-kutu', onClick: () => b.git('/hafiza') },
+        h('span', { class: 'gls-istat-deger' }, ikon3d('hafiza', 26), String(tekrarSayisi)), h('span', null, t('ht.tekrarBekleyen'))),
     ),
-    h('section', { class: 'b-kart gls-kimlik', 'aria-labelledby': 'gls-kimlik-baslik' },
-      h('div', { class: 'b-satir' },
-        h('h2', { class: 'b-bolum-baslik b-buyut', id: 'gls-kimlik-baslik' }, t('gelisim.kimlik.baslik')),
-        h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => b.git('/ayarlar') }, ikon('ayar', 18), t('gelisim.kimlik.duzenle')),
+    h('button', { type: 'button', class: 'gls-satir', onClick: () => b.git('/dil-anlari') },
+      ikon3d('anlar', 28), h('b', null, t('anlar.baslik')), h('span', { class: 'gls-satir-sayi' }, String(benimAnSayisi)), ikon('sag', 18)),
+    h('section', { class: 'gls-merkez', 'aria-labelledby': 'gls-merkez-baslik' },
+      h('h2', { class: 'gls-merkez-baslik', id: 'gls-merkez-baslik' }, t('ht.ogrenmeMerkezi')),
+      h('div', { class: 'b-uygulamalar gls-uygulamalar' },
+        [['senaryo', 'senaryolar', '/senaryolar', 1], ['telaffuz', 'telaffuz', `/gorusme?tur=senaryo&id=${oneri.kimlik}`, 5], ['hafiza', 'hafiza', '/hafiza', 3], ['kupa', 'karne', '/karne', 2], ['baglanti', 'partner', '/kesfet', 4]].map(([ik, ad, yol, renk]) =>
+          h('button', { type: 'button', class: 'b-uygulama', onClick: () => b.git(yol) }, h('span', { class: `b-uygulama-ikon b-kutu-${renk}` }, ikon3d(ik, 38)), t(`ht.merkez.${ad}`))),
       ),
-      h('dl', { class: 'gls-kimlik-liste' },
-        [
-          [t('gelisim.kimlik.anaDil'), v.profil.anaDil ? t(`diller.${v.profil.anaDil}`) : t('gelisim.kimlik.belirtilmedi')],
-          [t('gelisim.kimlik.hedefDil'), v.profil.ogrenilenDil ? t(`diller.${v.profil.ogrenilenDil}`) : t('gelisim.kimlik.belirtilmedi')],
-          [t('gelisim.kimlik.seviye'), v.profil.seviye || t('gelisim.kimlik.belirtilmedi')],
-          [t('gelisim.kimlik.hedef'), v.profil.dilHedefi || t('gelisim.kimlik.hedefAciklama')],
-        ].map(([etiket, deger]) => h('div', { class: 'gls-kimlik-satir' },
-          h('dt', { class: 'b-kucuk' }, etiket), h('dd', null, deger),
-        )),
-      ),
-      v.profil.tanitimMetni ? h('p', { class: 'b-kucuk' }, v.profil.tanitimMetni) : null,
-      h('p', { class: 'b-kucuk' }, t('gelisim.kimlik.gizlilik')),
     ),
     h('section', { class: 'b-kart gls-siradaki', 'aria-labelledby': 'gls-sonraki-adim' },
       h('span', { class: 'b-ust-etiket' }, t('gelisim.siradakiEtiket')),
@@ -200,7 +192,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'gelisim',
-  surum: '0.2.7',
+  surum: '0.4.0',
   onek: 'gls',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'gunluk'],

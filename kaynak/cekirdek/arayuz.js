@@ -70,6 +70,18 @@ const IKONLAR = {
   yildiz: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',
   kalkan: '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/>',
   kilit: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  degis: '<path d="M4 8h14l-3-3M20 16H6l3 3"/>',
+  arti: '<path d="M12 5v14M5 12h14"/>',
+  ara: '<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/>',
+  zil: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+  suzgec: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+  el: '<path d="M8 13V6a1.5 1.5 0 0 1 3 0v5M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V6a1.5 1.5 0 0 1 3 0v7c0 4-2.5 7-6 7-2.6 0-4.2-1.4-5.6-3.6L4 13.2a1.5 1.5 0 0 1 2.5-1.6L8 13"/>',
+  paylas: '<path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 13v6h14v-6"/>',
+  begen: '<path d="M7 11v9H4v-9zM7 11l4-7c1.5 0 2.5 1 2.2 2.6L12.6 10H19a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 17.8 20H7"/>',
+  nokta3: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
+  kalem: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/>',
+  takvim: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>',
+  saat: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
 };
 
 export function ikon(ad, boyut = 22, kalinlik = 2) {
@@ -96,17 +108,16 @@ export function ikon3d(ad, boyut = 40) {
 const ikonCiz = (...a) => ikon(...a);
 
 export function ustBaslik({ tabela, baslik, alt, sag, geri, ikon }) {
-  // English Prime sayfa kimliği: solda 3B ikon, çerçeveli serif başlık, altında açıklama.
+  // v0.4.0: ikonlu başlık HelloTalk tarzı ince üst çubuk olur (geri · 3B ikon + başlık · sağ), açıklama altta küçük.
   if (ikon) {
-    return h('header', { class: 'b-ust b-ust-ep' },
-      h('div', { class: 'b-ust-ep-satir' },
-        geri ? h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', 'aria-label': t('genel.geri'), onClick: geri }, ikonCiz('sol', 20)) : null,
-        h('span', { class: 'b-ust-ep-ikon' }, ikon3d(ikon, 40)),
-        h('h1', { class: 'b-baslik b-baslik-cerceve' }, baslik),
-      ),
-      alt ? h('p', { class: 'b-altbaslik' }, alt) : null,
-      sag || null,
-    );
+    return [
+      htUst({
+        sol: geri ? h('button', { type: 'button', class: 'b-ht-ikon b-ht-ikon-saydam', 'aria-label': t('genel.geri'), onClick: geri }, ikonCiz('sol', 22)) : null,
+        orta: h('h1', { class: 'b-ht-baslik b-ht-baslik-ikonlu' }, ikon3d(ikon, 28), h('span', null, baslik)),
+        sag: sag || null,
+      }),
+      alt ? h('p', { class: 'b-altbaslik b-ht-alt' }, alt) : null,
+    ];
   }
   return h('header', { class: 'b-ust' },
     h('div', { class: 'b-ust-metin' },
@@ -187,11 +198,12 @@ function cizimAvatar(profil) {
   return svg;
 }
 
-export function testAvatar(profil, boyut = 44) {
+export function testAvatar(profil, boyut = 44, { cevrimici = false } = {}) {
   if (profil && profil.ten) {
     return h('span', { class: `b-av b-av-cizim b-av-${profil.renk || 6}`, style: `width:${boyut}px;height:${boyut}px`, 'aria-hidden': 'true' },
       cizimAvatar(profil),
-      profil.bayrak && boyut >= 36 ? h('span', { class: 'b-av-bayrak', style: `font-size:${Math.max(12, Math.round(boyut * 0.3))}px` }, profil.bayrak) : null,
+      profil.bayrak && boyut >= 32 ? h('span', { class: 'b-av-bayrak', style: `font-size:${Math.max(12, Math.round(boyut * 0.3))}px` }, profil.bayrak) : null,
+      cevrimici ? h('span', { class: 'b-av-cevrimici' }) : null,
     );
   }
   return h('span', { class: `b-av b-av-${(profil && profil.renk) || 6}`, style: `width:${boyut}px;height:${boyut}px;font-size:${Math.round(boyut * 0.42)}px`, 'aria-hidden': 'true' }, (profil && profil.bas) || '?');
@@ -244,4 +256,50 @@ export function onayIste({ baslik, metin, evet, hayir }) {
     document.body.append(perde);
     perde.querySelector('button').focus();
   });
+}
+
+// ===== HelloTalk düzeni (v0.4.0): ince üst çubuk, metin sekmeleri, dil çifti =====
+// Üst çubuk: solda/sağda simge düğmeleri, ortada başlık. Sayfa kayarken üstte kalır.
+export function htUst({ sol, baslik, sag, orta }) {
+  return h('header', { class: 'b-ht-ust' },
+    h('div', { class: 'b-ht-ust-sol' }, sol || null),
+    orta || h('h1', { class: 'b-ht-baslik' }, baslik),
+    h('div', { class: 'b-ht-ust-sag' }, sag || null),
+  );
+}
+
+export function htIkon(icerik, etiket, onClick, { rozet } = {}) {
+  return h('button', { type: 'button', class: 'b-ht-ikon', 'aria-label': etiket, title: etiket, onClick },
+    typeof icerik === 'string' ? ikon(icerik, 22) : icerik,
+    rozet ? h('span', { class: 'b-ht-rozet' }, String(rozet)) : null,
+  );
+}
+
+// Yatay kayan metin sekmeleri (Güncel / Senin için ...) veya hap sekmeler (tur: 'hap').
+export function sekmeler(secenekler, aktif, degisti, { tur = 'metin', etiket } = {}) {
+  const kap = h('div', { class: `b-sekmeler b-sekmeler-${tur}`, role: 'group', 'aria-label': etiket || null });
+  secenekler.forEach(([id, ad]) => {
+    kap.append(h('button', { type: 'button', class: 'b-sekme', 'aria-pressed': String(id === aktif), onClick: () => {
+      kap.querySelectorAll('.b-sekme').forEach((d) => d.setAttribute('aria-pressed', 'false'));
+      kap.querySelector(`[data-id="${id}"]`).setAttribute('aria-pressed', 'true');
+      degisti(id);
+    }, 'data-id': id }, ad));
+  });
+  return kap;
+}
+
+// HelloTalk dil çifti: ana dil (yeşil çizgi) ⇄ öğrenilen dil (seviye noktaları).
+const NOKTA_SEVIYE = ['A1', 'A2', 'B1', 'B2', 'C1'];
+export function seviyeNoktalari(seviye) {
+  const n = Math.max(1, NOKTA_SEVIYE.indexOf(seviye) + 1);
+  return h('span', { class: 'b-noktalar', 'aria-hidden': 'true' }, NOKTA_SEVIYE.map((_, i) => h('i', { class: i < n ? 'b-nokta-dolu' : '' })));
+}
+
+export function dilCifti(anaDil, ogrenilenDil, seviye, { adlarla = false } = {}) {
+  const kod = (d) => (d || '?').toUpperCase();
+  return h('span', { class: 'b-dil-cift', 'aria-label': `${t(`diller.${anaDil}`)} → ${t(`diller.${ogrenilenDil}`)} ${seviye || ''}` },
+    h('span', { class: 'b-dil-ana' }, h('b', null, kod(anaDil)), h('i', { class: 'b-dil-cizgi' }), adlarla ? h('small', null, t(`diller.${anaDil}`)) : null),
+    h('span', { class: 'b-dil-ok', 'aria-hidden': 'true' }, ikon('degis', 16)),
+    h('span', { class: 'b-dil-ogr' }, h('b', null, kod(ogrenilenDil)), seviyeNoktalari(seviye), adlarla ? h('small', null, t(`diller.${ogrenilenDil}`)) : null),
+  );
 }

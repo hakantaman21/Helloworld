@@ -69,11 +69,11 @@ function ciz(kok, b) {
   yerlestir(kok, 
     ustBaslik({ baslik: t('ayarlar.baslik'), ikon: 'ayarlar', geri: () => b.geri('/gelisim') }),
 
-    h('nav', { class: 'b-izgara-2 ayr-kutular', 'aria-label': t('ayarlar.kutu.baslik') },
+    h('nav', { class: 'ayr-kutular', 'aria-label': t('ayarlar.kutu.baslik') },
       [['genel', 'dil', 4], ['profil', 'profil', 1], ['dil', 'kitap', 3], ['saat', 'bildirim', 2], ['gorunum', 'gorunum', 5], ['gizlilik', 'kilit', 6]].map(([k, ik, renk]) =>
         h('button', { type: 'button', class: `b-kutu b-kutu-${renk} ayr-kutu`, onClick: () => { const hedef = kok.querySelector(`#ayr-b-${k}`); if (hedef) hedef.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
-          ikon3d(ik, 44),
-          h('span', { class: 'b-kutu-baslik' }, t(`ayarlar.kutu.${k}`)),
+          ikon3d(ik, 34),
+          h('span', { class: 'b-kutu-baslik ayr-kutu-baslik' }, t(`ayarlar.kutu.${k}`)),
         )),
     ),
 

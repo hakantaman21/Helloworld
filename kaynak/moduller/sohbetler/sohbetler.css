@@ -1,19 +1,11 @@
 @layer moduller {
-  .shb-avatar { width: 48px; height: 48px; flex-shrink: 0; border-radius: var(--kose-tam); display: flex; align-items: center; justify-content: center; }
-  .shb-avatar-yz { border-radius: var(--kose-kucuk); background: var(--renk-gece); color: var(--renk-gece-vurgu); }
-  .shb-metin { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
-  .shb-ad { font-size: var(--yazi-govde); font-weight: 700; overflow-wrap: anywhere; }
-  .shb-arama { display: flex; align-items: center; gap: var(--bosluk-2); padding-left: var(--bosluk-3); border: 1px solid var(--renk-cizgi-guclu); background: var(--renk-yuzey); border-radius: var(--kose-tam); }
-  .shb-arama-girdi { flex: 1; min-width: 0; border: 0; background: transparent; }
-  .shb-filtreler { display: flex; gap: var(--bosluk-2); overflow-x: auto; padding-bottom: var(--bosluk-1); }
-  .shb-filtre { flex: 1; min-height: var(--dokunma); padding: 0 var(--bosluk-3); border: 1px solid var(--renk-cizgi); border-radius: var(--kose-tam); background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; font-weight: 600; cursor: pointer; }
-  .shb-filtre[aria-pressed="true"] { background: var(--renk-vurgu); border-color: var(--renk-vurgu); color: var(--renk-vurgu-uzerinde); }
-  .shb-liste { display: flex; flex-direction: column; gap: var(--bosluk-3); }
-  .shb-bilgi { padding: var(--bosluk-2); }
-}
-
-@layer moduller {
-  .shb-avatar-test { background: var(--renk-orta-acik); color: var(--renk-orta-metin); font-weight: 800; }
-  .shb-test { text-align: left; font: inherit; color: inherit; width: 100%; }
-  .shb-son { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .shb-av-yz { width: 52px; height: 52px; flex-shrink: 0; border-radius: var(--kose-tam); display: grid; place-items: center; background: radial-gradient(70% 70% at 30% 25%, var(--renk-kutu-4), var(--renk-yuzey)); box-shadow: inset 0 0 0 1px var(--renk-cizgi); }
+  .shb-av-gecmis { background: radial-gradient(70% 70% at 30% 25%, var(--renk-kutu-1), var(--renk-yuzey)); }
+  .shb-ben { background: transparent; }
+  .shb-ben-av { width: 36px; height: 36px; font-size: 15px; }
+  .shb-hizli { margin-top: 2px; }
+  .shb-liste { margin-top: -4px; }
+  .shb-oneri-alt { color: var(--renk-baslik); }
+  .shb-uyum { margin-left: auto; }
+  .shb-bilgi { padding: var(--bosluk-2) 0; }
 }

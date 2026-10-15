@@ -1,3 +1,14 @@
+## 0.4.0 — 16.10.2026 · HelloTalk düzeni: sıkı, dolu, kullanıcı dostu
+
+- Yoğunluk: daha küçük aralıklar, ince üst çubuk (geri · başlık · simgeler), düz liste satırları, tam genişlik alt menü; ekranlar daha az kaydırılıyor.
+- Sohbetler ("Dil Sohbetleri"): üstte hızlı erişim simgeleri, arama, Tümü / Çevrimiçi / İnsanlar / Yapay zekâ hapları, avatar + bayrak + son mesaj + zaman satırları, sana uygun ortak önerisi.
+- Bağlantı ("Dil Ortakları Bul"): Tümü / Sana uygun / Çevrimiçi / Yeni / Seviyeme yakın sekmeleri, dil hapları, yaş-cinsiyet-hızlı yanıt süzgeci, dil çifti (EN ⇄ TR + seviye noktaları), yaş rozeti, "x dk önce aktifti", rozetler, el sallama (selam), otomatik eşleşme kartı (uyum yüzdesi ve nedenleri).
+- Kişi profili: noktalı dünya kapağı, yerel saat, büyük avatar + bayrak + çevrimiçi noktası, yaş, @kullanıcı adı, dil çifti, uyum, katılma günü, hobiler, meslek, gezilecek yerler, Profil / Dil Anları sekmeleri; altta Takip · Sohbet · Selam çubuğu; şikâyet/engelle "…" menüsünde.
+- Dil Anları: arama + bildirim + yaz; Güncel / Senin için / Başkalarına yardım et / Takip sekmeleri; takip et, beğen, yorum, düzelt, paylaş; satır içi yorum önizlemesi.
+- Pratik: tek afiş (yapay zekâ / gerçek kişi), uygulama simgeleri, günün döngüsü; yinelenen bölümler ve üstte kalan Konuş düğmesi kaldırıldı.
+- Ben (Profil): avatar, dil çifti, takip sayıları, günlük seri ve tekrar kutuları, Dil Anları satırı, Öğrenme merkezi simgeleri.
+- Sanal kullanıcı sayısı 10'a çıktı (ABD, Avustralya, Hindistan, Kore eklendi). Yaş, etkinlik ve rozetler TEST verisidir ve öyle yazılır.
+
 ## 0.3.0 — 16.10.2026 · Gerçek English Prime görünümü + HelloTalk içeriği
 
 - English Prime'ın kendi 3B ikonları (30 ikon, webp) uygulamaya gömüldü: alt menü, sayfa başlıkları, Pratik kutuları, Profil menüsü, Ayarlar grupları.

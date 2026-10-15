@@ -2,13 +2,15 @@
 // Açıkken test profilleri "TEST" rozetiyle görünür; kapalıyken hiçbir test verisi gösterilmez.
 // Test sohbetleri gelişim, seviye ve Hata Hafızası kayıtlarına HİÇ yazılmaz (yalnız v.test alanı).
 import { al, degistir } from './depo.js';
-import { TEST_PROFILLERI, TEST_ANLARI, TEST_YORUM_KALIPLARI } from '../veri/test-profiller.js';
+import { TEST_PROFILLERI, TEST_ANLARI, TEST_YORUM_KALIPLARI, TEST_HAZIR_YORUMLAR } from '../veri/test-profiller.js';
+import { SEVIYE_SIRASI } from './oneri.js';
+import { aktifDil } from './metin.js';
 import { duzeltmeleriBul, tumunuDuzelt } from './dil/duzeltme-motoru.js';
 
 const MESAJ_SINIRI = 200;
 
 function test() {
-  return { anlar: [], begeniler: [], yorumlar: {}, duzeltmeler: {}, ...(al().test || { acik: false, sohbetler: {}, engelli: [], sikayetler: [] }) };
+  return { anlar: [], begeniler: [], yorumlar: {}, duzeltmeler: {}, takip: [], selamlar: [], ...(al().test || { acik: false, sohbetler: {}, engelli: [], sikayetler: [] }) };
 }
 
 function testGuncelle(fn) {
@@ -83,7 +85,7 @@ export function testSikayet(kimlik, neden) {
 }
 
 export function testVerileriniSil() {
-  degistir((v) => { v.test = { acik: testModuAcik(), sohbetler: {}, engelli: [], sikayetler: [], anlar: [], begeniler: [], yorumlar: {}, duzeltmeler: {} }; });
+  degistir((v) => { v.test = { acik: testModuAcik(), sohbetler: {}, engelli: [], sikayetler: [], anlar: [], begeniler: [], yorumlar: {}, duzeltmeler: {}, takip: [], selamlar: [] }; });
 }
 
 // ---- Dil Anları (test) ----
@@ -109,7 +111,11 @@ export function anBegen(kimlik) {
   testGuncelle((t) => { const b = new Set(t.begeniler || []); if (b.has(kimlik)) b.delete(kimlik); else b.add(kimlik); t.begeniler = [...b]; });
 }
 
-export function anYorumlari(kimlik) { return (test().yorumlar || {})[kimlik] || []; }
+export function anYorumlari(kimlik) {
+  const engelli = test().engelli || [];
+  const hazir = (TEST_HAZIR_YORUMLAR[kimlik] || []).filter((y) => !engelli.includes(y.yazar)).map((y) => ({ ...y, hazir: true }));
+  return [...hazir, ...((test().yorumlar || {})[kimlik] || [])];
+}
 
 export function anYorumEkle(kimlik, yorum) {
   testGuncelle((t) => { t.yorumlar = { ...(t.yorumlar || {}) }; t.yorumlar[kimlik] = [...(t.yorumlar[kimlik] || []), { ...yorum, zaman: Date.now() }].slice(-50); });
@@ -137,4 +143,55 @@ export function anOtomatikYorum(kimlik) {
 
 export function testProfiliHam(kimlik) {
   return TEST_PROFILLERI.find((p) => p.kimlik === kimlik) || null;
+}
+
+// ---- Takip ve selam (HelloTalk "takip et" / "el salla") ----
+export function takipte(kimlik) { return (test().takip || []).includes(kimlik); }
+export function takipDegistir(kimlik) {
+  testGuncelle((t) => { const k = new Set(t.takip || []); if (k.has(kimlik)) k.delete(kimlik); else k.add(kimlik); t.takip = [...k]; });
+  return takipte(kimlik);
+}
+export function takipSayisi() { return (test().takip || []).length; }
+export function selamVerildi(kimlik) { return (test().selamlar || []).includes(kimlik); }
+export function selamVer(kimlik, metin) {
+  testGuncelle((t) => { t.selamlar = [...new Set([...(t.selamlar || []), kimlik])]; });
+  testMesajEkle(kimlik, { kim: 'ben', metin, selam: true });
+}
+
+// ---- Etkinlik (TEST verisi: profillerdeki sonAktifDk alanından; gerçek kişi durumu değildir) ----
+export function aktiflik(p) {
+  const dk = Number(p.sonAktifDk || 0);
+  if (dk <= 0) return { cevrimici: true, dk: 0 };
+  return { cevrimici: false, dk };
+}
+
+// Kişinin şehrindeki yerel saat (HelloTalk profilindeki saat rozeti).
+export function yerelSaat(p) {
+  try {
+    return new Intl.DateTimeFormat(aktifDil() === 'tr' ? 'tr-TR' : 'en-GB', { hour: '2-digit', minute: '2-digit', timeZone: p.saatDilimi }).format(new Date());
+  } catch { return ''; }
+}
+
+// ---- Otomatik eşleşme: dil değişimi uyumu + seviye + etkinlik ----
+// Puan bir kural toplamıdır (yapay zekâ değildir). Nedenler ekranda açıkça yazılır.
+export function eslesme(p, ben = al().profil) {
+  const nedenler = [];
+  let puan = 10;
+  if (ben.ogrenilenDil && p.anaDil === ben.ogrenilenDil) { puan += 40; nedenler.push('anaDil'); }
+  if (ben.anaDil && p.ogrenilenDil === ben.anaDil) { puan += 25; nedenler.push('karsilikli'); }
+  const fark = Math.abs(SEVIYE_SIRASI.indexOf(p.seviye) - SEVIYE_SIRASI.indexOf(ben.seviye));
+  if (fark <= 1) { puan += 8; nedenler.push('seviye'); }
+  const a = aktiflik(p);
+  if (a.cevrimici || a.dk < 60) { puan += 6; nedenler.push('aktif'); }
+  if ((p.rozetler || []).includes('hizli')) { puan += 4; nedenler.push('hizli'); }
+  return { puan: Math.min(99, puan), nedenler };
+}
+
+export function enIyiEslesmeler() {
+  return testProfilleri().map((p) => ({ profil: p, ...eslesme(p) })).sort((a, b) => b.puan - a.puan);
+}
+
+// El sallamaya otomatik test yanıtı (kalıp; yapay zekâ değildir).
+export function selamYaniti(p) {
+  return { kim: 'o', metin: `Hi! 👋 Thanks for the wave, I'm ${p.ad}. How is your day going?`, otomatik: true };
 }

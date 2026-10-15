@@ -3,12 +3,12 @@
 // Gerçek topluluk açılınca aynı ekran sunucudaki gerçek sohbete bağlanır. Test mesajları gelişime sayılmaz.
 import './mesaj.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, durumKutusu, yerlestir, testEtiketi, farkCiz, onayIste, testAvatar, goreliZaman } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, durumKutusu, yerlestir, testEtiketi, farkCiz, onayIste, testAvatar, goreliZaman, dilCifti, sekmeler } from '../../cekirdek/arayuz.js';
+import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { kelimeFarki } from '../../cekirdek/dil/fark.js';
-import { testProfili, testMesajlari, testMesajEkle, otomatikYanit, gonderimOncesiOneri, testEngelle, testSikayet, testYazarAnlari } from '../../cekirdek/test-modu.js';
-import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
+import { testProfili, testMesajlari, testMesajEkle, otomatikYanit, gonderimOncesiOneri, testEngelle, testSikayet, testYazarAnlari, aktiflik, yerelSaat, eslesme, takipte, takipDegistir, selamVer, selamVerildi, selamYaniti } from '../../cekirdek/test-modu.js';
 import { TEST_KONULARI } from '../../veri/test-profiller.js';
 
 const YANIT_GECIKMESI = 1300;
@@ -37,7 +37,7 @@ function ciz(kok, b) {
         h('div', { class: 'msj-balon msj-balon-ben' }, h('p', null, m.metin), h('span', { class: 'msj-saat' }, saat(m.zaman), m.duzeltildi ? ` · ${t('test.duzeltilerekGonderildi')}` : '')));
     }
     return h('div', { class: 'msj-satir msj-o' },
-      h('span', { class: `msj-av msj-av-${profil.renk}`, 'aria-hidden': 'true' }, profil.bas),
+      testAvatar(profil, 32),
       h('div', { class: 'msj-o-ic' },
         m.duzeltme ? h('div', { class: 'msj-duzeltme' },
           h('span', { class: 'msj-duzeltme-baslik' }, ikon('onay', 16), t('test.partnerDuzeltmesi', { ad: profil.ad })),
@@ -54,7 +54,7 @@ function ciz(kok, b) {
       h('div', { class: 'msj-uyari' }, testEtiketi(), h('span', null, t('test.sohbetUyari'))),
       mesajlar.length ? null : h('p', { class: 'b-kucuk msj-bos' }, t('test.ilkMesaj', { ad: profil.ad })),
       mesajlar.map(balon),
-      yaziyor ? h('div', { class: 'msj-satir msj-o' }, h('span', { class: `msj-av msj-av-${profil.renk}`, 'aria-hidden': 'true' }, profil.bas), h('div', { class: 'msj-balon msj-balon-o msj-yaziyor' }, t('test.yaziyor', { ad: profil.ad }))) : null,
+      yaziyor ? h('div', { class: 'msj-satir msj-o' }, testAvatar(profil, 32), h('div', { class: 'msj-balon msj-balon-o msj-yaziyor' }, t('test.yaziyor', { ad: profil.ad }))) : null,
     );
     requestAnimationFrame(() => window.scrollTo(0, document.body.scrollHeight));
   }
@@ -122,16 +122,17 @@ function ciz(kok, b) {
 
   yerlestir(kok,
     h('header', { class: 'msj-ust' },
-      h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', 'aria-label': t('genel.geri'), onClick: () => b.geri('/kesfet') }, ikon('sol', 20)),
-      h('button', { type: 'button', class: 'msj-av-dugme', onClick: () => b.git(`/kisi?k=${profil.kimlik}`), 'aria-label': t('test.profiliGor') }, testAvatar(profil, 40)),
+      h('button', { type: 'button', class: 'b-ht-ikon msj-geri', 'aria-label': t('genel.geri'), onClick: () => b.geri('/sohbetler') }, ikon('sol', 22)),
+      h('button', { type: 'button', class: 'msj-av-dugme', onClick: () => b.git(`/kisi?k=${profil.kimlik}`), 'aria-label': t('test.profiliGor') }, testAvatar(profil, 40, { cevrimici: aktiflik(profil).cevrimici })),
       h('div', { class: 'msj-kim' },
         h('div', { class: 'msj-ad' }, h('b', null, profil.ad), testEtiketi()),
-        h('span', { class: 'b-kucuk' }, `${yerel(profil.ulke)} · ${profil.seviye}`),
+        h('span', { class: 'b-kucuk' }, `${aktiflikMetni(profil)} · ${yerelSaat(profil)}`),
       ),
-    ),
-    h('div', { class: 'msj-araclar' },
-      h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve msj-arac-dugme', onClick: sikayetEt }, ikon('kalkan', 18), t('test.sikayetEt')),
-      h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve msj-arac-dugme', onClick: engelle }, ikon('kapat', 18), t('test.engelle')),
+      h('button', { type: 'button', class: 'b-ht-ikon msj-menu', 'aria-label': t('ht.dahaFazla'), onClick: () => eylemMenusu([
+        [t('test.profiliGor'), () => b.git(`/kisi?k=${profil.kimlik}`)],
+        [t('test.sikayetEt'), sikayetEt],
+        [t('test.engelle'), engelle, true],
+      ]) }, ikon('nokta3', 22)),
     ),
     liste,
     h('div', { class: 'msj-alt' },
@@ -165,59 +166,111 @@ async function sikayetPenceresi(ad) {
   });
 }
 
-function seviyeCubugu(seviye) {
-  const i = SEVIYE_SIRASI.indexOf(seviye);
-  return h('span', { class: 'msj-seviye', role: 'img', 'aria-label': seviye },
-    SEVIYE_SIRASI.map((s, j) => h('i', { class: j <= i ? 'msj-seviye-dolu' : 'msj-seviye-bos' })), h('b', null, seviye));
+// Basit eylem menüsü (HelloTalk "…"): alttan açılan pencere.
+function eylemMenusu(secenekler) {
+  const kapat = () => perde.remove();
+  const perde = h('div', { class: 'b-perde', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('ht.dahaFazla'), onClick: (e) => { if (e.target === perde) kapat(); } },
+    h('div', { class: 'b-pencere msj-menu-pencere' },
+      secenekler.map(([ad, fn, tehlike]) => h('button', { type: 'button', class: `b-dugme ${tehlike ? 'b-dugme-tehlike' : 'b-dugme-cerceve'}`, onClick: () => { kapat(); fn(); } }, ad)),
+      h('button', { type: 'button', class: 'b-dugme', onClick: kapat }, t('genel.vazgec')),
+    ));
+  document.body.append(perde);
+  perde.querySelector('button').focus();
 }
 
+// Kişi profili (HelloTalk profil sayfası düzeni): kapak, avatar, yaş, kullanıcı adı, etkinlik, yerel saat,
+// dil çifti, eşleşme uyumu, tanıtım, Profil / Dil Anları sekmeleri; altta Takip · Sohbet · Selam çubuğu.
 function kisiCiz(kok, b) {
   const p = testProfili(b.p.k);
   if (!p) {
     yerlestir(kok, durumKutusu('bos', t('test.profilYok'), { metin: t('genel.geri'), fn: () => b.geri('/kesfet') }));
     return null;
   }
+  kok.classList.add('msj-kisi-ekran');
   const anlar = testYazarAnlari(p.kimlik);
-  yerlestir(kok,
-    h('div', { class: 'msj-kisi-ust' },
-      h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', 'aria-label': t('genel.geri'), onClick: () => b.geri('/kesfet') }, ikon('sol', 20)),
-      testEtiketi(),
-    ),
-    h('section', { class: 'b-kart msj-kisi-kahraman' },
-      testAvatar(p, 88),
-      h('h1', { class: 'b-baslik' }, p.ad),
-      h('span', { class: 'b-kucuk' }, yerel(p.ulke)),
-      h('p', { class: 'msj-kisi-tanitim' }, yerel(p.tanitim)),
-      h('div', { class: 'msj-kisi-eylem' },
-        h('button', { type: 'button', class: 'b-dugme b-dugme-ana msj-kisi-mesaj', onClick: () => b.git(`/mesaj?k=${p.kimlik}`) }, ikon('sohbet', 20), t('test.mesajYaz')),
-        h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', 'aria-label': t('test.sikayetEt'), title: t('test.sikayetEt'), onClick: async () => { const n = await sikayetPenceresi(p.ad); if (!n) return; testSikayet(p.kimlik, n); duyur(t('test.sikayetAlindi'), 4000); } }, ikon('kalkan', 20)),
+  const uyum = eslesme(p);
+  const a = aktiflik(p);
+  let sekme = 'profil';
+  const icerik = h('div', { class: 'msj-kisi-icerik' });
+  const takipDugmesi = h('button', { type: 'button', class: 'msj-alt-takip' });
+
+  async function sikayet() { const n = await sikayetPenceresi(p.ad); if (!n) return; testSikayet(p.kimlik, n); duyur(t('test.sikayetAlindi'), 4000); }
+  async function engelle() {
+    const evet = await onayIste({ baslik: t('test.engelleBaslik', { ad: p.ad }), metin: t('test.engelleMetin'), evet: t('test.engelle'), hayir: t('genel.vazgec') });
+    if (!evet) return;
+    testEngelle(p.kimlik); duyur(t('test.engellendi', { ad: p.ad })); b.git('/kesfet', { degistir: true });
+  }
+  function takipCiz() {
+    const var_ = takipte(p.kimlik);
+    takipDugmesi.setAttribute('aria-pressed', String(var_));
+    takipDugmesi.setAttribute('aria-label', var_ ? t('ht.takiptesin') : t('ht.takipEt'));
+    yerlestir(takipDugmesi, ikon(var_ ? 'onay' : 'arti', 22));
+  }
+  const grup = (baslik, ...cocuk) => h('section', { class: 'msj-grup' }, h('h2', { class: 'msj-grup-baslik' }, baslik), ...cocuk);
+  const haplar = (dizi) => h('div', { class: 'msj-haplar' }, dizi.map((x) => h('span', { class: 'msj-hap' }, x)));
+
+  function icerikCiz() {
+    if (sekme === 'anlar') {
+      yerlestir(icerik, anlar.length ? anlar.map((an) => h('button', { type: 'button', class: 'msj-an', onClick: () => b.git('/dil-anlari') },
+        h('span', null, an.metin),
+        an.gorsel ? h('span', { class: `msj-an-gorsel b-kutu-${an.gorsel.kutu}` }, ikon3d(an.gorsel.ikon, 32), yerel(an.gorsel.yazi)) : null,
+        h('span', { class: 'b-kucuk' }, goreliZaman(an.zaman)))) : h('p', { class: 'b-kucuk' }, t('test.anYok')));
+      return;
+    }
+    yerlestir(icerik,
+      h('div', { class: 'msj-istatistik' },
+        h('span', null, ikon('takvim', 18), t('ht.katildi', { n: p.katildiGun })),
+        h('span', null, ikon('kalem', 18), t('ht.anSayisi', { n: anlar.length })),
+        h('span', null, ikon('saat', 18), t('ht.yerelSaat', { saat: yerelSaat(p) })),
       ),
+      h('section', { class: 'msj-uyum' },
+        h('span', { class: 'msj-uyum-puan' }, `%${uyum.puan}`),
+        h('div', null, h('b', null, t('ht.uyumBaslik')), h('span', { class: 'b-kucuk' }, uyum.nedenler.map((n) => t(`ht.neden.${n}`, { dil: t(`diller.${n === 'karsilikli' ? p.ogrenilenDil : p.anaDil}`) })).join(' · '))),
+      ),
+      grup(t('ht.hobiler'), haplar(p.ilgi.map((i) => yerel(i)))),
+      grup(t('ht.meslek'), haplar([yerel(p.meslek)])),
+      grup(t('ht.gezilecek'), haplar(p.gezilecek || [])),
+      grup(t('ht.ozellikler'), rozetler(p)),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-metin msj-sikayet-baglanti', onClick: sikayet }, ikon('kalkan', 16), t('test.sikayetEt')),
+    );
+  }
+
+  takipCiz();
+  yerlestir(kok,
+    h('div', { class: 'msj-kapak', 'aria-hidden': 'false' },
+      h('button', { type: 'button', class: 'b-ht-ikon msj-kapak-dugme', 'aria-label': t('genel.geri'), onClick: () => b.geri('/kesfet') }, ikon('sol', 22)),
+      h('span', { class: 'msj-kapak-saat' }, yerelSaat(p)),
+      h('button', { type: 'button', class: 'b-ht-ikon msj-kapak-dugme', 'aria-label': t('ht.dahaFazla'), onClick: () => eylemMenusu([[t('test.sikayetEt'), sikayet], [t('test.engelle'), engelle, true]]) }, ikon('nokta3', 22)),
     ),
-    h('section', { class: 'b-kart' },
-      h('span', { class: 'b-ust-etiket' }, t('test.dilKimligi')),
-      h('div', { class: 'msj-dil-satir' }, h('span', null, t('test.anaDili')), h('b', null, t(`diller.${p.anaDil}`))),
-      h('div', { class: 'msj-dil-satir' }, h('span', null, t('test.ogreniyor')), h('b', null, t(`diller.${p.ogrenilenDil}`)), seviyeCubugu(p.seviye)),
+    h('section', { class: 'msj-kimlik' },
+      h('div', { class: 'msj-kimlik-ust' },
+        h('span', { class: 'msj-av-cerceve' }, testAvatar(p, 96, { cevrimici: a.cevrimici })),
+        h('span', { class: 'msj-aktif' }, a.cevrimici ? h('i') : null, aktiflikMetni(p)),
+      ),
+      h('div', { class: 'msj-ad-satir' }, h('h1', { class: 'msj-ad-buyuk' }, p.ad), yasRozeti(p), testEtiketi()),
+      h('span', { class: 'b-kucuk' }, `@${p.kullanici} · ${yerel(p.ulke)}`),
+      h('div', { class: 'msj-dil' }, dilCifti(p.anaDil, p.ogrenilenDil, p.seviye, { adlarla: true })),
+      h('p', { class: 'msj-kisi-tanitim' }, yerel(p.tanitim)),
     ),
-    h('section', { class: 'b-kart' },
-      h('span', { class: 'b-ust-etiket' }, t('test.ilgiAlanlari')),
-      h('div', { class: 'b-cipler' }, p.ilgi.map((i) => h('span', { class: 'b-cip' }, yerel(i)))),
+    sekmeler([['profil', t('ht.profilSekme')], ['anlar', t('ht.anlarSekme', { n: anlar.length })]], sekme, (id) => { sekme = id; icerikCiz(); }, { tur: 'hap' }),
+    icerik,
+    h('div', { class: 'msj-alt-cubuk' },
+      takipDugmesi,
+      h('button', { type: 'button', class: 'b-dugme b-dugme-ana msj-alt-sohbet', onClick: () => b.git(`/mesaj?k=${p.kimlik}`) }, ikon('sohbet', 20), t('ht.sohbet')),
+      h('button', { type: 'button', class: 'msj-alt-selam', 'aria-label': t('ht.selamVer', { ad: p.ad }), onClick: () => {
+        if (!selamVerildi(p.kimlik)) { selamVer(p.kimlik, t('ht.selamMetni')); setTimeout(() => testMesajEkle(p.kimlik, selamYaniti(p)), YANIT_GECIKMESI); }
+        b.git(`/mesaj?k=${p.kimlik}`);
+      } }, ikon('el', 22)),
     ),
-    h('section', { class: 'b-kart' },
-      h('span', { class: 'b-ust-etiket' }, t('test.anlari', { ad: p.ad })),
-      anlar.length ? anlar.map((a) => h('button', { type: 'button', class: 'msj-an', onClick: () => b.git('/dil-anlari') }, h('span', null, a.metin), h('span', { class: 'b-kucuk' }, goreliZaman(a.zaman)))) : h('p', { class: 'b-kucuk' }, t('test.anYok')),
-    ),
-    h('button', { type: 'button', class: 'b-dugme b-dugme-tehlike', onClick: async () => {
-      const evet = await onayIste({ baslik: t('test.engelleBaslik', { ad: p.ad }), metin: t('test.engelleMetin'), evet: t('test.engelle'), hayir: t('genel.vazgec') });
-      if (!evet) return;
-      testEngelle(p.kimlik); duyur(t('test.engellendi', { ad: p.ad })); b.git('/kesfet', { degistir: true });
-    } }, ikon('kapat', 18), t('test.engelle')),
   );
+  takipDugmesi.addEventListener('click', () => { const sonra = takipDegistir(p.kimlik); takipCiz(); duyur(sonra ? t('ht.takipEdildi', { ad: p.ad }) : t('ht.takiptenCikti', { ad: p.ad })); });
+  icerikCiz();
   return null;
 }
 
 export default {
   kimlik: 'mesaj',
-  surum: '0.2.9',
+  surum: '0.4.0',
   onek: 'msj',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'metin', 'test-modu'],

@@ -12,7 +12,8 @@
 }
 
 @layer moduller {
-  .ayr-kutular { gap: 12px; }
-  .ayr-kutu { min-height: 104px; }
+  .ayr-kutular { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .ayr-kutu { min-height: 84px; padding: 10px; gap: 4px; border-radius: 16px; }
+  .ayr-kutu-baslik { font-size: 13.5px; line-height: 1.2; }
   .ayr-bolum { scroll-margin-top: 16px; }
 }
