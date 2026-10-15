@@ -52,6 +52,7 @@ export default {
   },
 
   anlar: {
+    baglantiyaGit: 'Discover people',
     baslik: 'Language Moments',
     alt: 'Build language skills through short moments',
     aciklama: 'Community posts are not available yet. They will appear when safety and moderation are ready.',
