@@ -151,6 +151,8 @@ export default {
   },
 
   sohbetler: {
+    gecmisBilgi: 'Önceki mesaj ve konuşmaların burada. Yeni kişiler için Bağlantı, konuşma çalışmak için Pratik bölümünü kullan.',
+    yeniKisi: 'Yeni kişiler keşfet',
     hizliBaslik: 'Hemen konuşmaya başla',
     hizliAlt: 'Beklemeden yapay zekâ partnerinle kısa bir konuşma yap.',
     hizliDugme: 'Konuşmaya başla',
@@ -175,6 +177,7 @@ export default {
   },
 
   kesfet: {
+    pratigeGit: 'Pratik bölümüne git',
     heroEtiket: 'HEMEN BAŞLA',
     heroBaslik: 'Konuşarak öğren, pratik yaparak geliş',
     heroAlt: 'Gerçek partner arayabilir veya beklemeden yapay zekâ ile pratik yapabilirsin.',
