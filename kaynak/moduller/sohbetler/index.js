@@ -40,10 +40,10 @@ function ciz(kok, b) {
       filtre === 'tum' && !arama ? h('p', { class: 'b-kucuk shb-bilgi' }, t('sohbetler.insanBilgi')) : null,
     );
   }
-  const secenekler = [['tum', 'tumFiltre'], ['yz', 'yzFiltre'], ['insan', 'insanFiltre']];
+  const secenekler = [['tum', t('sohbetler.tumFiltre')], ['yz', t('sohbetler.yzFiltre')], ['insan', t('sohbetler.insanFiltre')]];
   const filtreler = h('div', { class: 'shb-filtreler', role: 'group', 'aria-label': t('sohbetler.filtreBaslik') },
     secenekler.map(([id, anahtar]) => {
-      const oge = h('button', { type: 'button', class: 'shb-filtre', 'aria-pressed': String(filtre === id), onClick: () => { filtre = id; yenile(); } }, t('sohbetler.' + anahtar));
+      const oge = h('button', { type: 'button', class: 'shb-filtre', 'aria-pressed': String(filtre === id), onClick: () => { filtre = id; yenile(); } }, anahtar);
       dugmeler[id] = oge;
       return oge;
     }),
