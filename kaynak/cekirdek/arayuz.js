@@ -102,8 +102,9 @@ export function ustBaslik({ tabela, baslik, alt, sag, geri }) {
 // Dört sekme (Anayasa bölüm 4): Sohbetler · Keşfet · Pratik · Profil
 const GEZINME = [
   { yol: '/sohbetler', ikon: 'sohbet', anahtar: 'gezinme.sohbetler' },
-  { yol: '/kesfet', ikon: 'pusula', anahtar: 'gezinme.kesfet' },
-  { yol: '/bugun', ikon: 'mikrofon', anahtar: 'gezinme.pratik' },
+  { yol: '/kesfet', ikon: 'pusula', anahtar: 'gezinme.baglanti' },
+  { yol: '/dil-anlari', ikon: 'yildiz', anahtar: 'gezinme.dilAnlari' },
+  { yol: '/bugun', ikon: 'dalga', anahtar: 'gezinme.ai' },
   { yol: '/gelisim', ikon: 'kisi', anahtar: 'gezinme.profil' },
 ];
 
@@ -116,6 +117,17 @@ export function altGezinme(aktifYol) {
         'aria-current': g.yol === aktifYol ? 'page' : false,
       }, ikon(g.ikon), t(g.anahtar))),
     ),
+  );
+}
+
+// English Prime esinli: her ana ekranda tek satır profil / ayarlar, gerçek hedeflere gider.
+export function ustKontroller(ad) {
+  return h('div', { class: 'b-ust-kontroller' },
+    h('a', { class: 'b-ust-profil', href: '#/gelisim', 'aria-label': t('gezinme.profil') },
+      h('span', { class: 'b-ust-avatar', 'aria-hidden': 'true' }, (ad || '?').charAt(0).toLocaleUpperCase()),
+      h('span', null, t('gezinme.profil'))),
+    h('span', { class: 'b-ust-marka' }, t('uygulama.ad')),
+    h('a', { class: 'b-ust-ayar', href: '#/ayarlar', 'aria-label': t('ayarlar.baslik') }, ikon('ayar', 22)),
   );
 }
 
