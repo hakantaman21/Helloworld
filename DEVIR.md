@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.2.1 deneme teslimi; ana dal kaynak sürümü kontrol sırasında v0.2.0 (8780227). Canlı Vercel sürümü ayrıca doğrulanmalı; dal sürümü yayın kanıtı değildir.
+- **Sürüm:** v0.2.2 tasarim-kesfet-v0.2.2 dalında, v0.2.1 deneme üzerine; ana dal kaynak sürümü kontrol sırasında v0.2.0 (8780227). Canlı Vercel sürümü ayrıca doğrulanmalı; dal sürümü yayın kanıtı değildir.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · uygulayıcı Codex; Claude incelemesi bekleniyor.
 - **Depo:** `hakantaman21/helloworld` · Vercel projesi: `helloworld` (Hakan 21). Canlı ve deneme linkleri Vercel → helloworld → Deployments'ta.
 - **Ne çalışıyor:** İlk açılış (4 adım), dört sekme, yapay zekâ partnerle demo konuşma (senaryolar, sabah/akşam araması, tanışma, hata tekrarı), karne, Hata Hafızası, profil/gelişim, ayarlar, İngilizce + Türkçe arayüz. Veri yalnız cihazda.
@@ -14,6 +14,16 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.2.2 — 16.10.2026
+
+- **Yapan:** ChatGPT (GitHub bağlı sohbet), Hakan'ın HelloTalk ekran görüntüleri ve ELSA/Speak tasarım isteğiyle.
+- **Ne yapıldı:** Keşfet ekranı; hızlı konuşma kartı, gerçek insan/AI sekmeleri, planlanan eşleşme ölçütleri, telaffuz/senaryo yolu, iki dilli içerik ve erişilebilir düzen.
+- **Güvenilirlik:** Gerçek kişi listesi üretilmedi, sahte puan yok. Demo koç açıkça etiketli. Hesap/sunucu/gerçek fonem puanı yok.
+- **Dokunulan dosyalar:** kesfet/index.js, kesfet.css, metinler/tr.js ve en.js, sürüm ve devir belgeleri.
+- **Kontrol durumu:** Kod incelemesi ve cihaz/robot testleri bekliyor. PR onaylanmadan deneme/main'e alınmaz.
+- **Sıradaki:** Claude incelemesi; onay sonrası deneme dalına alma, sonra telefon testi.
+
 
 ## v0.2.1 — 15.10.2026
 
