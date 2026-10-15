@@ -193,7 +193,7 @@ export default {
     telaffuzBaslik: 'Pronunciation and speaking',
     telaffuzAlt: 'You can practise aloud in scenarios. Reliable sound-level scoring is not available yet.',
     senaryoDugme: 'Explore scenarios',
-    baslik: 'Discover',
+    baslik: 'Connect',
     alt: 'Discover people and language partners',
     partnerBaslik: 'Find a partner',
     partnerBos: 'When the community opens, you’ll find people practising English here, matched to your goals and level.',

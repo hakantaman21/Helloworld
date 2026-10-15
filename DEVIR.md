@@ -1,4 +1,38 @@
-## Vercel Preview derleme engeli — 16.10.2026 / ChatGPT
+# Devir Notu
+
+> **Bu projede çalışan her yapay zekâ işe buradan başlar.** Sıra: bu dosya → `KURALLAR.md` → `ANAYASA.md`'nin ilgili bölümü.
+> İş bitince en üstteki "Şu anki durum" güncellenir ve aşağıya yeni sürüm kaydı eklenir. Kaydı ve "Yapan" bilgisi olmayan sürümü robot derlemez (Y24).
+
+## Şu anki durum
+
+- **Sürüm:** v0.2.7 · dal `tasarim-besli-menu-v0.2.6` (PR #4, taban `tasarim-kesfet-v0.2.2`). `main` ve `deneme` değişmedi; merge Hakan onayıyla.
+- **Derleme:** `npm run build` 16.10.2026'da Claude tarafından çalıştırıldı: denetçi ihlali 0, dağıtım denetimi geçti. Vercel Preview sonucu ayrıca doğrulanmalı (Vercel kaynak sınırı uyarısı görülmüştü).
+- **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · PR #2, #3, #4 açık.
+- **Ayrıntılı devir:** ChatGPT'nin 16.10.2026 notu `DEVIR_2026-10-16_CHATGPT.md` (P0 derleme maddesi bu sürümde Claude tarafından kapatıldı).
+- **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
+- **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma (senaryolar, aramalar, tanışma, hata tekrarı), karne, Hata Hafızası, profil dil kimliği ve düzenleme, görünüm tercihi, TR + EN arayüz. Veri yalnız cihazda.
+- **Ne çalışmıyor / henüz yok:** gerçek kişilerle sohbet ve eşleşme, hesap ve sunucu, gerçek yapay zekâ sağlayıcısı (demo koç), harf düzeyinde telaffuz.
+- **Sıradaki adım:** Hakan'ın telefonda `teslim/` derlemesini ya da Vercel Preview'u kontrolü → PR #4 incelemesi → arka uç ve hesap kararı.
+- **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · yapay zekâ partnerin adı.
+
+## Sürüm kayıtları
+
+## v0.2.7 — 16.10.2026 · Anayasal bölüm ayrımı ve derleme düzeltmesi
+
+- **Yapan:** ChatGPT (bölüm ayrımı, profil düzenleme, 4→5 göçü) · Claude (Opus 5.5, derleme düzeltmesi ve devir düzeni)
+- **Claude — 16.10.2026:** Güncel dalda `npm run build` gerçekten çalıştırıldı; eski Vercel logundaki dört ihlal giderilmişti ama 5 yeni ihlal vardı. Düzeltmeler:
+  - Y16b: `ayarlar/index.js` hesaplanan anahtarlar `t(`diller.${d}`)` ve `t(`ayarlar.gorunumSecenek.${k}`)` biçimine çevrildi (denetçinin tanıdığı önek biçimi).
+  - Y25: kullanılmayan `gezinme.ai` anahtarı tr.js'den kaldırıldı (en.js'de yoktu, kodda kullanılmıyordu).
+  - Y26: Pratik ekranındaki "AI ile pratik" düğmesine `yzEtiketi()` eklendi (gerçek eksikti). Bağlantı artık yalnız insan keşfi olduğundan robotun Y26 listesinde `kesfet` yerine `bugun` (Pratik) denetlenir; kural metni değişmedi.
+  - Y24: ChatGPT notları "# Devir Notu" başlığının üstüne eklenmişti; protokol sırası geri kuruldu, notlar aşağıda bu sürümün altına aynen taşındı.
+  - Hata: "Kendimi tanıtıyorum" metni, ilk açılıştaki konuşma rahatlığı alanına (`kendiniTanim`: hic/basit/rahat) yazılıyordu; profilde "basit" görünüyor, tanıtım yazınca rahatlık bilgisi siliniyordu. Tanıtım `tanitimMetni` alanına ayrıldı; **şema 5 → 6 göçü** kod dışı eski değeri tanıtıma taşır, rahatlık kodunu korur (iki durum da sınandı).
+  - Bağlantı ekranının başlığı sekmeyle aynı yapıldı (TR "Bağlantı", EN "Connect"; önceden "Keşfet/Discover").
+  - Pratik ekranı: gece yarısından sonra "Günaydın" yerine "İyi akşamlar"; tarih arayüz diline göre (EN arayüzde Türkçe tarih yazıyordu). AI etiketi düğmenin içine değil açıklamanın başına kondu (düğme metni taşıyordu).
+  - Sınama (gerçek derleme `teslim/KonusmaKocu-v0.2.7.html`, başsız Chromium, 360 px): ilk açılış, beş sekme, Ayarlar; sayfa hatası 0, yatay taşma 0, tanıtım kaydet → yeniden aç → profilde görünüyor. `npm run build`: denetçi 0 ihlal; `npm run robot-sinama`: 8/8.
+  - Yapılmayan: gerçek Samsung/Chrome ve Vercel Preview (Vercel kaynak sınırı uyarısı vardı), ekran okuyucu testi.
+- **Dokunulan dosyalar (Claude):** kaynak/moduller/{ayarlar,bugun,gelisim}/index.js, kaynak/cekirdek/{gocler,zaman}.js, kaynak/metinler/{tr,en}.js, araclar/yasa-denetcisi.mjs, DEVIR.md, DEGISIKLIKLER.md
+
+### Vercel Preview derleme engeli — 16.10.2026 / ChatGPT
 
 - Kullanıcı Vercel Preview logunu iletti: commit `8882d8b`, `npm run build` dört ihlal ile durdu (Y4: bugun.css, gelisim.css; Y16b: kesfet/index.js, sohbetler/index.js).
 - Y4 için modüle özgü `bgn-hizli-alt` ve `gls-siradaki-alt` sınıfları CSS ve ilgili metin elemanlarına eklendi.
@@ -6,7 +40,7 @@
 - Kalite denetçisi gevşetilmedi, `!important` eklenmedi.
 - **Henüz derleme ve Vercel yeniden dağıtım sonucu doğrulanmadı.** Kullanıcının logu eski commit'e aitti. Yeni Preview çıktısı incelenmeli.
 
-## Profil düzenleme ve veri göçü — 16.10.2026 / ChatGPT
+### Profil düzenleme ve veri göçü — 16.10.2026 / ChatGPT
 
 - Ayarlar ekranına ana dil, öğrenilen dil, kişisel dil hedefi ve kısa tanıtım düzenleme alanları eklendi; değişiklikler mevcut `degistir` deposuna kaydedilir.
 - Profil ekranı kişisel dil hedefini mevcut genel hedef yerine gösterir; mevcut büyüme karnesi korunur.
@@ -15,7 +49,7 @@
 - Mevcut dil seçimi uygulamanın desteklediği dil etiketleriyle sınırlıdır; `diger` genel kategoridir. Toplulukta kamuya açık profil hâlâ yok.
 - Çalıştırılmış derleme, robot, mobil ve şema göç testi yok. Main/deneme değişmedi.
 
-## Profil kimlik kartı — 16.10.2026 / ChatGPT
+### Profil kimlik kartı — 16.10.2026 / ChatGPT
 
 - Profil üstüne ana dil, öğrenilen dil, mevcut seviye ve konuşma pratiği hedefi görünümü eklendi; mevcut büyüme karnesi ve ölçüm açıklamaları korunuyor.
 - Bilinmeyen dil için boş durum ve yerel depolama/gizlilik açıklaması gösteriliyor; kamuya açık profil veya sosyal bağlantı varmış gibi davranılmıyor.
@@ -23,7 +57,7 @@
 - Önemli sınır: Düzenle mevcut ayarlar ekranına gider; bu ekranda ana dil/öğrenilen dil/hedef alanları henüz düzenlenemiyor. Bu özellik tamamlandı denmemeli.
 - Testler çalıştırılmadı: derleme, robot, mobil ve erişilebilirlik. Main/deneme merge yok.
 
-## Pratik ve Dil Anları görev ayrımı — 16.10.2026 / ChatGPT
+### Pratik ve Dil Anları görev ayrımı — 16.10.2026 / ChatGPT
 
 - Pratik ekranına açık AI / gerçek kişi seçimi eklendi; AI mevcut demo senaryoya, gerçek kişi Bağlantı keşfine gider. Canlı insan görüşmesi henüz yok.
 - Pratik'teki mükerrer ayarlar kısayolu ve kullanılmayan `bgn-profil` CSS kuralı kaldırıldı.
@@ -31,7 +65,7 @@
 - TR/EN metin anahtarları eş zamanlı güncellendi. Yeni important eklenmedi.
 - Eksik: gerçek partner servisi, paylaşımlar, profil bilgi düzenleme, otomatik denetim/derleme/Android testi. Main/deneme değiştirilmedi.
 
-## Bağlantı görev ayrımı — 16.10.2026 / ChatGPT
+### Bağlantı görev ayrımı — 16.10.2026 / ChatGPT
 
 - Beşli menüde Bağlantı yalnız gerçek kişi keşfine ayrıldı. AI sekmesi, hızlı pratik ve telaffuz/senaryo kartı kaldırıldı.
 - Eski `kft-sekme`, `kft-sekmeler`, `kft-demo-not`, `kft-ogren` ve `shb-basla` CSS kuralları silindi; yeni `!important` yok.
@@ -39,7 +73,7 @@
 - Gerçek hesap/partner altyapısı olmadığından dürüst boş durum devam ediyor.
 - Derleme, robot, mobil test ve tüm dosyalarda artık denetimi henüz yapılmadı. Main/deneme değiştirilmedi.
 
-## HelloTalk ekran kaydı incelemesi — 16.10.2026 / ChatGPT
+### HelloTalk ekran kaydı incelemesi — 16.10.2026 / ChatGPT
 
 - Kaynak: kullanıcının yaklaşık 74 saniyelik HelloTalk Android ekran kaydı; 9 örnek kare incelendi.
 - Görülen ekranlar: Dil Sohbetleri, Dil Ortakları Bul, Dil Anları akışı, Öğren araçları, profil ve menü.
@@ -49,14 +83,16 @@
 - Uygulama sırası: 1) mevcut beşli menü ve yönlendirme temizliği, 2) ortak mat siyah/gri token ve bileşenleri, 3) filtre/arama, 4) profil ve güvenli topluluk altyapısı, 5) mobil/erişilebilirlik/robot testleri.
 - Bu kayıt analiz ve karar notudur; yeni UI kodu/testi olarak raporlanmamalıdır. Main ve deneme dalları değişmedi.
 
-## Anayasa uyum kaydı — 16.10.2026 / ChatGPT
+### Anayasa uyum kaydı — 16.10.2026 / ChatGPT
 
 - ANAYASA.md dört sekme ve zorunlu sıcak palet tanımlarını kullanıcının son beş sekme, mat siyah/gri, English Prime UX kararlarıyla uyumlaştıracak şekilde güncellendi.
 - Korunan hükümler: önce konuşma, insan/AI dürüst ayrımı, 18+ başlangıç, gizlilik, güvenli topluluk, çok dillilik, erişilebilirlik, Y1–Y28.
 - Kalite kaynağı: MIMARI_KALITE_KURALLARI.md; yeni important ve CSS yaması yığılması yasak.
 - Bu teslim belge/karar uyumlaştırmasıdır; UI kodunun tümü tamamlanmış veya test edilmiş değildir. Ana/deneme dalı değişmedi.
 
-## v0.2.6 — 16.10.2026 / ChatGPT / Beşli menü
+## v0.2.6 — 16.10.2026 · Beşli menü
+
+- **Yapan:** ChatGPT
 
 - Kullanıcı kararı: Sohbet · Bağlantı · Dil Anları · AI · Profil; sol üst profil, sağ üst ayarlar.
 - Tasarım: English Prime'dan ilhamla sade kartlar, 5 eşit tab, vurgu yüzeyi, dengeli/kompakt yerleşim.
@@ -66,22 +102,6 @@
 - Sonraki geliştirici: Y1–Y26 denetçisi, robot, gerçek Android, tema ve erişilebilirlik testleri; Claude incelemesi.
 - Hakan onayı olmadan merge yok.
 
-# Devir Notu
-
-> **Bu projede çalışan her yapay zekâ işe buradan başlar.** Sıra: bu dosya → `KURALLAR.md` → `ANAYASA.md`'nin ilgili bölümü.
-> İş bitince en üstteki "Şu anki durum" güncellenir ve aşağıya yeni sürüm kaydı eklenir. Kaydı ve "Yapan" bilgisi olmayan sürümü robot derlemez (Y24).
-
-## Şu anki durum
-
-- **Sürüm:** v0.2.5 tasarim-kesfet-v0.2.2 dalında, v0.2.1 deneme üzerine; ana dal kaynak sürümü kontrol sırasında v0.2.0 (8780227). Canlı Vercel sürümü ayrıca doğrulanmalı; dal sürümü yayın kanıtı değildir.
-- **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · uygulayıcı Codex; Claude incelemesi bekleniyor.
-- **Depo:** `hakantaman21/helloworld` · Vercel projesi: `helloworld` (Hakan 21). Canlı ve deneme linkleri Vercel → helloworld → Deployments'ta.
-- **Ne çalışıyor:** İlk açılış (4 adım), dört sekme, yapay zekâ partnerle demo konuşma (senaryolar, sabah/akşam araması, tanışma, hata tekrarı), karne, Hata Hafızası, profil/gelişim, ayarlar, İngilizce + Türkçe arayüz. Veri yalnız cihazda.
-- **Ne çalışmıyor / henüz yok:** gerçek kişilerle sohbet (topluluk, Evre 3), hesap ve sunucu, gerçek yapay zekâ sağlayıcısı (şimdilik demo koç), harf düzeyinde telaffuz.
-- **Sıradaki adım:** English Prime ve akıllı asistan uygulamasındaki tasarım, ilke, hesap ve profil öğelerinin bu projeye taşınması (Benimle'nin isteği, 15.10.2026).
-- **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · yapay zekâ partnerin adı.
-
-## Sürüm kayıtları
 
 ## v0.2.5 — 16.10.2026
 

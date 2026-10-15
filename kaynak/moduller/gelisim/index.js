@@ -125,7 +125,7 @@ function ciz(kok, b) {
           h('dt', { class: 'b-kucuk' }, etiket), h('dd', null, deger),
         )),
       ),
-      v.profil.kendiniTanim ? h('p', { class: 'b-kucuk' }, v.profil.kendiniTanim) : null,
+      v.profil.tanitimMetni ? h('p', { class: 'b-kucuk' }, v.profil.tanitimMetni) : null,
       h('p', { class: 'b-kucuk' }, t('gelisim.kimlik.gizlilik')),
     ),
     h('section', { class: 'b-kart gls-siradaki', 'aria-labelledby': 'gls-sonraki-adim' },

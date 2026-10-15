@@ -5,7 +5,10 @@
 - Üst profil ve ayarlar kontrolleri merkezi yönlendiriciyle çalışır.
 - Beşli menü adları ve TR/EN açıklamaları uyumlaştırıldı.
 - Eski fonksiyonlar üzerine CSS yaması eklenmedi; yeni important yok.
-- Derleme/robot/mobil testleri henüz çalıştırılmadı; ana/deneme merge yok.
+- Claude: derleme engeli giderildi (Y16b, Y24, Y25, Y26); denetçi 0 ihlal, robot 8/8, 360 px Chromium sınaması geçti.
+- Claude: tanıtım metni konuşma rahatlığı alanını eziyordu → ayrı alan ve şema 5 → 6 göçü.
+- Claude: Bağlantı başlığı sekmeyle aynı; gece "Günaydın" yerine "İyi akşamlar"; tarih arayüz dilinde.
+- Gerçek telefon ve Vercel Preview testi bekliyor; ana/deneme merge yok.
 
 ## 0.2.6 — 16.10.2026 · Beşli menü ve English Prime esinli görünüm
 

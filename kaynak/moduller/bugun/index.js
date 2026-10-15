@@ -1,8 +1,8 @@
 // Bugün: günün döngüsü, sıradaki adım (tabela), Hata Hafızası kısayolu ve tek dokunuşla "Konuş".
 import './bugun.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, altGezinme, yerlestir } from '../../cekirdek/arayuz.js';
-import { t, yerel } from '../../cekirdek/metin.js';
+import { h, ikon, altGezinme, yerlestir, yzEtiketi } from '../../cekirdek/arayuz.js';
+import { t, yerel, aktifDil } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { gunKaydi, siradaki, seriHesapla, bugunkuSenaryo } from '../../cekirdek/gunluk.js';
 import { vadesiGelenler } from '../../cekirdek/hafiza.js';
@@ -78,7 +78,7 @@ function ciz(kok, b) {
   yerlestir(kok, 
     h('header', { class: 'b-ust' },
       h('div', { class: 'b-ust-metin' },
-        h('div', { class: 'b-tabela' }, new Date().toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' })),
+        h('div', { class: 'b-tabela' }, new Date().toLocaleDateString(aktifDil() === 'tr' ? 'tr-TR' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' })),
         h('h1', { class: 'b-baslik' }, t(`bugun.selam.${gunBolumu()}`, { ad: v.profil.ad })),
       ),
     ),
@@ -88,7 +88,7 @@ function ciz(kok, b) {
         h('button', { type: 'button', class: 'b-dugme b-dugme-ana', onClick: senaryoyaGit }, ikon('dalga', 20), t('bugun.partnerSecim.yz')),
         h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => b.git('/kesfet') }, ikon('kisi', 20), t('bugun.partnerSecim.insan')),
       ),
-      h('p', { class: 'b-kucuk' }, t('bugun.partnerSecim.bilgi')),
+      h('p', { class: 'b-kucuk bgn-secim-bilgi' }, yzEtiketi(), ' ', t('bugun.partnerSecim.bilgi')),
     ),
     h('div', { class: 'b-cipler' },
       h('span', { class: 'b-cip b-cip-vurgu' }, t('bugun.seri', { n: seri })),

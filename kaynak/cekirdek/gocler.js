@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 5;
+export const GUNCEL_SEMA = 6;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -72,4 +72,13 @@ export const gocler = {
     ...eski,
     profil: { ...eski.profil, dilHedefi: eski.profil.dilHedefi || '' },
   }),
+  // 5 → 6: "Kendimi tanıtıyorum" metni ayrı alana taşınır. kendiniTanim ilk açılıştaki konuşma rahatlığıdır
+  // (hic/basit/rahat); v0.2.7 taslağında tanıtım metni de aynı alana yazılıyordu. Kod dışı değer tanıtıma taşınır.
+  6: (eski) => {
+    const kt = eski.profil.kendiniTanim, kod = ['hic', 'basit', 'rahat'].includes(kt);
+    return {
+      ...eski,
+      profil: { ...eski.profil, kendiniTanim: kod ? kt : null, tanitimMetni: eski.profil.tanitimMetni || (kod || !kt ? '' : String(kt).slice(0, 300)) },
+    };
+  },
 };

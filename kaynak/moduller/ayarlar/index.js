@@ -50,7 +50,7 @@ function ciz(kok, b) {
   const dilSecimi = (kimlik, etiket, alan) => {
     const sec = h('select', { id: kimlik, class: 'b-girdi', 'aria-label': etiket },
       h('option', { value: '' }, t('ayarlar.dilSeciniz')),
-      diller.map((d) => h('option', { value: d }, t('diller.' + d))),
+      diller.map((d) => h('option', { value: d }, t(`diller.${d}`))),
     );
     sec.value = p[alan] || '';
     sec.addEventListener('change', () => ayarKaydet((pr) => { pr[alan] = sec.value || null; }));
@@ -59,8 +59,8 @@ function ciz(kok, b) {
   const hedefGirdisi = h('input', { id: 'ayr-hedef', class: 'b-girdi', type: 'text', maxlength: 120, value: p.dilHedefi || '', placeholder: t('ayarlar.hedefOrnek') });
   hedefGirdisi.addEventListener('change', () => ayarKaydet((pr) => { pr.dilHedefi = hedefGirdisi.value.trim().slice(0, 120); }));
   const tanitimGirdisi = h('textarea', { id: 'ayr-tanitim', class: 'b-girdi', rows: 3, maxlength: 300, placeholder: t('ayarlar.tanitimOrnek') });
-  tanitimGirdisi.value = p.kendiniTanim || '';
-  tanitimGirdisi.addEventListener('change', () => ayarKaydet((pr) => { pr.kendiniTanim = tanitimGirdisi.value.trim().slice(0, 300); }));
+  tanitimGirdisi.value = p.tanitimMetni || '';
+  tanitimGirdisi.addEventListener('change', () => ayarKaydet((pr) => { pr.tanitimMetni = tanitimGirdisi.value.trim().slice(0, 300); }));
 
   yerlestir(kok, 
     ustBaslik({ tabela: t('ayarlar.tabela'), baslik: t('ayarlar.baslik'), geri: () => b.geri('/gelisim') }),
@@ -125,7 +125,7 @@ function ciz(kok, b) {
       secimGrubu({
         etiket: t('ayarlar.gorunum'),
         aciklama: t('ayarlar.gorunumAciklama'),
-        secenekler: ['dengeli', 'kompakt'].map((k) => [k, t('ayarlar.gorunumSecenek.' + k)]),
+        secenekler: ['dengeli', 'kompakt'].map((k) => [k, t(`ayarlar.gorunumSecenek.${k}`)]),
         aktif: a.gorunum || 'dengeli',
         degisti: (k) => ayarKaydet((pr) => { pr.ayarlar.gorunum = k; }),
       }),
