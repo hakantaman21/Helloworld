@@ -1,3 +1,11 @@
+## Pratik ve Dil Anları görev ayrımı — 16.10.2026 / ChatGPT
+
+- Pratik ekranına açık AI / gerçek kişi seçimi eklendi; AI mevcut demo senaryoya, gerçek kişi Bağlantı keşfine gider. Canlı insan görüşmesi henüz yok.
+- Pratik'teki mükerrer ayarlar kısayolu ve kullanılmayan `bgn-profil` CSS kuralı kaldırıldı.
+- Dil Anları'nda senaryo pratiği kısayolu yerine Bağlantı keşfine geçiş verildi; topluluk boş durumu korunuyor.
+- TR/EN metin anahtarları eş zamanlı güncellendi. Yeni important eklenmedi.
+- Eksik: gerçek partner servisi, paylaşımlar, profil bilgi düzenleme, otomatik denetim/derleme/Android testi. Main/deneme değiştirilmedi.
+
 ## Bağlantı görev ayrımı — 16.10.2026 / ChatGPT
 
 - Beşli menüde Bağlantı yalnız gerçek kişi keşfine ayrıldı. AI sekmesi, hızlı pratik ve telaffuz/senaryo kartı kaldırıldı.
