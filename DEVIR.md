@@ -5,16 +5,25 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.2.8 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.2.7'de (16.10.2026, PR #2 ile Hakan onayıyla). Canlıya alma yine yalnız Hakan onayıyla.
+- **Sürüm:** v0.2.9 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.2.7'de (16.10.2026, PR #2 ile Hakan onayıyla). Canlıya alma yine yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
-- **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma, karne, Hata Hafızası, profil düzenleme, görünüm, TR + EN. **Test modu:** TEST profilleriyle mesajlaşma, düzeltme önerisi, partner düzeltmesi, konu önerisi, şikâyet/engelleme (yanıtlar otomatik kalıp). Veri yalnız cihazda.
+- **Görünüm:** English Prime dili (koyu mat, kabartmalı kart, altın vurgu, yüzen alt menü, bölüm renkli etiketler) — yalnız jetonlar ve `bilesenler.css`.
+- **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma, karne, Hata Hafızası, profil düzenleme, görünüm, TR + EN. **Test modu (sanal kullanıcılar):** Dil Anları akışı (beğen, yorum, düzelt, paylaş), Bağlantı süzgeçleri ve kişi profili, mesajlaşma, düzeltme önerisi, partner düzeltmesi, konu önerisi, şikâyet/engelleme (yanıtlar otomatik kalıp). Veri yalnız cihazda.
 - **Ne çalışmıyor / henüz yok:** gerçek hesap ve sunucu, gerçek kişilerle mesajlaşma, sesli mesaj (Y12 kararı bekliyor), çeviri, gerçek yapay zekâ sağlayıcısı, harf düzeyinde telaffuz.
 - **Sıradaki adım:** Hakan'ın test modunu telefonda denemesi → arka uç kararı (Supabase / Firebase) → aynı Mesaj ekranını gerçek iki hesapla bağlamak.
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.2.9 — 16.10.2026 · English Prime görünümü ve HelloTalk öğeleri
+
+- **Yapan:** Claude (Opus 5.5), Hakan'ın isteği ("mimari ve görünüm English Prime'dan, HelloTalk öğeleri sanal kullanıcılarla")
+- **Ne yapıldı:** Jetonlar EP paletine geçti (koyu mat #0B0C10 / yüzey #1B1D24, altın vurgu #E0B03C; açık tema eşleniği) + yeni jetonlar (`--renk-yuzey-ust`, `--renk-kabartma-isik`, `--renk-vurgu-parlak`, `--renk-grup-1..5`). `bilesenler.css`: kabartmalı kart/düğme/girdi, yüzen alt menü ve altın etkin sekme, bölüm renkli üst etiket, `b-av` avatarları. Dil Anları akışı (test), Bağlantı süzgeç + kişi satırı, Mesaj modülüne `kisi` ekranı, `testAvatar()` ve `goreliZaman()` ortak yardımcıları, `veri/test-profiller.js`'e TEST_ANLARI ve yorum kalıpları, `diller.ja`.
+- **Anayasa uyumu:** Sanal kullanıcılar TEST rozetli, çevrimiçi durumu yok, sayılar uydurulmaz (yalnız kendi etkileşimin). Renkler yalnız jetonlardan (Y3), kontrast AA (Y14).
+- **Sınama:** `npm run build` 0 ihlal, robot 8/8. Başsız Chromium 360 px, koyu ve açık tema: davetle test modunu aç → akış 6 gönderi → beğen/düzelt/yorum kaydı → paylaş → otomatik yorum → Bağlantı 4 süzgeç → kişi profili → mesaj; taşma 0, sayfa hatası 0.
+- **Dokunulan dosyalar:** stiller/{jetonlar,tema-koyu,bilesenler}.css, cekirdek/{arayuz,test-modu,surum}.js, veri/test-profiller.js, moduller/{dil-anlari,kesfet,mesaj}/*, metinler/{tr,en}.js, package.json, DEGISIKLIKLER.md, DEVIR.md
 
 ## v0.2.8 — 16.10.2026 · Test modu
 

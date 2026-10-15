@@ -9,6 +9,7 @@ export default {
   },
 
   diller: {
+    ja: 'Japanese',
     tr: 'Turkish', en: 'English', es: 'Spanish', ar: 'Arabic', de: 'German',
     fr: 'French', ru: 'Russian', pt: 'Portuguese', fa: 'Persian', diger: 'Other',
   },
@@ -45,6 +46,7 @@ export default {
     kesfet: 'Discover',
     gelenArama: 'Coach is calling',
     mesaj: 'Message',
+    kisi: 'Profile',
     gorusme: 'Conversation',
     karne: 'Conversation report',
     senaryolar: 'Scenarios',
@@ -56,6 +58,27 @@ export default {
   },
 
   anlar: {
+    sen: 'You',
+    profiliAc: 'Open {ad}\'s profile',
+    seninDuzeltmen: 'Your correction',
+    eylemler: 'Post actions',
+    begen: 'Like',
+    begenildi: 'Liked',
+    yorum: 'Comment',
+    duzelt: 'Correct',
+    duzeltEtiket: 'Corrected version of the post',
+    duzeltAciklama: 'Rewrite the sentence correctly. We show the difference in green and red.',
+    degisiklikYok: 'You have not changed anything yet.',
+    duzeltmeGonderildi: 'Your correction was added (test).',
+    duzeltmeyiGonder: 'Add correction',
+    yorumYaz: 'Write a comment…',
+    paylasBaslik: 'Share a moment',
+    paylasOrnek: 'What did you learn in English today? Write a sentence…',
+    paylas: 'Share',
+    paylasildi: 'Shared (only on this device, test).',
+    akisBos: 'No posts yet.',
+    yakinda: 'COMING SOON',
+    testUyari: 'Test feed: posts belong to TEST-badged virtual users, not real people. Like and comment counts are only your own interactions.',
     baglantiyaGit: 'Discover people',
     baslik: 'Language Moments',
     alt: 'Build language skills through short moments',
@@ -178,6 +201,8 @@ export default {
   },
 
   kesfet: {
+    suzgec: { tum: 'All', anaDil: 'Native English', seviye: 'Near my level', degisim: 'Learning Turkish' },
+    suzgecBos: 'Nobody matches this filter.',
     pratigeGit: 'Go to Practice',
     heroEtiket: 'NEW CONNECTIONS',
     heroBaslik: 'Meet new people',
@@ -426,6 +451,16 @@ export default {
   },
 
   test: {
+    davetBaslik: 'Try with virtual users',
+    davetAciklama: 'Before the community opens you can try Connect, Moments and messaging with TEST-badged virtual users. They are not real people; replies are automatic templates and do not count towards your progress. Turn it off in Settings › Test mode.',
+    davetDugme: 'Turn on test mode',
+    profiliGor: 'View profile',
+    dilKimligi: 'Language identity',
+    anaDili: 'Native language',
+    ogreniyor: 'Learning',
+    ilgiAlanlari: 'Interests',
+    anlari: 'Posts by {ad}',
+    anYok: 'No posts yet.',
     rozet: 'TEST',
     rozetAciklama: 'Test profile: not a real person. Visible only in test mode.',
     profillerBaslik: 'Test profiles',
@@ -466,4 +501,5 @@ export default {
     silindi: 'Test data deleted.',
     gorunur: 'Test mode setting is now visible.',
   },
+  zamanOnce: { simdi: 'just now', dk: '{n} min ago', saat: '{n} h ago', gun: '{n} d ago' },
 };

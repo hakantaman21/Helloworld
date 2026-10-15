@@ -2,13 +2,17 @@
 // Açıkken test profilleri "TEST" rozetiyle görünür; kapalıyken hiçbir test verisi gösterilmez.
 // Test sohbetleri gelişim, seviye ve Hata Hafızası kayıtlarına HİÇ yazılmaz (yalnız v.test alanı).
 import { al, degistir } from './depo.js';
-import { TEST_PROFILLERI } from '../veri/test-profiller.js';
+import { TEST_PROFILLERI, TEST_ANLARI, TEST_YORUM_KALIPLARI } from '../veri/test-profiller.js';
 import { duzeltmeleriBul, tumunuDuzelt } from './dil/duzeltme-motoru.js';
 
 const MESAJ_SINIRI = 200;
 
 function test() {
-  return al().test || { acik: false, sohbetler: {}, engelli: [], sikayetler: [] };
+  return { anlar: [], begeniler: [], yorumlar: {}, duzeltmeler: {}, ...(al().test || { acik: false, sohbetler: {}, engelli: [], sikayetler: [] }) };
+}
+
+function testGuncelle(fn) {
+  degistir((v) => { const t = { ...test() }; fn(t); v.test = t; });
 }
 
 export function testModuAcik() {
@@ -79,5 +83,58 @@ export function testSikayet(kimlik, neden) {
 }
 
 export function testVerileriniSil() {
-  degistir((v) => { v.test = { acik: testModuAcik(), sohbetler: {}, engelli: [], sikayetler: [] }; });
+  degistir((v) => { v.test = { acik: testModuAcik(), sohbetler: {}, engelli: [], sikayetler: [], anlar: [], begeniler: [], yorumlar: {}, duzeltmeler: {} }; });
+}
+
+// ---- Dil Anları (test) ----
+const SAAT = 3600000;
+
+// Akış: kullanıcının kendi gönderileri + test gönderileri, en yeni üstte. Engellenen yazarlar gizlenir.
+export function testAnlari() {
+  if (!testModuAcik()) return [];
+  const engelli = test().engelli || [];
+  const simdi = Date.now();
+  const tohum = TEST_ANLARI.filter((a) => !engelli.includes(a.yazar)).map((a) => ({ ...a, zaman: simdi - a.saatOnce * SAAT, profil: TEST_PROFILLERI.find((p) => p.kimlik === a.yazar) }));
+  const benim = (test().anlar || []).map((a) => ({ ...a, benim: true }));
+  return [...benim, ...tohum].sort((a, b) => b.zaman - a.zaman);
+}
+
+export function testYazarAnlari(kimlik) {
+  return testAnlari().filter((a) => a.yazar === kimlik);
+}
+
+export function anBegenildi(kimlik) { return (test().begeniler || []).includes(kimlik); }
+
+export function anBegen(kimlik) {
+  testGuncelle((t) => { const b = new Set(t.begeniler || []); if (b.has(kimlik)) b.delete(kimlik); else b.add(kimlik); t.begeniler = [...b]; });
+}
+
+export function anYorumlari(kimlik) { return (test().yorumlar || {})[kimlik] || []; }
+
+export function anYorumEkle(kimlik, yorum) {
+  testGuncelle((t) => { t.yorumlar = { ...(t.yorumlar || {}) }; t.yorumlar[kimlik] = [...(t.yorumlar[kimlik] || []), { ...yorum, zaman: Date.now() }].slice(-50); });
+}
+
+export function anDuzeltmesi(kimlik) { return (test().duzeltmeler || {})[kimlik] || null; }
+
+export function anDuzelt(kimlik, kaynak, dogru) {
+  testGuncelle((t) => { t.duzeltmeler = { ...(t.duzeltmeler || {}), [kimlik]: { kaynak, dogru, zaman: Date.now() } }; });
+}
+
+export function anPaylas(metin) {
+  const kimlik = 'benim-' + Date.now().toString(36);
+  testGuncelle((t) => { t.anlar = [{ kimlik, yazar: 'ben', metin: String(metin).slice(0, 500), zaman: Date.now() }, ...(t.anlar || [])].slice(0, 50); });
+  return kimlik;
+}
+
+// Kendi gönderisine otomatik test yorumu: sırayla kalıplardan biri.
+export function anOtomatikYorum(kimlik) {
+  const sira = (test().anlar || []).length;
+  const k = TEST_YORUM_KALIPLARI[sira % TEST_YORUM_KALIPLARI.length];
+  if ((test().engelli || []).includes(k.yazar)) return;
+  anYorumEkle(kimlik, { yazar: k.yazar, metin: k.metin, otomatik: true });
+}
+
+export function testProfiliHam(kimlik) {
+  return TEST_PROFILLERI.find((p) => p.kimlik === kimlik) || null;
 }

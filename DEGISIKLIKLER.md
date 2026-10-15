@@ -1,3 +1,11 @@
+## 0.2.9 — 16.10.2026 · English Prime görünümü ve HelloTalk öğeleri
+
+- Görünüm English Prime'a geçti: koyu mat yüzey, kabartmalı kartlar ve düğmeler, altın vurgu, yüzen alt menü, bölüm renkli üst etiketler. Açık tema da aynı dille. Yalnız tasarım jetonları değişti (Y3), kontrast denetimi geçti (Y14).
+- Dil Anları (HelloTalk "Moments"): test modunda sanal kullanıcı gönderileri; beğen, yorum, gönderiyi düzelt (yeşil/kırmızı fark), şikâyet, kendi anını paylaş (otomatik test yorumu gelir).
+- Bağlantı (HelloTalk "Dil ortakları"): süzgeçler (Tümü / Ana dili İngilizce / Seviyeme yakın / Türkçe öğrenenler) ve kişi satırları; yeni Kişi profili ekranı (dil kimliği, seviye çubuğu, ilgiler, paylaşımları, mesaj, şikâyet, engelle).
+- Test modu kapalıyken Bağlantı ve Dil Anları'nda "Sanal kullanıcılarla dene" daveti.
+- Sanal kullanıcılar her yerde TEST rozetli; beğeni/yorum sayıları uydurulmaz, gelişime yazılmaz.
+
 ## 0.2.8 — 16.10.2026 · Test modu
 
 - Ayarlar › Test modu (sürüm satırına 5 dokunuşla görünür; varsayılan kapalı).

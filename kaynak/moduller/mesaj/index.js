@@ -3,11 +3,12 @@
 // Gerçek topluluk açılınca aynı ekran sunucudaki gerçek sohbete bağlanır. Test mesajları gelişime sayılmaz.
 import './mesaj.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, durumKutusu, yerlestir, testEtiketi, farkCiz, onayIste } from '../../cekirdek/arayuz.js';
+import { h, ikon, durumKutusu, yerlestir, testEtiketi, farkCiz, onayIste, testAvatar, goreliZaman } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { kelimeFarki } from '../../cekirdek/dil/fark.js';
-import { testProfili, testMesajlari, testMesajEkle, otomatikYanit, gonderimOncesiOneri, testEngelle, testSikayet } from '../../cekirdek/test-modu.js';
+import { testProfili, testMesajlari, testMesajEkle, otomatikYanit, gonderimOncesiOneri, testEngelle, testSikayet, testYazarAnlari } from '../../cekirdek/test-modu.js';
+import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { TEST_KONULARI } from '../../veri/test-profiller.js';
 
 const YANIT_GECIKMESI = 1300;
@@ -122,7 +123,7 @@ function ciz(kok, b) {
   yerlestir(kok,
     h('header', { class: 'msj-ust' },
       h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', 'aria-label': t('genel.geri'), onClick: () => b.geri('/kesfet') }, ikon('sol', 20)),
-      h('span', { class: `msj-av msj-av-${profil.renk}`, 'aria-hidden': 'true' }, profil.bas),
+      h('button', { type: 'button', class: 'msj-av-dugme', onClick: () => b.git(`/kisi?k=${profil.kimlik}`), 'aria-label': t('test.profiliGor') }, testAvatar(profil, 40)),
       h('div', { class: 'msj-kim' },
         h('div', { class: 'msj-ad' }, h('b', null, profil.ad), testEtiketi()),
         h('span', { class: 'b-kucuk' }, `${yerel(profil.ulke)} · ${profil.seviye}`),
@@ -149,13 +150,79 @@ function ciz(kok, b) {
   return () => clearTimeout(zamanlayici);
 }
 
+// Kişi profili (HelloTalk profil sayfası esinli): dil kimliği, seviye, tanıtım, ilgiler, anları; mesaj, şikâyet, engelle.
+async function sikayetPenceresi(ad) {
+  return new Promise((coz) => {
+    const kapat = (d) => { perde.remove(); coz(d); };
+    const perde = h('div', { class: 'b-perde', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'msj-ks' },
+      h('div', { class: 'b-pencere' },
+        h('h2', { class: 'b-bolum-baslik', id: 'msj-ks' }, t('test.sikayetBaslik', { ad })),
+        h('div', { class: 'b-yigin' }, SIKAYET_NEDENLERI.map((n) => h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => kapat(n) }, t(`test.sikayetNeden.${n}`))),
+          h('button', { type: 'button', class: 'b-dugme', onClick: () => kapat(null) }, t('genel.vazgec'))),
+      ));
+    document.body.append(perde);
+    perde.querySelector('button').focus();
+  });
+}
+
+function seviyeCubugu(seviye) {
+  const i = SEVIYE_SIRASI.indexOf(seviye);
+  return h('span', { class: 'msj-seviye', role: 'img', 'aria-label': seviye },
+    SEVIYE_SIRASI.map((s, j) => h('i', { class: j <= i ? 'msj-seviye-dolu' : 'msj-seviye-bos' })), h('b', null, seviye));
+}
+
+function kisiCiz(kok, b) {
+  const p = testProfili(b.p.k);
+  if (!p) {
+    yerlestir(kok, durumKutusu('bos', t('test.profilYok'), { metin: t('genel.geri'), fn: () => b.geri('/kesfet') }));
+    return null;
+  }
+  const anlar = testYazarAnlari(p.kimlik);
+  yerlestir(kok,
+    h('div', { class: 'msj-kisi-ust' },
+      h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', 'aria-label': t('genel.geri'), onClick: () => b.geri('/kesfet') }, ikon('sol', 20)),
+      testEtiketi(),
+    ),
+    h('section', { class: 'b-kart msj-kisi-kahraman' },
+      testAvatar(p, 88),
+      h('h1', { class: 'b-baslik' }, p.ad),
+      h('span', { class: 'b-kucuk' }, yerel(p.ulke)),
+      h('p', { class: 'msj-kisi-tanitim' }, yerel(p.tanitim)),
+      h('div', { class: 'msj-kisi-eylem' },
+        h('button', { type: 'button', class: 'b-dugme b-dugme-ana msj-kisi-mesaj', onClick: () => b.git(`/mesaj?k=${p.kimlik}`) }, ikon('sohbet', 20), t('test.mesajYaz')),
+        h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', 'aria-label': t('test.sikayetEt'), title: t('test.sikayetEt'), onClick: async () => { const n = await sikayetPenceresi(p.ad); if (!n) return; testSikayet(p.kimlik, n); duyur(t('test.sikayetAlindi'), 4000); } }, ikon('kalkan', 20)),
+      ),
+    ),
+    h('section', { class: 'b-kart' },
+      h('span', { class: 'b-ust-etiket' }, t('test.dilKimligi')),
+      h('div', { class: 'msj-dil-satir' }, h('span', null, t('test.anaDili')), h('b', null, t(`diller.${p.anaDil}`))),
+      h('div', { class: 'msj-dil-satir' }, h('span', null, t('test.ogreniyor')), h('b', null, t(`diller.${p.ogrenilenDil}`)), seviyeCubugu(p.seviye)),
+    ),
+    h('section', { class: 'b-kart' },
+      h('span', { class: 'b-ust-etiket' }, t('test.ilgiAlanlari')),
+      h('div', { class: 'b-cipler' }, p.ilgi.map((i) => h('span', { class: 'b-cip' }, yerel(i)))),
+    ),
+    h('section', { class: 'b-kart' },
+      h('span', { class: 'b-ust-etiket' }, t('test.anlari', { ad: p.ad })),
+      anlar.length ? anlar.map((a) => h('button', { type: 'button', class: 'msj-an', onClick: () => b.git('/dil-anlari') }, h('span', null, a.metin), h('span', { class: 'b-kucuk' }, goreliZaman(a.zaman)))) : h('p', { class: 'b-kucuk' }, t('test.anYok')),
+    ),
+    h('button', { type: 'button', class: 'b-dugme b-dugme-tehlike', onClick: async () => {
+      const evet = await onayIste({ baslik: t('test.engelleBaslik', { ad: p.ad }), metin: t('test.engelleMetin'), evet: t('test.engelle'), hayir: t('genel.vazgec') });
+      if (!evet) return;
+      testEngelle(p.kimlik); duyur(t('test.engellendi', { ad: p.ad })); b.git('/kesfet', { degistir: true });
+    } }, ikon('kapat', 18), t('test.engelle')),
+  );
+  return null;
+}
+
 export default {
   kimlik: 'mesaj',
-  surum: '0.2.8',
+  surum: '0.2.9',
   onek: 'msj',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'metin', 'test-modu'],
   ekranlar: {
     mesaj: ekran({ baslikAnahtari: 'ekran.mesaj', durumlar: DORT_DURUM, ciz }),
+    kisi: ekran({ baslikAnahtari: 'ekran.kisi', durumlar: DORT_DURUM, ciz: kisiCiz }),
   },
 };

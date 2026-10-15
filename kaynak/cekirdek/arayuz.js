@@ -141,6 +141,21 @@ export function testEtiketi() {
   return h('span', { class: 'b-cip b-test', title: t('test.rozetAciklama') }, t('test.rozet'));
 }
 
+// Sanal (test) kullanıcı avatarı: baş harf, 6 renk; gerçek fotoğraf kullanılmaz.
+export function testAvatar(profil, boyut = 44) {
+  return h('span', { class: `b-av b-av-${(profil && profil.renk) || 6}`, style: `width:${boyut}px;height:${boyut}px;font-size:${Math.round(boyut * 0.42)}px`, 'aria-hidden': 'true' }, (profil && profil.bas) || '?');
+}
+
+// "3 saat önce" gibi göreli zaman.
+export function goreliZaman(zaman) {
+  const dk = Math.max(0, Math.round((Date.now() - zaman) / 60000));
+  if (dk < 1) return t('zamanOnce.simdi');
+  if (dk < 60) return t('zamanOnce.dk', { n: dk });
+  const sa = Math.round(dk / 60);
+  if (sa < 24) return t('zamanOnce.saat', { n: sa });
+  return t('zamanOnce.gun', { n: Math.round(sa / 24) });
+}
+
 // Y18: boş, yükleniyor, hata, çevrimdışı durumları için ortak kutu.
 export function durumKutusu(tur, mesaj, eylem) {
   return h('div', { class: 'b-durum', 'data-durum': tur, role: tur === 'hata' ? 'alert' : 'status' },

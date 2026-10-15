@@ -33,3 +33,20 @@
   .msj-yaz { display: flex; gap: var(--bosluk-2); align-items: flex-end; }
   .msj-girdi { flex: 1; min-width: 0; resize: none; min-height: var(--dokunma); max-height: 120px; }
 }
+
+@layer moduller {
+  .msj-av-dugme { min-width: var(--dokunma); min-height: var(--dokunma); padding: 0; border: 0; background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+  .msj-kisi-ust { display: flex; align-items: center; justify-content: space-between; }
+  .msj-kisi-kahraman { align-items: center; text-align: center; gap: var(--bosluk-2); }
+  .msj-kisi-tanitim { font-size: 15px; line-height: 1.5; }
+  .msj-kisi-eylem { width: 100%; margin-top: var(--bosluk-2); display: flex; gap: var(--bosluk-2); align-items: center; }
+  .msj-kisi-mesaj { flex: 1; min-height: var(--dokunma); font-size: var(--yazi-govde); }
+  .msj-dil-satir { display: flex; align-items: center; gap: var(--bosluk-3); flex-wrap: wrap; min-height: 36px; }
+  .msj-dil-satir > span:first-child { color: var(--renk-soluk); font-size: var(--yazi-kucuk); min-width: 92px; }
+  .msj-seviye { display: inline-flex; align-items: center; gap: 3px; margin-left: auto; }
+  .msj-seviye i { width: 14px; height: 6px; border-radius: 3px; }
+  .msj-seviye-dolu { background: var(--renk-vurgu); }
+  .msj-seviye-bos { background: var(--renk-cizgi-guclu); }
+  .msj-seviye b { margin-left: 6px; font-size: var(--yazi-kucuk); }
+  .msj-an { display: flex; flex-direction: column; gap: 4px; min-height: var(--dokunma); padding: var(--bosluk-3); border: 1px solid var(--renk-cizgi); border-radius: 14px; background: var(--renk-yuzey-ikinci); color: var(--renk-murekkep); text-align: left; font: inherit; font-size: 14px; line-height: 1.4; cursor: pointer; }
+}

@@ -13,7 +13,7 @@ export const TEST_PROFILLERI = [
   },
   {
     kimlik: 'test-kenji', ad: 'Kenji', bas: 'K', renk: 2, ulke: { tr: 'Japonya · Osaka', en: 'Japan · Osaka' },
-    anaDil: 'diger', ogrenilenDil: 'en', seviye: 'A2',
+    anaDil: 'ja', ogrenilenDil: 'en', seviye: 'A2',
     ilgi: [{ tr: 'Oyunlar', en: 'Games' }, { tr: 'Futbol', en: 'Football' }, { tr: 'Müzik', en: 'Music' }],
     tanitim: { tr: 'Üniversite öğrencisiyim. Yavaş yazarım, sabırlı olursan sevinirim.', en: 'University student. I type slowly, thank you for being patient.' },
     yanitlar: ['Oh, really? I like it too.', 'Sorry, my English is not good. Can you say it simple?', 'What is your favourite one?'],
@@ -53,4 +53,23 @@ export const TEST_KONULARI = [
   { baslik: { tr: 'Hafta sonu', en: 'Weekend' }, cumle: 'What did you do last weekend?' },
   { baslik: { tr: 'Yemek', en: 'Food' }, cumle: 'What is a typical breakfast in your country?' },
   { baslik: { tr: 'İş ve okul', en: 'Work and study' }, cumle: 'Why are you learning English?' },
+];
+
+// Dil Anları (HelloTalk "Moments" benzeri) TEST gönderileri. Bazı cümlelerde bilerek hata vardır:
+// kullanıcı "Düzelt" ile düzeltme pratiği yapabilsin diye. saatOnce: gönderinin kaç saat önce paylaşıldığı (göreli).
+// Beğeni ve yorum sayıları uydurulmaz: yalnız bu cihazdaki etkileşimler sayılır.
+export const TEST_ANLARI = [
+  { kimlik: 'an-1', yazar: 'test-kenji', saatOnce: 1, etiket: { tr: 'Günlük', en: 'Daily life' }, metin: 'Yesterday I go to the cinema with my friends. The film was very funny!' },
+  { kimlik: 'an-2', yazar: 'test-lucia', saatOnce: 3, etiket: { tr: 'Yemek', en: 'Food' }, metin: 'I made paella for my family today. What is a famous dish in your country?' },
+  { kimlik: 'an-3', yazar: 'test-carlos', saatOnce: 5, etiket: { tr: 'İş', en: 'Work' }, metin: 'Tomorrow I have a job interview. He want me to speak English. I am nervous!' },
+  { kimlik: 'an-4', yazar: 'test-tom', saatOnce: 8, etiket: { tr: 'İpucu', en: 'Tip' }, metin: 'Native speaker tip: we often say "I\'m good, thanks" instead of "I am fine". Any questions? Happy to help!' },
+  { kimlik: 'an-5', yazar: 'test-amira', saatOnce: 20, etiket: { tr: 'Kitap', en: 'Books' }, metin: 'I just finished a book about the history of Istanbul. Has anyone been there? I want to visit next year.' },
+  { kimlik: 'an-6', yazar: 'test-marie', saatOnce: 26, etiket: { tr: 'Telaffuz', en: 'Pronunciation' }, metin: 'Which word is harder for you: "world" or "squirrel"? For me it is squirrel!' },
+];
+
+// Kullanıcının kendi gönderisine gelen otomatik test yorumları (yazar, metin). "Otomatik test yanıtı" diye etiketlenir.
+export const TEST_YORUM_KALIPLARI = [
+  { yazar: 'test-tom', metin: 'Nice post! Your English is clear.' },
+  { yazar: 'test-lucia', metin: 'Interesting! I would like to know more.' },
+  { yazar: 'test-amira', metin: 'Thanks for sharing. Where did you learn that?' },
 ];

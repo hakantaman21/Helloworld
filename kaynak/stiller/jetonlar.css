@@ -4,19 +4,19 @@
   :root {
     color-scheme: light;
 
-    --renk-zemin: #F4F6F8;
+    --renk-zemin: #EEF0F4;
     --renk-yuzey: #FFFFFF;
-    --renk-yuzey-ikinci: #EEF0F3;
-    --renk-murekkep: #14213D;
-    --renk-soluk: #5B6472;
-    --renk-cizgi: #E3E6EB;
-    --renk-cizgi-guclu: #C9CED6;
+    --renk-yuzey-ikinci: #F1F2F6;
+    --renk-murekkep: #1A1D26;
+    --renk-soluk: #585F6E;
+    --renk-cizgi: #E1E4EA;
+    --renk-cizgi-guclu: #C7CCD5;
 
-    --renk-vurgu: #C2410C;
-    --renk-vurgu-uzerinde: #FFFFFF;
-    --renk-vurgu-metin: #B23C0B;
-    --renk-vurgu-acik: #FDEDE6;
-    --renk-vurgu-acik-metin: #8A3110;
+    --renk-vurgu: #E0B03C;
+    --renk-vurgu-uzerinde: #1B1406;
+    --renk-vurgu-metin: #7E5A00;
+    --renk-vurgu-acik: #FBF1D6;
+    --renk-vurgu-acik-metin: #5F4300;
 
     --renk-iyi: #1F7A4D;
     --renk-iyi-metin: #1A6B43;
@@ -27,17 +27,25 @@
     --renk-kotu-metin: #B42318;
     --renk-kotu-acik: #FDECEA;
 
-    --renk-gece: #14213D;
-    --renk-gece-yuzey: #22335A;
-    --renk-gece-cizgi: #45557A;
+    --renk-gece: #14161D;
+    --renk-gece-yuzey: #22252E;
+    --renk-gece-cizgi: #3B3F4B;
     --renk-gece-metin: #FFFFFF;
-    --renk-gece-soluk: #C9D1E0;
-    --renk-gece-vurgu: #F8B597;
+    --renk-gece-soluk: #C9CDD6;
+    --renk-gece-vurgu: #F0C866;
 
-    --renk-golge: rgba(20, 33, 61, 0.10);
-    --renk-perde: rgba(14, 21, 38, 0.55);
+    --renk-golge: rgba(26, 29, 38, 0.10);
+    --renk-yuzey-ust: #FFFFFF;
+    --renk-kabartma-isik: rgba(255, 255, 255, 0.95);
+    --renk-vurgu-parlak: #F2CC6A;
+    --renk-grup-1: #2563A8;
+    --renk-grup-2: #0F766E;
+    --renk-grup-3: #6D3FC0;
+    --renk-grup-4: #7E5A00;
+    --renk-grup-5: #1F7A4D;
+    --renk-perde: rgba(10, 11, 15, 0.55);
 
-    --yazi-aile: Figtree, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --yazi-aile: Inter, Figtree, system-ui, -apple-system, "Segoe UI", sans-serif;
     --yazi-baslik: 28px;
     --yazi-altbaslik: 17px;
     --yazi-govde: 15px;

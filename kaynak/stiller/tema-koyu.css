@@ -3,18 +3,18 @@
 @layer tema {
   :root[data-tema="koyu"] {
     color-scheme: dark;
-    --renk-zemin: #0E1526;
-    --renk-yuzey: #18223A;
-    --renk-yuzey-ikinci: #212C47;
-    --renk-murekkep: #E8ECF4;
-    --renk-soluk: #A3AEC2;
-    --renk-cizgi: #2A3654;
-    --renk-cizgi-guclu: #3A4766;
-    --renk-vurgu: #C2410C;
-    --renk-vurgu-uzerinde: #FFFFFF;
-    --renk-vurgu-metin: #F4A27E;
-    --renk-vurgu-acik: #3A2218;
-    --renk-vurgu-acik-metin: #F8C2A8;
+    --renk-zemin: #0B0C10;
+    --renk-yuzey: #1B1D24;
+    --renk-yuzey-ikinci: #24262F;
+    --renk-murekkep: #ECEEF3;
+    --renk-soluk: #A9AFBC;
+    --renk-cizgi: #2C2F39;
+    --renk-cizgi-guclu: #3D414D;
+    --renk-vurgu: #E0B03C;
+    --renk-vurgu-uzerinde: #1B1406;
+    --renk-vurgu-metin: #F0C866;
+    --renk-vurgu-acik: #33291A;
+    --renk-vurgu-acik-metin: #F3D58A;
     --renk-iyi: #2E9E65;
     --renk-iyi-metin: #7AD3A0;
     --renk-iyi-acik: #173A2A;
@@ -23,31 +23,39 @@
     --renk-kotu: #B42318;
     --renk-kotu-metin: #F49A92;
     --renk-kotu-acik: #3D1A18;
-    --renk-gece: #0A101E;
-    --renk-gece-yuzey: #18223A;
-    --renk-gece-cizgi: #3A4766;
+    --renk-gece: #08090C;
+    --renk-gece-yuzey: #1B1D24;
+    --renk-gece-cizgi: #3D414D;
     --renk-gece-metin: #FFFFFF;
-    --renk-gece-soluk: #C9D1E0;
-    --renk-gece-vurgu: #F8B597;
-    --renk-golge: rgba(0, 0, 0, 0.30);
-    --renk-perde: rgba(0, 0, 0, 0.6);
+    --renk-gece-soluk: #C9CDD6;
+    --renk-gece-vurgu: #F0C866;
+    --renk-golge: rgba(0, 0, 0, 0.45);
+    --renk-yuzey-ust: #24262E;
+    --renk-kabartma-isik: rgba(255, 255, 255, 0.07);
+    --renk-vurgu-parlak: #F2CC6A;
+    --renk-grup-1: #7CB4F5;
+    --renk-grup-2: #5FD4C4;
+    --renk-grup-3: #B79BF5;
+    --renk-grup-4: #F0C866;
+    --renk-grup-5: #7AD3A0;
+    --renk-perde: rgba(0, 0, 0, 0.62);
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-tema="acik"]) {
       color-scheme: dark;
-      --renk-zemin: #0E1526;
-      --renk-yuzey: #18223A;
-      --renk-yuzey-ikinci: #212C47;
-      --renk-murekkep: #E8ECF4;
-      --renk-soluk: #A3AEC2;
-      --renk-cizgi: #2A3654;
-      --renk-cizgi-guclu: #3A4766;
-      --renk-vurgu: #C2410C;
-      --renk-vurgu-uzerinde: #FFFFFF;
-      --renk-vurgu-metin: #F4A27E;
-      --renk-vurgu-acik: #3A2218;
-      --renk-vurgu-acik-metin: #F8C2A8;
+      --renk-zemin: #0B0C10;
+      --renk-yuzey: #1B1D24;
+      --renk-yuzey-ikinci: #24262F;
+      --renk-murekkep: #ECEEF3;
+      --renk-soluk: #A9AFBC;
+      --renk-cizgi: #2C2F39;
+      --renk-cizgi-guclu: #3D414D;
+      --renk-vurgu: #E0B03C;
+      --renk-vurgu-uzerinde: #1B1406;
+      --renk-vurgu-metin: #F0C866;
+      --renk-vurgu-acik: #33291A;
+      --renk-vurgu-acik-metin: #F3D58A;
       --renk-iyi: #2E9E65;
       --renk-iyi-metin: #7AD3A0;
       --renk-iyi-acik: #173A2A;
@@ -56,14 +64,22 @@
       --renk-kotu: #B42318;
       --renk-kotu-metin: #F49A92;
       --renk-kotu-acik: #3D1A18;
-      --renk-gece: #0A101E;
-      --renk-gece-yuzey: #18223A;
-      --renk-gece-cizgi: #3A4766;
+      --renk-gece: #08090C;
+      --renk-gece-yuzey: #1B1D24;
+      --renk-gece-cizgi: #3D414D;
       --renk-gece-metin: #FFFFFF;
-      --renk-gece-soluk: #C9D1E0;
-      --renk-gece-vurgu: #F8B597;
-      --renk-golge: rgba(0, 0, 0, 0.30);
-      --renk-perde: rgba(0, 0, 0, 0.6);
+      --renk-gece-soluk: #C9CDD6;
+      --renk-gece-vurgu: #F0C866;
+      --renk-golge: rgba(0, 0, 0, 0.45);
+      --renk-yuzey-ust: #24262E;
+      --renk-kabartma-isik: rgba(255, 255, 255, 0.07);
+      --renk-vurgu-parlak: #F2CC6A;
+      --renk-grup-1: #7CB4F5;
+      --renk-grup-2: #5FD4C4;
+      --renk-grup-3: #B79BF5;
+      --renk-grup-4: #F0C866;
+      --renk-grup-5: #7AD3A0;
+      --renk-perde: rgba(0, 0, 0, 0.62);
     }
   }
 }

@@ -10,6 +10,7 @@ export default {
   },
 
   diller: {
+    ja: 'Japonca',
     tr: 'Türkçe', en: 'İngilizce', es: 'İspanyolca', ar: 'Arapça', de: 'Almanca',
     fr: 'Fransızca', ru: 'Rusça', pt: 'Portekizce', fa: 'Farsça', diger: 'Diğer',
   },
@@ -46,6 +47,7 @@ export default {
     kesfet: 'Keşfet',
     gelenArama: 'Koç arıyor',
     mesaj: 'Mesaj',
+    kisi: 'Profil',
     gorusme: 'Görüşme',
     karne: 'Konuşma karnesi',
     senaryolar: 'Senaryolar',
@@ -57,6 +59,27 @@ export default {
   },
 
   anlar: {
+    sen: 'Sen',
+    profiliAc: '{ad} profilini aç',
+    seninDuzeltmen: 'Senin düzeltmen',
+    eylemler: 'Gönderi eylemleri',
+    begen: 'Beğen',
+    begenildi: 'Beğendin',
+    yorum: 'Yorum',
+    duzelt: 'Düzelt',
+    duzeltEtiket: 'Gönderinin düzeltilmiş hali',
+    duzeltAciklama: 'Cümleyi doğru haliyle yeniden yaz. Farkı yeşil ve kırmızı gösteririz.',
+    degisiklikYok: 'Henüz bir değişiklik yapmadın.',
+    duzeltmeGonderildi: 'Düzeltmen eklendi (test).',
+    duzeltmeyiGonder: 'Düzeltmeyi ekle',
+    yorumYaz: 'Yorum yaz…',
+    paylasBaslik: 'Bir an paylaş',
+    paylasOrnek: 'Bugün İngilizce ne öğrendin? Bir cümle yaz…',
+    paylas: 'Paylaş',
+    paylasildi: 'Paylaşıldı (yalnız bu cihazda, test).',
+    akisBos: 'Henüz gönderi yok.',
+    yakinda: 'YAKINDA',
+    testUyari: 'Test akışı: gönderiler TEST rozetli sanal kullanıcılara ait, gerçek kişi değil. Beğeni ve yorum sayıları yalnız senin etkileşimlerin.',
     baglantiyaGit: 'Yeni kişiler keşfet',
     baslik: 'Dil Anları',
     alt: 'Kısa paylaşımlarla dilini geliştir',
@@ -179,6 +202,8 @@ export default {
   },
 
   kesfet: {
+    suzgec: { tum: 'Tümü', anaDil: 'Ana dili İngilizce', seviye: 'Seviyeme yakın', degisim: 'Türkçe öğrenenler' },
+    suzgecBos: 'Bu süzgece uyan kimse yok.',
     pratigeGit: 'Pratik bölümüne git',
     heroEtiket: 'YENİ BAĞLANTILAR',
     heroBaslik: 'Yeni insanlarla tanış',
@@ -427,6 +452,16 @@ export default {
   },
 
   test: {
+    davetBaslik: 'Sanal kullanıcılarla dene',
+    davetAciklama: 'Topluluk açılmadan önce Bağlantı, Dil Anları ve mesajlaşmayı TEST rozetli sanal kullanıcılarla deneyebilirsin. Gerçek kişi değiller; yanıtlar otomatik kalıptır ve gelişimine sayılmaz. Ayarlar › Test modu ile kapatırsın.',
+    davetDugme: 'Test modunu aç',
+    profiliGor: 'Profili gör',
+    dilKimligi: 'Dil kimliği',
+    anaDili: 'Ana dili',
+    ogreniyor: 'Öğreniyor',
+    ilgiAlanlari: 'İlgi alanları',
+    anlari: '{ad} paylaşımları',
+    anYok: 'Henüz paylaşımı yok.',
     rozet: 'TEST',
     rozetAciklama: 'Test profili: gerçek kişi değildir. Yalnız test modunda görünür.',
     profillerBaslik: 'Test profilleri',
@@ -467,4 +502,5 @@ export default {
     silindi: 'Test verileri silindi.',
     gorunur: 'Test modu ayarı görünür oldu.',
   },
+  zamanOnce: { simdi: 'şimdi', dk: '{n} dk önce', saat: '{n} sa önce', gun: '{n} gün önce' },
 };
