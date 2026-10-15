@@ -1,5 +1,4 @@
 @layer moduller {
-  .bgn-profil { font-size: var(--yazi-govde); font-weight: 700; flex-shrink: 0; }
   .bgn-tabela { gap: 2px; padding: var(--bosluk-3) var(--bosluk-4); border-radius: var(--kose-kucuk); }
   .bgn-oge-metin { display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0; }
   .bgn-oge-baslik { font-size: var(--yazi-govde); font-weight: 600; }
