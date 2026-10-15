@@ -49,7 +49,7 @@ function ciz() {
   document.title = `${t(ekran.baslikAnahtari)} · ${t('uygulama.ad')}`;
   try {
     aktifTemizle = ekran.ciz(kap, { p: parametreler, git, geri }) || null;
-    if (['sohbetler', 'kesfet', 'dil-anlari', 'bugun', 'gelisim'].includes(id)) kap.prepend(ustKontroller(veri.profil.ad));
+    if (['sohbetler', 'kesfet', 'dil-anlari', 'bugun', 'gelisim'].includes(id)) kap.prepend(ustKontroller(veri.profil.ad, git));
   } catch (hata) {
     console.error('[yonlendirici]', id, hata);
     kap.replaceChildren(h('div', { class: 'b-durum', role: 'alert' }, t('genel.hata')));
