@@ -3,6 +3,14 @@
 Her teslimde sürüm bir artar ve en üste bir kayıt eklenir (Y10). Test robotu, `kaynak/cekirdek/surum.js`,
 `package.json` ve buradaki son kaydın aynı olduğunu denetler.
 
+## 0.2.4 — 16.10.2026 · Pratik ekranı konuşma yolları
+
+- Speak esinli hızlı konuşma kartı, tek dokunuşla önerilen senaryo.
+- Üç açık pratik yolu: hızlı konuş, senaryo seç, Hata Hafızası.
+- ELSA/English Prime ilkeleri: gerçek ölçüm olmayan demoda telaffuz veya ustalık puanı üretilmez.
+- TR/EN metinleri; mevcut işleyen akışlar korunur.
+- Kod, robot, cihaz testleri ve Claude incelemesi bekleniyor; merge yok.
+
 ## 0.2.3 — 16.10.2026 · Sohbetler ilk UX dalgası
 
 - HelloTalk esinli konuşma araması ve Tümü / Yapay zekâ / İnsanlar sekmeleri.
