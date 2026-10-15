@@ -1,3 +1,13 @@
+## v0.2.6 — 16.10.2026 / ChatGPT / Beşli menü
+
+- Kullanıcı kararı: Sohbet · Bağlantı · Dil Anları · AI · Profil; sol üst profil, sağ üst ayarlar.
+- Tasarım: English Prime'dan ilhamla sade kartlar, 5 eşit tab, vurgu yüzeyi, dengeli/kompakt yerleşim.
+- Bağlantı mevcut Keşfet modülüne, AI mevcut Pratik modülüne bağlı; yeni Dil Anları güvenli boş durumdur.
+- Ayarlar: mevcut sistem/açık/koyu ve yeni görünüm seçimi; veri göçü 3→4.
+- Dal: tasarim-besli-menu-v0.2.6, taban: tasarim-kesfet-v0.2.2. Henüz test edilmedi, main/deneme değişmedi.
+- Sonraki geliştirici: Y1–Y26 denetçisi, robot, gerçek Android, tema ve erişilebilirlik testleri; Claude incelemesi.
+- Hakan onayı olmadan merge yok.
+
 # Devir Notu
 
 > **Bu projede çalışan her yapay zekâ işe buradan başlar.** Sıra: bu dosya → `KURALLAR.md` → `ANAYASA.md`'nin ilgili bölümü.
