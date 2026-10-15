@@ -31,7 +31,10 @@ export default {
 
   gezinme: {
     etiket: 'Ana gezinme',
-    sohbetler: 'Sohbetler',
+    sohbetler: 'Sohbet',
+    baglanti: 'Bağlantı',
+    dilAnlari: 'Dil Anları',
+    ai: 'AI',
     kesfet: 'Keşfet',
     pratik: 'Pratik',
     profil: 'Profil',
@@ -49,7 +52,16 @@ export default {
     senaryoAlani: 'Senaryo alanı',
     hafiza: 'Hata Hafızası',
     gelisim: 'Profil',
+    dilAnlari: 'Dil Anları',
     ayarlar: 'Ayarlar',
+  },
+
+  anlar: {
+    baslik: 'Dil Anları',
+    alt: 'Kısa paylaşımlarla dilini geliştir',
+    aciklama: 'Topluluk gönderileri henüz açık değil. Güvenli paylaşım ve moderasyon hazır olduğunda burada görünecek.',
+    basla: 'Senaryolarla pratik yap',
+    guvenlik: 'Paylaşım ve yorumlar moderasyon altyapısı tamamlandıktan sonra açılacak.',
   },
 
   karsilama: {
