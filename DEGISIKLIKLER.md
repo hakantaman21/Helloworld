@@ -3,6 +3,14 @@
 Her teslimde sürüm bir artar ve en üste bir kayıt eklenir (Y10). Test robotu, `kaynak/cekirdek/surum.js`,
 `package.json` ve buradaki son kaydın aynı olduğunu denetler.
 
+## 0.2.3 — 16.10.2026 · Sohbetler ilk UX dalgası
+
+- HelloTalk esinli konuşma araması ve Tümü / Yapay zekâ / İnsanlar sekmeleri.
+- Speak esinli tek dokunuşla konuşma başlatma kartı.
+- Arama yalnızca cihazdaki konuşma başlıklarını filtreler; gerçek kullanıcı ve mesajlaşma henüz yok.
+- Türkçe/İngilizce metinler, 48px dokunma alanları, ayrı AI kimliği.
+- Teknik derleme ve cihaz testleri bekliyor; PR #3 taslak ve birleştirilmedi.
+
 ## 0.2.2 — 16.10.2026 · Keşfet kullanıcı deneyimi ilk dalga
 
 - HelloTalk referansı: insan/AI keşif ayrımı, eşleşme kriterlerinin açık sunumu; sahte profil veya canlı durum yok.
