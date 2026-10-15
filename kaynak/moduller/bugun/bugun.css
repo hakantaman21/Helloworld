@@ -13,7 +13,7 @@
 
 @layer moduller {
   .bgn-hizli { gap: var(--bosluk-3); background: var(--renk-vurgu-acik); }
-  .bgn-hizli .b-kucuk { color: var(--renk-vurgu-acik-metin); }
+  .bgn-hizli .bgn-hizli-alt { color: var(--renk-vurgu-acik-metin); }
   .bgn-yollar { display: flex; flex-direction: column; gap: var(--bosluk-2); }
   .bgn-yol { min-height: 76px; }
   .bgn-yol > svg { flex-shrink: 0; color: var(--renk-soluk); }
