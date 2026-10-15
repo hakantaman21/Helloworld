@@ -104,7 +104,7 @@ const GEZINME = [
   { yol: '/sohbetler', ikon: 'sohbet', anahtar: 'gezinme.sohbetler' },
   { yol: '/kesfet', ikon: 'pusula', anahtar: 'gezinme.baglanti' },
   { yol: '/dil-anlari', ikon: 'yildiz', anahtar: 'gezinme.dilAnlari' },
-  { yol: '/bugun', ikon: 'dalga', anahtar: 'gezinme.ai' },
+  { yol: '/bugun', ikon: 'dalga', anahtar: 'gezinme.pratik' },
   { yol: '/gelisim', ikon: 'kisi', anahtar: 'gezinme.profil' },
 ];
 
