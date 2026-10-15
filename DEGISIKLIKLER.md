@@ -3,6 +3,14 @@
 Her teslimde sürüm bir artar ve en üste bir kayıt eklenir (Y10). Test robotu, `kaynak/cekirdek/surum.js`,
 `package.json` ve buradaki son kaydın aynı olduğunu denetler.
 
+## 0.2.5 — 16.10.2026 · Profil gelişim ve sonraki adım
+
+- Profilde Hata Hafızası vadesine göre bir sonraki adım önerisi.
+- Veri kartı için ölçüm sınırlarını açıklayan açılır bilgi.
+- Mevcut dönem raporu, paylaşım, seviye yolu ve haftalık takvim korunur.
+- TR/EN anahtarları eşleştirildi; gerçek telaffuz veya geçerli seviye ölçümü iddia edilmez.
+- Derleme/robot/telefon doğrulaması bekliyor; PR taslak, merge yok.
+
 ## 0.2.4 — 16.10.2026 · Pratik ekranı konuşma yolları
 
 - Speak esinli hızlı konuşma kartı, tek dokunuşla önerilen senaryo.
