@@ -99,7 +99,7 @@ export function ustBaslik({ tabela, baslik, alt, sag, geri }) {
   );
 }
 
-// Dört sekme (Anayasa bölüm 4): Sohbetler · Keşfet · Pratik · Profil
+// Beş sekme (Anayasa bölüm 14): Sohbet · Bağlantı · Dil Anları · Pratik · Profil
 const GEZINME = [
   { yol: '/sohbetler', ikon: 'sohbet', anahtar: 'gezinme.sohbetler' },
   { yol: '/kesfet', ikon: 'pusula', anahtar: 'gezinme.baglanti' },
@@ -121,13 +121,13 @@ export function altGezinme(aktifYol) {
 }
 
 // English Prime esinli: her ana ekranda tek satır profil / ayarlar, gerçek hedeflere gider.
-export function ustKontroller(ad) {
+export function ustKontroller(ad, git) {
   return h('div', { class: 'b-ust-kontroller' },
-    h('a', { class: 'b-ust-profil', href: '#/gelisim', 'aria-label': t('gezinme.profil') },
+    h('button', { type: 'button', class: 'b-ust-profil', onClick: () => git('/gelisim'), 'aria-label': t('gezinme.profil') },
       h('span', { class: 'b-ust-avatar', 'aria-hidden': 'true' }, (ad || '?').charAt(0).toLocaleUpperCase()),
       h('span', null, t('gezinme.profil'))),
     h('span', { class: 'b-ust-marka' }, t('uygulama.ad')),
-    h('a', { class: 'b-ust-ayar', href: '#/ayarlar', 'aria-label': t('ayarlar.baslik') }, ikon('ayar', 22)),
+    h('button', { type: 'button', class: 'b-ust-ayar', onClick: () => git('/ayarlar'), 'aria-label': t('ayarlar.baslik') }, ikon('ayar', 22)),
   );
 }
 
