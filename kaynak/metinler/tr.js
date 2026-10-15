@@ -391,6 +391,7 @@ export default {
   },
 
   ayarlar: {
+    dilProfili: 'Dil profilim', anaDil: 'Ana dilim', ogrenilenDil: 'Öğrendiğim dil', dilSeciniz: 'Dil seçiniz', dilHedefi: 'Dil öğrenme hedefim', hedefOrnek: 'Örneğin: Akıcı günlük konuşma', tanitim: 'Kendimi tanıtıyorum', tanitimOrnek: 'Kendinizden kısaca bahsedin', profilGizlilik: 'Bu bilgiler şu anda yalnızca cihazınızda tutulur; başkalarıyla paylaşılmaz.',
     gorunumBaslik: 'Görünüm ve özelleştirme',
     gorunum: 'Kart yerleşimi',
     gorunumAciklama: 'Dengeli görünüm daha ferah; kompakt görünüm daha az kaydırma gerektirir.',
