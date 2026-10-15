@@ -96,6 +96,14 @@ export default {
   },
 
   bugun: {
+    hizliEtiket: 'READY TO SPEAK?',
+    hizliBaslik: 'Start speaking in 5 minutes',
+    hizliAciklama: 'Open a scenario suited to your level. The demo coach does not score your real proficiency or pronunciation.',
+    hizliDugme: 'Speak now',
+    yollarBaslik: 'How would you like to practise?',
+    hizli: { baslik: 'Quick speaking', alt: 'Start the recommended scenario' },
+    hedefli: { baslik: 'Choose a scenario', alt: 'Practise real-life situations' },
+    tekrar: { baslik: 'Error Memory', alt: 'Review {n} items due for practice' },
     selam: { sabah: 'Good morning, {ad}', ogle: 'Good afternoon, {ad}', aksam: 'Good evening, {ad}' },
     seri: 'Streak: {n} days',
     seviye: 'Level: {s}',
