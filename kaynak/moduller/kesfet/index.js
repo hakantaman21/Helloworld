@@ -51,7 +51,7 @@ function ciz(kok, b) {
     h('section', { class: 'b-kart kft-hero', 'aria-labelledby': 'kft-giris' },
       h('span', { class: 'b-ust-etiket' }, t('kesfet.heroEtiket')),
       h('h2', { class: 'b-bolum-baslik', id: 'kft-giris' }, t('kesfet.heroBaslik')),
-      h('p', { class: 'b-kucuk' }, t('kesfet.heroAlt')),
+      h('p', { class: 'b-kucuk kft-hero-alt' }, t('kesfet.heroAlt')),
       h('button', { class: 'b-dugme b-dugme-ana', type: 'button', onClick: konus }, ikon('oynat', 20), t('kesfet.hizliPratik')),
     ),
     h('section', { class: 'b-yigin', 'aria-label': t('kesfet.secimBaslik') },
