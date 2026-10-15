@@ -3,7 +3,6 @@
   .shb-avatar-yz { border-radius: var(--kose-kucuk); background: var(--renk-gece); color: var(--renk-gece-vurgu); }
   .shb-metin { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
   .shb-ad { font-size: var(--yazi-govde); font-weight: 700; overflow-wrap: anywhere; }
-  .shb-basla { gap: var(--bosluk-3); background: var(--renk-vurgu-acik); }
   .shb-arama { display: flex; align-items: center; gap: var(--bosluk-2); padding-left: var(--bosluk-3); border: 1px solid var(--renk-cizgi-guclu); background: var(--renk-yuzey); border-radius: var(--kose-tam); }
   .shb-arama-girdi { flex: 1; min-width: 0; border: 0; background: transparent; }
   .shb-filtreler { display: flex; gap: var(--bosluk-2); overflow-x: auto; padding-bottom: var(--bosluk-1); }
