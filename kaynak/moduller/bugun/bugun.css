@@ -1,5 +1,4 @@
 @layer moduller {
-  .bgn-profil { font-size: var(--yazi-govde); font-weight: 700; flex-shrink: 0; }
   .bgn-tabela { gap: 2px; padding: var(--bosluk-3) var(--bosluk-4); border-radius: var(--kose-kucuk); }
   .bgn-oge-metin { display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0; }
   .bgn-oge-baslik { font-size: var(--yazi-govde); font-weight: 600; }
@@ -10,4 +9,12 @@
 @layer moduller {
   .bgn-arac { gap: 6px; min-height: 120px; }
   .bgn-arac-pasif { opacity: 0.6; border-style: dashed; }
+}
+
+@layer moduller {
+  .bgn-hizli { gap: var(--bosluk-3); background: var(--renk-vurgu-acik); }
+  .bgn-hizli .bgn-hizli-alt { color: var(--renk-vurgu-acik-metin); }
+  .bgn-yollar { display: flex; flex-direction: column; gap: var(--bosluk-2); }
+  .bgn-yol { min-height: 76px; }
+  .bgn-yol > svg { flex-shrink: 0; color: var(--renk-soluk); }
 }

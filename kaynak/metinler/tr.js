@@ -31,7 +31,9 @@ export default {
 
   gezinme: {
     etiket: 'Ana gezinme',
-    sohbetler: 'Sohbetler',
+    sohbetler: 'Sohbet',
+    baglanti: 'Bağlantı',
+    dilAnlari: 'Dil Anları',
     kesfet: 'Keşfet',
     pratik: 'Pratik',
     profil: 'Profil',
@@ -49,7 +51,17 @@ export default {
     senaryoAlani: 'Senaryo alanı',
     hafiza: 'Hata Hafızası',
     gelisim: 'Profil',
+    dilAnlari: 'Dil Anları',
     ayarlar: 'Ayarlar',
+  },
+
+  anlar: {
+    baglantiyaGit: 'Yeni kişiler keşfet',
+    baslik: 'Dil Anları',
+    alt: 'Kısa paylaşımlarla dilini geliştir',
+    aciklama: 'Topluluk gönderileri henüz açık değil. Güvenli paylaşım ve moderasyon hazır olduğunda burada görünecek.',
+    basla: 'Senaryolarla pratik yap',
+    guvenlik: 'Paylaşım ve yorumlar moderasyon altyapısı tamamlandıktan sonra açılacak.',
   },
 
   karsilama: {
@@ -82,7 +94,7 @@ export default {
     izinVer: 'Mikrofona izin ver',
     yaziliDevam: 'Şimdilik yazarak konuşayım',
     tanismaBaslik: 'Yapay zekâ partnerinle tanış',
-    tanismaAciklama: 'Yaklaşık 1 dakikalık kısa bir sohbet. Seviyeni bu sohbetten anlayacağız; sınav yok.',
+    tanismaAciklama: 'Yaklaşık 1 dakikalık senaryolu tanışma demosu. Dil seviyeni ölçmez veya değiştirmez.',
     tanismaBasla: 'Tanışmaya başla',
     tanismaAtla: 'Sonra yaparım',
   },
@@ -97,6 +109,15 @@ export default {
   },
 
   bugun: {
+    partnerSecim: { baslik: 'Kiminle pratik yapacaksın?', yz: 'AI ile pratik', insan: 'Gerçek kişi', bilgi: 'AI demo koç hazırdır. Gerçek kişilerle konuşma, güvenli topluluk açıldığında kullanılabilir.' },
+    hizliEtiket: 'KONUŞMAYA HAZIR MISIN?',
+    hizliBaslik: '5 dakikada konuşmaya başla',
+    hizliAciklama: 'Seviyene uygun bir senaryo açılır. Demo koç gerçek dil seviyeni veya telaffuzunu puanlamaz.',
+    hizliDugme: 'Şimdi konuş',
+    yollarBaslik: 'Nasıl pratik yapmak istersin?',
+    hizli: { baslik: 'Hızlı konuş', alt: 'Önerilen senaryoyla hemen başla' },
+    hedefli: { baslik: 'Senaryo seç', alt: 'Günlük yaşam durumlarından birini çalış' },
+    tekrar: { baslik: 'Hata Hafızası', alt: 'Tekrar zamanı gelen {n} öğeyi incele' },
     selam: { sabah: 'Günaydın, {ad}', ogle: 'İyi günler, {ad}', aksam: 'İyi akşamlar, {ad}' },
     seri: 'Seri: {n} gün',
     seviye: 'Seviye: {s}',
@@ -131,6 +152,19 @@ export default {
   },
 
   sohbetler: {
+    gecmisBilgi: 'Önceki mesaj ve konuşmaların burada. Yeni kişiler için Bağlantı, konuşma çalışmak için Pratik bölümünü kullan.',
+    yeniKisi: 'Yeni kişiler keşfet',
+    hizliBaslik: 'Hemen konuşmaya başla',
+    hizliAlt: 'Beklemeden yapay zekâ partnerinle kısa bir konuşma yap.',
+    hizliDugme: 'Konuşmaya başla',
+    ara: 'Konuşmalarda ara',
+    filtreBaslik: 'Konuşma türü',
+    tumFiltre: 'Tümü',
+    yzFiltre: 'Yapay zekâ',
+    insanFiltre: 'İnsanlar',
+    listeBaslik: 'Konuşmalar ve partnerler',
+    aramaBos: 'Aramana uygun bir konuşma bulunamadı.',
+    insanBilgi: 'Gerçek kişi mesajlaşması henüz açılmadı; burada yalnızca cihazındaki yapay zekâ pratikleri listelenir.',
     baslik: 'Sohbetler',
     alt: 'Gerçek kişilerle ve yapay zekâ partnerinle konuşmaların',
     yzBolum: 'Yapay zekâ partnerin',
@@ -144,8 +178,24 @@ export default {
   },
 
   kesfet: {
-    baslik: 'Keşfet',
-    alt: 'Dil partnerleri ve topluluk',
+    pratigeGit: 'Pratik bölümüne git',
+    heroEtiket: 'YENİ BAĞLANTILAR',
+    heroBaslik: 'Yeni insanlarla tanış',
+    heroAlt: 'Dil hedeflerine ve ilgi alanlarına uygun gerçek kişilerle bağlantı kur.',
+    hizliPratik: 'Şimdi konuş · 5 dk',
+    secimBaslik: 'Pratik partneri seç',
+    insanSekme: 'Gerçek insanlar',
+    yzSekme: 'Yapay zekâ',
+    eslesmeAciklama: 'Dil, seviye ve hedefe göre güvenli eşleşme yakında.',
+    filtreBaslik: 'Yakında kullanılacak keşif ölçütleri',
+    filtre: { dil: 'Dil', seviye: 'Seviye', hedef: 'Hedef' },
+    yzAlternatif: 'Yapay zekâ ile hemen başla',
+    demoAciklama: 'Şu an demo koç çalışıyor. Bu oturum gerçek telaffuz veya seviye ölçümü değildir.',
+    telaffuzBaslik: 'Telaffuz ve konuşma çalışması',
+    telaffuzAlt: 'Senaryolarda sesli tekrar yapabilirsin. Ses/harf düzeyinde güvenilir puanlama henüz aktif değil.',
+    senaryoDugme: 'Senaryoları keşfet',
+    baslik: 'Bağlantı',
+    alt: 'Yeni kişiler ve dil partnerleri',
     partnerBaslik: 'Partner bul',
     partnerBos: 'Topluluk açılınca İngilizce pratik yapan kişileri hedefine ve seviyene göre burada bulacaksın.',
     yzBaslik: 'Bu sırada yapay zekâ partnerin hazır',
@@ -207,6 +257,10 @@ export default {
   },
 
   karne: {
+    olculmedi: 'Ölçülmedi',
+    olcumYok: 'Bu demo telaffuz, akıcılık veya dil seviyesini ölçmez. Ses tanımanın güven değeri telaffuz puanı değildir.',
+    demoAciklama: 'Senaryolu demo: yanıtlar gerçek bir yapay zekâ sağlayıcısından gelmez. Düzeltmeler örnek önerilerdir; Hata Hafızası ve seviyen değiştirilmez. Pratik süren kaydedilir.',
+
     tabela: 'Pratik › {baslik}',
     baslik: 'Konuşma karnesi',
     ozetIyi: 'Görevi tamamladın. Güzel konuştun!',
@@ -300,6 +354,15 @@ export default {
   },
 
   gelisim: {
+    kimlik: { baslik: 'Dil profilim', duzenle: 'Düzenle', anaDil: 'Ana dil', hedefDil: 'Öğrenilen dil', seviye: 'Seviye', hedef: 'Hedef', hedefAciklama: 'Konuşma pratiği', belirtilmedi: 'Henüz belirtilmedi', gizlilik: 'Bu bilgiler şu an cihazında tutulur; herkese açık bir profil oluşturulmadı.' },
+    siradakiEtiket: 'SANA ÖNERİLEN SONRAKİ ADIM',
+    tekrarBaslik: 'Tekrar zamanı: {n} öğe',
+    tekrarAciklama: 'Hata Hafızası’nda zamanı gelen öğeleri gözden geçir. Bu öneri bir seviye kararı değildir.',
+    pratikBaslik: 'Yeni bir konuşma dene',
+    pratikAciklama: 'Mevcut seviyene uygun bir senaryoyla pratik yap. Sonuçlar tek başına ustalık kanıtı sayılmaz.',
+    baslatDugme: 'Devam et',
+    olcumAciklamaBaslik: 'Bu rakamlar ne anlama geliyor?',
+    olcumAciklama: 'Dakika, kelime ve etkin gün sayısı cihazdaki kayıtların özetidir. Akıcılık göstergesi mevcut oturum verilerine dayanır; standartlaştırılmış bir sınav, telaffuz puanı veya doğrulanmış dil yeterliği değildir.',
     baslik: 'Profil',
     rol: { ogrenen: 'Öğreniyor', yardimci: 'Yardımcı partner' },
     anaDil: 'Ana dil: {dil}',
@@ -327,6 +390,11 @@ export default {
   },
 
   ayarlar: {
+    dilProfili: 'Dil profilim', anaDil: 'Ana dilim', ogrenilenDil: 'Öğrendiğim dil', dilSeciniz: 'Dil seçiniz', dilHedefi: 'Dil öğrenme hedefim', hedefOrnek: 'Örneğin: Akıcı günlük konuşma', tanitim: 'Kendimi tanıtıyorum', tanitimOrnek: 'Kendinizden kısaca bahsedin', profilGizlilik: 'Bu bilgiler şu anda yalnızca cihazınızda tutulur; başkalarıyla paylaşılmaz.',
+    gorunumBaslik: 'Görünüm ve özelleştirme',
+    gorunum: 'Kart yerleşimi',
+    gorunumAciklama: 'Dengeli görünüm daha ferah; kompakt görünüm daha az kaydırma gerektirir.',
+    gorunumSecenek: { dengeli: 'Dengeli', kompakt: 'Kompakt' },
     baslik: 'Ayarlar',
     tabela: 'Profil',
     arayuzDili: 'Uygulama dili',

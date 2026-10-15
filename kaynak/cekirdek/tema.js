@@ -3,8 +3,10 @@ import { al } from './depo.js';
 import { dinle } from './olay-hatti.js';
 
 export function temaUygula() {
-  const tercih = al().profil.ayarlar.tema;
+  const ayarlar = al().profil.ayarlar;
+  const tercih = ayarlar.tema;
   const kok = document.documentElement;
+  kok.setAttribute('data-gorunum', ayarlar.gorunum === 'kompakt' ? 'kompakt' : 'dengeli');
   if (tercih === 'sistem') kok.removeAttribute('data-tema');
   else kok.setAttribute('data-tema', tercih);
 }

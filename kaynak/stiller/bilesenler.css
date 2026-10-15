@@ -23,6 +23,15 @@
   .b-kucuk { font-size: var(--yazi-kucuk); color: var(--renk-soluk); }
   .b-ust-etiket { font-size: var(--yazi-kucuk); font-weight: 700; letter-spacing: 0.04em; color: var(--renk-soluk); }
 
+  /* English Prime'dan esinlenen sade, beşli navigasyon ve üst kontrol şeridi */
+  .b-ust-kontroller { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--bosluk-2); min-height: 52px; }
+  .b-ust-profil { border: 0; background: transparent; cursor: pointer; display: inline-flex; align-items: center; gap: var(--bosluk-2); text-decoration: none; color: var(--renk-murekkep); font-size: var(--yazi-kucuk); font-weight: 700; }
+  .b-ust-avatar { display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--kose-kucuk); background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); border: 1px solid var(--renk-cizgi); }
+  .b-ust-marka { font-size: var(--yazi-kucuk); color: var(--renk-soluk); font-weight: 700; text-align: center; }
+  .b-ust-ayar { cursor: pointer; justify-self: end; display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--renk-cizgi); border-radius: var(--kose-kucuk); background: var(--renk-yuzey); color: var(--renk-murekkep); box-shadow: 0 2px 5px var(--renk-golge); }
+  :root[data-gorunum="kompakt"] .b-ekran { gap: var(--bosluk-3); }
+  :root[data-gorunum="kompakt"] .b-kart { padding: var(--bosluk-3); }
+  :root[data-gorunum="kompakt"] .b-gezinme { --gezinme-yukseklik: 68px; }
   /* --- Kartlar --- */
   .b-kart {
     background: var(--renk-yuzey);
@@ -137,7 +146,10 @@
   }
   .b-gezinme-ic { width: 100%; max-width: var(--icerik-genislik); display: flex; justify-content: space-around; align-items: center; }
   .b-gezinme-oge {
-    min-width: 72px;
+    min-width: 0;
+    flex: 1;
+    padding: 4px 2px;
+    text-align: center;
     min-height: var(--dokunma);
     display: flex;
     flex-direction: column;
@@ -146,11 +158,12 @@
     gap: var(--bosluk-1);
     text-decoration: none;
     color: var(--renk-soluk);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
   }
   .b-gezinme-oge svg { stroke: var(--renk-soluk); }
-  .b-gezinme-oge[aria-current="page"] { color: var(--renk-murekkep); font-weight: 700; }
+  .b-gezinme-oge[aria-current="page"] { color: var(--renk-murekkep); font-weight: 700; background: var(--renk-vurgu-acik); border-radius: var(--kose-kucuk); }
+  .b-gezinme-oge:focus-visible, .b-ust-ayar:focus-visible, .b-ust-profil:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
   .b-gezinme-oge[aria-current="page"] svg { stroke: var(--renk-vurgu-metin); }
 
   /* --- İkon dairesi --- */

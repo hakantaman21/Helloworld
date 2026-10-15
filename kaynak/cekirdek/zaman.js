@@ -31,6 +31,7 @@ export function saatGeldiMi(saat, simdi = new Date()) {
 
 export function gunBolumu(simdi = new Date()) {
   const s = simdi.getHours();
+  if (s < 5) return 'aksam'; // gece yarısından sonra "Günaydın" denmez
   if (s < 12) return 'sabah';
   if (s < 18) return 'ogle';
   return 'aksam';

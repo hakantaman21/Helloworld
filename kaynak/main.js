@@ -19,6 +19,7 @@ import { pwaBaslat } from './cekirdek/pwa.js';
 import karsilama from './moduller/karsilama/index.js';
 import sohbetler from './moduller/sohbetler/index.js';
 import kesfet from './moduller/kesfet/index.js';
+import dilAnlari from './moduller/dil-anlari/index.js';
 import bugun from './moduller/bugun/index.js';
 import arama from './moduller/arama/index.js';
 import karne from './moduller/karne/index.js';
@@ -38,7 +39,7 @@ function uygulamayiBaslat() {
   if (!al().profil.ayarlar.arayuzDili) degistir((v) => { v.profil.ayarlar.arayuzDili = tarayiciDili(); });
   dilAyarla(al().profil.ayarlar.arayuzDili);
   temaBaslat();
-  for (const m of [karsilama, sohbetler, kesfet, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar]) kaydet(m, KAPALI_MODULLER);
+  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar]) kaydet(m, KAPALI_MODULLER);
 
   dinle('arama:geldi', ({ tur }) => {
     if (MESGUL_EKRANLAR.includes(aktifEkran())) return;

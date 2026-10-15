@@ -478,7 +478,7 @@ async function asenkronDenetimler(kaynak, sonuclar) {
   // Y26: yapay zekâ her zaman etiketli
   {
     const h = [];
-    for (const yol of [['moduller', 'arama', 'gorusme.js'], ['moduller', 'arama', 'gelen-arama.js'], ['moduller', 'sohbetler', 'index.js'], ['moduller', 'kesfet', 'index.js']]) {
+    for (const yol of [['moduller', 'arama', 'gorusme.js'], ['moduller', 'arama', 'gelen-arama.js'], ['moduller', 'sohbetler', 'index.js'], ['moduller', 'bugun', 'index.js']]) {
       const d = join(kaynak, ...yol);
       if (existsSync(d) && !/yzEtiketi\(\)/.test(oku(d))) h.push(`${yol.join('/')}: yapay zekâ etiketi yok`);
     }

@@ -6,7 +6,8 @@ import { t } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { donemOzeti, dondurmaHakki } from '../../cekirdek/gunluk.js';
 import { tarihAnahtari, gunEkle, haftaBaslangici, kisaTarih } from '../../cekirdek/zaman.js';
-import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
+import { SEVIYE_SIRASI, oneriSenaryo } from '../../cekirdek/oneri.js';
+import { vadesiGelenler } from '../../cekirdek/hafiza.js';
 import { jeton } from '../../cekirdek/tema.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 
@@ -93,6 +94,8 @@ function ciz(kok, b) {
   const yol = SEVIYE_SIRASI.slice(0, 4);
   const bugun = tarihAnahtari();
   const hafta = haftaBaslangici(bugun);
+  const tekrarSayisi = vadesiGelenler().length;
+  const oneri = oneriSenaryo().senaryo;
 
   yerlestir(kok, 
     h('header', { class: 'gls-profil' },
@@ -106,7 +109,31 @@ function ciz(kok, b) {
           v.profil.anaDil ? h('span', { class: 'b-cip' }, t('gelisim.anaDil', { dil: t(`diller.${v.profil.anaDil}`) })) : null,
         ),
       ),
-      h('a', { class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', href: '#/ayarlar', 'aria-label': t('gelisim.ayarlar') }, ikon('ayar', 20)),
+    ),
+    h('section', { class: 'b-kart gls-kimlik', 'aria-labelledby': 'gls-kimlik-baslik' },
+      h('div', { class: 'b-satir' },
+        h('h2', { class: 'b-bolum-baslik b-buyut', id: 'gls-kimlik-baslik' }, t('gelisim.kimlik.baslik')),
+        h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => b.git('/ayarlar') }, ikon('ayar', 18), t('gelisim.kimlik.duzenle')),
+      ),
+      h('dl', { class: 'gls-kimlik-liste' },
+        [
+          [t('gelisim.kimlik.anaDil'), v.profil.anaDil ? t(`diller.${v.profil.anaDil}`) : t('gelisim.kimlik.belirtilmedi')],
+          [t('gelisim.kimlik.hedefDil'), v.profil.ogrenilenDil ? t(`diller.${v.profil.ogrenilenDil}`) : t('gelisim.kimlik.belirtilmedi')],
+          [t('gelisim.kimlik.seviye'), v.profil.seviye || t('gelisim.kimlik.belirtilmedi')],
+          [t('gelisim.kimlik.hedef'), v.profil.dilHedefi || t('gelisim.kimlik.hedefAciklama')],
+        ].map(([etiket, deger]) => h('div', { class: 'gls-kimlik-satir' },
+          h('dt', { class: 'b-kucuk' }, etiket), h('dd', null, deger),
+        )),
+      ),
+      v.profil.tanitimMetni ? h('p', { class: 'b-kucuk' }, v.profil.tanitimMetni) : null,
+      h('p', { class: 'b-kucuk' }, t('gelisim.kimlik.gizlilik')),
+    ),
+    h('section', { class: 'b-kart gls-siradaki', 'aria-labelledby': 'gls-sonraki-adim' },
+      h('span', { class: 'b-ust-etiket' }, t('gelisim.siradakiEtiket')),
+      h('h2', { class: 'b-bolum-baslik', id: 'gls-sonraki-adim' }, tekrarSayisi ? t('gelisim.tekrarBaslik', { n: tekrarSayisi }) : t('gelisim.pratikBaslik')),
+      h('p', { class: 'b-kucuk gls-siradaki-alt' }, tekrarSayisi ? t('gelisim.tekrarAciklama') : t('gelisim.pratikAciklama')),
+      h('button', { class: 'b-dugme b-dugme-ana', type: 'button', onClick: () => b.git(tekrarSayisi ? '/hafiza' : `/gorusme?tur=senaryo&id=${oneri.kimlik}`) },
+        ikon('oynat', 18), t('gelisim.baslatDugme')),
     ),
     h('div', { class: 'b-cipler', role: 'radiogroup', 'aria-label': t('gelisim.donem') },
       ['hafta', 'ay'].map((d) => h('button', {
@@ -124,6 +151,10 @@ function ciz(kok, b) {
         h('div', { class: 'gls-olcu' }, h('span', { class: 'gls-deger' }, `${ozet.tamamGun} / ${ozet.gunSayisi}`), h('span', { class: 'gls-etiket' }, t('gelisim.gun'))),
       ),
       h('button', { class: 'b-dugme b-dugme-ana', onClick: () => paylas(ozet) }, ikon('paylas', 20), t('gelisim.paylas')),
+    ),
+    h('details', { class: 'b-kart gls-aciklama' },
+      h('summary', { class: 'b-bolum-baslik' }, t('gelisim.olcumAciklamaBaslik')),
+      h('p', { class: 'b-kucuk' }, t('gelisim.olcumAciklama')),
     ),
     h('section', { class: 'b-kart', 'aria-labelledby': 'gls-yol' },
       h('h2', { class: 'b-bolum-baslik', id: 'gls-yol' }, t('gelisim.seviyeYolu')),
@@ -156,7 +187,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'gelisim',
-  surum: '0.2.0',
+  surum: '0.2.7',
   onek: 'gls',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'gunluk'],

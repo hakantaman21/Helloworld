@@ -1,7 +1,69 @@
+## 0.2.7 — 16.10.2026 · Anayasal bölüm ayrımı
+
+- Sohbet geçmiş iletişim odağına taşındı; hızlı pratik kartı kaldırıldı.
+- Bağlantı'da konuşma eylemleri Pratik ekranına yönlendirildi.
+- Üst profil ve ayarlar kontrolleri merkezi yönlendiriciyle çalışır.
+- Beşli menü adları ve TR/EN açıklamaları uyumlaştırıldı.
+- Eski fonksiyonlar üzerine CSS yaması eklenmedi; yeni important yok.
+- Claude: derleme engeli giderildi (Y16b, Y24, Y25, Y26); denetçi 0 ihlal, robot 8/8, 360 px Chromium sınaması geçti.
+- Claude: tanıtım metni konuşma rahatlığı alanını eziyordu → ayrı alan ve şema 5 → 6 göçü.
+- Claude: Bağlantı başlığı sekmeyle aynı; gece "Günaydın" yerine "İyi akşamlar"; tarih arayüz dilinde.
+- Gerçek telefon ve Vercel Preview testi bekliyor; ana/deneme merge yok.
+
+## 0.2.6 — 16.10.2026 · Beşli menü ve English Prime esinli görünüm
+
+- Ana menü: Sohbet, Bağlantı, Dil Anları, AI, Profil.
+- Mevcut ekran eşlemeleri: Sohbet→sohbetler, Bağlantı→kesfet, AI→bugun, Profil→gelisim.
+- Dil Anları ayrı modül; moderasyon/sunucu olmadığı için sahte gönderi yok.
+- Beş ana ekranda sol üst profil, sağ üst ayarlar; merkezde marka.
+- Ayarlarda dengeli/kompakt görünüm ve mevcut açık/koyu/sistem teması; şema 3→4 güvenli göç.
+- Navigasyon dokunma hedefleri, CSS jeton tabanlı yüzey ve ikon gölgeleri.
+- Testler henüz çalıştırılmadı. Ayrı dal, merge yok.
+
 # Değişiklikler
 
 Her teslimde sürüm bir artar ve en üste bir kayıt eklenir (Y10). Test robotu, `kaynak/cekirdek/surum.js`,
 `package.json` ve buradaki son kaydın aynı olduğunu denetler.
+
+## 0.2.5 — 16.10.2026 · Profil gelişim ve sonraki adım
+
+- Profilde Hata Hafızası vadesine göre bir sonraki adım önerisi.
+- Veri kartı için ölçüm sınırlarını açıklayan açılır bilgi.
+- Mevcut dönem raporu, paylaşım, seviye yolu ve haftalık takvim korunur.
+- TR/EN anahtarları eşleştirildi; gerçek telaffuz veya geçerli seviye ölçümü iddia edilmez.
+- Derleme/robot/telefon doğrulaması bekliyor; PR taslak, merge yok.
+
+## 0.2.4 — 16.10.2026 · Pratik ekranı konuşma yolları
+
+- Speak esinli hızlı konuşma kartı, tek dokunuşla önerilen senaryo.
+- Üç açık pratik yolu: hızlı konuş, senaryo seç, Hata Hafızası.
+- ELSA/English Prime ilkeleri: gerçek ölçüm olmayan demoda telaffuz veya ustalık puanı üretilmez.
+- TR/EN metinleri; mevcut işleyen akışlar korunur.
+- Kod, robot, cihaz testleri ve Claude incelemesi bekleniyor; merge yok.
+
+## 0.2.3 — 16.10.2026 · Sohbetler ilk UX dalgası
+
+- HelloTalk esinli konuşma araması ve Tümü / Yapay zekâ / İnsanlar sekmeleri.
+- Speak esinli tek dokunuşla konuşma başlatma kartı.
+- Arama yalnızca cihazdaki konuşma başlıklarını filtreler; gerçek kullanıcı ve mesajlaşma henüz yok.
+- Türkçe/İngilizce metinler, 48px dokunma alanları, ayrı AI kimliği.
+- Teknik derleme ve cihaz testleri bekliyor; PR #3 taslak ve birleştirilmedi.
+
+## 0.2.2 — 16.10.2026 · Keşfet kullanıcı deneyimi ilk dalga
+
+- HelloTalk referansı: insan/AI keşif ayrımı, eşleşme kriterlerinin açık sunumu; sahte profil veya canlı durum yok.
+- Speak referansı: ilk ekranda tek dokunuşla kısa konuşma.
+- ELSA referansı: telaffuz çalışma yolu; gerçek ses düzeyi puanı varmış gibi gösterilmez.
+- İki dilli metinler, erişilebilir 48 px sekmeler, mobil kartlar, açılır topluluk kuralları.
+- Başlangıç dalı: deneme v0.2.1. Ayrı tasarım dalı; ana dala aktarılmadı.
+- İnceleme: GitHub PR ve gerçek cihaz/robot testi bekleniyor.
+
+## 0.2.1 — 15.10.2026 · Demo ölçümlerinin ayrılması
+
+- Demo telaffuz, akıcılık ve seviye puanları kaldırıldı; profil seviyesi ve Hata Hafızası demo ile değişmez.
+- İki dilde ölçüm sınırı açıklaması eklendi; süre ve pratik geçmişi korunur.
+- Şema 3 eski demo kanıtlarını arşivler; eski akıcılık ve telaffuz puanları gelişim hesabından çıkarılır.
+- Ortak çalışma: https://github.com/hakantaman21/Helloworld/issues/1
 
 ## 0.2.0 — 15.10.2026 · Yön düzeltmesi: dil pratiği platformu
 

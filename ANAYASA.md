@@ -52,7 +52,7 @@ Dil öğrenen herkesin her gün korkmadan konuşabildiği bir platform kuruyoruz
 
 - **İlk açılış:** (1) arayüz dili, ad, ana dil, rol (2) konuşma rahatlığı, 18 yaş ve topluluk kuralları onayı (3) mikrofon izni, gerekçesiyle (4) yapay zekâyla 1 dakikalık tanışma, seviye tahmini.
 - **Hesap:** Toplulukta konuşmak için hesap gerekir; yapay zekâyla denemek için misafir modu.
-- **Dört sekme:** Sohbetler · Keşfet · Pratik · Profil.
+- **Beş sekme (16.10.2026 ürün kararı):** Sohbet (geçmiş mesajlar) · Bağlantı (yeni kişi keşfi) · Dil Anları (kişilerin/grupların paylaşım ve etkinlikleri) · Pratik (gerçek insan veya açıkça etiketli AI ile konuşma) · Profil (kimlik, ülke, ana dil, hedef, seviye). Sol üst profil, sağ üst ayarlar. Topluluk servisleri hazır olana dek boş durumlar dürüstçe belirtilir.
 - **Kurallar:** konuşmaya tek dokunuş; her ekranda tabela; geri hep gelinen yere; izin ihtiyaç anında ve gerekçeyle; durum mesajları insan dilinde; "şu an konuşamıyorum" seçeneği; kontrol kullanıcıda; mikrofon durumu hep görünür.
 - **Motivasyon etiği:** seri + haftada bir dondurma hakkı; suçlayıcı bildirim yok; kendiliğinden günde en fazla iki hatırlatma; rastgele ödül yok.
 
@@ -62,7 +62,7 @@ Yaş 18+ (18 yaş altı yetişkin havuzunda hiç görünmez) · e-posta/telefon 
 
 ## 6. Tasarım ilkeleri
 
-Sıcak turuncu-mercan + derin lacivert; tek yazı ailesi, dört boy · yapay zekâ her zaman etiketli ve farklı avatar biçiminde · renklerin sabit anlamları (telaffuz yeşil/sarı/kırmızı, düzeltmede silinen üstü çizili kırmızı, eklenen kalın yeşil); renk hiçbir zaman tek başına anlam taşımaz · telefon önce, dört sekme, birincil eylemler başparmak bölgesinde · konuşma ekranında dört öğe; konuşma sırasında düzeltme yok · 48 px dokunma, WCAG AA, altyazı, koyu tema · "hareketi azalt"a uyum · her ekranın boş/yükleniyor/hata/çevrimdışı hali.
+Mat siyah/antrasit/gri ağırlıklı, isteğe bağlı sıcak turuncu-mercan + derin lacivert vurgu; kabartma ölçülü, ortak tasarım tokenları ve tek tutarlı 3D ikon ailesi; tek yazı ailesi, dört boy · yapay zekâ her zaman etiketli ve farklı avatar biçiminde · renklerin sabit anlamları (telaffuz yeşil/sarı/kırmızı, düzeltmede silinen üstü çizili kırmızı, eklenen kalın yeşil); renk hiçbir zaman tek başına anlam taşımaz · telefon önce, beş eşit sekme, birincil eylemler başparmak bölgesinde · konuşma ekranında dört öğe; konuşma sırasında düzeltme yok · 48 px dokunma, WCAG AA, altyazı, koyu tema · "hareketi azalt"a uyum · her ekranın boş/yükleniyor/hata/çevrimdışı hali.
 
 ## 7. İçerik ve yapay zekâ ilkeleri
 
@@ -103,8 +103,17 @@ Boş topluluk → yapay zekâ partner · akran ağırlığı → Türkçe ekleni
 
 ## 12. Yol haritası
 
-0. Temel (v0.1.0, tamam) · 1. Yön düzeltmesi ve altyapı: dört sekme, EN+TR, GitHub/Vercel, devir protokolü, arka uç, hesap · 2. Yapay zekâ yolu: gerçek sesli partner, telaffuz koçu · 3. Topluluk çekirdeği (18+) ve güvenlik · 4. Kapalı deneme · 5. Yayın · 6. Arama ve ses odaları · 7. Yeni diller · 8. Ergen havuzu ve ekosistem.
+0. Temel (v0.1.0, tamam) · 1. Yön düzeltmesi ve altyapı: beş sekme (16.10.2026 kararı), EN+TR, GitHub/Vercel, devir protokolü, arka uç, hesap · 2. Yapay zekâ yolu: gerçek sesli partner, telaffuz koçu · 3. Topluluk çekirdeği (18+) ve güvenlik · 4. Kapalı deneme · 5. Yayın · 6. Arama ve ses odaları · 7. Yeni diller · 8. Ergen havuzu ve ekosistem.
 
 ## 13. Çalışma düzeni ve devir protokolü
 
 Bkz. `KURALLAR.md` ve `DEVIR.md`. Özet: yalnız istenen yapılır; değişiklik "deneme" dalına gider, Vercel deneme linki üretir; "okey" gelince ana dala taşınır; her teslimde sürüm artar ve `DEVIR.md`'ye "Yapan" bilgisiyle kayıt düşülür (Y24).
+
+## 14. Ürün kararı ve anayasa uyumu — 16.10.2026
+
+- **Kaynak:** Kullanıcının doğrudan talimatları; önceki dört sekme ve tek renk paleti varsayımları bu maddelerle güncellendi.
+- **Bilgi mimarisi:** Sohbet geçmiş iletişim içindir; Bağlantı yeni insanları keşfetmek içindir; Dil Anları topluluk akışıdır; Pratik insan veya AI konuşmasıdır; Profil kişisel tanıtım/hedef/seviyedir. AI ayrı ana sekme değildir.
+- **Tasarım:** English Prime'ın az tıklama/az kaydırma, net tabela, eşit ve hizalı platform butonları, çipler, yumuşak ama kararlı kaydırma ve menü açıkken arka plan kilidi ilkeleri; mat siyah ve gri zemin, ölçülü kabartma ve tutarlı 3D ikon paketi. Sadelik ve WCAG AA, süsleme önceliğinin üstündedir.
+- **Teknik borç yasağı:** Yeni `!important` yok; eski CSS üstüne yama yığılmaz, kök kural düzeltilir; gereksiz seçiciler ve olay dinleyicileri temizlenir. Ayrıntı: `MIMARI_KALITE_KURALLARI.md`.
+- **Kapsayıcılık:** İlk hedef İngilizce ve 18+; sonraki diller, kültürler ve ayrı güvenli ergen havuzu için veri modeli ve erişilebilirlik genişletilebilir kalır. Başlangıç sınırları gizlenmez.
+- **Yürürlük kontrolü:** Değişiklikler mevcut Y1–Y28 yasalarını geçersiz kılmaz. Her PR için statik denetim, robot, mobil ve erişilebilirlik doğrulaması gerekir; yapılmamış test geçti denmez.

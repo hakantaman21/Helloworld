@@ -1,4 +1,7 @@
 @layer moduller {
+  .gls-kimlik { gap: var(--bosluk-3); }
+  .gls-kimlik-liste { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--bosluk-3); margin: 0; }
+  .gls-kimlik-satir dd { margin: 0; overflow-wrap: anywhere; font-weight: 600; }
   .gls-donem { min-width: 64px; padding: 0 var(--bosluk-3); }
   .gls-karne {
     padding: var(--bosluk-5);
@@ -53,4 +56,11 @@
     align-items: center;
     justify-content: center;
   }
+}
+
+@layer moduller {
+  .gls-siradaki { gap: var(--bosluk-3); background: var(--renk-vurgu-acik); }
+  .gls-siradaki .gls-siradaki-alt { color: var(--renk-vurgu-acik-metin); }
+  .gls-aciklama { gap: var(--bosluk-2); }
+  .gls-aciklama summary { cursor: pointer; min-height: 48px; display: flex; align-items: center; }
 }
