@@ -136,6 +136,11 @@ export function yzEtiketi() {
   return h('span', { class: 'b-cip b-yz', title: t('ortak.yzAciklama') }, ikon('yildiz', 14, 2.2), t('ortak.yz'));
 }
 
+// Test modu rozeti: test profilleri ve test mesajları hiçbir zaman gerçek kişi gibi görünmez.
+export function testEtiketi() {
+  return h('span', { class: 'b-cip b-test', title: t('test.rozetAciklama') }, t('test.rozet'));
+}
+
 // Y18: boş, yükleniyor, hata, çevrimdışı durumları için ortak kutu.
 export function durumKutusu(tur, mesaj, eylem) {
   return h('div', { class: 'b-durum', 'data-durum': tur, role: tur === 'hata' ? 'alert' : 'status' },

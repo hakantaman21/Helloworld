@@ -2,16 +2,18 @@
 // Arama yalnızca cihazdaki geçmişin başlığını filtreler, sunucu/gerçek kişi uydurulmaz.
 import './sohbetler.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, altGezinme, ustBaslik, durumKutusu, yzEtiketi, yerlestir } from '../../cekirdek/arayuz.js';
+import { h, ikon, altGezinme, ustBaslik, durumKutusu, yzEtiketi, yerlestir, testEtiketi } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { kisaTarih } from '../../cekirdek/zaman.js';
+import { testSohbetOzetleri } from '../../cekirdek/test-modu.js';
 
 const SON_KONUSMA_SAYISI = 30;
 
 function ciz(kok, b) {
   kok.classList.add('b-ekran-gezinmeli');
   const gecmis = (al().gorusmeler || []).slice(0, SON_KONUSMA_SAYISI);
+  const testOzet = testSohbetOzetleri();
   let filtre = 'tum';
   let arama = '';
   const liste = h('div', { class: 'shb-liste', role: 'region', 'aria-live': 'polite' });
@@ -35,7 +37,14 @@ function ciz(kok, b) {
           h('span', { class: 'shb-ad' }, yerel(g.baslik)),
           h('span', { class: 'b-kucuk' }, `${kisaTarih(g.tarih)} · ${t('genel.dk', { n: Math.max(0.1, Math.round((g.sureSn / 60) * 10) / 10) })}`),
         ), yzEtiketi())) : null,
-      filtre === 'insan' ? durumKutusu('bos', t('sohbetler.insanBos'), { metin: t('sohbetler.kesfeteGit'), fn: () => b.git('/kesfet') }) : null,
+      // Test modu: test sohbetleri "İnsanlar" altında, TEST rozetiyle (gerçek kişi değildir).
+      filtre !== 'yz' ? testOzet.filter((o) => o.profil.ad.toLocaleLowerCase().includes(arama)).map((o) => h('button', { type: 'button', class: 'b-kart b-kart-satir b-kart-tiklanir shb-test', onClick: () => b.git(`/mesaj?k=${o.profil.kimlik}`) },
+        h('span', { class: 'shb-avatar shb-avatar-test', 'aria-hidden': 'true' }, o.profil.bas),
+        h('span', { class: 'shb-metin' },
+          h('span', { class: 'shb-ad' }, o.profil.ad),
+          h('span', { class: 'b-kucuk shb-son' }, o.son.metin),
+        ), testEtiketi())) : null,
+      filtre === 'insan' && !testOzet.length ? durumKutusu('bos', t('sohbetler.insanBos'), { metin: t('sohbetler.kesfeteGit'), fn: () => b.git('/kesfet') }) : null,
       filtre !== 'insan' && !yzVar && !gorunen.length ? durumKutusu('bos', t('sohbetler.aramaBos')) : null,
       filtre === 'tum' && !arama ? h('p', { class: 'b-kucuk shb-bilgi' }, t('sohbetler.insanBilgi')) : null,
     );
@@ -66,7 +75,7 @@ function ciz(kok, b) {
 }
 export default {
   kimlik: 'sohbetler',
-  surum: '0.2.7',
+  surum: '0.2.8',
   onek: 'shb',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'metin'],

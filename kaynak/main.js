@@ -27,6 +27,7 @@ import senaryolar from './moduller/senaryolar/index.js';
 import hafiza from './moduller/hafiza/index.js';
 import gelisim from './moduller/gelisim/index.js';
 import ayarlar from './moduller/ayarlar/index.js';
+import mesaj from './moduller/mesaj/index.js';
 
 // Bayrakla kapatılan modüller burada listelenir; uygulama diğerleriyle çalışmaya devam eder.
 const KAPALI_MODULLER = [];
@@ -39,7 +40,7 @@ function uygulamayiBaslat() {
   if (!al().profil.ayarlar.arayuzDili) degistir((v) => { v.profil.ayarlar.arayuzDili = tarayiciDili(); });
   dilAyarla(al().profil.ayarlar.arayuzDili);
   temaBaslat();
-  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar]) kaydet(m, KAPALI_MODULLER);
+  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar, mesaj]) kaydet(m, KAPALI_MODULLER);
 
   dinle('arama:geldi', ({ tur }) => {
     if (MESGUL_EKRANLAR.includes(aktifEkran())) return;

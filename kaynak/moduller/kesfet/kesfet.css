@@ -10,3 +10,21 @@
   .kft-kural summary { cursor: pointer; min-height: 48px; display: flex; align-items: center; }
   .kft-kurallar { display: flex; flex-direction: column; gap: var(--bosluk-2); padding-left: var(--bosluk-5); list-style: disc; font-size: 14px; }
 }
+
+@layer moduller {
+  .kft-test-uyari { border-style: dashed; border-color: var(--renk-orta-metin); background: var(--renk-orta-acik); color: var(--renk-orta-metin); }
+  .kft-test-baslik { display: flex; align-items: center; gap: var(--bosluk-2); flex-wrap: wrap; }
+  .kft-test-kart { display: flex; flex-direction: column; gap: var(--bosluk-3); }
+  .kft-test-ust { display: flex; align-items: center; gap: var(--bosluk-3); }
+  .kft-test-kim { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+  .kft-test-ad { display: flex; align-items: center; gap: var(--bosluk-2); flex-wrap: wrap; font-size: var(--yazi-govde); }
+  .kft-test-dil { font-weight: 600; }
+  .kft-test-tanitim { font-size: 15px; line-height: 1.45; overflow-wrap: anywhere; }
+  .kft-av { width: 52px; height: 52px; flex-shrink: 0; border-radius: var(--kose-tam); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; }
+  .kft-av-1 { background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); }
+  .kft-av-2 { background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); }
+  .kft-av-3 { background: var(--renk-orta-acik); color: var(--renk-orta-metin); }
+  .kft-av-4 { background: var(--renk-gece); color: var(--renk-gece-metin); }
+  .kft-av-5 { background: var(--renk-kotu-acik); color: var(--renk-kotu-metin); }
+  .kft-av-6 { background: var(--renk-yuzey-ikinci); color: var(--renk-murekkep); }
+}

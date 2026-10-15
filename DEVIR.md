@@ -5,18 +5,25 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.2.7 · `deneme` dalında (16.10.2026, Hakan onayıyla `tasarim-besli-menu-v0.2.6` hızlı birleştirildi; PR #3 ve #4 kapandı). `main` (canlı) hâlâ v0.2.0; canlıya alma PR #2 ile, ayrı Hakan onayıyla.
-- **Çalışma kuralı:** Yeni iş `deneme`'den açılan yeni dalda yapılır; aynı dalda aynı anda tek yazan (issue #1, madde 4).
-- **Derleme:** `npm run build` 16.10.2026'da Claude tarafından çalıştırıldı: denetçi ihlali 0, dağıtım denetimi geçti. Vercel Preview sonucu ayrıca doğrulanmalı (Vercel kaynak sınırı uyarısı görülmüştü).
-- **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · açık PR: #2 (deneme → main).
-- **Ayrıntılı devir:** ChatGPT'nin 16.10.2026 notu `DEVIR_2026-10-16_CHATGPT.md` (P0 derleme maddesi bu sürümde Claude tarafından kapatıldı).
-- **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
-- **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma (senaryolar, aramalar, tanışma, hata tekrarı), karne, Hata Hafızası, profil dil kimliği ve düzenleme, görünüm tercihi, TR + EN arayüz. Veri yalnız cihazda.
-- **Ne çalışmıyor / henüz yok:** gerçek kişilerle sohbet ve eşleşme, hesap ve sunucu, gerçek yapay zekâ sağlayıcısı (demo koç), harf düzeyinde telaffuz.
-- **Sıradaki adım:** Hakan'ın telefonda `teslim/` derlemesini ya da Vercel Preview'u kontrolü → PR #4 incelemesi → arka uç ve hesap kararı.
-- **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · yapay zekâ partnerin adı.
+- **Sürüm:** v0.2.8 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.2.7'de (16.10.2026, PR #2 ile Hakan onayıyla). Canlıya alma yine yalnız Hakan onayıyla.
+- **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
+- **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
+- **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
+- **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma, karne, Hata Hafızası, profil düzenleme, görünüm, TR + EN. **Test modu:** TEST profilleriyle mesajlaşma, düzeltme önerisi, partner düzeltmesi, konu önerisi, şikâyet/engelleme (yanıtlar otomatik kalıp). Veri yalnız cihazda.
+- **Ne çalışmıyor / henüz yok:** gerçek hesap ve sunucu, gerçek kişilerle mesajlaşma, sesli mesaj (Y12 kararı bekliyor), çeviri, gerçek yapay zekâ sağlayıcısı, harf düzeyinde telaffuz.
+- **Sıradaki adım:** Hakan'ın test modunu telefonda denemesi → arka uç kararı (Supabase / Firebase) → aynı Mesaj ekranını gerçek iki hesapla bağlamak.
+- **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.2.8 — 16.10.2026 · Test modu
+
+- **Yapan:** Claude (Opus 5.5), Hakan'ın isteği ("sahte profillerle sohbet denemesi")
+- **Ne yapıldı:** Ayarlar'da varsayılan kapalı **Test modu** (sürüm satırına 5 dokunuşla görünür). Açıkken Bağlantı'da 6 TEST rozetli profil (`veri/test-profiller.js`), yeni **Mesaj** modülü (`moduller/mesaj`, önek `msj`): yazılı mesaj, gönderim öncesi düzeltme önerisi (yerel kurallar), partner düzeltmesi, konu önerisi, şikâyet (4 neden) ve engelleme. Sohbetler › İnsanlar'da test sohbetleri. Ortak `testEtiketi()` bileşeni. Şema 6 → 7 (`test` alanı).
+- **Anayasa uyumu:** Test profilleri her yerde TEST rozetli, çevrimiçi durumu uydurulmaz, gerçek fotoğraf yok. Yanıtlar kalıptır ve "Otomatik test yanıtı" diye etiketlenir (yapay zekâ değil, insan gibi sunulmaz). Test verisi `v.test` alanında; gelişim, seviye ve Hata Hafızası'na yazılmaz (sınandı). Ses kaydı yok (Y12).
+- **Sınama:** `npm run build` denetçi 0 ihlal; robot 8/8; başsız Chromium 360 px uçtan uca: test modu kapalıyken hiçbir test kartı yok → 5 dokunuş → aç → 6 profil → mesaj → öneri → partner düzeltmesi + otomatik yanıt → şikâyet kaydı → Sohbetler'de görünüyor → engelle → 5 profil → kapat → hepsi gizli; yatay taşma 0, sayfa hatası 0.
+- **Yarım kalan:** sesli mesaj, çeviri, gerçek sunucu. Gerçek Samsung testi Hakan'da.
+- **Dokunulan dosyalar:** veri/test-profiller.js, cekirdek/{test-modu,gocler,arayuz,surum}.js, moduller/mesaj/*, moduller/{kesfet,sohbetler,ayarlar}/*, stiller/bilesenler.css, metinler/{tr,en}.js, main.js, package.json, DEGISIKLIKLER.md, DEVIR.md
 
 ## v0.2.7 — 16.10.2026 · Anayasal bölüm ayrımı ve derleme düzeltmesi
 

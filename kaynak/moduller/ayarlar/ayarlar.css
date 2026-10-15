@@ -5,3 +5,8 @@
   .ayr-anahtar input { width: 22px; height: 22px; min-height: 22px; accent-color: var(--renk-vurgu); }
   .ayr-surum { text-align: center; }
 }
+
+@layer moduller {
+  .ayr-test { border-style: dashed; border-color: var(--renk-orta-metin); }
+  .ayr-surum-dugme { display: block; width: 100%; min-height: var(--dokunma); border: 0; background: transparent; color: inherit; font: inherit; cursor: default; }
+}

@@ -1,3 +1,11 @@
+## 0.2.8 — 16.10.2026 · Test modu
+
+- Ayarlar › Test modu (sürüm satırına 5 dokunuşla görünür; varsayılan kapalı).
+- Açıkken Bağlantı'da 6 TEST rozetli profil; "Mesaj yaz" ile yeni Mesaj ekranı.
+- Mesaj ekranı: gönderim öncesi düzeltme önerisi, partner düzeltmesi (yeşil fark), konu önerisi, şikâyet (4 neden) ve engelleme.
+- Yanıtlar otomatik kalıptır ve "Otomatik test yanıtı" diye etiketlenir; yapay zekâ değildir, gerçek kişi gibi sunulmaz.
+- Test sohbetleri Sohbetler › İnsanlar altında TEST rozetiyle; gelişim, seviye ve Hata Hafızası'na yazılmaz. Şema 6 → 7 (test alanı).
+
 ## 0.2.7 — 16.10.2026 · Anayasal bölüm ayrımı
 
 - Sohbet geçmiş iletişim odağına taşındı; hızlı pratik kartı kaldırıldı.

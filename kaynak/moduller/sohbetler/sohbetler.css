@@ -11,3 +11,9 @@
   .shb-liste { display: flex; flex-direction: column; gap: var(--bosluk-3); }
   .shb-bilgi { padding: var(--bosluk-2); }
 }
+
+@layer moduller {
+  .shb-avatar-test { background: var(--renk-orta-acik); color: var(--renk-orta-metin); font-weight: 800; }
+  .shb-test { text-align: left; font: inherit; color: inherit; width: 100%; }
+  .shb-son { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}

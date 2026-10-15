@@ -10,6 +10,10 @@ import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { SURUM } from '../../cekirdek/surum.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { destek } from '../../cekirdek/ses/ses-hatti.js';
+import { testModuAcik, testModuAyarla, testVerileriniSil } from '../../cekirdek/test-modu.js';
+
+// Test modu bölümü varsayılan gizlidir: sürüm satırına 5 kez dokununca ya da test modu açıkken görünür.
+let surumDokunma = 0;
 
 function secimGrubu({ etiket, aciklama, secenekler, aktif, degisti }) {
   const kimlik = 'ayr-' + Math.random().toString(36).slice(2, 7);
@@ -183,14 +187,29 @@ function ciz(kok, b) {
       ),
     ),
 
-    h('p', { class: 'b-kucuk ayr-surum' }, t('ayarlar.surum', { s: SURUM, saglayici: a.saglayici })),
+    testModuAcik() || surumDokunma >= 5 ? h('section', { class: 'b-kart ayr-bolum ayr-test', 'aria-labelledby': 'ayr-test-baslik' },
+      h('h2', { class: 'b-bolum-baslik', id: 'ayr-test-baslik' }, t('test.ayarBaslik')),
+      h('p', { class: 'b-kucuk' }, t('test.ayarAciklama')),
+      h('label', { class: 'ayr-anahtar' },
+        h('input', { type: 'checkbox', checked: testModuAcik(), onChange: (e) => { testModuAyarla(e.currentTarget.checked); duyur(t(e.currentTarget.checked ? 'test.acildi' : 'test.kapandi'), 2500); } }),
+        h('span', null, t('test.ayarAnahtar')),
+      ),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: async () => {
+        const evet = await onayIste({ metin: t('test.silOnay'), evet: t('test.silEvet'), hayir: t('genel.vazgec') });
+        if (!evet) return;
+        testVerileriniSil();
+        duyur(t('test.silindi'));
+      } }, t('test.sil')),
+    ) : null,
+    h('button', { type: 'button', class: 'ayr-surum-dugme', onClick: () => { surumDokunma += 1; if (surumDokunma === 5) { duyur(t('test.gorunur'), 2500); b.git('/ayarlar', { degistir: true }); } } },
+      h('span', { class: 'b-kucuk ayr-surum' }, t('ayarlar.surum', { s: SURUM, saglayici: a.saglayici }))),
   );
   return null;
 }
 
 export default {
   kimlik: 'ayarlar',
-  surum: '0.2.7',
+  surum: '0.2.8',
   onek: 'ayr',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'zamanlayici'],
