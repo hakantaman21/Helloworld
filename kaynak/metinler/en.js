@@ -104,6 +104,7 @@ export default {
   },
 
   bugun: {
+    partnerSecim: { baslik: 'Who would you like to practise with?', yz: 'Practise with AI', insan: 'Real person', bilgi: 'The AI demo coach is available. Speaking with real people will open when the safe community is ready.' },
     hizliEtiket: 'READY TO SPEAK?',
     hizliBaslik: 'Start speaking in 5 minutes',
     hizliAciklama: 'Open a scenario suited to your level. The demo coach does not score your real proficiency or pronunciation.',
