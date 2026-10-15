@@ -42,7 +42,7 @@ function anaEkran(kok, b) {
   const seviyedekiler = senaryolar.filter((s) => s.seviye === seviye);
 
   yerlestir(kok, 
-    ustBaslik({ tabela: t('gezinme.pratik'), baslik: t('senaryolar.baslik'), alt: t('senaryolar.alt'), geri: () => b.geri('/bugun') }),
+    ustBaslik({ tabela: t('gezinme.pratik'), baslik: t('senaryolar.baslik'), alt: t('senaryolar.alt'), ikon: 'senaryo', geri: () => b.geri('/bugun') }),
     seviyeSecici(seviye, (s) => { secilenSeviye = s; anaEkran(kok, b); }),
     h('button', { class: 'b-kart b-kart-vurgulu b-kart-tiklanir snr-oneri', type: 'button', onClick: () => b.git(`/gorusme?tur=senaryo&id=${oneri.kimlik}`) },
       h('span', { class: 'b-ust-etiket snr-oneri-etiket' }, t('senaryolar.oneri')),

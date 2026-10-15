@@ -1,7 +1,7 @@
 // Profil ve ayarlar: kontrol kullanıcıda (Anayasa bölüm 3). Gizlilik görünür; veriler indirilebilir ve silinebilir.
 import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ustBaslik, onayIste, yerlestir } from '../../cekirdek/arayuz.js';
+import { h, ustBaslik, onayIste, yerlestir, ikon3d } from '../../cekirdek/arayuz.js';
 import { t, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { al, degistir, sifirla, disaAktarMetni } from '../../cekirdek/depo.js';
 import { siradaki } from '../../cekirdek/gunluk.js';
@@ -67,9 +67,18 @@ function ciz(kok, b) {
   tanitimGirdisi.addEventListener('change', () => ayarKaydet((pr) => { pr.tanitimMetni = tanitimGirdisi.value.trim().slice(0, 300); }));
 
   yerlestir(kok, 
-    ustBaslik({ tabela: t('ayarlar.tabela'), baslik: t('ayarlar.baslik'), geri: () => b.geri('/gelisim') }),
+    ustBaslik({ baslik: t('ayarlar.baslik'), ikon: 'ayarlar', geri: () => b.geri('/gelisim') }),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('nav', { class: 'b-izgara-2 ayr-kutular', 'aria-label': t('ayarlar.kutu.baslik') },
+      [['genel', 'dil', 4], ['profil', 'profil', 1], ['dil', 'kitap', 3], ['saat', 'bildirim', 2], ['gorunum', 'gorunum', 5], ['gizlilik', 'kilit', 6]].map(([k, ik, renk]) =>
+        h('button', { type: 'button', class: `b-kutu b-kutu-${renk} ayr-kutu`, onClick: () => { const hedef = kok.querySelector(`#ayr-b-${k}`); if (hedef) hedef.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+          ikon3d(ik, 44),
+          h('span', { class: 'b-kutu-baslik' }, t(`ayarlar.kutu.${k}`)),
+        )),
+    ),
+
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-genel' },
+      h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.kutu.genel')),
       secimGrubu({
         etiket: t('ayarlar.arayuzDili'),
         secenekler: ARAYUZ_DILLERI.map((d) => [d, d.toUpperCase()]),
@@ -84,7 +93,8 @@ function ciz(kok, b) {
       }),
     ),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-profil' },
+      h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.kutu.profil')),
       h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-ad' }, t('ayarlar.ad')), adGirdisi),
       secimGrubu({
         etiket: t('ayarlar.seviye'),
@@ -94,7 +104,7 @@ function ciz(kok, b) {
       }),
     ),
 
-    h('section', { class: 'b-kart ayr-bolum', 'aria-label': t('ayarlar.dilProfili') },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-dil', 'aria-label': t('ayarlar.dilProfili') },
       h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.dilProfili')),
       dilSecimi('ayr-ana-dil', t('ayarlar.anaDil'), 'anaDil'),
       dilSecimi('ayr-ogrenilen-dil', t('ayarlar.ogrenilenDil'), 'ogrenilenDil'),
@@ -103,7 +113,7 @@ function ciz(kok, b) {
       h('p', { class: 'b-kucuk' }, t('ayarlar.profilGizlilik')),
     ),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-saat' },
       h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.saatler')),
       h('div', { class: 'b-izgara-2' },
         h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-sabah' }, t('ayarlar.sabah')), saatGirdisi('ayr-sabah', 'sabahSaati')),
@@ -111,7 +121,7 @@ function ciz(kok, b) {
       ),
     ),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-gorunum' },
       secimGrubu({
         etiket: t('ayarlar.duzeltme'),
         aciklama: t('ayarlar.duzeltmeAciklama'),
@@ -149,7 +159,7 @@ function ciz(kok, b) {
       ) : null,
     ),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-deneme' },
       h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.deneme')),
       h('button', {
         class: 'b-dugme',
@@ -160,7 +170,7 @@ function ciz(kok, b) {
       }, t('ayarlar.demoArama')),
     ),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-gizlilik' },
       h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.gizlilik')),
       h('p', { class: 'b-kucuk' }, t('ayarlar.gizlilikMetni')),
       h('div', { class: 'b-yigin' },

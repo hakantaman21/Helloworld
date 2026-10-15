@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.2.9 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.2.7'de (16.10.2026, PR #2 ile Hakan onayıyla). Canlıya alma yine yalnız Hakan onayıyla.
+- **Sürüm:** v0.3.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.2.7'de (16.10.2026, PR #2 ile Hakan onayıyla). Canlıya alma yine yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,15 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.3.0
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan: "Ne English Prime gibi tasarım var ne de HelloTalk gibi içerik, resimler, menü, ayarlar var. Zemin rengi, ikonlar."
+- **Ne:** `kaynak/veri/ikon3d.js` (EP 3B ikonları, webp data URI) + `ikon3d(ad, boyut)` yardımcı; `ustBaslik({ ikon })` EP başlığı; EP jetonları (zemin, mücevher yüzey, `--renk-baslik`, `--renk-kutu-1..6`, ten/saç jetonları); `.b-kutu`, `.b-menu`, `.b-gorsel`, çizim avatar (`testAvatar` profil `ten/sac/sacTip/bayrak` alanlarıyla SVG çizer).
+- **Ekranlar:** Pratik kutuları, Profil menüsü, Ayarlar grup kutuları, Dil Anları gönderi görselleri, test profillerine bayrak.
+- **Kurallar:** Renkler yalnız jetonlarda (Y3), kontrast geçti (Y14), yeni metinler tr+en (Y25). Göç gerekmedi (yeni kayıt alanı yok).
+- **Durum:** `deneme` dalında; canlı (main) yalnız Hakan "canlıya al" derse.
 
 ## v0.2.9 — 16.10.2026 · English Prime görünümü ve HelloTalk öğeleri
 

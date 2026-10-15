@@ -5,42 +5,42 @@
 
 export const TEST_PROFILLERI = [
   {
-    kimlik: 'test-lucia', ad: 'Lucía', bas: 'L', renk: 1, ulke: { tr: 'İspanya · Valensiya', en: 'Spain · Valencia' },
+    kimlik: 'test-lucia', ad: 'Lucía', bas: 'L', renk: 1, bayrak: '🇪🇸', ten: 2, sac: 1, sacTip: 'uzun', ulke: { tr: 'İspanya · Valensiya', en: 'Spain · Valencia' },
     anaDil: 'es', ogrenilenDil: 'en', seviye: 'B1',
     ilgi: [{ tr: 'Yemek', en: 'Cooking' }, { tr: 'Seyahat', en: 'Travel' }, { tr: 'Fotoğraf', en: 'Photography' }],
     tanitim: { tr: 'Hemşireyim, iş için İngilizcemi geliştiriyorum. Akşamları yazışmayı severim.', en: 'I am a nurse improving my English for work. I like chatting in the evenings.' },
     yanitlar: ['That sounds nice! What did you do after that?', 'Haha, I understand you. In Spain we say the same thing.', 'Can you tell me more? I want to practise my questions too.'],
   },
   {
-    kimlik: 'test-kenji', ad: 'Kenji', bas: 'K', renk: 2, ulke: { tr: 'Japonya · Osaka', en: 'Japan · Osaka' },
+    kimlik: 'test-kenji', ad: 'Kenji', bas: 'K', renk: 2, bayrak: '🇯🇵', ten: 1, sac: 4, sacTip: 'kisa', ulke: { tr: 'Japonya · Osaka', en: 'Japan · Osaka' },
     anaDil: 'ja', ogrenilenDil: 'en', seviye: 'A2',
     ilgi: [{ tr: 'Oyunlar', en: 'Games' }, { tr: 'Futbol', en: 'Football' }, { tr: 'Müzik', en: 'Music' }],
     tanitim: { tr: 'Üniversite öğrencisiyim. Yavaş yazarım, sabırlı olursan sevinirim.', en: 'University student. I type slowly, thank you for being patient.' },
     yanitlar: ['Oh, really? I like it too.', 'Sorry, my English is not good. Can you say it simple?', 'What is your favourite one?'],
   },
   {
-    kimlik: 'test-amira', ad: 'Amira', bas: 'A', renk: 3, ulke: { tr: 'Mısır · Kahire', en: 'Egypt · Cairo' },
+    kimlik: 'test-amira', ad: 'Amira', bas: 'A', renk: 3, bayrak: '🇪🇬', ten: 3, sac: 1, sacTip: 'ortu', ulke: { tr: 'Mısır · Kahire', en: 'Egypt · Cairo' },
     anaDil: 'ar', ogrenilenDil: 'en', seviye: 'B2',
     ilgi: [{ tr: 'Kitaplar', en: 'Books' }, { tr: 'Tarih', en: 'History' }, { tr: 'Kahve', en: 'Coffee' }],
     tanitim: { tr: 'Öğretmenim. Doğal konuşma kalıplarını öğrenmek istiyorum.', en: 'I am a teacher. I want to learn natural phrases people really use.' },
     yanitlar: ['Interesting! By the way, a more natural way to say it might be different. Shall I suggest one?', 'I have been to Istanbul once. The food was amazing.', 'What kind of books do you read?'],
   },
   {
-    kimlik: 'test-tom', ad: 'Tom', bas: 'T', renk: 4, ulke: { tr: 'İngiltere · Leeds', en: 'United Kingdom · Leeds' },
+    kimlik: 'test-tom', ad: 'Tom', bas: 'T', renk: 4, bayrak: '🇬🇧', ten: 1, sac: 3, sacTip: 'kisa', ulke: { tr: 'İngiltere · Leeds', en: 'United Kingdom · Leeds' },
     anaDil: 'en', ogrenilenDil: 'tr', seviye: 'A1',
     ilgi: [{ tr: 'Doğa yürüyüşü', en: 'Hiking' }, { tr: 'Kediler', en: 'Cats' }, { tr: 'Yemek', en: 'Cooking' }],
     tanitim: { tr: 'Ana dilim İngilizce, Türkçe öğreniyorum. Senin İngilizcene yardım ederim.', en: 'Native English speaker learning Turkish. Happy to help with your English.' },
     yanitlar: ['Nice one! That was very clear.', 'Quick tip: we usually say it a bit shorter in everyday English.', 'How do you say that in Turkish?'],
   },
   {
-    kimlik: 'test-marie', ad: 'Marie', bas: 'M', renk: 5, ulke: { tr: 'Fransa · Lyon', en: 'France · Lyon' },
+    kimlik: 'test-marie', ad: 'Marie', bas: 'M', renk: 5, bayrak: '🇫🇷', ten: 1, sac: 2, sacTip: 'topuz', ulke: { tr: 'Fransa · Lyon', en: 'France · Lyon' },
     anaDil: 'fr', ogrenilenDil: 'en', seviye: 'B1',
     ilgi: [{ tr: 'Film', en: 'Films' }, { tr: 'Dans', en: 'Dance' }, { tr: 'Moda', en: 'Fashion' }],
     tanitim: { tr: 'Sesli mesajla pratik yapmayı seviyorum; telaffuzum üzerinde çalışıyorum.', en: 'I like practising with voice messages; I am working on my pronunciation.' },
     yanitlar: ['Ah, I love that film too!', 'My weekend was quiet. I went to the market and cooked.', 'Do you prefer films in English with or without subtitles?'],
   },
   {
-    kimlik: 'test-carlos', ad: 'Carlos', bas: 'C', renk: 6, ulke: { tr: 'Brezilya · Porto Alegre', en: 'Brazil · Porto Alegre' },
+    kimlik: 'test-carlos', ad: 'Carlos', bas: 'C', renk: 6, bayrak: '🇧🇷', ten: 4, sac: 4, sacTip: 'kisa', ulke: { tr: 'Brezilya · Porto Alegre', en: 'Brazil · Porto Alegre' },
     anaDil: 'pt', ogrenilenDil: 'en', seviye: 'A2',
     ilgi: [{ tr: 'Futbol', en: 'Football' }, { tr: 'Gitar', en: 'Guitar' }, { tr: 'Plaj', en: 'Beach' }],
     tanitim: { tr: 'İş görüşmesine hazırlanıyorum; kısa sorularla pratik yapalım.', en: 'Preparing for a job interview; let us practise with short questions.' },
@@ -59,12 +59,12 @@ export const TEST_KONULARI = [
 // kullanıcı "Düzelt" ile düzeltme pratiği yapabilsin diye. saatOnce: gönderinin kaç saat önce paylaşıldığı (göreli).
 // Beğeni ve yorum sayıları uydurulmaz: yalnız bu cihazdaki etkileşimler sayılır.
 export const TEST_ANLARI = [
-  { kimlik: 'an-1', yazar: 'test-kenji', saatOnce: 1, etiket: { tr: 'Günlük', en: 'Daily life' }, metin: 'Yesterday I go to the cinema with my friends. The film was very funny!' },
-  { kimlik: 'an-2', yazar: 'test-lucia', saatOnce: 3, etiket: { tr: 'Yemek', en: 'Food' }, metin: 'I made paella for my family today. What is a famous dish in your country?' },
-  { kimlik: 'an-3', yazar: 'test-carlos', saatOnce: 5, etiket: { tr: 'İş', en: 'Work' }, metin: 'Tomorrow I have a job interview. He want me to speak English. I am nervous!' },
+  { kimlik: 'an-1', gorsel: { ikon: 'yildiz', kutu: 1, yazi: { tr: 'Sinema gecesi', en: 'Movie night' } }, yazar: 'test-kenji', saatOnce: 1, etiket: { tr: 'Günlük', en: 'Daily life' }, metin: 'Yesterday I go to the cinema with my friends. The film was very funny!' },
+  { kimlik: 'an-2', gorsel: { ikon: 'hediye', kutu: 2, yazi: { tr: 'Ev yapımı paella', en: 'Homemade paella' } }, yazar: 'test-lucia', saatOnce: 3, etiket: { tr: 'Yemek', en: 'Food' }, metin: 'I made paella for my family today. What is a famous dish in your country?' },
+  { kimlik: 'an-3', gorsel: { ikon: 'hedef', kutu: 4, yazi: { tr: 'Yarın: iş görüşmesi', en: 'Tomorrow: interview' } }, yazar: 'test-carlos', saatOnce: 5, etiket: { tr: 'İş', en: 'Work' }, metin: 'Tomorrow I have a job interview. He want me to speak English. I am nervous!' },
   { kimlik: 'an-4', yazar: 'test-tom', saatOnce: 8, etiket: { tr: 'İpucu', en: 'Tip' }, metin: 'Native speaker tip: we often say "I\'m good, thanks" instead of "I am fine". Any questions? Happy to help!' },
-  { kimlik: 'an-5', yazar: 'test-amira', saatOnce: 20, etiket: { tr: 'Kitap', en: 'Books' }, metin: 'I just finished a book about the history of Istanbul. Has anyone been there? I want to visit next year.' },
-  { kimlik: 'an-6', yazar: 'test-marie', saatOnce: 26, etiket: { tr: 'Telaffuz', en: 'Pronunciation' }, metin: 'Which word is harder for you: "world" or "squirrel"? For me it is squirrel!' },
+  { kimlik: 'an-5', gorsel: { ikon: 'kitap', kutu: 3, yazi: { tr: 'İstanbul tarihi', en: 'History of Istanbul' } }, yazar: 'test-amira', saatOnce: 20, etiket: { tr: 'Kitap', en: 'Books' }, metin: 'I just finished a book about the history of Istanbul. Has anyone been there? I want to visit next year.' },
+  { kimlik: 'an-6', gorsel: { ikon: 'ses', kutu: 5, yazi: { tr: 'world · squirrel', en: 'world · squirrel' } }, yazar: 'test-marie', saatOnce: 26, etiket: { tr: 'Telaffuz', en: 'Pronunciation' }, metin: 'Which word is harder for you: "world" or "squirrel"? For me it is squirrel!' },
 ];
 
 // Kullanıcının kendi gönderisine gelen otomatik test yorumları (yazar, metin). "Otomatik test yanıtı" diye etiketlenir.

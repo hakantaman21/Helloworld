@@ -58,7 +58,7 @@ function ciz(kok, b) {
     }),
   );
   yerlestir(kok,
-    ustBaslik({ baslik: t('sohbetler.baslik'), alt: t('sohbetler.alt') }),
+    ustBaslik({ baslik: t('sohbetler.baslik'), alt: t('sohbetler.alt'), ikon: 'sohbet' }),
     h('p', { class: 'b-kucuk shb-bilgi' }, t('sohbetler.gecmisBilgi')),
     h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => b.git('/kesfet') }, t('sohbetler.yeniKisi'), ikon('sag', 18)),
     h('section', { class: 'b-yigin', 'aria-label': t('sohbetler.listeBaslik') },

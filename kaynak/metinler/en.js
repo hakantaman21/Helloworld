@@ -132,6 +132,7 @@ export default {
   },
 
   bugun: {
+    gelisimKutu: { baslik: 'My progress', alt: 'Streak, level and goals' },
     partnerSecim: { baslik: 'Who would you like to practise with?', yz: 'Practise with AI', insan: 'Real person', bilgi: 'The AI demo coach is available. Speaking with real people will open when the safe community is ready.' },
     hizliEtiket: 'READY TO SPEAK?',
     hizliBaslik: 'Start speaking in 5 minutes',
@@ -379,6 +380,14 @@ export default {
   },
 
   gelisim: {
+    menu: {
+      baslik: 'Menu',
+      ayarlar: { baslik: 'Settings', alt: 'Language, reminder times, appearance, privacy' },
+      hafiza: { baslik: 'My mistake memory', alt: 'Corrections due for review' },
+      senaryolar: { baslik: 'Scenarios', alt: 'Café, job interview, travel…' },
+      anlar: { baslik: 'Language Moments', alt: 'Post, correct, comment' },
+      baglanti: { baslik: 'Find a language partner', alt: 'Native speakers of your target language' },
+    },
     kimlik: { baslik: 'My language profile', duzenle: 'Edit', anaDil: 'Native language', hedefDil: 'Learning', seviye: 'Level', hedef: 'Goal', hedefAciklama: 'Speaking practice', belirtilmedi: 'Not specified yet', gizlilik: 'These details currently stay on your device; no public profile has been created.' },
     siradakiEtiket: 'YOUR SUGGESTED NEXT STEP',
     tekrarBaslik: 'Time to review: {n} items',
@@ -415,6 +424,7 @@ export default {
   },
 
   ayarlar: {
+    kutu: { baslik: 'Setting groups', genel: 'General', profil: 'My profile', dil: 'Language profile', saat: 'Reminders', gorunum: 'Appearance & coach', gizlilik: 'Privacy & backup' },
     dilProfili: 'My language profile', anaDil: 'Native language', ogrenilenDil: 'Language I am learning', dilSeciniz: 'Select a language', dilHedefi: 'My language goal', hedefOrnek: 'For example: Fluent everyday conversation', tanitim: 'About me', tanitimOrnek: 'Write a short introduction', profilGizlilik: 'These details are currently stored only on your device and are not shared with others.',
     gorunumBaslik: 'Appearance and customization',
     gorunum: 'Card density',

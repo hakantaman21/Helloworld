@@ -1,5 +1,6 @@
 // Ortak arayüz yardımcıları: öğe oluşturma, ikonlar, üst başlık, alt gezinme, durum kutuları.
 import { t } from './metin.js';
+import { IKON3D } from '../veri/ikon3d.js';
 
 const SVG_AD_ALANI = 'http://www.w3.org/2000/svg';
 
@@ -86,15 +87,34 @@ export function ikon(ad, boyut = 22, kalinlik = 2) {
   return svg;
 }
 
+// English Prime 3B ikonu (görsel). Süs amaçlıdır: ekran okuyucudan gizli, yanında her zaman metin vardır.
+export function ikon3d(ad, boyut = 40) {
+  return h('img', { class: 'b-ikon3d', src: IKON3D[ad] || IKON3D.yildiz, width: boyut, height: boyut, alt: '', 'aria-hidden': 'true', loading: 'lazy', decoding: 'async' });
+}
+
 // Üst başlık: tabela (nerede olduğun), başlık, alt başlık, sağda isteğe bağlı içerik.
-export function ustBaslik({ tabela, baslik, alt, sag, geri }) {
+const ikonCiz = (...a) => ikon(...a);
+
+export function ustBaslik({ tabela, baslik, alt, sag, geri, ikon }) {
+  // English Prime sayfa kimliği: solda 3B ikon, çerçeveli serif başlık, altında açıklama.
+  if (ikon) {
+    return h('header', { class: 'b-ust b-ust-ep' },
+      h('div', { class: 'b-ust-ep-satir' },
+        geri ? h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', 'aria-label': t('genel.geri'), onClick: geri }, ikonCiz('sol', 20)) : null,
+        h('span', { class: 'b-ust-ep-ikon' }, ikon3d(ikon, 40)),
+        h('h1', { class: 'b-baslik b-baslik-cerceve' }, baslik),
+      ),
+      alt ? h('p', { class: 'b-altbaslik' }, alt) : null,
+      sag || null,
+    );
+  }
   return h('header', { class: 'b-ust' },
     h('div', { class: 'b-ust-metin' },
       tabela ? h('div', { class: 'b-tabela' }, tabela) : null,
       h('h1', { class: 'b-baslik' }, baslik),
       alt ? h('p', { class: 'b-altbaslik' }, alt) : null,
     ),
-    geri ? h('button', { class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', 'aria-label': t('genel.geri'), onClick: geri }, ikon('sol', 20)) : null,
+    geri ? h('button', { class: 'b-dugme b-dugme-cerceve b-dugme-yuvarlak', 'aria-label': t('genel.geri'), onClick: geri }, ikonCiz('sol', 20)) : null,
     sag || null,
   );
 }
@@ -102,10 +122,10 @@ export function ustBaslik({ tabela, baslik, alt, sag, geri }) {
 // Beş sekme (Anayasa bölüm 14): Sohbet · Bağlantı · Dil Anları · Pratik · Profil
 const GEZINME = [
   { yol: '/sohbetler', ikon: 'sohbet', anahtar: 'gezinme.sohbetler' },
-  { yol: '/kesfet', ikon: 'pusula', anahtar: 'gezinme.baglanti' },
-  { yol: '/dil-anlari', ikon: 'yildiz', anahtar: 'gezinme.dilAnlari' },
-  { yol: '/bugun', ikon: 'dalga', anahtar: 'gezinme.pratik' },
-  { yol: '/gelisim', ikon: 'kisi', anahtar: 'gezinme.profil' },
+  { yol: '/kesfet', ikon: 'baglanti', anahtar: 'gezinme.baglanti' },
+  { yol: '/dil-anlari', ikon: 'anlar', anahtar: 'gezinme.dilAnlari' },
+  { yol: '/bugun', ikon: 'pratik', anahtar: 'gezinme.pratik' },
+  { yol: '/gelisim', ikon: 'profil', anahtar: 'gezinme.profil' },
 ];
 
 export function altGezinme(aktifYol) {
@@ -115,7 +135,7 @@ export function altGezinme(aktifYol) {
         class: 'b-gezinme-oge',
         href: '#' + g.yol,
         'aria-current': g.yol === aktifYol ? 'page' : false,
-      }, ikon(g.ikon), t(g.anahtar))),
+      }, ikon3d(g.ikon, 30), t(g.anahtar))),
     ),
   );
 }
@@ -127,7 +147,7 @@ export function ustKontroller(ad, git) {
       h('span', { class: 'b-ust-avatar', 'aria-hidden': 'true' }, (ad || '?').charAt(0).toLocaleUpperCase()),
       h('span', null, t('gezinme.profil'))),
     h('span', { class: 'b-ust-marka' }, t('uygulama.ad')),
-    h('button', { type: 'button', class: 'b-ust-ayar', onClick: () => git('/ayarlar'), 'aria-label': t('ayarlar.baslik') }, ikon('ayar', 22)),
+    h('button', { type: 'button', class: 'b-ust-ayar', onClick: () => git('/ayarlar'), 'aria-label': t('ayarlar.baslik') }, ikon3d('ayarlar', 30)),
   );
 }
 
@@ -142,7 +162,38 @@ export function testEtiketi() {
 }
 
 // Sanal (test) kullanıcı avatarı: baş harf, 6 renk; gerçek fotoğraf kullanılmaz.
+// Çizim avatar (HelloTalk tarzı profil resmi): ten, saç rengi ve saç biçimi profilden gelir; renkler jetonlardan.
+const SAC_BICIMI = {
+  kisa: { arka: '', on: '<path d="M20.5 29c-.6-9.6 4.6-15.5 11.5-15.5S44.1 19.4 43.5 29c-1.6-4.6-5-7.3-11.5-7.3S22.1 24.4 20.5 29z"/>' },
+  uzun: { arka: '<path d="M18.5 31c0-11 5.8-18 13.5-18s13.5 7 13.5 18v15h-27z"/>', on: '<path d="M20.5 28c.4-8.6 5-14 11.5-14s11.1 5.4 11.5 14c-3.6-3.4-7-6-11.5-6.4-3.2 2.6-7.6 5.4-11.5 6.4z"/>' },
+  topuz: { arka: '<circle cx="32" cy="12.5" r="6"/>', on: '<path d="M20.5 29c-.6-9.6 4.6-15.5 11.5-15.5S44.1 19.4 43.5 29c-2.4-4.2-6.2-6.6-11.5-6.6S22.9 24.8 20.5 29z"/>' },
+  ortu: { arka: '<path d="M17.5 32c0-11.6 6.4-19 14.5-19s14.5 7.4 14.5 19c0 6-2 10.6-5 14H22.5c-3-3.4-5-8-5-14z"/>', on: '<path d="M20 31c0-10 5.2-16 12-16s12 6 12 16c-1.8-6.4-6-9.4-12-9.4S21.8 24.6 20 31z"/>' },
+};
+
+function cizimAvatar(profil) {
+  const svg = document.createElementNS(SVG_AD_ALANI, 'svg');
+  svg.setAttribute('viewBox', '0 0 64 64');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('class', 'b-av-svg');
+  const sac = SAC_BICIMI[profil.sacTip] || SAC_BICIMI.kisa;
+  svg.innerHTML = `<rect class="b-avc-zemin" width="64" height="64"/>`
+    + `<g class="b-avc-sac b-avc-sac-${profil.sac || 1}${profil.sacTip === 'ortu' ? ' b-avc-ortu' : ''}">${sac.arka}</g>`
+    + `<path class="b-avc-govde" d="M11 66c1.6-12 10-18.5 21-18.5S51.4 54 53 66z"/>`
+    + `<rect class="b-avc-ten b-avc-ten-${profil.ten || 1}" x="28" y="38" width="8" height="10" rx="3"/>`
+    + `<circle class="b-avc-ten b-avc-ten-${profil.ten || 1}" cx="32" cy="30" r="11.5"/>`
+    + `<g class="b-avc-sac b-avc-sac-${profil.sac || 1}${profil.sacTip === 'ortu' ? ' b-avc-ortu' : ''}">${sac.on}</g>`
+    + `<circle class="b-avc-goz" cx="27.8" cy="31" r="1.5"/><circle class="b-avc-goz" cx="36.2" cy="31" r="1.5"/>`
+    + `<path class="b-avc-agiz" d="M28.6 35.6c2 1.8 4.8 1.8 6.8 0"/>`;
+  return svg;
+}
+
 export function testAvatar(profil, boyut = 44) {
+  if (profil && profil.ten) {
+    return h('span', { class: `b-av b-av-cizim b-av-${profil.renk || 6}`, style: `width:${boyut}px;height:${boyut}px`, 'aria-hidden': 'true' },
+      cizimAvatar(profil),
+      profil.bayrak && boyut >= 36 ? h('span', { class: 'b-av-bayrak', style: `font-size:${Math.max(12, Math.round(boyut * 0.3))}px` }, profil.bayrak) : null,
+    );
+  }
   return h('span', { class: `b-av b-av-${(profil && profil.renk) || 6}`, style: `width:${boyut}px;height:${boyut}px;font-size:${Math.round(boyut * 0.42)}px`, 'aria-hidden': 'true' }, (profil && profil.bas) || '?');
 }
 

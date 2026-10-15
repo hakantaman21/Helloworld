@@ -1,3 +1,12 @@
+## 0.3.0 — 16.10.2026 · Gerçek English Prime görünümü + HelloTalk içeriği
+
+- English Prime'ın kendi 3B ikonları (30 ikon, webp) uygulamaya gömüldü: alt menü, sayfa başlıkları, Pratik kutuları, Profil menüsü, Ayarlar grupları.
+- Zemin ve renkler English Prime'dan: koyu mat zemin (köşeden ışık alan degrade), petrol-yeşili mücevher kartlar, altın düğmeler, serif çerçeveli başlıklar; açık tema da aynı dille.
+- Pratik: seçenekler renkli 2 sütunlu kutular (Senaryolar, Telaffuz, Hata Hafızası, Gelişimim).
+- Profil: HelloTalk "Ben" menüsü (Ayarlar, Hata Hafızam, Senaryolar, Dil Anları, Dil partneri bul).
+- Ayarlar: üstte 6 renkli grup kutusu; dokununca ilgili bölüme kayar.
+- Sanal kullanıcılar (TEST): çizim profil resimleri ve ülke bayrakları; Dil Anları gönderilerinde görseller.
+
 ## 0.2.9 — 16.10.2026 · English Prime görünümü ve HelloTalk öğeleri
 
 - Görünüm English Prime'a geçti: koyu mat yüzey, kabartmalı kartlar ve düğmeler, altın vurgu, yüzen alt menü, bölüm renkli üst etiketler. Açık tema da aynı dille. Yalnız tasarım jetonları değişti (Y3), kontrast denetimi geçti (Y14).

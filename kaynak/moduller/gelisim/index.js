@@ -1,7 +1,7 @@
 // Gelişim: haftalık/aylık Büyüme Karnesi (paylaşılabilir kart), seviye yolu, haftanın günleri ve seri.
 import './gelisim.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, altGezinme, durumKutusu, ikon, yerlestir } from '../../cekirdek/arayuz.js';
+import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d } from '../../cekirdek/arayuz.js';
 import { t } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { donemOzeti, dondurmaHakki } from '../../cekirdek/gunluk.js';
@@ -109,6 +109,19 @@ function ciz(kok, b) {
           v.profil.anaDil ? h('span', { class: 'b-cip' }, t('gelisim.anaDil', { dil: t(`diller.${v.profil.anaDil}`) })) : null,
         ),
       ),
+    ),
+    h('nav', { class: 'b-kart b-menu gls-menu', 'aria-label': t('gelisim.menu.baslik') },
+      [
+        ['ayarlar', '/ayarlar', 'ayarlar'],
+        ['hafiza', '/hafiza', 'hafiza'],
+        ['senaryo', '/senaryolar', 'senaryolar'],
+        ['anlar', '/dil-anlari', 'anlar'],
+        ['baglanti', '/kesfet', 'baglanti'],
+      ].map(([ik, yol, anahtar]) => h('button', { type: 'button', class: 'b-menu-satir', onClick: () => b.git(yol) },
+        ikon3d(ik, 40),
+        h('span', { class: 'b-menu-metin' }, h('b', null, t(`gelisim.menu.${anahtar}.baslik`)), h('span', null, t(`gelisim.menu.${anahtar}.alt`))),
+        ikon('sag', 18),
+      )),
     ),
     h('section', { class: 'b-kart gls-kimlik', 'aria-labelledby': 'gls-kimlik-baslik' },
       h('div', { class: 'b-satir' },

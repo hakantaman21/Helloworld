@@ -4,7 +4,7 @@
 // Beğeni/yorum sayıları uydurulmaz; yalnız bu cihazdaki etkileşimler sayılır. Test verisi gelişime yazılmaz.
 import './anlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, altGezinme, ustBaslik, durumKutusu, ikon, yerlestir, testEtiketi, testAvatar, goreliZaman, farkCiz } from '../../cekirdek/arayuz.js';
+import { h, altGezinme, ustBaslik, durumKutusu, ikon, yerlestir, testEtiketi, testAvatar, goreliZaman, farkCiz, ikon3d } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
@@ -59,6 +59,7 @@ function ciz(kok, b) {
       ),
       an.etiket ? h('span', { class: 'b-cip anl-etiket' }, `#${yerel(an.etiket)}`) : null,
       h('p', { class: 'anl-metin' }, an.metin),
+      an.gorsel ? h('figure', { class: `b-gorsel b-kutu-${an.gorsel.kutu} anl-gorsel` }, ikon3d(an.gorsel.ikon, 84), h('figcaption', { class: 'b-gorsel-yazi' }, yerel(an.gorsel.yazi))) : null,
       duz ? h('div', { class: 'anl-duzeltme' }, h('span', { class: 'anl-duzeltme-baslik' }, ikon('onay', 16), t('anlar.seninDuzeltmen')), farkCiz(kelimeFarki(duz.kaynak, duz.dogru))) : null,
       h('div', { class: 'anl-eylemler', role: 'group', 'aria-label': t('anlar.eylemler') },
         h('button', { type: 'button', class: 'anl-eylem', 'aria-pressed': String(begendi), onClick: () => { anBegen(an.kimlik); yenile(); } }, ikon('yildiz', 18), t(begendi ? 'anlar.begenildi' : 'anlar.begen')),
@@ -118,7 +119,7 @@ function ciz(kok, b) {
 
   if (!testModuAcik()) {
     yerlestir(kok,
-      ustBaslik({ baslik: t('anlar.baslik'), alt: t('anlar.alt') }),
+      ustBaslik({ baslik: t('anlar.baslik'), alt: t('anlar.alt'), ikon: 'anlar' }),
       h('section', { class: 'b-kart anl-bos' },
         h('span', { class: 'b-ust-etiket' }, t('anlar.yakinda')),
         durumKutusu('bos', t('anlar.aciklama')),
@@ -135,7 +136,7 @@ function ciz(kok, b) {
   }
 
   yerlestir(kok,
-    ustBaslik({ baslik: t('anlar.baslik'), alt: t('anlar.alt') }),
+    ustBaslik({ baslik: t('anlar.baslik'), alt: t('anlar.alt'), ikon: 'anlar' }),
     h('div', { class: 'anl-uyari' }, testEtiketi(), h('span', null, t('anlar.testUyari'))),
     h('section', { class: 'b-kart anl-paylas', 'aria-labelledby': 'anl-paylas-baslik' },
       h('span', { class: 'b-ust-etiket', id: 'anl-paylas-baslik' }, t('anlar.paylasBaslik')),

@@ -43,7 +43,7 @@ function ciz(kok, b) {
   kok.classList.add('b-ekran-gezinmeli');
   if (!testModuAcik()) {
     yerlestir(kok,
-      ustBaslik({ baslik: t('kesfet.baslik'), alt: t('kesfet.alt') }),
+      ustBaslik({ baslik: t('kesfet.baslik'), alt: t('kesfet.alt'), ikon: 'baglanti' }),
       h('section', { class: 'b-kart kft-hero', 'aria-labelledby': 'kft-giris' },
         h('span', { class: 'b-ust-etiket' }, t('kesfet.heroEtiket')),
         h('h2', { class: 'b-bolum-baslik', id: 'kft-giris' }, t('kesfet.heroBaslik')),
@@ -73,7 +73,7 @@ function ciz(kok, b) {
     yerlestir(liste, kisiler.length ? kisiler.map((k) => satir(k, b)) : durumKutusu('bos', testProfilleri().length ? t('kesfet.suzgecBos') : t('test.hepsiEngelli')));
   }
   yerlestir(kok,
-    ustBaslik({ baslik: t('kesfet.baslik'), alt: t('kesfet.alt') }),
+    ustBaslik({ baslik: t('kesfet.baslik'), alt: t('kesfet.alt'), ikon: 'baglanti' }),
     h('div', { class: 'kft-uyari' }, testEtiketi(), h('span', null, t('test.profillerAciklama'))),
     h('div', { class: 'kft-suzgecler', role: 'group', 'aria-label': t('kesfet.filtreBaslik') },
       SUZGECLER.map((s) => { const d = h('button', { type: 'button', class: 'kft-suzgec', 'aria-pressed': String(s === suzgec), onClick: () => { suzgec = s; yenile(); } }, t(`kesfet.suzgec.${s}`)); dugmeler[s] = d; return d; }),

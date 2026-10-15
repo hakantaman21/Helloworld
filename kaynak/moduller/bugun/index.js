@@ -1,7 +1,7 @@
 // Bugün: günün döngüsü, sıradaki adım (tabela), Hata Hafızası kısayolu ve tek dokunuşla "Konuş".
 import './bugun.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, altGezinme, yerlestir, yzEtiketi } from '../../cekirdek/arayuz.js';
+import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d } from '../../cekirdek/arayuz.js';
 import { t, yerel, aktifDil } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { gunKaydi, siradaki, seriHesapla, bugunkuSenaryo } from '../../cekirdek/gunluk.js';
@@ -57,9 +57,10 @@ function ciz(kok, b) {
   const seri = seriHesapla();
 
   const pratikSecenekleri = [
-    { baslik: t('bugun.hizli.baslik'), alt: t('bugun.hizli.alt'), ikonAdi: 'mikrofon', git: () => b.git(`/gorusme?tur=senaryo&id=${oneri.kimlik}`) },
-    { baslik: t('bugun.hedefli.baslik'), alt: t('bugun.hedefli.alt'), ikonAdi: 'harita', git: () => b.git('/senaryolar') },
-    { baslik: t('bugun.tekrar.baslik'), alt: t('bugun.tekrar.alt', { n: vadesi.length }), ikonAdi: 'liste', git: () => b.git('/hafiza') },
+    { baslik: t('bugun.hizli.baslik'), alt: t('bugun.hizli.alt'), ikonAdi: 'mikrofon', ikon3: 'telaffuz', kutu: 5, git: () => b.git(`/gorusme?tur=senaryo&id=${oneri.kimlik}`) },
+    { baslik: t('bugun.hedefli.baslik'), alt: t('bugun.hedefli.alt'), ikonAdi: 'harita', ikon3: 'senaryo', kutu: 1, git: () => b.git('/senaryolar') },
+    { baslik: t('bugun.tekrar.baslik'), alt: t('bugun.tekrar.alt', { n: vadesi.length }), ikonAdi: 'liste', ikon3: 'hafiza', kutu: 3, git: () => b.git('/hafiza') },
+    { baslik: t('bugun.gelisimKutu.baslik'), alt: t('bugun.gelisimKutu.alt'), ikonAdi: 'grafik', ikon3: 'gelisim', kutu: 4, git: () => b.git('/gelisim') },
   ];
   const senaryoyaGit = () => b.git(`/gorusme?tur=senaryo&id=${oneri.kimlik}`);
   const baslat = (tur) => {
@@ -76,7 +77,8 @@ function ciz(kok, b) {
   const durumu = (tur) => (gun[tur] ? 'tamam' : sira === tur ? 'siradaki' : 'bekliyor');
 
   yerlestir(kok, 
-    h('header', { class: 'b-ust' },
+    h('header', { class: 'b-ust bgn-ust' },
+      h('span', { class: 'b-ust-ep-ikon' }, ikon3d('pratik', 44)),
       h('div', { class: 'b-ust-metin' },
         h('div', { class: 'b-tabela' }, new Date().toLocaleDateString(aktifDil() === 'tr' ? 'tr-TR' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' })),
         h('h1', { class: 'b-baslik' }, t(`bugun.selam.${gunBolumu()}`, { ad: v.profil.ad })),
@@ -103,14 +105,11 @@ function ciz(kok, b) {
     ),
     h('section', { class: 'b-yigin', 'aria-labelledby': 'bgn-yollar' },
       h('h2', { class: 'b-bolum-baslik', id: 'bgn-yollar' }, t('bugun.yollarBaslik')),
-      h('div', { class: 'bgn-yollar' }, pratikSecenekleri.map((secenek) =>
-        h('button', { class: 'b-kart b-kart-satir b-kart-tiklanir bgn-yol', type: 'button', onClick: secenek.git },
-          h('span', { class: 'b-ikon-daire' }, ikon(secenek.ikonAdi, 20)),
-          h('span', { class: 'bgn-oge-metin' },
-            h('span', { class: 'bgn-oge-baslik' }, secenek.baslik),
-            h('span', { class: 'b-kucuk' }, secenek.alt),
-          ),
-          ikon('sag', 18),
+      h('div', { class: 'b-izgara-2 bgn-kutular' }, pratikSecenekleri.map((secenek) =>
+        h('button', { class: `b-kutu b-kutu-${secenek.kutu} bgn-kutu`, type: 'button', onClick: secenek.git },
+          ikon3d(secenek.ikon3, 52),
+          h('span', { class: 'b-kutu-baslik' }, secenek.baslik),
+          h('span', { class: 'b-kutu-alt' }, secenek.alt),
         ))),
     ),
     h('div', { class: 'b-kart bgn-tabela', role: 'status' },

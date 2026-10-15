@@ -48,7 +48,7 @@ function ciz(kok, b) {
   else liste = h('div', { class: 'b-yigin' }, siralama.map(ogeKarti));
 
   yerlestir(kok, 
-    ustBaslik({ tabela: t('gezinme.pratik'), baslik: t('hafiza.baslik'), alt: t('hafiza.alt'), geri: () => b.geri('/bugun') }),
+    ustBaslik({ tabela: t('gezinme.pratik'), baslik: t('hafiza.baslik'), alt: t('hafiza.alt'), ikon: 'hafiza', geri: () => b.geri('/bugun') }),
     tum.length ? h('div', { class: 'b-kart hfz-ozet', role: 'status' }, t('hafiza.durum', { n: vadesi.length, m: ogrenilen })) : null,
     h('div', { class: 'b-cipler', role: 'radiogroup', 'aria-label': t('hafiza.turEtiket') },
       TURLER.map((tur) => h('button', {

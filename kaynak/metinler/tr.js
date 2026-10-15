@@ -133,6 +133,7 @@ export default {
   },
 
   bugun: {
+    gelisimKutu: { baslik: 'Gelişimim', alt: 'Seri, seviye ve hedefler' },
     partnerSecim: { baslik: 'Kiminle pratik yapacaksın?', yz: 'AI ile pratik', insan: 'Gerçek kişi', bilgi: 'AI demo koç hazırdır. Gerçek kişilerle konuşma, güvenli topluluk açıldığında kullanılabilir.' },
     hizliEtiket: 'KONUŞMAYA HAZIR MISIN?',
     hizliBaslik: '5 dakikada konuşmaya başla',
@@ -380,6 +381,14 @@ export default {
   },
 
   gelisim: {
+    menu: {
+      baslik: 'Menü',
+      ayarlar: { baslik: 'Ayarlar', alt: 'Dil, bildirim saatleri, görünüm, gizlilik' },
+      hafiza: { baslik: 'Hata Hafızam', alt: 'Tekrar zamanı gelen düzeltmeler' },
+      senaryolar: { baslik: 'Senaryolar', alt: 'Kafe, iş görüşmesi, seyahat…' },
+      anlar: { baslik: 'Dil Anları', alt: 'Paylaş, düzelt, yorum yap' },
+      baglanti: { baslik: 'Dil partneri bul', alt: 'Ana dili hedef dilin olan kişiler' },
+    },
     kimlik: { baslik: 'Dil profilim', duzenle: 'Düzenle', anaDil: 'Ana dil', hedefDil: 'Öğrenilen dil', seviye: 'Seviye', hedef: 'Hedef', hedefAciklama: 'Konuşma pratiği', belirtilmedi: 'Henüz belirtilmedi', gizlilik: 'Bu bilgiler şu an cihazında tutulur; herkese açık bir profil oluşturulmadı.' },
     siradakiEtiket: 'SANA ÖNERİLEN SONRAKİ ADIM',
     tekrarBaslik: 'Tekrar zamanı: {n} öğe',
@@ -416,6 +425,7 @@ export default {
   },
 
   ayarlar: {
+    kutu: { baslik: 'Ayar grupları', genel: 'Genel', profil: 'Profilim', dil: 'Dil profili', saat: 'Hatırlatıcılar', gorunum: 'Görünüm ve koç', gizlilik: 'Gizlilik ve yedek' },
     dilProfili: 'Dil profilim', anaDil: 'Ana dilim', ogrenilenDil: 'Öğrendiğim dil', dilSeciniz: 'Dil seçiniz', dilHedefi: 'Dil öğrenme hedefim', hedefOrnek: 'Örneğin: Akıcı günlük konuşma', tanitim: 'Kendimi tanıtıyorum', tanitimOrnek: 'Kendinizden kısaca bahsedin', profilGizlilik: 'Bu bilgiler şu anda yalnızca cihazınızda tutulur; başkalarıyla paylaşılmaz.',
     gorunumBaslik: 'Görünüm ve özelleştirme',
     gorunum: 'Kart yerleşimi',

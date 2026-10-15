@@ -10,3 +10,9 @@
   .ayr-test { border-style: dashed; border-color: var(--renk-orta-metin); }
   .ayr-surum-dugme { display: block; width: 100%; min-height: var(--dokunma); border: 0; background: transparent; color: inherit; font: inherit; cursor: default; }
 }
+
+@layer moduller {
+  .ayr-kutular { gap: 12px; }
+  .ayr-kutu { min-height: 104px; }
+  .ayr-bolum { scroll-margin-top: 16px; }
+}

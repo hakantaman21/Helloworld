@@ -29,3 +29,7 @@
   .anl-yorum-form { display: flex; gap: var(--bosluk-2); align-items: center; }
   .anl-yorum-girdi { flex: 1; min-width: 0; }
 }
+
+@layer moduller {
+  .anl-gorsel { margin: 4px 0 2px; }
+}
