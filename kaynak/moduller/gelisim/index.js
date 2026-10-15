@@ -120,7 +120,7 @@ function ciz(kok, b) {
           [t('gelisim.kimlik.anaDil'), v.profil.anaDil ? t(`diller.${v.profil.anaDil}`) : t('gelisim.kimlik.belirtilmedi')],
           [t('gelisim.kimlik.hedefDil'), v.profil.ogrenilenDil ? t(`diller.${v.profil.ogrenilenDil}`) : t('gelisim.kimlik.belirtilmedi')],
           [t('gelisim.kimlik.seviye'), v.profil.seviye || t('gelisim.kimlik.belirtilmedi')],
-          [t('gelisim.kimlik.hedef'), t('gelisim.kimlik.hedefAciklama')],
+          [t('gelisim.kimlik.hedef'), v.profil.dilHedefi || t('gelisim.kimlik.hedefAciklama')],
         ].map(([etiket, deger]) => h('div', { class: 'gls-kimlik-satir' },
           h('dt', { class: 'b-kucuk' }, etiket), h('dd', null, deger),
         )),
