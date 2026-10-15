@@ -29,6 +29,9 @@
   .b-ust-avatar { display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--kose-kucuk); background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); border: 1px solid var(--renk-cizgi); }
   .b-ust-marka { font-size: var(--yazi-kucuk); color: var(--renk-soluk); font-weight: 700; text-align: center; }
   .b-ust-ayar { justify-self: end; display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--renk-cizgi); border-radius: var(--kose-kucuk); background: var(--renk-yuzey); color: var(--renk-murekkep); box-shadow: 0 2px 5px var(--renk-golge); }
+  :root[data-gorunum="kompakt"] .b-ekran { gap: var(--bosluk-3); }
+  :root[data-gorunum="kompakt"] .b-kart { padding: var(--bosluk-3); }
+  :root[data-gorunum="kompakt"] .b-gezinme { --gezinme-yukseklik: 68px; }
   /* --- Kartlar --- */
   .b-kart {
     background: var(--renk-yuzey);
