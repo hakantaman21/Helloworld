@@ -1,3 +1,13 @@
+## 0.2.6 — 16.10.2026 · Beşli menü ve English Prime esinli görünüm
+
+- Ana menü: Sohbet, Bağlantı, Dil Anları, AI, Profil.
+- Mevcut ekran eşlemeleri: Sohbet→sohbetler, Bağlantı→kesfet, AI→bugun, Profil→gelisim.
+- Dil Anları ayrı modül; moderasyon/sunucu olmadığı için sahte gönderi yok.
+- Beş ana ekranda sol üst profil, sağ üst ayarlar; merkezde marka.
+- Ayarlarda dengeli/kompakt görünüm ve mevcut açık/koyu/sistem teması; şema 3→4 güvenli göç.
+- Navigasyon dokunma hedefleri, CSS jeton tabanlı yüzey ve ikon gölgeleri.
+- Testler henüz çalıştırılmadı. Ayrı dal, merge yok.
+
 # Değişiklikler
 
 Her teslimde sürüm bir artar ve en üste bir kayıt eklenir (Y10). Test robotu, `kaynak/cekirdek/surum.js`,
