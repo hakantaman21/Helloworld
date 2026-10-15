@@ -1,17 +1,12 @@
 @layer moduller {
   .kft-hero { gap: var(--bosluk-3); border-color: var(--renk-vurgu); background: var(--renk-vurgu-acik); }
   .kft-hero-alt { color: var(--renk-vurgu-acik-metin); }
-  .kft-sekmeler { display: grid; grid-template-columns: 1fr 1fr; gap: var(--bosluk-2); }
-  .kft-sekme { min-height: 48px; border: 1px solid var(--renk-cizgi); border-radius: var(--kose-tam); background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; font-weight: 600; cursor: pointer; }
-  .kft-sekme[aria-pressed="true"] { background: var(--renk-vurgu); color: var(--renk-vurgu-uzerinde); border-color: var(--renk-vurgu); }
   .kft-sonuc { display: flex; flex-direction: column; gap: var(--bosluk-3); }
   .kft-bilgi { display: flex; gap: var(--bosluk-3); align-items: flex-start; }
   .kft-bilgi > div { min-width: 0; flex: 1; }
 
   .kft-etiketler { display: flex; gap: var(--bosluk-2); flex-wrap: wrap; }
   .kft-etiket { padding: 8px 12px; border: 1px solid var(--renk-cizgi); border-radius: var(--kose-tam); background: var(--renk-yuzey-ikinci); color: var(--renk-murekkep); font-size: var(--yazi-kucuk); }
-  .kft-demo-not { font-size: var(--yazi-kucuk); color: var(--renk-soluk); }
-  .kft-ogren { gap: var(--bosluk-3); }
   .kft-kural summary { cursor: pointer; min-height: 48px; display: flex; align-items: center; }
   .kft-kurallar { display: flex; flex-direction: column; gap: var(--bosluk-2); padding-left: var(--bosluk-5); list-style: disc; font-size: 14px; }
 }
