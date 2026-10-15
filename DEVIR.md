@@ -1,3 +1,13 @@
+## HelloTalk ekran kaydı incelemesi — 16.10.2026 / ChatGPT
+
+- Kaynak: kullanıcının yaklaşık 74 saniyelik HelloTalk Android ekran kaydı; 9 örnek kare incelendi.
+- Görülen ekranlar: Dil Sohbetleri, Dil Ortakları Bul, Dil Anları akışı, Öğren araçları, profil ve menü.
+- Benimsenecek: sohbet araması ve çip filtreler; dil partneri keşfi ve kişi kartları; topluluk paylaşımları ve etkinlikleri; profilin kategorili sunumu; alt gezinmede açık aktif durum.
+- Kaçınılacak: reklam/VIP baskısı, yoğun promosyon, kalabalık yüzey, görevleri karıştıran sekmeler.
+- Ürün sınırları: Sohbet=geçmiş; Bağlantı=yeni kişi; Dil Anları=paylaşımlar; Pratik=insan veya AI; Profil=kişisel bilgi. AI insanmış gibi sunulmaz.
+- Uygulama sırası: 1) mevcut beşli menü ve yönlendirme temizliği, 2) ortak mat siyah/gri token ve bileşenleri, 3) filtre/arama, 4) profil ve güvenli topluluk altyapısı, 5) mobil/erişilebilirlik/robot testleri.
+- Bu kayıt analiz ve karar notudur; yeni UI kodu/testi olarak raporlanmamalıdır. Main ve deneme dalları değişmedi.
+
 ## Anayasa uyum kaydı — 16.10.2026 / ChatGPT
 
 - ANAYASA.md dört sekme ve zorunlu sıcak palet tanımlarını kullanıcının son beş sekme, mat siyah/gri, English Prime UX kararlarıyla uyumlaştıracak şekilde güncellendi.
