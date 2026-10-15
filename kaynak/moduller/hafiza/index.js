@@ -1,0 +1,83 @@
+// Hata Hafızası ekranı: hatalar, tekrar durumu ve "Şimdi pratik yap".
+import './hafiza.css';
+import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
+import { h, altGezinme, ustBaslik, durumKutusu, yerlestir } from '../../cekirdek/arayuz.js';
+import { t } from '../../cekirdek/metin.js';
+import { al } from '../../cekirdek/depo.js';
+import { vadesiGelenler, OGRENILDI_SERISI } from '../../cekirdek/hafiza.js';
+import { tarihAnahtari, kisaTarih } from '../../cekirdek/zaman.js';
+import { duyur } from '../../cekirdek/duyuru.js';
+
+const TURLER = ['tumu', 'kelime', 'gramer', 'telaffuz'];
+let secilenTur = 'tumu';
+
+function ogeKarti(k) {
+  const bugun = tarihAnahtari();
+  const durumEtiketi = k.durum === 'ogrenildi'
+    ? h('span', { class: 'b-cip b-cip-iyi' }, t('hafiza.ogrenildi'))
+    : k.sonrakiTekrar <= bugun ? h('span', { class: 'b-cip b-cip-vurgu' }, t('hafiza.sirada')) : null;
+  return h('article', { class: `b-kart hfz-oge${k.durum === 'ogrenildi' ? ' hfz-oge-ogrenildi' : ''}` },
+    h('div', { class: 'hfz-oge-ust' },
+      h('span', { class: 'b-ust-etiket' }, `${t(`hafiza.tur.${k.tur}`)} · ${k.seviye}`),
+      durumEtiketi,
+    ),
+    h('p', { class: 'hfz-dogru', lang: 'en' }, k.dogru),
+    k.kullanici && k.kullanici !== k.dogru ? h('p', { class: 'b-kucuk', lang: k.tur === 'kelime' ? 'tr' : 'en' }, t('hafiza.sen', { metin: k.kullanici })) : null,
+    h('div', { class: 'hfz-alt' },
+      h('span', { class: 'b-kucuk' }, t('hafiza.kaynak', { baglam: k.baglam, tarih: kisaTarih(k.sonGorulme) })),
+      h('span', { class: 'hfz-seri', 'aria-label': t('hafiza.tekrar', { n: Math.min(k.seri, OGRENILDI_SERISI) }) },
+        Array.from({ length: OGRENILDI_SERISI }, (_, i) => h('span', { class: i < k.seri ? 'hfz-nokta hfz-nokta-dolu' : 'hfz-nokta' }))),
+    ),
+  );
+}
+
+function ciz(kok, b) {
+  kok.classList.add('b-ekran-gezinmeli');
+  const tum = al().hafiza;
+  const vadesi = vadesiGelenler();
+  const ogrenilen = tum.filter((k) => k.durum === 'ogrenildi').length;
+  const filtreli = secilenTur === 'tumu' ? tum : tum.filter((k) => k.tur === secilenTur);
+  const siralama = [...filtreli].sort((a, c) => {
+    if (a.durum !== c.durum) return a.durum === 'aktif' ? -1 : 1;
+    return a.sonrakiTekrar < c.sonrakiTekrar ? -1 : 1;
+  });
+
+  let liste;
+  if (!tum.length) liste = durumKutusu('bos', t('hafiza.bos'));
+  else if (!filtreli.length) liste = durumKutusu('bos', t('hafiza.filtreBos'));
+  else liste = h('div', { class: 'b-yigin' }, siralama.map(ogeKarti));
+
+  yerlestir(kok, 
+    ustBaslik({ baslik: t('hafiza.baslik'), alt: t('hafiza.alt') }),
+    tum.length ? h('div', { class: 'b-kart hfz-ozet', role: 'status' }, t('hafiza.durum', { n: vadesi.length, m: ogrenilen })) : null,
+    h('div', { class: 'b-cipler', role: 'radiogroup', 'aria-label': t('hafiza.turEtiket') },
+      TURLER.map((tur) => h('button', {
+        class: 'b-dugme b-dugme-cerceve',
+        role: 'radio',
+        'aria-checked': tur === secilenTur ? 'true' : 'false',
+        onClick: () => { secilenTur = tur; ciz(kok, b); },
+      }, t(`hafiza.tur.${tur}`))),
+    ),
+    liste,
+    h('button', {
+      class: 'b-dugme b-dugme-ana b-ana-eylem',
+      onClick: () => {
+        if (!vadesi.length) { duyur(t('hafiza.pratikYok')); return; }
+        b.git('/gorusme?tur=tekrar');
+      },
+    }, t('hafiza.pratik')),
+    altGezinme('/hafiza'),
+  );
+  return null;
+}
+
+export default {
+  kimlik: 'hafiza',
+  surum: '0.1.0',
+  onek: 'hfz',
+  semaSurumu: 1,
+  cekirdekServisleri: ['depo', 'hafiza'],
+  ekranlar: {
+    hafiza: ekran({ baslikAnahtari: 'ekran.hafiza', durumlar: DORT_DURUM, ciz }),
+  },
+};

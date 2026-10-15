@@ -1,0 +1,12 @@
+/* En son katman: erişilebilirlik kuralları her şeyin üstündedir. */
+@layer erisim {
+  /* Y23: "hareketi azalt" ayarı açıkken animasyon ve geçişler kapanır */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms;
+      animation-iteration-count: 1;
+      transition-duration: 0.01ms;
+      scroll-behavior: auto;
+    }
+  }
+}

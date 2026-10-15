@@ -1,0 +1,15 @@
+{
+  "name": "Konuşma Koçu",
+  "short_name": "Koç",
+  "description": "Her gün birkaç dakika İngilizce konuşma pratiği",
+  "lang": "tr",
+  "start_url": "./#/bugun",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F4F6F8",
+  "theme_color": "#14213D",
+  "icons": [
+    { "src": "simge.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

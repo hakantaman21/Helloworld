@@ -1,0 +1,7 @@
+@layer moduller {
+  .ayr-bolum { gap: var(--bosluk-4); }
+  .ayr-satir { display: flex; flex-direction: column; gap: var(--bosluk-2); }
+  .ayr-anahtar { display: flex; align-items: center; gap: var(--bosluk-3); min-height: var(--dokunma); font-size: var(--yazi-govde); }
+  .ayr-anahtar input { width: 22px; height: 22px; min-height: 22px; accent-color: var(--renk-vurgu); }
+  .ayr-surum { text-align: center; }
+}

@@ -1,0 +1,11 @@
+@layer moduller {
+  .snr-seviye { min-width: 56px; padding: 0 var(--bosluk-4); }
+  .snr-oneri { background: var(--renk-vurgu-acik); gap: 6px; }
+  .snr-oneri-etiket { color: var(--renk-vurgu-acik-metin); }
+  .snr-oneri-baslik { font-size: var(--yazi-altbaslik); font-weight: 700; }
+  .snr-alan { min-height: 92px; justify-content: space-between; }
+  .snr-alan-ad { font-size: var(--yazi-govde); font-weight: 700; }
+  .snr-alan-bos { border-style: dashed; }
+  .snr-satir-metin { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .snr-satir-baslik { font-size: var(--yazi-govde); font-weight: 600; }
+}

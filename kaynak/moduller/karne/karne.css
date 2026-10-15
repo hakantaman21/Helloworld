@@ -1,0 +1,37 @@
+@layer moduller {
+  .krn-ekran { gap: var(--bosluk-5); }
+  .krn-olcu { gap: 2px; padding: var(--bosluk-3); }
+  .krn-olcu-deger { font-size: 22px; font-weight: 700; }
+  .krn-olcu-not { font-size: 11px; color: var(--renk-soluk); }
+  .krn-duzeltme { gap: var(--bosluk-3); }
+  .krn-tumu { align-self: flex-start; }
+  .krn-tumu[hidden] { display: none; }
+
+  .krn-telaffuz { gap: var(--bosluk-3); }
+  .krn-telaffuz-satir { display: flex; align-items: center; gap: var(--bosluk-3); }
+  .krn-telaffuz-metin { flex-grow: 1; min-width: 0; font-size: var(--yazi-govde); font-weight: 600; }
+  .krn-puan { white-space: nowrap; }
+  .krn-isaret {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: var(--kose-tam);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .krn-isaret-iyi { color: var(--renk-iyi-metin); }
+  .krn-isaret-orta { color: var(--renk-orta-metin); }
+  .krn-isaret-kotu { color: var(--renk-kotu-metin); }
+  .krn-isaret.krn-isaret-iyi { background: var(--renk-iyi-acik); }
+  .krn-isaret.krn-isaret-orta { background: var(--renk-orta-acik); }
+  .krn-isaret.krn-isaret-kotu { background: var(--renk-kotu-acik); }
+  .krn-telaffuz-metin.krn-isaret-orta { text-decoration: underline dotted; text-underline-offset: 4px; }
+  .krn-telaffuz-metin.krn-isaret-kotu { text-decoration: underline wavy; text-underline-offset: 4px; }
+  .krn-lejant { display: flex; flex-wrap: wrap; gap: var(--bosluk-3); font-size: var(--yazi-kucuk); }
+  .krn-lejant-oge { display: inline-flex; align-items: center; gap: 6px; }
+
+  .krn-hafiza { background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); border-color: transparent; }
+  .krn-son { margin-top: var(--bosluk-2); }
+  .krn-ortali { text-align: center; }
+}

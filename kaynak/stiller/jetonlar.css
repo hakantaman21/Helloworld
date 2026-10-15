@@ -1,0 +1,71 @@
+/* Tasarım jetonları (Y3): renk, boşluk, yazı ve katman değerleri YALNIZ burada tanımlanır.
+   Koyu tema değerleri tema-koyu.css dosyasındadır. */
+@layer jetonlar {
+  :root {
+    color-scheme: light;
+
+    --renk-zemin: #F4F6F8;
+    --renk-yuzey: #FFFFFF;
+    --renk-yuzey-ikinci: #EEF0F3;
+    --renk-murekkep: #14213D;
+    --renk-soluk: #5B6472;
+    --renk-cizgi: #E3E6EB;
+    --renk-cizgi-guclu: #C9CED6;
+
+    --renk-vurgu: #C2410C;
+    --renk-vurgu-uzerinde: #FFFFFF;
+    --renk-vurgu-metin: #B23C0B;
+    --renk-vurgu-acik: #FDEDE6;
+    --renk-vurgu-acik-metin: #8A3110;
+
+    --renk-iyi: #1F7A4D;
+    --renk-iyi-metin: #1A6B43;
+    --renk-iyi-acik: #E6F4EC;
+    --renk-orta-metin: #8A5C00;
+    --renk-orta-acik: #FBF1DC;
+    --renk-kotu: #B42318;
+    --renk-kotu-metin: #B42318;
+    --renk-kotu-acik: #FDECEA;
+
+    --renk-gece: #14213D;
+    --renk-gece-yuzey: #22335A;
+    --renk-gece-cizgi: #45557A;
+    --renk-gece-metin: #FFFFFF;
+    --renk-gece-soluk: #C9D1E0;
+    --renk-gece-vurgu: #F8B597;
+
+    --renk-perde: rgba(14, 21, 38, 0.55);
+
+    --yazi-aile: Figtree, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --yazi-baslik: 28px;
+    --yazi-altbaslik: 17px;
+    --yazi-govde: 15px;
+    --yazi-kucuk: 13px;
+
+    --bosluk-1: 4px;
+    --bosluk-2: 8px;
+    --bosluk-3: 12px;
+    --bosluk-4: 16px;
+    --bosluk-5: 20px;
+    --bosluk-6: 24px;
+    --bosluk-8: 32px;
+
+    --kose-kucuk: 12px;
+    --kose-buyuk: 16px;
+    --kose-tam: 999px;
+
+    --dokunma: 48px;
+    --gezinme-yukseklik: 76px;
+    --icerik-genislik: 560px;
+
+    --sure-kisa: 160ms;
+    --sure-orta: 240ms;
+
+    /* Y5: katman ölçeği — z-index yalnız bu değerlerden seçilir */
+    --z-icerik: 1;
+    --z-ust-bant: 10;
+    --z-menu: 20;
+    --z-pencere: 30;
+    --z-bildirim: 40;
+  }
+}

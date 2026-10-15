@@ -1,0 +1,67 @@
+/* Koyu tema: yalnız renk jetonlarını değiştirir (Y3).
+   Aynı değerler iki yerde durur: kullanıcı "koyu" seçtiğinde ve sistem koyuyken. Robot ikisinin aynı olduğunu denetler. */
+@layer tema {
+  :root[data-tema="koyu"] {
+    color-scheme: dark;
+    --renk-zemin: #0E1526;
+    --renk-yuzey: #18223A;
+    --renk-yuzey-ikinci: #212C47;
+    --renk-murekkep: #E8ECF4;
+    --renk-soluk: #A3AEC2;
+    --renk-cizgi: #2A3654;
+    --renk-cizgi-guclu: #3A4766;
+    --renk-vurgu: #C2410C;
+    --renk-vurgu-uzerinde: #FFFFFF;
+    --renk-vurgu-metin: #F4A27E;
+    --renk-vurgu-acik: #3A2218;
+    --renk-vurgu-acik-metin: #F8C2A8;
+    --renk-iyi: #2E9E65;
+    --renk-iyi-metin: #7AD3A0;
+    --renk-iyi-acik: #173A2A;
+    --renk-orta-metin: #E8BE5E;
+    --renk-orta-acik: #3A2E14;
+    --renk-kotu: #B42318;
+    --renk-kotu-metin: #F49A92;
+    --renk-kotu-acik: #3D1A18;
+    --renk-gece: #0A101E;
+    --renk-gece-yuzey: #18223A;
+    --renk-gece-cizgi: #3A4766;
+    --renk-gece-metin: #FFFFFF;
+    --renk-gece-soluk: #C9D1E0;
+    --renk-gece-vurgu: #F8B597;
+    --renk-perde: rgba(0, 0, 0, 0.6);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-tema="acik"]) {
+      color-scheme: dark;
+      --renk-zemin: #0E1526;
+      --renk-yuzey: #18223A;
+      --renk-yuzey-ikinci: #212C47;
+      --renk-murekkep: #E8ECF4;
+      --renk-soluk: #A3AEC2;
+      --renk-cizgi: #2A3654;
+      --renk-cizgi-guclu: #3A4766;
+      --renk-vurgu: #C2410C;
+      --renk-vurgu-uzerinde: #FFFFFF;
+      --renk-vurgu-metin: #F4A27E;
+      --renk-vurgu-acik: #3A2218;
+      --renk-vurgu-acik-metin: #F8C2A8;
+      --renk-iyi: #2E9E65;
+      --renk-iyi-metin: #7AD3A0;
+      --renk-iyi-acik: #173A2A;
+      --renk-orta-metin: #E8BE5E;
+      --renk-orta-acik: #3A2E14;
+      --renk-kotu: #B42318;
+      --renk-kotu-metin: #F49A92;
+      --renk-kotu-acik: #3D1A18;
+      --renk-gece: #0A101E;
+      --renk-gece-yuzey: #18223A;
+      --renk-gece-cizgi: #3A4766;
+      --renk-gece-metin: #FFFFFF;
+      --renk-gece-soluk: #C9D1E0;
+      --renk-gece-vurgu: #F8B597;
+      --renk-perde: rgba(0, 0, 0, 0.6);
+    }
+  }
+}

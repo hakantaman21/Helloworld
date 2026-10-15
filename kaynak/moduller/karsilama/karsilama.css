@@ -1,0 +1,34 @@
+@layer moduller {
+  .kar-ekran { gap: var(--bosluk-5); padding-top: var(--bosluk-8); }
+  .kar-ilerleme { display: flex; justify-content: space-between; align-items: center; }
+  .kar-noktalar { display: flex; gap: 6px; }
+  .kar-nokta { width: 28px; height: 6px; border-radius: 3px; background: var(--renk-cizgi-guclu); }
+  .kar-nokta-dolu { background: var(--renk-vurgu); }
+  .kar-tanitim { display: flex; flex-direction: column; align-items: center; gap: var(--bosluk-4); padding-top: var(--bosluk-2); }
+  .kar-ortali { text-align: center; }
+  .kar-koc {
+    width: 112px;
+    height: 112px;
+    border-radius: var(--kose-tam);
+    background: var(--renk-vurgu-acik);
+    color: var(--renk-vurgu-metin);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .kar-secenek {
+    min-height: 56px;
+    padding: 0 var(--bosluk-4);
+    border-radius: var(--kose-kucuk);
+    border: 1px solid var(--renk-cizgi-guclu);
+    background: var(--renk-yuzey);
+    color: var(--renk-murekkep);
+    text-align: left;
+    font-size: var(--yazi-govde);
+  }
+  .kar-secenek[aria-checked="true"] {
+    border: 2px solid var(--renk-vurgu);
+    background: var(--renk-vurgu-acik);
+    font-weight: 700;
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "installCommand": "echo bagimlilik-yok",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist"
+}

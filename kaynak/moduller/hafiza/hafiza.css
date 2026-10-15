@@ -1,0 +1,11 @@
+@layer moduller {
+  .hfz-ozet { padding: var(--bosluk-3) var(--bosluk-4); border-radius: var(--kose-kucuk); }
+  .hfz-oge { gap: 6px; }
+  .hfz-oge-ogrenildi { opacity: 0.75; }
+  .hfz-oge-ust { display: flex; justify-content: space-between; align-items: center; gap: var(--bosluk-2); }
+  .hfz-dogru { font-size: var(--yazi-govde); font-weight: 700; }
+  .hfz-alt { display: flex; justify-content: space-between; align-items: center; gap: var(--bosluk-2); }
+  .hfz-seri { display: flex; gap: 4px; }
+  .hfz-nokta { width: 10px; height: 10px; border-radius: var(--kose-tam); border: 2px solid var(--renk-cizgi-guclu); }
+  .hfz-nokta-dolu { background: var(--renk-iyi); border-color: var(--renk-iyi); }
+}

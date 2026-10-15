@@ -1,0 +1,28 @@
+@layer sifirla {
+  *, *::before, *::after { box-sizing: border-box; }
+  body, h1, h2, h3, p, ul, ol, figure { margin: 0; }
+  ul, ol { padding: 0; list-style: none; }
+  img, svg { display: block; max-width: 100%; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+}
+
+@layer temel {
+  html {
+    font-family: var(--yazi-aile);
+    font-size: var(--yazi-govde);
+    line-height: 1.45;
+    background: var(--renk-zemin);
+    color: var(--renk-murekkep);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body { min-height: 100dvh; background: var(--renk-zemin); }
+  a { color: var(--renk-vurgu-metin); }
+
+  /* Y13: tüm dokunulabilir öğeler en az 48 piksel */
+  button, select, input, textarea, a.b-dugme, [role="button"] { min-height: var(--dokunma); }
+  button { cursor: pointer; }
+  button:disabled { cursor: default; opacity: 0.55; }
+
+  :focus-visible { outline: 3px solid var(--renk-vurgu-metin); outline-offset: 2px; }
+}
