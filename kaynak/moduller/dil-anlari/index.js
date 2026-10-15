@@ -12,7 +12,7 @@ function ciz(kok, b) {
       h('span', { class: 'b-ikon-daire b-ikon-daire-vurgu' }, ikon('sohbet', 22)),
       durumKutusu('bos', t('anlar.aciklama')),
       h('p', { class: 'anl-bilgi' }, t('anlar.guvenlik')),
-      h('button', { class: 'b-dugme b-dugme-ana', type: 'button', onClick: () => b.git('/senaryolar') }, t('anlar.basla')),
+      h('button', { class: 'b-dugme b-dugme-cerceve', type: 'button', onClick: () => b.git('/kesfet') }, t('anlar.baglantiyaGit')),
     ),
     altGezinme('/dil-anlari'),
   );
