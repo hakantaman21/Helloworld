@@ -81,7 +81,7 @@ export default {
     izinVer: 'Allow microphone',
     yaziliDevam: 'I’ll type for now',
     tanismaBaslik: 'Meet your AI partner',
-    tanismaAciklama: 'A short chat of about 1 minute. We’ll estimate your level from it; it’s not a test.',
+    tanismaAciklama: 'A scripted introduction demo of about 1 minute. It does not assess or change your language level.',
     tanismaBasla: 'Start the chat',
     tanismaAtla: 'Maybe later',
   },
@@ -206,6 +206,10 @@ export default {
   },
 
   karne: {
+    olculmedi: 'Not measured',
+    olcumYok: 'This demo does not assess pronunciation, fluency or language level. Speech recognition confidence is not a pronunciation score.',
+    demoAciklama: 'Scripted demo: responses do not come from a live AI provider. Corrections are example suggestions; your Error Memory and level are unchanged. Practice time is recorded.',
+
     tabela: 'Practice › {baslik}',
     baslik: 'Conversation report',
     ozetIyi: 'You completed the task. Well spoken!',

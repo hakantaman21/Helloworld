@@ -82,7 +82,7 @@ export default {
     izinVer: 'Mikrofona izin ver',
     yaziliDevam: 'Şimdilik yazarak konuşayım',
     tanismaBaslik: 'Yapay zekâ partnerinle tanış',
-    tanismaAciklama: 'Yaklaşık 1 dakikalık kısa bir sohbet. Seviyeni bu sohbetten anlayacağız; sınav yok.',
+    tanismaAciklama: 'Yaklaşık 1 dakikalık senaryolu tanışma demosu. Dil seviyeni ölçmez veya değiştirmez.',
     tanismaBasla: 'Tanışmaya başla',
     tanismaAtla: 'Sonra yaparım',
   },
@@ -207,6 +207,10 @@ export default {
   },
 
   karne: {
+    olculmedi: 'Ölçülmedi',
+    olcumYok: 'Bu demo telaffuz, akıcılık veya dil seviyesini ölçmez. Ses tanımanın güven değeri telaffuz puanı değildir.',
+    demoAciklama: 'Senaryolu demo: yanıtlar gerçek bir yapay zekâ sağlayıcısından gelmez. Düzeltmeler örnek önerilerdir; Hata Hafızası ve seviyen değiştirilmez. Pratik süren kaydedilir.',
+
     tabela: 'Pratik › {baslik}',
     baslik: 'Konuşma karnesi',
     ozetIyi: 'Görevi tamamladın. Güzel konuştun!',

@@ -154,20 +154,9 @@ export const demoSaglayici = {
       },
 
       bitir(sureSn) {
-        const sayilar = durum.cumleler.map((c) => normal(c.metin).split(' ').filter(Boolean).length);
-        const ortalama = sayilar.length ? sayilar.reduce((a, b) => a + b, 0) / sayilar.length : 0;
-        const akicilik = sayilar.length ? Math.max(5, Math.min(100, Math.round(35 + ortalama * 6 - durum.duzeltmeler.length * 4))) : 0;
-        let seviyeTahmini = ortalama < 4 ? 'A1' : ortalama < 8 ? 'A2' : 'B1';
-        if (durum.duzeltmeler.length > durum.cumleler.length && seviyeTahmini !== 'A1') {
-          seviyeTahmini = SEVIYE_SIRASI[SEVIYE_SIRASI.indexOf(seviyeTahmini) - 1];
-        }
         const odak = kaynak.karneOdagi || [];
         const duzeltmeler = [...durum.duzeltmeler].sort((a, b) => Number(odak.includes(b.kuralId)) - Number(odak.includes(a.kuralId)));
-        const telaffuz = yazili ? null : durum.cumleler
-          .filter((c) => c.guven > 0)
-          .map((c) => ({ metin: c.metin, puan: Math.round(c.guven * 100) }))
-          .sort((a, b) => a.puan - b.puan)
-          .slice(0, 3);
+
 
         return {
           tur,
@@ -181,10 +170,12 @@ export const demoSaglayici = {
           ceviriler: durum.ceviriler,
           yeniKelimeler: durum.kullanilanKelimeler,
           gorevTamam: durum.gorevTamam,
-          akicilik,
-          telaffuz,
+          saglayici: 'demo',
+          olcumDurumu: 'demo',
+          akicilik: null,
+          telaffuz: null,
           hafizaSonuclari: durum.hafizaSonuclari,
-          seviyeTahmini,
+          seviyeTahmini: null,
           kulturelNot: kaynak.kulturelNot || null,
         };
       },

@@ -5,7 +5,8 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.2.0 (deneme dalında, onay bekliyor). Ana dalda (canlı): v0.1.0.
+- **Sürüm:** v0.2.1 deneme teslimi; ana dal kaynak sürümü kontrol sırasında v0.2.0 (8780227). Canlı Vercel sürümü ayrıca doğrulanmalı; dal sürümü yayın kanıtı değildir.
+- **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · uygulayıcı Codex; Claude incelemesi bekleniyor.
 - **Depo:** `hakantaman21/helloworld` · Vercel projesi: `helloworld` (Hakan 21). Canlı ve deneme linkleri Vercel → helloworld → Deployments'ta.
 - **Ne çalışıyor:** İlk açılış (4 adım), dört sekme, yapay zekâ partnerle demo konuşma (senaryolar, sabah/akşam araması, tanışma, hata tekrarı), karne, Hata Hafızası, profil/gelişim, ayarlar, İngilizce + Türkçe arayüz. Veri yalnız cihazda.
 - **Ne çalışmıyor / henüz yok:** gerçek kişilerle sohbet (topluluk, Evre 3), hesap ve sunucu, gerçek yapay zekâ sağlayıcısı (şimdilik demo koç), harf düzeyinde telaffuz.
@@ -13,6 +14,17 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.2.1 — 15.10.2026
+
+- **Yapan:** ChatGPT / Codex; Hakan'ın çalışma devri üzerine.
+- **Ne yapıldı:** Demo ölçüm puanları kaldırıldı; demo hafızaya kanıt yazmaz, tekrar ustalığını veya profil seviyesini değiştirmez. İki dilde açıklama, şema 3 ile eski demo verisini arşivleme ve gelişimden ayırma.
+- **Dokunulan dosyalar:** ai/demo-koc.js, gorusme-sonucu.js, gocler.js, moduller/karne/index.js, metinler/{tr,en}.js, sürüm ve devir belgeleri, araclar/demo-sinama.mjs.
+- **Kontroller:** `npm run derle`, `node araclar/demo-sinama.mjs` ve `npm run robot-sinama` geçti. Gerçek cihaz ve görsel tarayıcı testi yapılmadı.
+- **Sınırlama:** Eski profil seviyesinin kullanıcı mı demo mu kaynaklı olduğu bilinmediği için korunur. Eski hafıza kayıtları demoArsivi içinde tutulur. Yeni gerçek sağlayıcı henüz yok.
+- **Sıradaki:** Claude incelemesi; hesap ve gerçek partner altyapısı için sağlayıcı/maliyet kararı. Anayasa Y9/Y12 ve çok dilli model önerileri issue #1'de, henüz uygulanmadı.
+- **Yayın:** main'e alınmadı; deneme sonucu/onay bekleniyor.
+
 
 ## v0.2.0 — 15.10.2026
 

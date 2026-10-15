@@ -3,6 +3,13 @@
 Her teslimde sürüm bir artar ve en üste bir kayıt eklenir (Y10). Test robotu, `kaynak/cekirdek/surum.js`,
 `package.json` ve buradaki son kaydın aynı olduğunu denetler.
 
+## 0.2.1 — 15.10.2026 · Demo ölçümlerinin ayrılması
+
+- Demo telaffuz, akıcılık ve seviye puanları kaldırıldı; profil seviyesi ve Hata Hafızası demo ile değişmez.
+- İki dilde ölçüm sınırı açıklaması eklendi; süre ve pratik geçmişi korunur.
+- Şema 3 eski demo kanıtlarını arşivler; eski akıcılık ve telaffuz puanları gelişim hesabından çıkarılır.
+- Ortak çalışma: https://github.com/hakantaman21/Helloworld/issues/1
+
 ## 0.2.0 — 15.10.2026 · Yön düzeltmesi: dil pratiği platformu
 
 - Yeni yön: gerçek kişilerle pratik (topluluk) + her an hazır yapay zekâ partner. İlk öğrenilen dil İngilizce.

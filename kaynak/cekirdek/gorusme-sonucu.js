@@ -8,6 +8,7 @@ const SAKLANAN_GORUSME = 30;
 const TELAFFUZ_ESIGI = 60;
 
 export function sonucuIsle(ozet) {
+  const demo = ozet.olcumDurumu === 'demo' || ozet.saglayici === 'demo';
   const kaynakEtiketi = `konusma-kocu/${ozet.senaryoId}`;
   const baglam = ozet.baslik; // { tr, en }: ekranda yerel() ile gösterilir
 
@@ -24,10 +25,10 @@ export function sonucuIsle(ozet) {
       kayitlar.push(kayitOlustur({ tur: 'telaffuz', dogru: p.metin, kullanici: p.metin, baglam, seviye: ozet.seviye, kaynak: kaynakEtiketi, kuralId: null }));
     }
   }
-  const eklenen = hafizayaEkle(kayitlar);
+  const eklenen = demo ? 0 : hafizayaEkle(kayitlar);
 
   // 2. Tekrar edilen hafıza öğelerinin sonucu
-  for (const s of ozet.hafizaSonuclari) tekrarSonucu(s.id, s.basari);
+  if (!demo) for (const s of ozet.hafizaSonuclari) tekrarSonucu(s.id, s.basari);
 
   // 3. Günlük döngü ve sayılar
   const konustu = ozet.cumleler.length > 0;
@@ -36,13 +37,13 @@ export function sonucuIsle(ozet) {
     if (konustu && ozet.tur === 'senaryo') gun.senaryo = true;
     gun.dakika += Math.round((ozet.sureSn / 60) * 10) / 10;
     for (const k of ozet.yeniKelimeler) if (!gun.yeniKelime.includes(k)) gun.yeniKelime.push(k);
-    if (ozet.akicilik) gun.akicilik.push(ozet.akicilik);
+    if (!demo && ozet.akicilik) gun.akicilik.push(ozet.akicilik);
   });
 
   // 4. Profil, senaryo tamamlama, karne
   degistir((v) => {
     if (ozet.tur === 'tanisma' && konustu) {
-      v.profil.seviye = ozet.seviyeTahmini;
+      if (!demo && ozet.seviyeTahmini) v.profil.seviye = ozet.seviyeTahmini;
       v.profil.tanismaYapildi = true;
     }
     if (ozet.tur === 'senaryo' && ozet.gorevTamam) v.tamamlananSenaryolar[ozet.senaryoId] = tarihAnahtari();

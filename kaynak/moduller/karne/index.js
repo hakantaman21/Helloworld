@@ -59,6 +59,7 @@ function ciz(kok, b) {
     return null;
   }
 
+  const demo = g.olcumDurumu === 'demo' || g.saglayici === 'demo';
   const sinir = YOGUNLUK[v.profil.ayarlar.duzeltmeYogunlugu] || 3;
   let hepsi = false;
   const duzeltmeListesi = h('div', { class: 'b-yigin' });
@@ -87,7 +88,8 @@ function ciz(kok, b) {
   duzeltmeleriCiz();
 
   let telaffuzIcerik;
-  if (g.yazili) telaffuzIcerik = durumKutusu('bos', t('karne.telaffuzYazili'));
+  if (demo) telaffuzIcerik = durumKutusu('bos', t('karne.olcumYok'));
+  else if (g.yazili) telaffuzIcerik = durumKutusu('bos', t('karne.telaffuzYazili'));
   else if (!g.telaffuz || !g.telaffuz.length) telaffuzIcerik = durumKutusu('bos', t('karne.telaffuzBos'));
   else {
     telaffuzIcerik = h('div', { class: 'b-kart krn-telaffuz' },
@@ -125,10 +127,11 @@ function ciz(kok, b) {
         h('p', { class: 'b-altbaslik' }, g.gorevTamam ? t('karne.ozetIyi') : t('karne.ozetDevam')),
       ),
     ),
-    g.tur === 'tanisma' && g.cumleler.length ? h('div', { class: 'b-kart b-cip-vurgu' }, t('karne.seviyeBelirlendi', { s: g.seviyeTahmini })) : null,
+    !demo && g.seviyeTahmini && g.tur === 'tanisma' && g.cumleler.length ? h('div', { class: 'b-kart b-cip-vurgu' }, t('karne.seviyeBelirlendi', { s: g.seviyeTahmini })) : null,
+    demo ? h('p', { class: 'b-kart' }, t('karne.demoAciklama')) : null,
     h('div', { class: 'b-izgara-3' },
       olcu(t('karne.dakika', { n: dakika }), t('karne.konustun')),
-      olcu(String(g.akicilik), t('karne.akicilik'), t('karne.demoNot')),
+      olcu(demo || g.akicilik == null ? t('karne.olculmedi') : String(g.akicilik), t('karne.akicilik'), t('karne.demoNot')),
       olcu(String(g.yeniKelimeler.length), t('karne.yeniKelime')),
     ),
     h('section', { class: 'b-yigin', 'aria-labelledby': 'krn-duz' },
