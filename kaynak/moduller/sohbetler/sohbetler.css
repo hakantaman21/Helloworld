@@ -1,15 +1,14 @@
 @layer moduller {
-  .shb-avatar {
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
-    border-radius: var(--kose-tam);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  /* Y26: yapay zekâ avatarı insan avatarından farklı biçimdedir (köşeli ve koyu) */
+  .shb-avatar { width: 48px; height: 48px; flex-shrink: 0; border-radius: var(--kose-tam); display: flex; align-items: center; justify-content: center; }
   .shb-avatar-yz { border-radius: var(--kose-kucuk); background: var(--renk-gece); color: var(--renk-gece-vurgu); }
-  .shb-metin { display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0; }
-  .shb-ad { font-size: var(--yazi-govde); font-weight: 600; }
+  .shb-metin { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+  .shb-ad { font-size: var(--yazi-govde); font-weight: 700; overflow-wrap: anywhere; }
+  .shb-basla { gap: var(--bosluk-3); background: var(--renk-vurgu-acik); }
+  .shb-arama { display: flex; align-items: center; gap: var(--bosluk-2); padding-left: var(--bosluk-3); border: 1px solid var(--renk-cizgi-guclu); background: var(--renk-yuzey); border-radius: var(--kose-tam); }
+  .shb-arama-girdi { flex: 1; min-width: 0; border: 0; background: transparent; }
+  .shb-filtreler { display: flex; gap: var(--bosluk-2); overflow-x: auto; padding-bottom: var(--bosluk-1); }
+  .shb-filtre { flex: 1; min-height: var(--dokunma); padding: 0 var(--bosluk-3); border: 1px solid var(--renk-cizgi); border-radius: var(--kose-tam); background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; font-weight: 600; cursor: pointer; }
+  .shb-filtre[aria-pressed="true"] { background: var(--renk-vurgu); border-color: var(--renk-vurgu); color: var(--renk-vurgu-uzerinde); }
+  .shb-liste { display: flex; flex-direction: column; gap: var(--bosluk-3); }
+  .shb-bilgi { padding: var(--bosluk-2); }
 }
