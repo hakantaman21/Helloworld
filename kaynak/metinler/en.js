@@ -32,6 +32,8 @@ export default {
     etiket: 'Main navigation',
     sohbetler: 'Chats',
     kesfet: 'Discover',
+    baglanti: 'Connect',
+    dilAnlari: 'Moments',
     pratik: 'Practice',
     profil: 'Profile',
   },
@@ -48,6 +50,7 @@ export default {
     senaryoAlani: 'Scenario area',
     hafiza: 'Error Memory',
     gelisim: 'Profile',
+    dilAnlari: 'Language Moments',
     ayarlar: 'Settings',
   },
 
@@ -386,6 +389,7 @@ export default {
   },
 
   ayarlar: {
+    dilProfili: 'My language profile', anaDil: 'Native language', ogrenilenDil: 'Language I am learning', dilSeciniz: 'Select a language', dilHedefi: 'My language goal', hedefOrnek: 'For example: Fluent everyday conversation', tanitim: 'About me', tanitimOrnek: 'Write a short introduction', profilGizlilik: 'These details are currently stored only on your device and are not shared with others.',
     gorunumBaslik: 'Appearance and customization',
     gorunum: 'Card density',
     gorunumAciklama: 'Comfortable spacing or compact cards for less scrolling.',
