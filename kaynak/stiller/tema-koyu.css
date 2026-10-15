@@ -29,6 +29,7 @@
     --renk-gece-metin: #FFFFFF;
     --renk-gece-soluk: #C9D1E0;
     --renk-gece-vurgu: #F8B597;
+    --renk-golge: rgba(0, 0, 0, 0.30);
     --renk-perde: rgba(0, 0, 0, 0.6);
   }
 
@@ -61,6 +62,7 @@
       --renk-gece-metin: #FFFFFF;
       --renk-gece-soluk: #C9D1E0;
       --renk-gece-vurgu: #F8B597;
+      --renk-golge: rgba(0, 0, 0, 0.30);
       --renk-perde: rgba(0, 0, 0, 0.6);
     }
   }
