@@ -130,6 +130,17 @@ export default {
   },
 
   sohbetler: {
+    hizliBaslik: 'Start speaking now',
+    hizliAlt: 'Have a short conversation with your AI partner without waiting.',
+    hizliDugme: 'Start speaking',
+    ara: 'Search conversations',
+    filtreBaslik: 'Conversation type',
+    tumFiltre: 'All',
+    yzFiltre: 'AI',
+    insanFiltre: 'People',
+    listeBaslik: 'Conversations and partners',
+    aramaBos: 'No conversations match your search.',
+    insanBilgi: 'Messaging real people is not available yet. Only your on-device AI practice sessions appear here.',
     baslik: 'Chats',
     alt: 'Your conversations with real people and your AI partner',
     yzBolum: 'Your AI partner',
