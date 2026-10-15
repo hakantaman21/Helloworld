@@ -1,3 +1,11 @@
+## Bağlantı görev ayrımı — 16.10.2026 / ChatGPT
+
+- Beşli menüde Bağlantı yalnız gerçek kişi keşfine ayrıldı. AI sekmesi, hızlı pratik ve telaffuz/senaryo kartı kaldırıldı.
+- Eski `kft-sekme`, `kft-sekmeler`, `kft-demo-not`, `kft-ogren` ve `shb-basla` CSS kuralları silindi; yeni `!important` yok.
+- TR/EN keşif başlığı ve açıklaması gerçek insan bağlantısına göre düzeltildi.
+- Gerçek hesap/partner altyapısı olmadığından dürüst boş durum devam ediyor.
+- Derleme, robot, mobil test ve tüm dosyalarda artık denetimi henüz yapılmadı. Main/deneme değiştirilmedi.
+
 ## HelloTalk ekran kaydı incelemesi — 16.10.2026 / ChatGPT
 
 - Kaynak: kullanıcının yaklaşık 74 saniyelik HelloTalk Android ekran kaydı; 9 örnek kare incelendi.
