@@ -4,6 +4,7 @@ import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar, enUsteKaydir, testEtiketi } from '../../cekirdek/arayuz.js';
 import { fotografEkle, medyaDisaAktar, medyaIceAktar, medyaSil } from '../../cekirdek/fotograf.js';
+import { benimGizlilik, gizlilikAyarla, GIZLILIK_SECENEKLERI, haberTercihleri, haberTercihiAyarla, HABER_TURLERI } from '../../cekirdek/arkadaslik.js';
 import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
 import { al, degistir, sifirla, disaAktarMetni, iceAktarHazirla, iceAktarUygula } from '../../cekirdek/depo.js';
@@ -268,6 +269,14 @@ function ciz(kok, b) {
 
     grup('gizlilik', 'kilit', t('ayarlar.grup.gizlilik'),
       h('p', { class: 'ayr-not ayr-not-kutu' }, t('ayarlar.gizlilikMetni')),
+      // v0.17.0 Karşılıklı gizlilik (WhatsApp mantığı): kapattığın bilgiyi başkalarında da göremezsin.
+      h('p', { class: 'ayr-not ayr-not-kutu' }, t('arkadas.karsilikliAciklama')),
+      ...['arkadasListesi', 'sonGorulme'].map((anahtarAd) => satir(t(`arkadas.gizlilik.${anahtarAd}`), (id) => bolumlu(id, GIZLILIK_SECENEKLERI.map((k) => [k, t(`arkadas.secenek.${k}`)]), benimGizlilik()[anahtarAd], (k) => { gizlilikAyarla(anahtarAd, k); duyur(t('arkadas.gizlilikKaydedildi'), 1800); }), { aciklama: t(`arkadas.gizlilikAciklama.${anahtarAd}`), altta: true })),
+      anahtar(t('arkadas.gizlilik.okundu'), benimGizlilik().okundu !== false, (v) => { gizlilikAyarla('okundu', v); duyur(t('arkadas.gizlilikKaydedildi'), 1800); }, t('arkadas.gizlilikAciklama.okundu')),
+      h('details', { class: 'ayr-acilir' },
+        h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('arkadas.haberTercihBaslik')), ikon('sag', 16)),
+        h('p', { class: 'ayr-not' }, t('arkadas.haberTercihAciklama')),
+        HABER_TURLERI.map((tur) => anahtar(t(`arkadas.haberTercih.${tur}`), haberTercihleri()[tur], (v) => haberTercihiAyarla(tur, v)))),
       h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => {
         const blob = new Blob([JSON.stringify({ ...JSON.parse(disaAktarMetni()), medya: medyaDisaAktar() }, null, 2)], { type: 'application/json' });
         const baglanti = h('a', { href: URL.createObjectURL(blob), download: 'helloworld-verilerim.json' });
@@ -361,7 +370,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'ayarlar',
-  surum: '0.6.0',
+  surum: '0.7.0',
   onek: 'ayr',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'zamanlayici'],

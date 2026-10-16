@@ -6,6 +6,7 @@ import { TEST_PROFILLERI, TEST_ANLARI, TEST_YORUM_KALIPLARI, TEST_HAZIR_YORUMLAR
 import { SEVIYE_SIRASI } from './oneri.js';
 import { aktifDil } from './metin.js';
 import { ilgiKimligi } from '../veri/ilgi-alanlari.js';
+import { sonGorulmeGorunurluk } from './arkadaslik.js';
 import { duzeltmeleriBul, tumunuDuzelt } from './dil/duzeltme-motoru.js';
 
 const MESAJ_SINIRI = 200;
@@ -185,7 +186,9 @@ export function selamVer(kimlik, metin) {
 }
 
 // ---- Etkinlik (TEST verisi: profillerdeki sonAktifDk alanından; gerçek kişi durumu değildir) ----
+// v0.17.0: son görülme/çevrimiçi bilgisi karşılıklı gizliliğe tabidir; görünmüyorsa "gizli" döner (sıralamada sona).
 export function aktiflik(p) {
+  if (!sonGorulmeGorunurluk(p.kimlik).gorunur) return { cevrimici: false, dk: 1e9, gizli: true };
   const dk = Number(p.sonAktifDk || 0);
   if (dk <= 0) return { cevrimici: true, dk: 0 };
   return { cevrimici: false, dk };

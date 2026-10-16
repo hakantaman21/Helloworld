@@ -173,3 +173,14 @@
   .msj-foto-dugme { flex: none; align-self: center; }
   .msj-foto { display: block; max-width: 220px; width: 100%; border-radius: 12px; margin-bottom: 4px; }
 }
+
+@layer moduller {
+  /* v0.17.0 Mesaj durumu tikleri ve kişinin arkadaş listesi */
+  .msj-tik { margin-left: 4px; font-weight: 800; letter-spacing: -2px; color: var(--renk-soluk); }
+  .msj-tik-okundu { color: var(--renk-gezinme-turkuaz); }
+  .msj-ark-liste { display: flex; gap: 12px; overflow-x: auto; padding: 4px 2px; }
+  .msj-ark { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 64px; border: 0; background: transparent; color: var(--renk-murekkep); font: inherit; font-size: calc(12px * var(--yazi-olcek)); cursor: pointer; }
+  .msj-ark-ben { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--kose-tam); background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); font-weight: 800; }
+  .msj-alt-takip[data-durum="arkadas"] { color: var(--renk-iyi-metin); }
+  .msj-alt-takip[data-durum="gonderildi"] { color: var(--renk-soluk); }
+}

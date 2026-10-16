@@ -29,3 +29,8 @@
 @layer moduller {
   .shb-okunmamis { width: 10px; height: 10px; flex-shrink: 0; border-radius: 50%; background: var(--renk-vurgu); box-shadow: 0 0 8px color-mix(in srgb, var(--renk-vurgu) 60%, transparent); }
 }
+
+@layer moduller {
+  /* v0.17.0 Favori yıldızı ve sabitleme işareti */
+  .shb-isaret { display: inline-flex; align-items: center; color: var(--renk-vurgu-metin); margin-right: 4px; }
+}

@@ -5,6 +5,8 @@ import './sohbetler.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, altGezinme, basBant, durumKutusu, yzEtiketi, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, goreliZaman, dilCifti } from '../../cekirdek/arayuz.js';
 import { benDugmesi } from '../../cekirdek/yan-menu.js';
+import { kisiEylemleri, basiliTut } from '../../cekirdek/kisi-eylemleri.js';
+import { favoriMi, sabitliMi, arkadasMi } from '../../cekirdek/arkadaslik.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { kisaTarih } from '../../cekirdek/zaman.js';
@@ -55,24 +57,32 @@ function ciz(kok, b) {
 
   const testSatiri = (o) => {
     const a = aktiflik(o.profil);
-    return h('button', { type: 'button', class: 'b-liste-satir shb-kisi', onClick: () => b.git(`/mesaj?k=${o.profil.kimlik}`) },
+    // v0.17.0: basılı tut → kişi eylemleri (arkadaş, favori, başa sabitle). Sabitli ve favori işaretleri satırda.
+    return basiliTut(h('button', { type: 'button', class: 'b-liste-satir shb-kisi', onClick: () => b.git(`/mesaj?k=${o.profil.kimlik}`) },
       testAvatar(o.profil, 64, { cevrimici: a.cevrimici }),
       h('span', { class: 'b-liste-ic shb-kisi-ic' },
-        h('span', { class: 'b-liste-ust' }, h('b', null, o.profil.ad), testEtiketi(), okunmamis(o) ? h('span', { class: 'shb-okunmamis', 'aria-label': t('ht.okunmamis') }) : null, h('span', { class: 'b-liste-zaman' }, goreliZaman(o.son.zaman))),
+        h('span', { class: 'b-liste-ust' }, h('b', null, o.profil.ad), testEtiketi(),
+          favoriMi(o.profil.kimlik) ? h('span', { class: 'shb-isaret', 'aria-label': t('arkadas.favori') }, ikon('yildiz', 14)) : null,
+          okunmamis(o) ? h('span', { class: 'shb-okunmamis', 'aria-label': t('ht.okunmamis') }) : null,
+          h('span', { class: 'b-liste-zaman' }, sabitliMi(o.profil.kimlik) ? h('span', { class: 'shb-isaret', 'aria-label': t('arkadas.sabitli') }, ikon('yerImi', 13)) : null, goreliZaman(o.son.zaman))),
         h('span', { class: 'shb-kisi-dil' }, dilCifti(o.profil.anaDil, o.profil.ogrenilenDil, o.profil.seviye), a.cevrimici ? t('ht.cevrimiciSimdi') : yerel(o.profil.ulke).split(' · ')[0]),
         h('span', { class: 'b-liste-alt' }, o.son.kim === 'ben' ? `${t('ht.sen')}: ` : '', o.son.foto ? `📷 ${t('kural.fotoMesaj')}` : o.son.metin),
-      ));
+      )), () => kisiEylemleri(o.profil, { b, yenile, sohbetVar: true }));
   };
 
   function yenile() {
     const ara = (metin) => String(metin).toLocaleLowerCase().includes(arama);
     const yzGoster = filtre === 'tum' || filtre === 'yz';
-    const kisiSuzgeci = ['saat', 'okunmamis'].includes(filtre) || filtre.startsWith('dil-');
+    const kisiSuzgeci = ['saat', 'okunmamis', 'favori', 'arkadas'].includes(filtre) || filtre.startsWith('dil-');
     const insanGoster = filtre === 'tum' || filtre === 'insan' || filtre === 'cevrimici' || kisiSuzgeci;
     const testler = testOzet.filter((o) => ara(o.profil.ad) && (filtre !== 'cevrimici' || aktiflik(o.profil).cevrimici)
       && (filtre !== 'saat' || saatFarki(o.profil) <= YAKIN_SAAT_FARKI)
       && (filtre !== 'okunmamis' || okunmamis(o))
-      && (!filtre.startsWith('dil-') || o.profil.anaDil === filtre.slice(4)));
+      && (filtre !== 'favori' || favoriMi(o.profil.kimlik))
+      && (filtre !== 'arkadas' || arkadasMi(o.profil.kimlik))
+      && (!filtre.startsWith('dil-') || o.profil.anaDil === filtre.slice(4)))
+      // v0.17.0: başa sabitlenenler (en çok 3) her zaman en üstte, sabitlenme sırasıyla.
+      .sort((x, y) => Number(sabitliMi(y.profil.kimlik)) - Number(sabitliMi(x.profil.kimlik)));
     const gecmisler = yzGoster ? gecmis.filter((g) => ara(yerel(g.baslik))) : [];
     const kocVar = yzGoster && ara(t('koc.ad'));
     const oneri = testModuAcik() && !arama && (filtre === 'tum' || filtre === 'insan') ? enIyiEslesmeler()[0] : null;
@@ -117,7 +127,7 @@ function ciz(kok, b) {
     ),
     h('label', { class: 'b-ht-arama' }, ikon('ara', 18),
       h('input', { type: 'search', placeholder: t('ht.ara'), 'aria-label': t('sohbetler.ara'), onInput: (e) => { arama = e.target.value.trim().toLocaleLowerCase(); yenile(); } })),
-    sekmeler([['tum', t('sohbetler.tumFiltre')], ['cevrimici', t('ht.cevrimici')], ['insan', t('sohbetler.insanFiltre')], ['yz', t('sohbetler.yzFiltre')], ['okunmamis', t('ht.okunmamis')], ['saat', t('ht.yakinSaat')],
+    sekmeler([['tum', t('sohbetler.tumFiltre')], ['favori', t('arkadas.favoriler')], ['arkadas', t('arkadas.arkadaslar')], ['cevrimici', t('ht.cevrimici')], ['insan', t('sohbetler.insanFiltre')], ['yz', t('sohbetler.yzFiltre')], ['okunmamis', t('ht.okunmamis')], ['saat', t('ht.yakinSaat')],
       ...[...new Set(testOzet.map((o) => o.profil.anaDil))].map((d) => [`dil-${d}`, t(`diller.${d}`)])], filtre, (id) => { filtre = id; yenile(); }, { tur: 'hap', etiket: t('sohbetler.filtreBaslik') }),
     liste,
     testModuAcik() ? null : h('p', { class: 'b-kucuk shb-bilgi' }, t('sohbetler.insanBilgi')),
@@ -129,7 +139,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'sohbetler',
-  surum: '0.5.0',
+  surum: '0.6.0',
   onek: 'shb',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'metin', 'test-modu'],

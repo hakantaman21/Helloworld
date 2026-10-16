@@ -847,3 +847,9 @@
   /* Menü uzun olunca öğeler sıkışıp üst üste binmesin; menü kendi içinde kayar. */
   .b-ymenu > * { flex-shrink: 0; }
 }
+
+@layer bilesenler {
+  /* v0.17.0 Kişi eylemleri penceresi */
+  .b-kisi-eylem { display: flex; flex-direction: column; gap: 8px; }
+  .b-kisi-eylem-dugme { display: flex; align-items: center; justify-content: flex-start; gap: 10px; }
+}

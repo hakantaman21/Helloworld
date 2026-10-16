@@ -1,3 +1,13 @@
+## 0.17.0 — 17.10.2026 · Arkadaşlık ve karşılıklı gizlilik
+
+- Bağlan'daki kişi kartlarının etrafındaki ince ışık çizgisi kalktı (Sohbet'teki gibi hafif kabartma).
+- Arkadaşlık: kişi profilindeki + ile istek gönder; kabul edilince arkadaşsınız. Gelen istekleri kabul et ya da reddet. Bağlan'da yeni "Arkadaşlar" sekmesi: gelen istekler, arkadaş haberleri, arkadaşlarım, gönderdiğin istekler.
+- Arkadaş haberleri: yeni Dil Anı, seviye atlama, seri rekoru, fotoğraf güncelleme, yeni ilgi alanı, yardım/düzeltme isteği. Hangi haberleri göreceğin Ayarlar › Gizlilik › Arkadaş haberleri'nden seçilir.
+- Favori ve başa sabitleme: Sohbet ya da Bağlan'da bir kişiye basılı tut (ya da kişi/sohbet "…" menüsü). En çok 3 sohbet sabitlenir; sabitliler en üstte. Sohbet'te "Favoriler" ve "Arkadaşlar" süzgeçleri.
+- Karşılıklı gizlilik (WhatsApp mantığı), Ayarlar › Gizlilik: "Arkadaş listemi kim görebilir" ve "Son görülme ve çevrimiçi" (Herkes / Arkadaşlarım / Kimse), "Okundu bilgisi" (açık/kapalı). Kapattığın bilgiyi başkalarında da göremezsin; görünmüyorsa nedeni yazılır.
+- Mesaj durumu: ✓ gönderildi · ✓✓ iletildi · turkuaz ✓✓ okundu (okundu iki taraf da açıksa).
+- Kişi profilinde "Arkadaşları" bölümü; kendi Profil sayfanda "Arkadaşlarım". Takip etme kişi "…" menüsüne taşındı.
+
 ## 0.16.0 — 17.10.2026 · Güvenilirlik, topluluk kuralları, C1, yeni menü
 
 - Yeni menü düzeni: beş ana sayfanın üst bandında solda profil fotoğrafın; dokununca yan menü açılır (Profilini gör, kısa yollar, Gelişim, Ayarlar). Sağ alttaki sekme artık "Gelişim" (seri, puanlar, karne, Cümle Defteri, seviye yolu). Kimlik bilgileri (kapak, fotoğraflar, ilgi alanları) ayrı "Profil" sayfasında.

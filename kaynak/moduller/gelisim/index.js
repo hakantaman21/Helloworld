@@ -1,9 +1,10 @@
 // Gelişim: haftalık/aylık Büyüme Karnesi (paylaşılabilir kart), seviye yolu, haftanın günleri ve seri.
 import './gelisim.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d, htUst, htIkon, dilCifti, benAvatar } from '../../cekirdek/arayuz.js';
+import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d, htUst, htIkon, dilCifti, benAvatar, testAvatar } from '../../cekirdek/arayuz.js';
 import { benDugmesi } from '../../cekirdek/yan-menu.js';
-import { testAnlari, takipSayisi } from '../../cekirdek/test-modu.js';
+import { arkadaslarim, benimGizlilik } from '../../cekirdek/arkadaslik.js';
+import { testAnlari, takipSayisi, testProfili } from '../../cekirdek/test-modu.js';
 import { fotografEkle, profilFotografiYap, fotografSil, FOTO_SINIRI, fotoAdresi, fotograflarEkle } from '../../cekirdek/fotograf.js';
 import { cumleSil } from '../../cekirdek/cumle-defteri.js';
 import { destek, soyle } from '../../cekirdek/ses/ses-hatti.js';
@@ -291,6 +292,13 @@ function profilCiz(kok, b) {
       ),
       h('p', { class: 'b-kucuk' }, t('foto.gizlilik')),
     ),
+    // v0.17.0 Arkadaşlarım (yalnız sen ve gizlilik ayarının izin verdikleri görür).
+    h('section', { class: 'b-platform gls-arkadaslar', 'aria-labelledby': 'gls-ark-baslik' },
+      h('h2', { class: 'b-grup-etiket', id: 'gls-ark-baslik' }, h('span', null, t('arkadas.arkadaslarim')), h('span', null, String(arkadaslarim().length))),
+      arkadaslarim().length ? h('div', { class: 'gls-ark-liste', 'data-yatay': '' }, arkadaslarim().map((k) => testProfili(k)).filter(Boolean).map((p) =>
+        h('button', { type: 'button', class: 'gls-ark', onClick: () => b.git(`/kisi?k=${p.kimlik}`) }, testAvatar(p, 48), h('span', null, p.ad))))
+        : h('p', { class: 'b-kucuk' }, t('arkadas.arkadasYok')),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-metin', onClick: () => b.git('/ayarlar?grup=gizlilik') }, `${t('arkadas.gizlilik.arkadasListesi')}: ${t(`arkadas.secenek.${benimGizlilik().arkadasListesi}`)}`)),
     h('section', { class: 'b-platform gls-davet' },
       h('div', { class: 'gls-davet-metin' }, h('b', null, t('davet.baslik')), h('span', null, t('davet.alt'))),
       h('button', { type: 'button', class: 'b-dugme b-dugme-ana gls-davet-dugme', onClick: async () => {
@@ -304,7 +312,7 @@ function profilCiz(kok, b) {
 
 export default {
   kimlik: 'gelisim',
-  surum: '0.5.0',
+  surum: '0.6.0',
   onek: 'gls',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'gunluk'],

@@ -116,3 +116,45 @@ export const TEST_YORUM_KALIPLARI = [
   { yazar: 'test-lucia', metin: 'Interesting! I would like to know more.' },
   { yazar: 'test-amira', metin: 'Thanks for sharing. Where did you learn that?' },
 ];
+
+// v0.17.0 TEST sosyal verisi (gerçek değil): her test kişisinin gizlilik ayarları, kendi arkadaşları, sana arkadaşlık
+// isteği gönderip göndermediği ve arkadaşı olunca görülecek haberleri. Haber türleri: an · seviye · seri · foto · ilgi · yardim.
+// Gizlilik değerleri: 'herkes' | 'arkadaslar' | 'kimse'; okundu: true/false. Karşılıklılık kuralları cekirdek/arkadaslik.js'te.
+export const TEST_SOSYAL = {
+  'test-lucia': { gizlilik: { arkadasListesi: 'herkes', sonGorulme: 'herkes', okundu: true }, arkadaslar: ['test-tom', 'test-marie', 'test-emma'],
+    haberler: [
+      { tur: 'an', saatOnce: 3, an: 'an-2', metin: { tr: 'Yeni bir Dil Anı paylaştı: ev yapımı paella', en: 'Shared a new Moment: homemade paella' } },
+      { tur: 'seri', saatOnce: 9, metin: { tr: '30 günlük seriye ulaştı', en: 'Reached a 30-day streak' } },
+      { tur: 'foto', saatOnce: 30, metin: { tr: 'Kapak fotoğrafını değiştirdi', en: 'Changed the cover photo' } },
+    ] },
+  'test-kenji': { gizlilik: { arkadasListesi: 'arkadaslar', sonGorulme: 'herkes', okundu: false }, arkadaslar: ['test-yuna', 'test-priya'],
+    haberler: [
+      { tur: 'yardim', saatOnce: 1, an: 'an-1', metin: { tr: 'Bir cümlesi için düzeltme istiyor', en: 'Is asking for a correction on a sentence' } },
+      { tur: 'seviye', saatOnce: 20, metin: { tr: 'A1 seviyesinden A2 seviyesine geçti', en: 'Moved up from A1 to A2' } },
+    ] },
+  'test-amira': { gizlilik: { arkadasListesi: 'kimse', sonGorulme: 'arkadaslar', okundu: true }, arkadaslar: ['test-lucia', 'test-carlos'],
+    haberler: [
+      { tur: 'an', saatOnce: 20, an: 'an-5', metin: { tr: 'İstanbul tarihi üzerine bir Dil Anı paylaştı', en: 'Shared a Moment about the history of Istanbul' } },
+      { tur: 'ilgi', saatOnce: 50, metin: { tr: 'İlgi alanlarına Tarih ekledi', en: 'Added History to interests' } },
+    ] },
+  'test-tom': { gizlilik: { arkadasListesi: 'herkes', sonGorulme: 'arkadaslar', okundu: true }, arkadaslar: ['test-lucia', 'test-jack', 'test-emma'],
+    haberler: [
+      { tur: 'an', saatOnce: 8, an: 'an-4', metin: { tr: 'Anadili İngilizce olanlardan bir ipucu paylaştı', en: 'Shared a native speaker tip' } },
+      { tur: 'seri', saatOnce: 40, metin: { tr: '100 günlük seriye ulaştı', en: 'Reached a 100-day streak' } },
+    ] },
+  'test-marie': { gizlilik: { arkadasListesi: 'arkadaslar', sonGorulme: 'kimse', okundu: true }, arkadaslar: ['test-lucia'],
+    haberler: [{ tur: 'an', saatOnce: 26, an: 'an-6', metin: { tr: 'Telaffuz üzerine bir soru paylaştı', en: 'Shared a pronunciation question' } }] },
+  'test-carlos': { gizlilik: { arkadasListesi: 'herkes', sonGorulme: 'herkes', okundu: true }, arkadaslar: ['test-amira'],
+    haberler: [{ tur: 'yardim', saatOnce: 5, an: 'an-3', metin: { tr: 'İş görüşmesi cümleleri için yardım istiyor', en: 'Is asking for help with job interview sentences' } }] },
+  'test-emma': { gizlilik: { arkadasListesi: 'herkes', sonGorulme: 'herkes', okundu: true }, arkadaslar: ['test-lucia', 'test-tom'],
+    haberler: [
+      { tur: 'yardim', saatOnce: 2, an: 'an-7', metin: { tr: 'Türkçe cümlesi için düzeltme istiyor', en: 'Is asking for a correction on her Turkish' } },
+      { tur: 'seviye', saatOnce: 70, metin: { tr: 'Türkçede A2 seviyesine geçti', en: 'Moved up to A2 in Turkish' } },
+    ] },
+  'test-jack': { gizlilik: { arkadasListesi: 'kimse', sonGorulme: 'herkes', okundu: true }, arkadaslar: ['test-tom'],
+    haberler: [{ tur: 'foto', saatOnce: 12, metin: { tr: 'Yeni bir profil fotoğrafı ekledi', en: 'Added a new profile photo' } }] },
+  'test-priya': { gizlilik: { arkadasListesi: 'herkes', sonGorulme: 'herkes', okundu: true }, arkadaslar: ['test-kenji'], istekGonderir: true,
+    haberler: [{ tur: 'an', saatOnce: 11, an: 'an-8', metin: { tr: 'Türkçe "seni özledim" üzerine soru paylaştı', en: 'Asked how to say "I miss you" in Turkish' } }] },
+  'test-yuna': { gizlilik: { arkadasListesi: 'arkadaslar', sonGorulme: 'herkes', okundu: true }, arkadaslar: ['test-kenji'], istekGonderir: true,
+    haberler: [{ tur: 'ilgi', saatOnce: 4, metin: { tr: 'İlgi alanlarına K-pop ekledi', en: 'Added K-pop to interests' } }] },
+};

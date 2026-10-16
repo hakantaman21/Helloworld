@@ -5,6 +5,9 @@ import './mesaj.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, durumKutusu, yerlestir, testEtiketi, farkCiz, onayIste, testAvatar, goreliZaman, dilCifti, sekmeler, enAltaKaydir } from '../../cekirdek/arayuz.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
+import { arkadasDurumu, favoriMi, favoriDegistir, sabitliMi, sabitleDegistir, SABIT_SINIRI, arkadasListesiGorunurluk, onunArkadaslari, mesajDurumu } from '../../cekirdek/arkadaslik.js';
+import { arkadasEylemi, arkadasEtiketi } from '../../cekirdek/kisi-eylemleri.js';
+import { TEST_PROFILLERI } from '../../veri/test-profiller.js';
 import { t, yerel, aktifDil } from '../../cekirdek/metin.js';
 import { mesajIzni, fotoIzni, iletisimBilgisiVar, iletisimIzni, ILETISIM_GUN } from '../../cekirdek/topluluk-kurallari.js';
 import { fotograflarEkle, fotoAdresi } from '../../cekirdek/fotograf.js';
@@ -44,10 +47,14 @@ function ciz(kok, b) {
   const yazAlani = h('div', { class: 'msj-yaz-alani' });
   const tarihYaz = (z) => new Date(z).toLocaleDateString(aktifDil(), { day: 'numeric', month: 'long', weekday: 'long' });
 
-  function balon(m) {
+  function balon(m, i, tum) {
     if (m.kim === 'ben') {
+      // v0.17.0 Mesaj durumu: ✓ gönderildi · ✓✓ iletildi · mavi ✓✓ okundu (okundu bilgisi karşılıklıdır).
+      const durum = mesajDurumu(tum, i, profil);
       return h('div', { class: 'msj-satir msj-ben' },
-        h('div', { class: 'msj-balon msj-balon-ben' }, m.foto ? h('img', { class: 'msj-foto', src: fotoAdresi(m.foto), alt: t('kural.fotoMesaj') }) : null, m.metin ? h('p', null, m.metin) : null, h('span', { class: 'msj-saat' }, saat(m.zaman), m.duzeltildi ? ` · ${t('test.duzeltilerekGonderildi')}` : '')));
+        h('div', { class: 'msj-balon msj-balon-ben' }, m.foto ? h('img', { class: 'msj-foto', src: fotoAdresi(m.foto), alt: t('kural.fotoMesaj') }) : null, m.metin ? h('p', null, m.metin) : null,
+          h('span', { class: 'msj-saat' }, saat(m.zaman), m.duzeltildi ? ` · ${t('test.duzeltilerekGonderildi')}` : '',
+            h('span', { class: `msj-tik msj-tik-${durum}`, role: 'img', 'aria-label': t(`arkadas.durum.${durum}`), title: t(`arkadas.durum.${durum}`) }, durum === 'gonderildi' ? '✓' : '✓✓'))));
     }
     return h('div', { class: 'msj-satir msj-o' },
       testAvatar(profil, 32),
@@ -85,7 +92,7 @@ function ciz(kok, b) {
     yerlestir(liste,
       h('div', { class: 'msj-uyari' }, testEtiketi(), h('span', null, t('test.sohbetUyari'))),
       mesajlar.length ? null : h('p', { class: 'b-kucuk msj-bos' }, t('test.ilkMesaj', { ad: profil.ad })),
-      mesajlar.map(balon),
+      mesajlar.map((m, i) => balon(m, i, mesajlar)),
       yaziyor ? h('div', { class: 'msj-satir msj-o' }, testAvatar(profil, 32), h('div', { class: 'msj-balon msj-balon-o msj-yaziyor' }, t('test.yaziyor', { ad: profil.ad }))) : null,
       !yaziyor && son && son.kim === 'ben' && !testYanitVerir(profil) ? h('p', { class: 'b-kucuk msj-bos' }, t('kural.cevrimdisi', { ad: profil.ad })) : null,
     );
@@ -207,10 +214,13 @@ function ciz(kok, b) {
       h('button', { type: 'button', class: 'msj-av-dugme', onClick: () => b.git(`/kisi?k=${profil.kimlik}`), 'aria-label': t('test.profiliGor') }, testAvatar(profil, 40, { cevrimici: aktiflik(profil).cevrimici })),
       h('div', { class: 'msj-kim' },
         h('div', { class: 'msj-ad' }, h('b', null, profil.ad), testEtiketi()),
-        h('span', { class: 'b-kucuk' }, `${aktiflikMetni(profil)} · ${yerelSaat(profil)}`),
+        h('span', { class: 'b-kucuk' }, [aktiflikMetni(profil), yerelSaat(profil)].filter(Boolean).join(' · ')),
       ),
       h('button', { type: 'button', class: 'b-ht-ikon msj-menu', 'aria-label': t('ht.dahaFazla'), onClick: () => eylemMenusu([
         [t('test.profiliGor'), () => b.git(`/kisi?k=${profil.kimlik}`)],
+        [arkadasEtiketi(profil.kimlik), () => arkadasEylemi(profil)],
+        [favoriMi(profil.kimlik) ? t('arkadas.favoridenCikar') : t('arkadas.favoriyeEkle'), () => duyur(favoriDegistir(profil.kimlik) ? t('arkadas.favoriyeEklendi', { ad: profil.ad }) : t('arkadas.favoridenCikti'))],
+        [sabitliMi(profil.kimlik) ? t('arkadas.sabitKaldir') : t('arkadas.basaSabitle'), () => { const r = sabitleDegistir(profil.kimlik); duyur(r === 'sinir' ? t('arkadas.sabitSiniri', { n: SABIT_SINIRI }) : r === 'sabitlendi' ? t('arkadas.sabitlendi') : t('arkadas.sabitKalkti')); }],
         [t('test.sikayetEt'), sikayetEt],
         [t('test.engelle'), engelle, true],
       ]) }, ikon('nokta3', 22)),
@@ -282,6 +292,7 @@ function kisiCiz(kok, b) {
   let sekme = 'profil';
   const icerik = h('div', { class: 'msj-kisi-icerik' });
   const takipDugmesi = h('button', { type: 'button', class: 'msj-alt-takip' });
+  const DURUM_IKON = { yok: 'arti', gonderildi: 'saat', gelen: 'arti', arkadas: 'onay' };
 
   async function sikayet() { const n = await sikayetPenceresi(p.ad); if (!n) return; testSikayet(p.kimlik, n); duyur(t('test.sikayetAlindi'), 4000); }
   async function engelle() {
@@ -289,12 +300,23 @@ function kisiCiz(kok, b) {
     if (!evet) return;
     testEngelle(p.kimlik); duyur(t('test.engellendi', { ad: p.ad })); b.git('/kesfet', { degistir: true });
   }
+  // v0.17.0: alt çubuktaki ilk düğme ARKADAŞLIK (istek → kabul); takip "…" menüsünde.
   function takipCiz() {
-    const var_ = takipte(p.kimlik);
-    takipDugmesi.setAttribute('aria-pressed', String(var_));
-    takipDugmesi.setAttribute('aria-label', var_ ? t('ht.takiptesin') : t('ht.takipEt'));
-    yerlestir(takipDugmesi, ikon(var_ ? 'onay' : 'arti', 22));
+    const d = arkadasDurumu(p.kimlik);
+    takipDugmesi.setAttribute('aria-pressed', String(d === 'arkadas'));
+    takipDugmesi.setAttribute('aria-label', arkadasEtiketi(p.kimlik));
+    takipDugmesi.title = arkadasEtiketi(p.kimlik);
+    takipDugmesi.dataset.durum = d;
+    yerlestir(takipDugmesi, ikon(DURUM_IKON[d], 22));
   }
+  const takipEylemi = () => { const sonra = takipDegistir(p.kimlik); duyur(sonra ? t('ht.takipEdildi', { ad: p.ad }) : t('ht.takiptenCikti', { ad: p.ad })); };
+  const kisiMenusu = () => eylemMenusu([
+    [favoriMi(p.kimlik) ? t('arkadas.favoridenCikar') : t('arkadas.favoriyeEkle'), () => duyur(favoriDegistir(p.kimlik) ? t('arkadas.favoriyeEklendi', { ad: p.ad }) : t('arkadas.favoridenCikti'))],
+    [sabitliMi(p.kimlik) ? t('arkadas.sabitKaldir') : t('arkadas.basaSabitle'), () => { const r = sabitleDegistir(p.kimlik); duyur(r === 'sinir' ? t('arkadas.sabitSiniri', { n: SABIT_SINIRI }) : r === 'sabitlendi' ? t('arkadas.sabitlendi') : t('arkadas.sabitKalkti')); }],
+    [takipte(p.kimlik) ? t('ht.takiptesin') : t('ht.takipEt'), takipEylemi],
+    [t('test.sikayetEt'), sikayet],
+    [t('test.engelle'), engelle, true],
+  ]);
   const bilgiSatiri = (ik, etiket, deger) => h('div', { class: 'msj-bilgi' }, h('span', { class: 'msj-bilgi-ikon' }, ikon(ik, 18)), h('span', { class: 'msj-bilgi-etiket' }, etiket), h('span', { class: 'msj-bilgi-deger' }, deger));
   const ortakMi = (i) => uyum.ortak.includes(i);
 
@@ -323,8 +345,26 @@ function kisiCiz(kok, b) {
         bilgiSatiri('saat', t('kisi.yerelSaat'), yerelSaat(p)),
         h('div', { class: 'msj-bilgi msj-bilgi-rozet' }, h('span', { class: 'msj-bilgi-ikon' }, ikon('sohbet', 18)), h('span', { class: 'msj-bilgi-etiket' }, t('ht.ozellikler')), h('span', { class: 'msj-bilgi-rozetler' }, rozetler(p))),
       ),
+      arkadasBolumu(),
       h('button', { type: 'button', class: 'b-dugme b-dugme-metin msj-sikayet-baglanti', onClick: sikayet }, ikon('kalkan', 16), t('test.sikayetEt')),
     );
+  }
+
+  // v0.17.0 Arkadaş listesi (karşılıklı gizlilik): görünmüyorsa nedeni dürüstçe söylenir.
+  function arkadasBolumu() {
+    const g = arkadasListesiGorunurluk(p.kimlik);
+    if (!g.gorunur) {
+      return h('section', { class: 'msj-kart' }, h('h2', { class: 'msj-kart-baslik' }, t('arkadas.onunArkadaslari')),
+        h('p', { class: 'b-kucuk' }, g.neden === 'o' ? t('arkadas.gizliO', { ad: p.ad }) : t(`arkadas.gizli.${g.neden}`)),
+        g.neden !== 'o' ? h('button', { type: 'button', class: 'b-dugme b-dugme-metin', onClick: () => b.git('/ayarlar?grup=gizlilik') }, t('arkadas.ayaraGit')) : null);
+    }
+    const liste = onunArkadaslari(p.kimlik);
+    return h('section', { class: 'msj-kart' }, h('h2', { class: 'msj-kart-baslik' }, `${t('arkadas.onunArkadaslari')} · ${liste.length}`),
+      h('div', { class: 'msj-ark-liste', 'data-yatay': '' }, liste.map((k) => {
+        if (k === 'ben') return h('span', { class: 'msj-ark' }, h('span', { class: 'msj-ark-ben' }, t('ht.sen')));
+        const kisi = TEST_PROFILLERI.find((x) => x.kimlik === k);
+        return kisi ? h('button', { type: 'button', class: 'msj-ark', onClick: () => b.git(`/kisi?k=${k}`) }, testAvatar(kisi, 48), h('span', null, kisi.ad)) : null;
+      })));
   }
 
   takipCiz();
@@ -333,7 +373,7 @@ function kisiCiz(kok, b) {
     h('div', { class: `msj-kapak b-kapak b-kapak-${((p.renk || 1) - 1) % 6 + 1}` },
       h('button', { type: 'button', class: 'b-ht-ikon msj-kapak-dugme', 'aria-label': t('genel.geri'), onClick: () => b.geri('/kesfet') }, ikon('sol', 22)),
       testEtiketi(),
-      h('button', { type: 'button', class: 'b-ht-ikon msj-kapak-dugme', 'aria-label': t('ht.dahaFazla'), onClick: () => eylemMenusu([[t('test.sikayetEt'), sikayet], [t('test.engelle'), engelle, true]]) }, ikon('nokta3', 22)),
+      h('button', { type: 'button', class: 'b-ht-ikon msj-kapak-dugme', 'aria-label': t('ht.dahaFazla'), onClick: kisiMenusu }, ikon('nokta3', 22)),
     ),
     h('section', { class: 'msj-kimlik' },
       h('span', { class: 'msj-av-cerceve' }, testAvatar(p, 104, { cevrimici: a.cevrimici })),
@@ -359,14 +399,14 @@ function kisiCiz(kok, b) {
       } }, ikon('el', 22)),
     ),
   );
-  takipDugmesi.addEventListener('click', () => { const sonra = takipDegistir(p.kimlik); takipCiz(); duyur(sonra ? t('ht.takipEdildi', { ad: p.ad }) : t('ht.takiptenCikti', { ad: p.ad })); });
+  takipDugmesi.addEventListener('click', () => { arkadasEylemi(p, () => { takipCiz(); icerikCiz(); }); takipCiz(); icerikCiz(); });
   icerikCiz();
   return null;
 }
 
 export default {
   kimlik: 'mesaj',
-  surum: '0.5.0',
+  surum: '0.6.0',
   onek: 'msj',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'metin', 'test-modu'],

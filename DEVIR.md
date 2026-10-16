@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.16.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.15.0'da (17.10.2026, PR #18). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.17.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.15.0'da (17.10.2026, PR #18). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,20 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.17.0
+
+- **Yapan:** Claude (Opus 5.5), 17.10.2026
+- **Neden:** Hakan (17.10, 01:04): Bağlan kart ışığı; favori, başa sabitleme, arkadaş ekleme, arkadaş güncellemeleri; arkadaş listesini kimin göreceği ve WhatsApp gibi karşılıklılık. Aynı mesajdaki diğer istekler kuyrukta: v0.18 paketler + günlük sınır + kilit, v0.19 bildirim kutusu/tur/yenilikler/hatırlatmalar/arama-ipucu-kılavuz-harita, v0.20 ikon paketleri + ekosistem + B1.
+- **Ne:**
+  - `cekirdek/arkadaslik.js`: durum (arkadas/gonderildi/gelen/yok), istek, kabul, ret, çıkar; favori; sabitleme (SABIT_SINIRI 3); `karsilikli()` = iki yönde izin (önce karşı taraf → neden 'o', sonra sen → 'benKimse'/'benArkadas'); `okunduGorunur`; `arkadasHaberleri()` (tercihlere göre); `mesajDurumu()`.
+  - `veri/test-profiller.js` → `TEST_SOSYAL` (gizlilik, arkadaşlar, istekGonderir, haberler). Priya ve Yuna sana istek gönderir.
+  - `test-modu.aktiflik()` son görülme gizliyse `{ gizli: true }` döner (çevrimiçi sekmesine de girmez); `aktiflikMetni` boş döner.
+  - `cekirdek/kisi-eylemleri.js`: `kisiEylemleri()` alt penceresi, `basiliTut()`, `arkadaslikIstegi()` (etkin test kişisi 2,5 sn sonra kabul eder).
+  - kesfet: "Arkadaşlar" sekmesi (`moduller/kesfet/arkadaslar.js`); sohbetler: favori/arkadaş süzgeci, sabitliler üstte; mesaj: ✓ tikleri, kişi alt çubuğunda arkadaşlık düğmesi, "Arkadaşları"; ayarlar: gizlilik ve haber tercihleri; gelisim/profil: Arkadaşlarım.
+  - Ayarlar: `profil.ayarlar.gizlilik`, `profil.ayarlar.arkadasHaberleri` (yoksa varsayılan; göç gerekmedi). Test verisi: `test.arkadaslar, istekler, reddedilenIstekler, favoriler, sabitli, arkadaslikZamani`.
+- **Sunucu notu:** Karşılıklılık ve görünürlük kuralları sunucuda da uygulanmalı (istemci kuralı tek başına gizlilik güvencesi değildir).
+- **Şema:** 17. **Durum:** `deneme`'de.
 
 ## v0.16.0
 
