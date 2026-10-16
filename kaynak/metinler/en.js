@@ -54,6 +54,20 @@ export default {
   },
   puan: { baslik: 'Learning points', katildi: 'Day {n}', dakika: 'min spoken', kelime: 'new words', hata: 'mistakes saved', cumle: 'saved sentences', an: 'Moments', takip: 'following' },
   davet: { baslik: 'Invite a friend', alt: 'Practising together is easier', dugme: 'Share', metin: 'I practise speaking English with Konuşma Koçu, join me:' },
+  pratik: {
+    sekme: { ai: 'AI chat', gercek: 'Real chat', ogren: 'Learn' }, afisEtiket: 'Highlights',
+    afis: {
+      1: { etiket: 'AI COACH', baslik: 'Start speaking in 5 minutes', alt: 'A scenario at your level, instant feedback', dugme: 'Talk now' },
+      2: { etiket: 'NEW', baslik: 'A partner that fits you', alt: 'Auto match and two-tab filters', dugme: 'Find partner' },
+      3: { etiket: 'PHRASEBOOK', baslik: 'Save sentences you like', alt: 'Listen, repeat, remember', dugme: 'My phrasebook' },
+      4: { etiket: 'COMMUNITY', baslik: 'Language Moments', alt: 'Post, correct, help others', dugme: 'Explore' },
+      5: { etiket: 'PROGRESS', baslik: 'Your weekly report is ready', alt: 'Minutes, words and streak at a glance', dugme: 'Open report' },
+    },
+    gercekBaslik: 'Language partners active now', tumunuGor: 'See all', konusalim: "Let's speak {dil}",
+    gercekBos: 'Chatting with real people will appear here when the community opens. For now you can try virtual users.',
+    gercekNot: 'Virtual users carry a TEST badge; they are not real people. The real community will open with accounts and safety measures.',
+    onerilen: 'Recommended for you', araclar: 'Tools', tekrarSayisi: '{n} due for review', cumleSayisi: '{n} sentences', karneAlt: 'Your weekly progress',
+  },
   ht: {
     gizle: 'Hide',
     sohbetBaslik: 'Language Chats', hizliErisim: 'Quick access', ara: 'Search', cevrimici: 'Online', sen: 'You', yzPratik: 'AI practice',

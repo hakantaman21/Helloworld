@@ -55,6 +55,20 @@ export default {
   },
   puan: { baslik: 'Öğrenme puanları', katildi: '{n}. gün', dakika: 'dk konuşma', kelime: 'yeni kelime', hata: 'hata kaydı', cumle: 'kayıtlı cümle', an: 'Dil Anı', takip: 'takip' },
   davet: { baslik: 'Arkadaşını davet et', alt: 'Birlikte pratik yapmak daha kolay', dugme: 'Paylaş', metin: 'Konuşma Koçu ile İngilizce konuşma pratiği yapıyorum, sen de gel:' },
+  pratik: {
+    sekme: { ai: 'AI sohbet', gercek: 'Gerçek sohbet', ogren: 'Öğren' }, afisEtiket: 'Tanıtımlar',
+    afis: {
+      1: { etiket: 'YAPAY ZEKÂ KOÇ', baslik: '5 dakikada konuşmaya başla', alt: 'Seviyene uygun bir senaryo, anında geri bildirim', dugme: 'Hemen konuş' },
+      2: { etiket: 'YENİ', baslik: 'Sana uygun dil ortağı', alt: 'Otomatik eşleşme ve iki sekmeli süzgeç', dugme: 'Ortak bul' },
+      3: { etiket: 'CÜMLE DEFTERİ', baslik: 'Beğendiğin cümleleri kaydet', alt: 'Sesli dinle, tekrar et, unutma', dugme: 'Defterim' },
+      4: { etiket: 'TOPLULUK', baslik: 'Dil Anları', alt: 'Paylaş, düzelt, başkalarına yardım et', dugme: 'Keşfet' },
+      5: { etiket: 'GELİŞİM', baslik: 'Haftalık karnen hazır', alt: 'Dakika, kelime ve seri bir bakışta', dugme: 'Karneyi aç' },
+    },
+    gercekBaslik: 'Şu an aktif dil ortakları', tumunuGor: 'Tümünü gör', konusalim: '{dil} konuşalım',
+    gercekBos: 'Gerçek kişilerle sohbet topluluk açılınca burada olacak. Şimdilik sanal kullanıcılarla deneyebilirsin.',
+    gercekNot: 'Sanal kullanıcılar TEST rozetlidir; gerçek kişi değildir. Gerçek topluluk hesaplar ve güvenlik önlemleriyle açılacak.',
+    onerilen: 'Senin için önerilenler', araclar: 'Araçlar', tekrarSayisi: '{n} tekrar bekliyor', cumleSayisi: '{n} cümle', karneAlt: 'Haftalık gelişimin',
+  },
   ht: {
     gizle: 'Gizle',
     sohbetBaslik: 'Dil Sohbetleri', hizliErisim: 'Hızlı erişim', ara: 'Arama', cevrimici: 'Çevrimiçi', sen: 'Sen', yzPratik: 'yapay zekâ pratiği',

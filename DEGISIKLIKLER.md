@@ -1,3 +1,9 @@
+## 0.8.0 — 16.10.2026 · Kayan afişler, Pratik üç sekme, kaydırarak sekme geçişi
+
+- Pratik'in en üstünde kayan tanıtım afişleri: 4,5 saniyede bir kendiliğinden ilerler, parmakla kaydırılır, dokununca ilgili yere götürür ("hareketi azalt" açıksa kendiliğinden ilerlemez).
+- Pratik üç sekme (HelloTalk Ses · Canlı · Öğren karşılığı): AI sohbet (konu odaları, günün döngüsü) · Gerçek sohbet (şu an aktif dil ortakları, renkli 2 sütunlu kartlar; TEST rozetli) · Öğren (senin için önerilen senaryolar ve araçlar, yatay kayan kart sıraları).
+- Ana sekmeler arasında sağa/sola kaydırarak geçiş (Sohbet ↔ Bağlantı ↔ Dil Anları ↔ Pratik ↔ Profil), kısa geçiş canlandırmasıyla. Yatay kayan alanlarda (afiş, sekmeler, kaydırıcı) devreye girmez.
+
 ## 0.7.0 — 16.10.2026 · HelloTalk örnekleriyle gruplu, az kaydırmalı düzen
 
 - Ayarlar: ana sayfada renkli simgeli kategori kartları (Profilim · Bildirimler, Gizlilik · Koç ve pratik, Dil · Görünüm), her satırda güncel değer özeti; dokununca yalnız o grup açılır, geri ile listeye dönülür.
