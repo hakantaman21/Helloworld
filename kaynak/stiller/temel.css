@@ -16,7 +16,13 @@
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
   }
-  body { min-height: 100dvh; background: radial-gradient(70% 60% at 88% 4%, var(--renk-zemin-ust), var(--renk-zemin)) fixed; background-color: var(--renk-zemin); }
+  /* v0.9.1: belge hiç kaymaz; kaydırma #uygulama içinde olur. Böylece Android Chrome'un adres çubuğu açılıp kapanmaz
+     ve alttaki sabit menü sayfa geçişlerinde aşağı kayıp kaybolmaz. */
+  html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+  body { background: radial-gradient(70% 60% at 88% 4%, var(--renk-zemin-ust), var(--renk-zemin)) fixed; background-color: var(--renk-zemin); }
+  #uygulama { position: fixed; inset: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
+  /* Üstten açılan pencere açıkken arka sayfa kaymaz (kural: perde öğesi .b-alt-pencere-perde, .b-perde ya da .b-katman taşır). */
+  :root:has(.b-alt-pencere-perde, .b-katman, .b-perde) #uygulama { overflow: hidden; }
   a { color: var(--renk-vurgu-metin); }
 
   /* Y13: tüm dokunulabilir öğeler en az 48 piksel */

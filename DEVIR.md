@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.9.0 · `main` (canlı, helloworld-gules.vercel.app) ve `deneme` aynı içerikte (16.10.2026, PR #12 ile Hakan onayıyla: "Yayına al"). Canlıya alma yine yalnız Hakan onayıyla.
+- **Sürüm:** v0.9.1 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.9.0'da (16.10.2026, PR #12). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,16 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.9.1
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan ekran kaydıyla: "Alt menüde ortaya geçiş yaparken halen alt öğe aşağı kayıp kaybolup gidiyor, sonra yine geliyor." Kayıtta menü geçişte ~0,25 sn ekran dışına iniyordu.
+- **Kök neden:** Yönlendirici her geçişte `window.scrollTo(0, 0)` yapıyordu; Android Chrome'da bu, gizlenmiş adres çubuğunu geri açıp görüntü alanını yeniden boyutlandırıyor ve `position: fixed; bottom: 0` menüyü bir kare aşağıda çiziyordu.
+- **Ne:** `temel.css`: `html, body { height: 100%; overflow: hidden }`, `#uygulama { position: fixed; inset: 0; overflow-y: auto }` — belge kaymaz, kaydırma #uygulama içinde. `arayuz.js` `kaydirmaAlani()`, `enUsteKaydir()`, `enAltaKaydir()`; yönlendirici `kok.scrollTo(0, 0)`. Pencere açıkken `:root:has(perde) #uygulama { overflow: hidden }`.
+- **Kural:** Yeni kodda `window.scrollTo`/`document.body.scrollHeight` kullanma; `enUsteKaydir()` / `enAltaKaydir()` ya da `kaydirmaAlani()` kullan.
+- **Şema:** değişmedi (11).
+- **Durum:** `deneme` dalında; canlıya alma Hakan onayıyla.
 
 ## v0.9.0
 

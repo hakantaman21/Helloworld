@@ -55,7 +55,7 @@ function ciz() {
     console.error('[yonlendirici]', id, hata);
     kap.replaceChildren(h('div', { class: 'b-durum', role: 'alert' }, t('genel.hata')));
   }
-  window.scrollTo(0, 0);
+  kok.scrollTo(0, 0);
   kap.focus({ preventScroll: true });
   yayinla('ekran:degisti', { id, parametreler });
 }

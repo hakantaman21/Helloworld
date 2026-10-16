@@ -2,7 +2,7 @@
 // her satır solda etiket, sağda denetim. Kontrol kullanıcıda (Anayasa bölüm 3): veriler indirilebilir ve silinebilir.
 import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar, enUsteKaydir } from '../../cekirdek/arayuz.js';
 import { fotografEkle } from '../../cekirdek/fotograf.js';
 import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
@@ -254,7 +254,7 @@ function ciz(kok, b) {
     kok.querySelector('.ayr-hakkinda').hidden = Boolean(k);
     gruplar.forEach((g) => { g.hidden = g.id !== `ayr-g-${k}`; });
     if (baslikYazi) baslikYazi.textContent = k ? gruplar.find((g) => g.id === `ayr-g-${k}`).querySelector('.ayr-grup-baslik').textContent : t('ayarlar.baslik');
-    window.scrollTo(0, 0);
+    enUsteKaydir();
   }
   goster(ilgiAcik ? 'profil' : (b.p.grup || null));
   if (ilgiAcik) requestAnimationFrame(() => { const hedef = kok.querySelector('#ayr-ilgi'); if (hedef) hedef.scrollIntoView({ block: 'start' }); });

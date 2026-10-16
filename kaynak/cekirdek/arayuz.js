@@ -534,3 +534,10 @@ export function sekmeKaydirmaBaslat(git) {
     setTimeout(() => { delete document.documentElement.dataset.gecis; }, 400);
   }, { passive: true });
 }
+
+// Kaydırma alanı: belge değil #uygulama kayar (bkz. temel.css). Ekranlar yukarı/aşağı kaydırmak için bunu kullanır.
+export function kaydirmaAlani() {
+  return document.getElementById('uygulama') || document.scrollingElement;
+}
+export function enUsteKaydir() { kaydirmaAlani().scrollTo(0, 0); }
+export function enAltaKaydir() { const a = kaydirmaAlani(); a.scrollTo(0, a.scrollHeight); }

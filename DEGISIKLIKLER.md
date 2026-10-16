@@ -1,3 +1,8 @@
+## 0.9.1 — 16.10.2026 · Alt menü sayfa geçişinde artık kaybolmuyor
+
+- Düzeltme: Android Chrome'da sekme değiştirirken (özellikle ortaya, Pratik'e geçerken) alt menü bir an aşağı kayıp kayboluyor, sonra geri geliyordu. Sebep: her geçişte sayfa en üste kaydırılınca tarayıcının adres çubuğu yeniden açılıyor, ekran yüksekliği değişiyor ve tarayıcı sabit menüyü bir an aşağıda bırakıyordu. Artık belge hiç kaymıyor; kaydırma uygulamanın kendi alanında (#uygulama) oluyor. Adres çubuğu yerinde kalıyor, alt menü de.
+- Üstten açılan pencere kilidi bu yeni kaydırma alanına taşındı.
+
 ## 0.9.0 — 16.10.2026 · Kalıcı alt menü, ışıklı gösterge, orta Pratik düğmesi, sayfa renkleri, kişisel renkler
 
 - Alt menü artık tek ve kalıcı: sayfa geçişlerinde ve kaydırırken yerinde durur, kaybolup gelmez.

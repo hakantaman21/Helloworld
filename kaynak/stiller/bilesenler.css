@@ -561,7 +561,6 @@
   .b-orta-karo { min-height: 92px; gap: 6px; }
 
   /* Üstten açılan pencereler açıkken arka sayfa ve alt menü kaymaz; pencerenin kaydırması dışarı taşmaz. */
-  :root:has(.b-alt-pencere-perde, .b-katman, .b-perde) body { overflow: hidden; touch-action: none; }
   .b-alt-pencere-ic, .b-katman-ic, .b-pencere { overscroll-behavior: contain; touch-action: pan-y; }
   :root:has(.b-alt-pencere-perde, .b-katman, .b-perde) .b-gezinme { pointer-events: none; }
 
