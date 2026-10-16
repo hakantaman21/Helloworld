@@ -71,7 +71,7 @@ export default {
   },
   orta: {
     baslik: 'Hızlı işlemler', varsayilan: 'Orta düğmeye dokununca', aciklama: 'Basılı tutunca bu menü açılır. Dokunma kısayolunu buradan seçebilirsin.',
-    ipucu: 'Pratik · basılı tut: hızlı işlemler', kaydedildi: 'Orta düğme kısayolu kaydedildi.',
+    balon: 'Basılı tut: hızlı işlemler', ipucu: 'Pratik · basılı tut: hızlı işlemler', kaydedildi: 'Orta düğme kısayolu kaydedildi.',
     eylem: { pratik: 'Pratik sayfası', arama: 'Koç araması (yapay zekâ)', senaryo: 'Senaryo seç', telaffuz: 'Telaffuz pratiği', hafiza: 'Hata Hafızası', partner: 'Dil ortağı bul' },
     kisa: { arama: 'Koç araması', senaryo: 'Senaryo', telaffuz: 'Telaffuz' },
   },
@@ -80,7 +80,7 @@ export default {
     sohbetBaslik: 'Dil Sohbetleri', hizliErisim: 'Hızlı erişim', ara: 'Arama', cevrimici: 'Çevrimiçi', sen: 'Sen', yzPratik: 'yapay zekâ pratiği',
     hizli: { senaryolar: 'Senaryolar', hafiza: 'Hata Hafızası', koc: 'AI Koç', partner: 'Partner bul', anlar: 'Dil Anları' , telaffuz: 'Telaffuz', defter: 'Cümle defteri', karne: 'Karne', odalar: 'Konu odaları' },
     uyum: '%{n} uyum', uyumKisa: 'uyum', uyumBaslik: 'Dil değişimi uyumu', oneriSatir: 'Sana en uygun dil ortağı · selam vermek için dokun',
-    ciddi: 'Ciddi öğrenenler', yakinSaat: 'Yakın saat dilimi', karsilikli: 'Karşılıklı', kadin: 'Kadın', erkek: 'Erkek', ogren: 'Öğren', sinif: 'Sınıf arkadaşları', okunmamis: 'Sen yazmadın',
+    ciddi: 'Ciddi öğrenenler', yakinSaat: 'Yakın saat dilimi', karsilikli: 'Karşılıklı', kadin: 'Kadın', erkek: 'Erkek', ogren: 'Öğren', sinif: 'Sınıf arkadaşları', okunmamis: 'Okunmamış',
     ortakBul: 'Dil Ortakları Bul', sanaUygun: 'Sana uygun', yeni: 'Yeni', tumDiller: 'Tüm diller', dil: 'Dil', dilimiOgrenen: '{dil} öğrenenler',
     suzgecler: 'Süzgeçler', yas: 'Yaş', cinsiyet: 'Cinsiyet', cins: { tum: 'Tümü', k: 'Kadın', e: 'Erkek' },
     yasAralik: { tum: 'Tümü', genc: '18–25', orta: '26–35', ust: '36+' }, yalnizHizli: 'Yalnız hızlı yanıt verenler',
@@ -297,9 +297,13 @@ export default {
     kesfeteGit: 'Keşfet’e bak',
   },
 
+  depo: {
+    yazilamadi: 'Son değişikliğin bu cihaza kaydedilemedi (depolama dolu ya da kapalı). Ayarlar › Gizlilik ve veriler › Verilerimi indir ile yedek al.',
+    bozukKayit: 'Önceki kayıt okunamadı; uygulama temiz başladı. Bozuk kayıt silinmedi, ayrı saklandı.',
+  },
   kesfet: {
     suzgec: { tum: 'Tümü', anaDil: 'Ana dili İngilizce', seviye: 'Seviyeme yakın', degisim: 'Türkçe öğrenenler' },
-    suzgecBos: 'Bu süzgece uyan kimse yok.',
+    suzgecBos: 'Bu süzgece uyan kimse yok.', suzgecGevset: 'Süzgeçleri temizle',
     pratigeGit: 'Pratik bölümüne git',
     heroEtiket: 'YENİ BAĞLANTILAR',
     heroBaslik: 'Yeni insanlarla tanış',
@@ -425,6 +429,8 @@ export default {
     meslekA: 'Meslek söylerken "a / an" kullanılır.',
     howMuch: 'Fiyat sorarken "How much does it cost?" ya da "How much is it?" denir.',
     moreBetter: '"better" zaten karşılaştırma; "more" gerekmez.',
+    yasKalibi: 'Yaş İngilizcede "be" ile söylenir: "I am 20 years old" ("have" değil).',
+    sayilamaz: 'Bu isim İngilizcede sayılamaz; çoğul eki almaz: information, advice, homework.',
     peopleAre: '"people" çoğuldur; "are" ile kullanılır.',
     canTo: '"can" sonrasında "to" gelmez.',
     wantTo: '"want" sonrasında "to + fiil" gelir.',
@@ -462,6 +468,7 @@ export default {
   },
 
   hafiza: {
+    ara: 'Hata Hafızasında ara',
     baslik: 'Hata Hafızası',
     alt: 'Hatalar utanç değil, sıradaki adımın.',
     durum: 'Bugün {n} öğenin tekrar sırası geldi · {m} öğe öğrenildi',
@@ -528,6 +535,10 @@ export default {
     ortaDugme: 'Orta düğme kısayolu', ortaDugmeAciklama: 'Ortadaki Pratik düğmesine dokununca ne olsun? Basılı tutunca hepsi açılır.',
     ortaSecenek: { pratik: 'Pratik', arama: 'Koç araması', senaryo: 'Senaryo', telaffuz: 'Telaffuz' },
     renkAd: { altin: 'Altın', mavi: 'Mavi', yesil: 'Yeşil', mercan: 'Mercan', mor: 'Mor', turkuaz: 'Turkuaz', varsayilan: 'Varsayılan', notr: 'Nötr', gece: 'Gece mavisi', bordo: 'Bordo', antrasit: 'Antrasit', sayfa: 'Sayfa rengi' },
+    yakinda: 'yakında', ogrenilenDilNot: 'Konuşma koçu, sözlük ve düzeltmeler şimdilik yalnız İngilizce. Diğer diller hazır olunca açılacak.',
+    gelismis: 'Gelişmiş özelleştirme', ozelGorunum: 'Özel görünüm', varsayilanaDon: 'Görünümü varsayılana döndür',
+    geriYukle: 'Yedekten geri yükle (.json)', geriYukleOnay: 'Seçtiğin yedek, bu cihazdaki tüm verilerin yerine geçecek. Devam edilsin mi?', geriYukleEvet: 'Geri yükle', geriYuklendi: 'Yedek geri yüklendi.',
+    geriYukleHata: { json: 'Bu dosya okunamadı (JSON değil).', bicim: 'Bu dosya bir helloworld yedeği gibi görünmüyor.', yeni: 'Bu yedek daha yeni bir sürümden; önce uygulamayı güncelle.', yazma: 'Cihazda yer yok; yedek kaydedilemedi.' },
     paket: 'Tasarım paketi', paketAciklama: 'Renk geçişleriyle uyumlu hazır görünümler. Aşağıdan tek tek değiştirirsen paket "Özel" olur.',
     paketAd: { akilli: 'Akıllı renk', prime: 'English Prime', gece: 'Gece turkuaz', mor: 'Mor akşam', bordo: 'Bordo klasik', minimal: 'Antrasit sade' },
     paketAlt: { akilli: 'Her sayfa kendi renginde', prime: 'Koyu yeşil, altın', gece: 'Lacivert, turkuaz', mor: 'Mor tonlar', bordo: 'Bordo, mercan', minimal: 'Gri, mavi, çizgi' },

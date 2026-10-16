@@ -165,3 +165,11 @@
   .ayr-paket[data-paket="bordo"] .ayr-paket-ornek i:nth-child(3), .ayr-paket[data-paket="minimal"] .ayr-paket-ornek i:nth-child(3) { background: var(--renk-onizleme-zemin-notr); }
   .ayr-paket-ornek i:nth-child(3) { box-shadow: inset 0 0 0 1px var(--renk-cizgi-guclu); }
 }
+
+/* v0.13.0 Geri yükleme dosya seçici görünmez (satırın tamamı dokunulabilir); gelişmiş özelleştirme */
+@layer moduller {
+  .ayr-geri-yukle { position: relative; cursor: pointer; }
+  .ayr-dosya { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .ayr-gelismis > .ayr-satir { margin-top: 6px; }
+  .ayr-ozel-isaret { color: var(--renk-vurgu-metin); font-weight: 800; }
+}

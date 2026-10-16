@@ -6,7 +6,7 @@ import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurall
 import { fotografEkle } from '../../cekirdek/fotograf.js';
 import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
-import { al, degistir, sifirla, disaAktarMetni } from '../../cekirdek/depo.js';
+import { al, degistir, sifirla, disaAktarMetni, iceAktar } from '../../cekirdek/depo.js';
 import { siradaki } from '../../cekirdek/gunluk.js';
 import { simdiAra } from '../../cekirdek/zamanlayici.js';
 import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
@@ -108,6 +108,12 @@ function grup(kimlik, ik, baslik, ...satirlar) {
 
 function ciz(kok, b) {
   kok.classList.add('ayr-ekran');
+  // Tek bir renk elle değişince paket seçimi kalkar ve "Özel görünüm" yazar (kayıtla ekran tutarlı).
+  const ozelIsaretle = () => {
+    kok.querySelectorAll('.ayr-paket').forEach((d) => d.setAttribute('aria-checked', 'false'));
+    const isaret = kok.querySelector('.ayr-ozel-isaret');
+    if (isaret) isaret.textContent = t('ayarlar.ozelGorunum');
+  };
   let aktifGrup = null;
   const p = al().profil;
   const a = p.ayarlar;
@@ -119,10 +125,16 @@ function ciz(kok, b) {
     g.addEventListener('change', () => { if (g.value) ayarKaydet((pr) => { pr.ayarlar[anahtarAd] = g.value; }); });
     return g;
   };
+  // v0.13.0: konuşma motoru, sözlük ve düzeltme kuralları şimdilik yalnız İngilizce (en-US). Öğrenilen dil olarak
+  // diğer diller "yakında" görünür ama seçilemez; kullanıcı seçtiği dilde çalışacağını sanmaz.
+  const PRATIK_DILLERI = ['en'];
   const dilSecimi = (alan) => (id) => {
     const sec = h('select', { class: 'ayr-girdi ayr-secim', 'aria-labelledby': id },
       h('option', { value: '' }, t('ayarlar.dilSeciniz')),
-      DILLER.map((d) => h('option', { value: d }, t(`diller.${d}`))));
+      DILLER.map((d) => {
+        const kapali = alan === 'ogrenilenDil' && !PRATIK_DILLERI.includes(d);
+        return h('option', { value: d, disabled: kapali }, kapali ? `${t(`diller.${d}`)} · ${t('ayarlar.yakinda')}` : t(`diller.${d}`));
+      }));
     sec.value = p[alan] || '';
     sec.addEventListener('change', () => ayarKaydet((pr) => { pr[alan] = sec.value || null; }));
     return sec;
@@ -191,7 +203,7 @@ function ciz(kok, b) {
     grup('dil', 'dil', t('ayarlar.grup.dil'),
       satir(t('ayarlar.arayuzDili'), (id) => bolumlu(id, ARAYUZ_DILLERI.map((d) => [d, d.toUpperCase()]), a.arayuzDili, (d) => { degistir((v) => { v.profil.ayarlar.arayuzDili = d; }); dilAyarla(d); ciz(kok, b); })),
       satir(t('ayarlar.anaDil'), dilSecimi('anaDil')),
-      satir(t('ayarlar.ogrenilenDil'), dilSecimi('ogrenilenDil')),
+      satir(t('ayarlar.ogrenilenDil'), dilSecimi('ogrenilenDil'), { aciklama: t('ayarlar.ogrenilenDilNot') }),
       satir(t('ayarlar.dilHedefi'), hedefGirdisi, { altta: true }),
     ),
 
@@ -213,10 +225,17 @@ function ciz(kok, b) {
       satir(t('ayarlar.gorunum'), (id) => bolumlu(id, ['dengeli', 'kompakt'].map((k) => [k, t(`ayarlar.gorunumSecenek.${k}`)]), a.gorunum || 'dengeli', (k) => ayarKaydet((pr) => { pr.ayarlar.gorunum = k; }))),
       satir(t('ayarlar.yaziBoyutu'), (id) => bolumlu(id, ['normal', 'buyuk'].map((k) => [k, t(`ayarlar.yaziSecenek.${k}`)]), a.yaziBoyutu || 'normal', (k) => ayarKaydet((pr) => { pr.ayarlar.yaziBoyutu = k; }))),
       satir(t('ayarlar.paket'), (id) => paketSecici(id, a.tasarimPaketi || 'akilli', (k) => { const pk = TASARIM_PAKETLERI[k]; ayarKaydet((pr) => { Object.assign(pr.ayarlar, pk, { tasarimPaketi: k }); }, true); ciz(kok, b); }), { aciklama: t('ayarlar.paketAciklama'), altta: true }),
-      satir(t('ayarlar.secimRengi'), (id) => renkSecici(id, 'secim', ['altin', 'mavi', 'yesil', 'mercan', 'mor', 'turkuaz'], a.secimRengi || 'altin', (k) => ayarKaydet((pr) => { pr.ayarlar.secimRengi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true)), { aciklama: t('ayarlar.secimRengiAciklama'), altta: true }),
-      satir(t('ayarlar.zeminRengi'), (id) => renkSecici(id, 'zemin', ['varsayilan', 'notr', 'mavi', 'mor', 'yesil'], a.zemin || 'varsayilan', (k) => ayarKaydet((pr) => { pr.ayarlar.zemin = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true)), { aciklama: t('ayarlar.zeminRengiAciklama'), altta: true }),
-      satir(t('ayarlar.bantRengi'), (id) => renkSecici(id, 'bant', ['yesil', 'gece', 'mor', 'bordo', 'antrasit', 'sayfa'], a.bantRengi || 'sayfa', (k) => ayarKaydet((pr) => { pr.ayarlar.bantRengi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true)), { aciklama: t('ayarlar.bantRengiAciklama'), altta: true }),
-      satir(t('ayarlar.suzgecBicimi'), (id) => suzgecSecici(id, a.suzgecBicimi || 'klasik', (k) => ayarKaydet((pr) => { pr.ayarlar.suzgecBicimi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true)), { aciklama: t('ayarlar.suzgecBicimiAciklama'), altta: true }),
+      h('details', { class: 'ayr-acilir ayr-gelismis', open: a.tasarimPaketi === 'ozel' },
+        h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('ayarlar.gelismis')), h('small', { class: 'ayr-ozel-isaret' }, a.tasarimPaketi === 'ozel' ? t('ayarlar.ozelGorunum') : '')),
+      satir(t('ayarlar.secimRengi'), (id) => renkSecici(id, 'secim', ['altin', 'mavi', 'yesil', 'mercan', 'mor', 'turkuaz'], a.secimRengi || 'altin', (k) => { ayarKaydet((pr) => { pr.ayarlar.secimRengi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.secimRengiAciklama'), altta: true }),
+      satir(t('ayarlar.zeminRengi'), (id) => renkSecici(id, 'zemin', ['varsayilan', 'notr', 'mavi', 'mor', 'yesil'], a.zemin || 'varsayilan', (k) => { ayarKaydet((pr) => { pr.ayarlar.zemin = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.zeminRengiAciklama'), altta: true }),
+      satir(t('ayarlar.bantRengi'), (id) => renkSecici(id, 'bant', ['yesil', 'gece', 'mor', 'bordo', 'antrasit', 'sayfa'], a.bantRengi || 'sayfa', (k) => { ayarKaydet((pr) => { pr.ayarlar.bantRengi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.bantRengiAciklama'), altta: true }),
+      satir(t('ayarlar.suzgecBicimi'), (id) => suzgecSecici(id, a.suzgecBicimi || 'klasik', (k) => { ayarKaydet((pr) => { pr.ayarlar.suzgecBicimi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.suzgecBicimiAciklama'), altta: true }),
+      ),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => {
+        ayarKaydet((pr) => { Object.assign(pr.ayarlar, TASARIM_PAKETLERI.akilli, { tasarimPaketi: 'akilli', gorunum: 'dengeli', yaziBoyutu: 'normal' }); });
+        ciz(kok, b);
+      } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.varsayilanaDon')), ikon('degis', 18)),
       satir(t('ayarlar.ortaDugme'), (id) => bolumlu(id, ['pratik', 'arama', 'senaryo', 'telaffuz'].map((k) => [k, t(`ayarlar.ortaSecenek.${k}`)]), a.ortaDugme || 'pratik', (k) => ayarKaydet((pr) => { pr.ayarlar.ortaDugme = k; })), { aciklama: t('ayarlar.ortaDugmeAciklama'), altta: true }),
     ),
 
@@ -224,9 +243,20 @@ function ciz(kok, b) {
       h('p', { class: 'ayr-not ayr-not-kutu' }, t('ayarlar.gizlilikMetni')),
       h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => {
         const blob = new Blob([disaAktarMetni()], { type: 'application/json' });
-        const baglanti = h('a', { href: URL.createObjectURL(blob), download: 'konusma-kocu-verilerim.json' });
+        const baglanti = h('a', { href: URL.createObjectURL(blob), download: 'helloworld-verilerim.json' });
         document.body.append(baglanti); baglanti.click(); baglanti.remove();
       } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.disaAktar')), ikon('sag', 18)),
+      h('label', { class: 'ayr-satir ayr-satir-dugme ayr-geri-yukle' },
+        h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.geriYukle')), ikon('sag', 18),
+        h('input', { type: 'file', accept: 'application/json,.json', class: 'ayr-dosya', onChange: async (e) => {
+          const dosya = e.target.files && e.target.files[0];
+          if (!dosya) return;
+          const evet = await onayIste({ metin: t('ayarlar.geriYukleOnay'), evet: t('ayarlar.geriYukleEvet'), hayir: t('genel.vazgec') });
+          if (!evet) { e.target.value = ''; return; }
+          const sonuc = iceAktar(await dosya.text());
+          duyur(sonuc.tamam ? t('ayarlar.geriYuklendi') : t(`ayarlar.geriYukleHata.${sonuc.neden}`), 6000);
+          if (sonuc.tamam) b.git('/bugun', { degistir: true });
+        } })),
       h('details', { class: 'ayr-acilir' },
         h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('kesfet.kurallarBaslik')), ikon('sag', 16)),
         kurallarSeridi()),

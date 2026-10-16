@@ -13,6 +13,7 @@ import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 
 const SELAM_YANIT_GECIKMESI = 1500;
+const kayitli = { durum: null, suzgec: null };
 const YAS_MIN = 18;
 const YAS_MAX = 60;
 
@@ -83,7 +84,7 @@ function suz(liste, d, f) {
 
 // İki sekmeli süzgeç penceresi: Sık kullanılan (tek dokunuş karoları) · Detaylı (yaş, cinsiyet, diller, seviye, ülke, ilgi).
 // Değişiklikler canlı sayılır ("N kişiyi göster"); Uygula'ya kadar listeye yansımaz, Sıfırla hepsini temizler.
-function suzgecPenceresi(mevcut, uygula) {
+function suzgecPenceresi(mevcut, uygula, say = (f) => suzgecUygula(testProfilleri(), f).length) {
   const f = { ...mevcut, hizli: new Set(mevcut.hizli), yas: [...mevcut.yas], seviye: [...mevcut.seviye], ulkeler: new Set(mevcut.ulkeler), ilgiler: new Set(mevcut.ilgiler) };
   const tum = testProfilleri();
   let sekme = 'sik';
@@ -100,7 +101,8 @@ function suzgecPenceresi(mevcut, uygula) {
   const grupla = (etiket, ...cocuk) => h('section', { class: 'b-platform' }, h('h3', { class: 'b-grup-etiket' }, etiket), ...cocuk);
 
   function sayiGuncelle() {
-    const sayi = suzgecUygula(tum, f).length;
+    // v0.13.0: sayı, ana listedeki sekme ve dil haplarıyla AYNI hesaplamadan gelir ("N kişiyi göster" = açılan liste).
+    const sayi = say(f);
     yerlestir(gosterDugmesi, t('suzgec.goster', { n: sayi }));
     gosterDugmesi.disabled = sayi === 0;
   }
@@ -221,8 +223,10 @@ function ciz(kok, b) {
   if (!testModuAcik()) { testsizCiz(kok, b); return null; }
 
   const ben = al().profil;
-  const durum = { sekme: 'tum', dil: 'hedef', eslesmeSira: -1 };
-  let suzgec = bosSuzgec();
+  // v0.13.0: sekme, dil hapı ve süzgeç ekran yeniden kurulunca (profile girip geri dönünce) korunur.
+  const durum = kayitli.durum || { sekme: 'tum', dil: 'hedef', eslesmeSira: -1 };
+  durum.eslesmeSira = -1;
+  let suzgec = kayitli.suzgec || bosSuzgec();
   const liste = h('div', { class: 'b-liste kft-liste', 'aria-live': 'polite' });
   const eslesmeAlani = h('div');
   const etkinAlani = h('div');
@@ -249,12 +253,14 @@ function ciz(kok, b) {
   }
 
   function yenile() {
+    kayitli.durum = durum; kayitli.suzgec = suzgec;
     suzgecRozeti();
     const kisiler = suz(testProfilleri(), durum, suzgec);
-    yerlestir(liste, kisiler.length ? kisiler.map((k) => satir(k, b, yenile)) : durumKutusu('bos', testProfilleri().length ? t('kesfet.suzgecBos') : t('test.hepsiEngelli')));
+    const temizle = () => { durum.sekme = 'tum'; durum.dil = 'tum'; kayitli.durum = durum; kayitli.suzgec = bosSuzgec(); b.git('/kesfet', { degistir: true }); };
+    yerlestir(liste, kisiler.length ? kisiler.map((k) => satir(k, b, yenile)) : durumKutusu('bos', testProfilleri().length ? t('kesfet.suzgecBos') : t('test.hepsiEngelli'), testProfilleri().length ? { metin: t('kesfet.suzgecGevset'), fn: temizle } : undefined));
   }
 
-  suzgecDugmesi = htIkon('suzgec', t('ht.suzgecler'), () => suzgecPenceresi(suzgec, (yeni) => { suzgec = yeni; yenile(); }));
+  suzgecDugmesi = htIkon('suzgec', t('ht.suzgecler'), () => suzgecPenceresi(suzgec, (yeni) => { suzgec = yeni; yenile(); }, (f) => suz(testProfilleri(), durum, f).length));
 
   // v0.10.0 Bilgi panosu (kayan): en iyi eşleşme, şu an çevrimiçi sayısı, ilgi ipucu, tanışma ve güvenlik.
   // Sayılar ve eşleşme bu cihazdaki TEST verisinden hesaplanır; uydurulmaz.

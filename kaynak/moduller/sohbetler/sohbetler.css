@@ -55,3 +55,7 @@
   .shb-kisi > .shb-kisi-ic { gap: 4px; }
   .shb-kisi-dil { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--renk-soluk); }
 }
+
+@layer moduller {
+  .shb-okunmamis { width: 10px; height: 10px; flex-shrink: 0; border-radius: 50%; background: var(--renk-vurgu); box-shadow: 0 0 8px color-mix(in srgb, var(--renk-vurgu) 60%, transparent); }
+}

@@ -6,7 +6,7 @@ import './stiller/bilesenler.css';
 import './stiller/tema-koyu.css';
 import './stiller/erisim.css';
 
-import { yukle, al, degistir } from './cekirdek/depo.js';
+import { yukle, al, degistir, bozukKayitVardi } from './cekirdek/depo.js';
 import { kaydet } from './cekirdek/modul-kaydi.js';
 import { baslat, git, aktifEkran } from './cekirdek/yonlendirici.js';
 import { temaBaslat } from './cekirdek/tema.js';
@@ -15,7 +15,7 @@ import { zamanlayiciBaslat } from './cekirdek/zamanlayici.js';
 import { duyur } from './cekirdek/duyuru.js';
 import { t, dilAyarla, tarayiciDili } from './cekirdek/metin.js';
 import { pwaBaslat } from './cekirdek/pwa.js';
-import { sekmeKaydirmaBaslat, ortaDugmeAyarla } from './cekirdek/arayuz.js';
+import { sekmeKaydirmaBaslat, ortaDugmeAyarla, ortaIpucuGoster } from './cekirdek/arayuz.js';
 import { simdiAra } from './cekirdek/zamanlayici.js';
 import { siradaki } from './cekirdek/gunluk.js';
 import { oneriSenaryo } from './cekirdek/oneri.js';
@@ -51,10 +51,19 @@ function uygulamayiBaslat() {
     git(`/gelen-arama?tur=${tur}`);
   });
 
+  // v0.13.0 Kayıt güvenliği: yazılamayan değişiklik ve okunamayan eski kayıt kullanıcıya söylenir.
+  let sonYazmaUyarisi = 0;
+  dinle('depo:yazilamadi', () => {
+    if (Date.now() - sonYazmaUyarisi < 60000) return;
+    sonYazmaUyarisi = Date.now();
+    duyur(t('depo.yazilamadi'), 8000);
+  });
+
   window.addEventListener('offline', () => duyur(t('genel.cevrimdisi'), 5000));
   window.addEventListener('online', () => duyur(t('genel.cevrimiciOldu')));
 
   baslat(document.getElementById('uygulama'));
+  if (bozukKayitVardi()) duyur(t('depo.bozukKayit'), 9000);
   zamanlayiciBaslat();
   sekmeKaydirmaBaslat(git);
   // Orta Pratik düğmesi: basılı tutunca hızlı işlemler; "atanabilir" olanlar dokunma kısayolu olarak seçilebilir.
@@ -70,6 +79,7 @@ function uygulamayiBaslat() {
     atamaKaydet: (k) => { degistir((v) => { v.profil.ayarlar.ortaDugme = k; }); duyur(t('orta.kaydedildi'), 1800); },
   });
   pwaBaslat();
+  setTimeout(() => ortaIpucuGoster((al().profil.ayarlar.ortaIpucu || 0) < 2, () => degistir((v) => { v.profil.ayarlar.ortaIpucu = (v.profil.ayarlar.ortaIpucu || 0) + 1; })), 1500);
 }
 
 uygulamayiBaslat();

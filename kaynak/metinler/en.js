@@ -70,7 +70,7 @@ export default {
   },
   orta: {
     baslik: 'Quick actions', varsayilan: 'When I tap the centre button', aciklama: 'Long-press opens this menu. Choose the tap shortcut here.',
-    ipucu: 'Practice · long-press: quick actions', kaydedildi: 'Centre button shortcut saved.',
+    balon: 'Press and hold: quick actions', ipucu: 'Practice · long-press: quick actions', kaydedildi: 'Centre button shortcut saved.',
     eylem: { pratik: 'Practice page', arama: 'Coach call (AI)', senaryo: 'Pick a scenario', telaffuz: 'Pronunciation practice', hafiza: 'Mistake memory', partner: 'Find a partner' },
     kisa: { arama: 'Coach call', senaryo: 'Scenario', telaffuz: 'Pronunciation' },
   },
@@ -79,7 +79,7 @@ export default {
     sohbetBaslik: 'Language Chats', hizliErisim: 'Quick access', ara: 'Search', cevrimici: 'Online', sen: 'You', yzPratik: 'AI practice',
     hizli: { senaryolar: 'Scenarios', hafiza: 'Mistakes', koc: 'AI Coach', partner: 'Find partner', anlar: 'Moments' , telaffuz: 'Pronunciation', defter: 'Phrasebook', karne: 'Report', odalar: 'Topic rooms' },
     uyum: '{n}% match', uyumKisa: 'match', uyumBaslik: 'Language exchange match', oneriSatir: 'Your best language partner · tap to say hi',
-    ciddi: 'Serious learners', yakinSaat: 'Nearby time zone', karsilikli: 'Mutual', kadin: 'Women', erkek: 'Men', ogren: 'Learn', sinif: 'Classmates', okunmamis: 'Awaiting reply',
+    ciddi: 'Serious learners', yakinSaat: 'Nearby time zone', karsilikli: 'Mutual', kadin: 'Women', erkek: 'Men', ogren: 'Learn', sinif: 'Classmates', okunmamis: 'Unread',
     ortakBul: 'Find Language Partners', sanaUygun: 'For you', yeni: 'New', tumDiller: 'All languages', dil: 'Language', dilimiOgrenen: 'Learning {dil}',
     suzgecler: 'Filters', yas: 'Age', cinsiyet: 'Gender', cins: { tum: 'All', k: 'Female', e: 'Male' },
     yasAralik: { tum: 'All', genc: '18–25', orta: '26–35', ust: '36+' }, yalnizHizli: 'Only fast responders',
@@ -296,9 +296,13 @@ export default {
     kesfeteGit: 'Go to Discover',
   },
 
+  depo: {
+    yazilamadi: 'Your last change could not be saved on this device (storage full or blocked). Back up via Settings › Privacy and data › Download my data.',
+    bozukKayit: 'The previous save could not be read, so the app started fresh. The damaged save was kept separately, not deleted.',
+  },
   kesfet: {
     suzgec: { tum: 'All', anaDil: 'Native English', seviye: 'Near my level', degisim: 'Learning Turkish' },
-    suzgecBos: 'Nobody matches this filter.',
+    suzgecBos: 'Nobody matches this filter.', suzgecGevset: 'Clear filters',
     pratigeGit: 'Go to Practice',
     heroEtiket: 'NEW CONNECTIONS',
     heroBaslik: 'Meet new people',
@@ -424,6 +428,8 @@ export default {
     meslekA: 'Use "a / an" when you say your job.',
     howMuch: 'To ask a price, say "How much does it cost?" or "How much is it?"',
     moreBetter: '"Better" is already a comparative; you don’t need "more".',
+    yasKalibi: 'Age uses "be" in English: "I am 20 years old" (not "have").',
+    sayilamaz: 'This noun is uncountable in English, so it takes no plural -s: information, advice, homework.',
     peopleAre: '"People" is plural; use it with "are".',
     canTo: 'Don’t use "to" after "can".',
     wantTo: 'After "want", use "to + verb".',
@@ -444,7 +450,7 @@ export default {
 
   senaryolar: {
     baslik: 'Scenarios',
-    alt: '9 areas of life, including technology and AI,, from A1 to B2',
+    alt: '9 areas of life, including technology and AI, from A1 to B2',
     seviyeEtiket: 'Level',
     oneri: 'COACH’S PICK',
     oneriAlt: '{alan} · {seviye} · 5 min · Coach: {rol}',
@@ -461,6 +467,7 @@ export default {
   },
 
   hafiza: {
+    ara: 'Search Error Memory',
     baslik: 'Error Memory',
     alt: 'Mistakes aren’t embarrassing; they’re your next step.',
     durum: '{n} items due today · {m} learned',
@@ -527,6 +534,10 @@ export default {
     ortaDugme: 'Centre button shortcut', ortaDugmeAciklama: 'What should tapping the centre Practice button do? Long-press shows all.',
     ortaSecenek: { pratik: 'Practice', arama: 'Coach call', senaryo: 'Scenario', telaffuz: 'Pronunciation' },
     renkAd: { altin: 'Gold', mavi: 'Blue', yesil: 'Green', mercan: 'Coral', mor: 'Purple', turkuaz: 'Turquoise', varsayilan: 'Default', notr: 'Neutral', gece: 'Midnight blue', bordo: 'Burgundy', antrasit: 'Anthracite', sayfa: 'Page colour' },
+    yakinda: 'coming soon', ogrenilenDilNot: 'The speaking coach, dictionary and corrections are English-only for now. Other languages will open when ready.',
+    gelismis: 'Advanced customisation', ozelGorunum: 'Custom look', varsayilanaDon: 'Reset appearance to default',
+    geriYukle: 'Restore from backup (.json)', geriYukleOnay: 'The selected backup will replace all data on this device. Continue?', geriYukleEvet: 'Restore', geriYuklendi: 'Backup restored.',
+    geriYukleHata: { json: 'This file could not be read (not JSON).', bicim: 'This file does not look like a helloworld backup.', yeni: 'This backup is from a newer version; update the app first.', yazma: 'No space on the device; the backup could not be saved.' },
     paket: 'Design pack', paketAciklama: 'Ready-made looks that match the colour gradients. Changing a single setting below makes it "Custom".',
     paketAd: { akilli: 'Smart colour', prime: 'English Prime', gece: 'Night teal', mor: 'Purple evening', bordo: 'Burgundy classic', minimal: 'Anthracite plain' },
     paketAlt: { akilli: 'Each page in its own colour', prime: 'Dark green, gold', gece: 'Navy, teal', mor: 'Purple tones', bordo: 'Burgundy, coral', minimal: 'Grey, blue, underline' },

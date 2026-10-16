@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 13;
+export const GUNCEL_SEMA = 14;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -137,5 +137,11 @@ export const gocler = {
         bantRengi: !eski.profil.ayarlar.bantRengi || eski.profil.ayarlar.bantRengi === 'yesil' ? 'sayfa' : eski.profil.ayarlar.bantRengi,
       },
     },
+  }),
+  // 13 → 14: orta düğme basılı tutma ipucunun kaç kez gösterildiği; test sohbetlerinde okunma zamanları.
+  14: (eski) => ({
+    ...eski,
+    profil: { ...eski.profil, ayarlar: { ...eski.profil.ayarlar, ortaIpucu: eski.profil.ayarlar.ortaIpucu || 0 } },
+    test: eski.test ? { ...eski.test, okundu: eski.test.okundu || {} } : eski.test,
   }),
 };

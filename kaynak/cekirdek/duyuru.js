@@ -30,5 +30,6 @@ export function duyur(mesaj, sure = 3500) {
   });
 
   kap.append(oge);
-  setTimeout(kapat, sure);
+  // Uzun metin daha uzun kalır (okuma süresi: harf başına ~55 ms, en az verilen süre, en çok 12 sn).
+  setTimeout(kapat, Math.min(12000, Math.max(sure, String(mesaj).length * 55)));
 }
