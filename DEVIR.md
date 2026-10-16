@@ -28,7 +28,7 @@
   - `ses-hatti.ingilizceSesler()`, `ayarlar.kocSesi`; `soyle` seçili sesi ve dilini kullanır.
   - `demo-koc`: karşı soru (`?` ile biten, dal/düzeltme yok) → `kocDili.sapma.soru` + aynı adım, adım başına bir kez. Konu dışı tahmini bilerek yok.
   - Senaryo satırı: `~(adım+2) dk` ve `gorev.aciklama` başarı ölçütü olarak.
-  - `cekirdek/fotograf.js`: IndexedDB `helloworld-medya/foto`; profilde `mdy:<id>`; `medyaHazirla()` main.js'te ekranlardan önce (en çok 1,5 sn); `fotoAdresi(ref)`; yedekte `medya` alanı; `medyaSil()`.
+  - `cekirdek/fotograf.js`: IndexedDB `helloworld-medya/foto`; profilde `mdy:<id>`; `medyaHazirla()` arka planda (ekranlar beklemez; fotoğraf yüklenince açık ekran bir kez yeniden çizilir — dosyadan açılışta IndexedDB geç yanıt verebildiği için; karşılaştırma aracı bu gecikmeyi yakaladı); `fotoAdresi(ref)`; yedekte `medya` alanı; `medyaSil()`.
   - Yazı ölçeği: tüm `font-size: Npx` → `calc(Npx * var(--yazi-olcek))`; `data-yazi="buyuk"` → 1.12; zoom kaldırıldı. Yeni CSS'te de bu biçim kullanılmalı.
   - Koyu tema: `tema-koyu.css` yalnız `[data-tema="koyu"]`; `tema.js` sistem temasını matchMedia ile çözer; `index.html` başında erken tema betiği.
   - `araclar/davranis-sinama.py` (isteğe bağlı, Playwright).

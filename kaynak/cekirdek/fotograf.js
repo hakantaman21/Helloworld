@@ -48,9 +48,10 @@ export function fotoAdresi(ref) {
   return String(ref).startsWith(ONEK) ? (onbellek.get(String(ref).slice(ONEK.length)) || '') : ref;
 }
 
-// Açılışta: IndexedDB'yi aç, resimleri belleğe al, profildeki eski veri adreslerini taşı. En çok 1,5 sn bekler.
+// Açılışta (arka planda): IndexedDB'yi aç, resimleri belleğe al, profildeki eski veri adreslerini taşı.
+// Döner: ekranda gösterilecek bir başvurulu fotoğraf varsa true (çağıran açık ekranı yeniler).
 export async function medyaHazirla() {
-  const bekle = new Promise((coz) => setTimeout(coz, 1500));
+  const bekle = new Promise((coz) => setTimeout(coz, 4000));
   await Promise.race([(async () => {
     db = await dbAc();
     if (!db) return;
@@ -72,6 +73,8 @@ export async function medyaHazirla() {
       if (harita.has(v.profil.foto)) v.profil.foto = harita.get(v.profil.foto);
     });
   })(), bekle]);
+  const p = al().profil;
+  return [p.foto, ...(p.fotograflar || [])].some((f) => f && String(f).startsWith(ONEK) && onbellek.has(String(f).slice(ONEK.length)));
 }
 
 // Yedek için: başvuruların resimleri { kimlik: veri } olarak.

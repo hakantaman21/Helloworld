@@ -40,10 +40,9 @@ const KAPALI_MODULLER = [];
 
 const MESGUL_EKRANLAR = ['gorusme', 'gelen-arama', 'karsilama'];
 
-async function uygulamayiBaslat() {
+function uygulamayiBaslat() {
   yukle();
-  // v0.14.0: fotoğraflar IndexedDB'den belleğe alınır (en çok 1,5 sn); sonra ekranlar çizilir.
-  await medyaHazirla();
+
   // Arayüz dili: kullanıcının seçimi, yoksa tarayıcının dili (desteklenmiyorsa İngilizce)
   if (!al().profil.ayarlar.arayuzDili) degistir((v) => { v.profil.ayarlar.arayuzDili = tarayiciDili(); });
   dilAyarla(al().profil.ayarlar.arayuzDili);
@@ -68,6 +67,8 @@ async function uygulamayiBaslat() {
 
   baslat(document.getElementById('uygulama'));
   if (bozukKayitVardi()) duyur(t('depo.bozukKayit'), 9000);
+  // v0.14.0: fotoğraflar IndexedDB'den arka planda belleğe alınır; ekranlar beklemez. Fotoğraf varsa açık ekran bir kez yenilenir.
+  medyaHazirla().then((yuklendi) => { if (yuklendi) git((location.hash.slice(1) || '/bugun'), {}); });
   zamanlayiciBaslat();
   sekmeKaydirmaBaslat(git);
   // Orta Pratik düğmesi: basılı tutunca hızlı işlemler; "atanabilir" olanlar dokunma kısayolu olarak seçilebilir.
