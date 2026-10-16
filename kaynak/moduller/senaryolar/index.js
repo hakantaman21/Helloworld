@@ -28,7 +28,9 @@ function senaryoSatiri(s, b) {
     h('span', { class: 'snr-satir-metin' },
       h('span', { class: 'snr-satir-baslik' }, yerel(s.baslik)),
       aktifDil() !== 'en' ? h('span', { class: 'b-kucuk', lang: 'en' }, s.baslik.en) : null,
-      h('span', { class: 'b-kucuk' }, `${s.seviye} · ${t('senaryolar.sure')} · ${yerel(s.roller.koc)}${tamam ? ' · ' + t('senaryolar.tamamlandi') : ''}`),
+      // v0.14.0: süre adım sayısından tahmin edilir; başarı ölçütü (görev) satırda yazar.
+      h('span', { class: 'b-kucuk' }, `${s.seviye} · ${t('senaryolar.sureDk', { n: (s.adimlar || []).length + 2 })} · ${yerel(s.roller.koc)}${tamam ? ' · ' + t('senaryolar.tamamlandi') : ''}`),
+      h('span', { class: 'b-kucuk snr-gorev' }, `${t('senaryolar.basari')}: ${yerel(s.gorev.aciklama)}`),
     ),
   );
 }

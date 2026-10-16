@@ -36,8 +36,8 @@
 @layer moduller {
   .kar-dil { justify-content: flex-end; }
   .kar-kurallar { gap: var(--bosluk-3); }
-  .kar-kural-liste { display: flex; flex-direction: column; gap: var(--bosluk-2); padding-left: var(--bosluk-5); list-style: disc; font-size: 14px; }
-  .kar-onay { display: flex; align-items: flex-start; gap: var(--bosluk-3); min-height: var(--dokunma); padding-top: var(--bosluk-2); font-size: 14px; font-weight: 600; }
+  .kar-kural-liste { display: flex; flex-direction: column; gap: var(--bosluk-2); padding-left: var(--bosluk-5); list-style: disc; font-size: calc(14px * var(--yazi-olcek)); }
+  .kar-onay { display: flex; align-items: flex-start; gap: var(--bosluk-3); min-height: var(--dokunma); padding-top: var(--bosluk-2); font-size: calc(14px * var(--yazi-olcek)); font-weight: 600; }
   .kar-onay input { width: 22px; height: 22px; min-height: 22px; flex-shrink: 0; margin-top: 1px; accent-color: var(--renk-vurgu); }
 }
 

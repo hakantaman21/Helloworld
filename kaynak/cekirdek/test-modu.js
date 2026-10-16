@@ -185,6 +185,9 @@ export function saatFarki(p) {
 }
 export const YAKIN_SAAT_FARKI = 3;
 
+// v0.14.0 Eşleşme puanı kural toplamıdır; bilimsel bir olasılık gibi "%93" gösterilmez, sözlü düzeye çevrilir.
+export function uyumDuzeyi(puan) { return puan >= 80 ? 'cok' : puan >= 60 ? 'iyi' : 'olasi'; }
+
 // v0.13.0 Gerçek okunma durumu: sohbet açılınca o ana kadarki mesajlar okundu sayılır.
 export function okunduIsaretle(kimlik) {
   const son = testMesajlari(kimlik).reduce((m, x) => Math.max(m, Number(x.zaman || 0)), 0);

@@ -15,6 +15,7 @@ import { zamanlayiciBaslat } from './cekirdek/zamanlayici.js';
 import { duyur } from './cekirdek/duyuru.js';
 import { t, dilAyarla, tarayiciDili } from './cekirdek/metin.js';
 import { pwaBaslat } from './cekirdek/pwa.js';
+import { medyaHazirla } from './cekirdek/fotograf.js';
 import { sekmeKaydirmaBaslat, ortaDugmeAyarla, ortaIpucuGoster } from './cekirdek/arayuz.js';
 import { simdiAra } from './cekirdek/zamanlayici.js';
 import { siradaki } from './cekirdek/gunluk.js';
@@ -31,6 +32,7 @@ import senaryolar from './moduller/senaryolar/index.js';
 import hafiza from './moduller/hafiza/index.js';
 import gelisim from './moduller/gelisim/index.js';
 import ayarlar from './moduller/ayarlar/index.js';
+import telaffuz from './moduller/telaffuz/index.js';
 import mesaj from './moduller/mesaj/index.js';
 
 // Bayrakla kapatılan modüller burada listelenir; uygulama diğerleriyle çalışmaya devam eder.
@@ -38,13 +40,15 @@ const KAPALI_MODULLER = [];
 
 const MESGUL_EKRANLAR = ['gorusme', 'gelen-arama', 'karsilama'];
 
-function uygulamayiBaslat() {
+async function uygulamayiBaslat() {
   yukle();
+  // v0.14.0: fotoğraflar IndexedDB'den belleğe alınır (en çok 1,5 sn); sonra ekranlar çizilir.
+  await medyaHazirla();
   // Arayüz dili: kullanıcının seçimi, yoksa tarayıcının dili (desteklenmiyorsa İngilizce)
   if (!al().profil.ayarlar.arayuzDili) degistir((v) => { v.profil.ayarlar.arayuzDili = tarayiciDili(); });
   dilAyarla(al().profil.ayarlar.arayuzDili);
   temaBaslat();
-  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar, mesaj]) kaydet(m, KAPALI_MODULLER);
+  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar, mesaj, telaffuz]) kaydet(m, KAPALI_MODULLER);
 
   dinle('arama:geldi', ({ tur }) => {
     if (MESGUL_EKRANLAR.includes(aktifEkran())) return;
@@ -72,7 +76,7 @@ function uygulamayiBaslat() {
       { kimlik: 'pratik', ikon: 'pratik', ad: t('orta.eylem.pratik'), kisa: t('gezinme.pratik'), atanabilir: true, calistir: () => git('/bugun') },
       { kimlik: 'arama', ikon: 'bildirim', ad: t('orta.eylem.arama'), kisa: t('orta.kisa.arama'), atanabilir: true, calistir: () => simdiAra(siradaki() === 'aksam' ? 'aksam' : 'sabah') },
       { kimlik: 'senaryo', ikon: 'senaryo', ad: t('orta.eylem.senaryo'), kisa: t('orta.kisa.senaryo'), atanabilir: true, calistir: () => git('/senaryolar') },
-      { kimlik: 'telaffuz', ikon: 'telaffuz', ad: t('orta.eylem.telaffuz'), kisa: t('orta.kisa.telaffuz'), atanabilir: true, calistir: () => git(`/gorusme?tur=senaryo&id=${oneriSenaryo().senaryo.kimlik}`) },
+      { kimlik: 'telaffuz', ikon: 'telaffuz', ad: t('orta.eylem.telaffuz'), kisa: t('orta.kisa.telaffuz'), atanabilir: true, calistir: () => git('/telaffuz') },
       { kimlik: 'hafiza', ikon: 'hafiza', ad: t('orta.eylem.hafiza'), calistir: () => git('/hafiza') },
       { kimlik: 'partner', ikon: 'baglanti', ad: t('orta.eylem.partner'), calistir: () => git('/kesfet') },
     ],

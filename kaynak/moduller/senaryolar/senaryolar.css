@@ -9,3 +9,7 @@
   .snr-satir-metin { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .snr-satir-baslik { font-size: var(--yazi-govde); font-weight: 600; }
 }
+
+@layer moduller {
+  .snr-gorev { color: var(--renk-soluk); }
+}

@@ -2,6 +2,7 @@
 import { t } from './metin.js';
 import { IKON3D } from '../veri/ikon3d.js';
 import { al } from './depo.js';
+import { fotoAdresi } from './fotograf.js';
 
 const SVG_AD_ALANI = 'http://www.w3.org/2000/svg';
 
@@ -473,7 +474,7 @@ export function kurallarSeridi() {
 // Kullanıcının kendi avatarı: profil fotoğrafı varsa o, yoksa adının baş harfi (altın zemin).
 export function benAvatar(boyut = 44, sinif = '') {
   const p = al().profil;
-  if (p.foto) return h('img', { class: `b-av b-av-foto ${sinif}`, src: p.foto, alt: '', width: boyut, height: boyut, style: `width:${boyut}px;height:${boyut}px` });
+  if (p.foto && fotoAdresi(p.foto)) return h('img', { class: `b-av b-av-foto ${sinif}`, src: fotoAdresi(p.foto), alt: '', width: boyut, height: boyut, style: `width:${boyut}px;height:${boyut}px` });
   return h('span', { class: `b-av b-av-ben ${sinif}`, style: `width:${boyut}px;height:${boyut}px;font-size:${Math.round(boyut * 0.42)}px`, 'aria-hidden': 'true' }, (p.ad || '?').charAt(0).toLocaleUpperCase());
 }
 

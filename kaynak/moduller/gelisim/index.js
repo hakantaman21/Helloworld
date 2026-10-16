@@ -3,7 +3,7 @@ import './gelisim.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d, htUst, htIkon, dilCifti, benAvatar, sekmeler } from '../../cekirdek/arayuz.js';
 import { testAnlari, takipSayisi } from '../../cekirdek/test-modu.js';
-import { fotografEkle, profilFotografiYap, fotografSil, FOTO_SINIRI } from '../../cekirdek/fotograf.js';
+import { fotografEkle, profilFotografiYap, fotografSil, FOTO_SINIRI, fotoAdresi } from '../../cekirdek/fotograf.js';
 import { cumleSil } from '../../cekirdek/cumle-defteri.js';
 import { destek, soyle } from '../../cekirdek/ses/ses-hatti.js';
 import { t, yerel } from '../../cekirdek/metin.js';
@@ -97,7 +97,7 @@ function fotoGoster(veri, yenile) {
   const perde = h('div', { class: 'b-alt-pencere-perde', onClick: (e) => { if (e.target === perde) kapat(); } },
     h('div', { class: 'b-alt-pencere', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('foto.baslik') },
       h('div', { class: 'b-alt-pencere-tutamak', 'aria-hidden': 'true' }),
-      h('div', { class: 'b-alt-pencere-ic' }, h('img', { class: 'gls-foto-buyuk', src: veri, alt: '' })),
+      h('div', { class: 'b-alt-pencere-ic' }, h('img', { class: 'gls-foto-buyuk', src: fotoAdresi(veri), alt: '' })),
       h('div', { class: 'b-alt-pencere-alt' },
         h('button', { type: 'button', class: 'b-dugme b-dugme-tehlike', onClick: () => { fotografSil(veri); kapat(); duyur(t('foto.silindi')); yenile(); } }, t('foto.sil')),
         h('button', { type: 'button', class: 'b-dugme b-dugme-ana', onClick: () => { profilFotografiYap(veri); kapat(); duyur(t('foto.profilYapildi')); yenile(); } }, t('foto.profilYap')),
@@ -172,7 +172,7 @@ function ciz(kok, b) {
     h('section', { class: 'b-platform gls-fotolar', 'aria-labelledby': 'gls-foto-baslik' },
       h('h2', { class: 'b-grup-etiket', id: 'gls-foto-baslik' }, h('span', null, t('foto.baslik')), h('span', null, `${(v.profil.fotograflar || []).length} / ${FOTO_SINIRI}`)),
       h('div', { class: 'b-karolar gls-foto-izgara' },
-        (v.profil.fotograflar || []).map((f, i) => h('button', { type: 'button', class: `gls-foto${f === v.profil.foto ? ' gls-foto-profil' : ''}`, 'aria-label': t('foto.ac', { n: i + 1 }), onClick: () => fotoGoster(f, () => ciz(kok, b)) }, h('img', { src: f, alt: '' }))),
+        (v.profil.fotograflar || []).map((f, i) => h('button', { type: 'button', class: `gls-foto${f === v.profil.foto ? ' gls-foto-profil' : ''}`, 'aria-label': t('foto.ac', { n: i + 1 }), onClick: () => fotoGoster(f, () => ciz(kok, b)) }, h('img', { src: fotoAdresi(f), alt: '' }))),
         (v.profil.fotograflar || []).length < FOTO_SINIRI ? h('button', { type: 'button', class: 'b-karo gls-foto-ekle', onClick: async () => {
           const s = await fotografEkle();
           if (s === 'eklendi') { duyur(t('foto.eklendi')); ciz(kok, b); } else if (s === 'hata') duyur(t('foto.hata')); else if (s === 'sinir') duyur(t('foto.sinir', { n: FOTO_SINIRI }));
@@ -192,7 +192,7 @@ function ciz(kok, b) {
     h('section', { class: 'b-platform gls-merkez', 'aria-labelledby': 'gls-merkez-baslik' },
       h('h2', { class: 'gls-merkez-baslik', id: 'gls-merkez-baslik' }, t('ht.ogrenmeMerkezi')),
       h('div', { class: 'b-uygulamalar gls-uygulamalar' },
-        [['senaryo', 'senaryolar', '/senaryolar', 1], ['telaffuz', 'telaffuz', `/gorusme?tur=senaryo&id=${oneri.kimlik}`, 5], ['hafiza', 'hafiza', '/hafiza', 3], ['kupa', 'karne', '/karne', 2], ['baglanti', 'partner', '/kesfet', 4]].map(([ik, ad, yol, renk]) =>
+        [['senaryo', 'senaryolar', '/senaryolar', 1], ['telaffuz', 'telaffuz', '/telaffuz', 5], ['hafiza', 'hafiza', '/hafiza', 3], ['kupa', 'karne', '/karne', 2], ['baglanti', 'partner', '/kesfet', 4]].map(([ik, ad, yol, renk]) =>
           h('button', { type: 'button', class: 'b-uygulama', onClick: () => b.git(yol) }, h('span', { class: `b-uygulama-ikon b-kutu-${renk}` }, ikon3d(ik, 38)), t(`ht.merkez.${ad}`))),
       ),
     ),

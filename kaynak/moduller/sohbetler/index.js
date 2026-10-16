@@ -8,7 +8,7 @@ import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { kisaTarih } from '../../cekirdek/zaman.js';
 import { oneriSenaryo } from '../../cekirdek/oneri.js';
-import { testModuAcik, testSohbetOzetleri, aktiflik, enIyiEslesmeler, saatFarki, YAKIN_SAAT_FARKI, okunmamis } from '../../cekirdek/test-modu.js';
+import { testModuAcik, testSohbetOzetleri, aktiflik, enIyiEslesmeler, saatFarki, YAKIN_SAAT_FARKI, okunmamis, uyumDuzeyi } from '../../cekirdek/test-modu.js';
 
 const SON_KONUSMA_SAYISI = 30;
 
@@ -20,7 +20,7 @@ const HIZLI = [
   ['yz', 'koc', null, 4],
   ['baglanti', 'partner', '/kesfet', 5],
   ['anlar', 'anlar', '/dil-anlari', 2],
-  ['telaffuz', 'telaffuz', null, 5],
+  ['telaffuz', 'telaffuz', '/telaffuz', 5],
   ['kitap', 'defter', '/gelisim?sekme=profil', 6],
   ['kupa', 'karne', '/gelisim?sekme=gelisim', 2],
   ['pratik', 'odalar', '/bugun', 1],
@@ -143,7 +143,7 @@ function ciz(kok, b) {
       oneri && !testOzet.some((o) => o.profil.kimlik === oneri.profil.kimlik) ? h('button', { type: 'button', class: 'b-liste-satir shb-oneri', onClick: () => b.git(`/kisi?k=${oneri.profil.kimlik}`) },
         testAvatar(oneri.profil, 52, { cevrimici: aktiflik(oneri.profil).cevrimici }),
         h('span', { class: 'b-liste-ic' },
-          h('span', { class: 'b-liste-ust' }, h('b', null, oneri.profil.ad), testEtiketi(), h('span', { class: 'b-etiket-hap b-etiket-hap-iyi shb-uyum' }, t('ht.uyum', { n: oneri.puan }))),
+          h('span', { class: 'b-liste-ust' }, h('b', null, oneri.profil.ad), testEtiketi(), h('span', { class: 'b-etiket-hap b-etiket-hap-iyi shb-uyum' }, t(`ht.uyumDuzey.${uyumDuzeyi(oneri.puan)}`))),
           h('span', { class: 'b-liste-alt shb-oneri-alt' }, t('ht.oneriSatir')),
         )) : null,
       !kocVar && !testler.length && !gecmisler.length

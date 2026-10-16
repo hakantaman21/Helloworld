@@ -80,12 +80,14 @@
     --renk-kutu-6: #FAF2DC;
     --renk-perde: rgba(10, 11, 15, 0.55);
 
+    /* v0.14.0 Yazı boyutu ölçeği: "Büyük" yazı zoom yerine tüm font-size değerlerini 1,12 ile çarpar (sabit/yapışkan öğeler kaymaz). */
+    --yazi-olcek: 1;
     --yazi-serif: Georgia, "Times New Roman", serif;
     --yazi-aile: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Figtree, system-ui, -apple-system, "Segoe UI", sans-serif;
-    --yazi-baslik: 28px;
-    --yazi-altbaslik: 17px;
-    --yazi-govde: 15px;
-    --yazi-kucuk: 13px;
+    --yazi-baslik: calc(28px * var(--yazi-olcek));
+    --yazi-altbaslik: calc(17px * var(--yazi-olcek));
+    --yazi-govde: calc(15px * var(--yazi-olcek));
+    --yazi-kucuk: calc(13px * var(--yazi-olcek));
 
     --bosluk-1: 4px;
     --bosluk-2: 8px;
@@ -171,4 +173,5 @@
     --renk-kart-parilti: color-mix(in srgb, #8AF3E5 8%, transparent);
     --renk-kart-alt-golge: color-mix(in srgb, #000000 55%, transparent);
   }
+  :root[data-yazi="buyuk"] { --yazi-olcek: 1.12; }
 }

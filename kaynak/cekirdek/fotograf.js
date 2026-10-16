@@ -1,6 +1,97 @@
 // Profil fotoğrafları: telefondan seçilen ya da çekilen resim cihazda küçültülür (en uzun kenar 480 px, JPEG)
 // ve yalnız bu cihazda saklanır; sunucuya gönderilmez. En çok FOTO_SINIRI fotoğraf.
+// v0.14.0: resimler localStorage'da değil IndexedDB'de durur (kota). Profilde yalnız "mdy:<kimlik>" başvurusu tutulur;
+// açılışta hepsi belleğe alınır (medyaHazirla), ekran fotoAdresi() ile çizer. IndexedDB yoksa eski yol (veri adresi) sürer.
 import { al, degistir } from './depo.js';
+
+const DB_ADI = 'helloworld-medya';
+const DEPO = 'foto';
+const ONEK = 'mdy:';
+const onbellek = new Map();
+let db = null;
+
+function dbAc() {
+  return new Promise((coz) => {
+    try {
+      if (!window.indexedDB) { coz(null); return; }
+      const istek = indexedDB.open(DB_ADI, 1);
+      istek.onupgradeneeded = () => istek.result.createObjectStore(DEPO);
+      istek.onsuccess = () => coz(istek.result);
+      istek.onerror = () => coz(null);
+      istek.onblocked = () => coz(null);
+    } catch { coz(null); }
+  });
+}
+function islem(kip, fn) {
+  return new Promise((coz) => {
+    if (!db) { coz(null); return; }
+    try {
+      const tx = db.transaction(DEPO, kip);
+      const sonuc = fn(tx.objectStore(DEPO));
+      tx.oncomplete = () => coz(sonuc && 'result' in sonuc ? sonuc.result : true);
+      tx.onerror = () => coz(null);
+      tx.onabort = () => coz(null);
+    } catch { coz(null); }
+  });
+}
+async function medyaYaz(veri) {
+  const kimlik = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
+  const tamam = await islem('readwrite', (d) => d.put(veri, kimlik));
+  if (!tamam) return veri;
+  onbellek.set(kimlik, veri);
+  return ONEK + kimlik;
+}
+
+// Ekranda <img src> için: başvuruyu gerçek resme çevirir.
+export function fotoAdresi(ref) {
+  if (!ref) return '';
+  return String(ref).startsWith(ONEK) ? (onbellek.get(String(ref).slice(ONEK.length)) || '') : ref;
+}
+
+// Açılışta: IndexedDB'yi aç, resimleri belleğe al, profildeki eski veri adreslerini taşı. En çok 1,5 sn bekler.
+export async function medyaHazirla() {
+  const bekle = new Promise((coz) => setTimeout(coz, 1500));
+  await Promise.race([(async () => {
+    db = await dbAc();
+    if (!db) return;
+    await new Promise((coz) => {
+      try {
+        const tx = db.transaction(DEPO, 'readonly');
+        const imlec = tx.objectStore(DEPO).openCursor();
+        imlec.onsuccess = () => { const c = imlec.result; if (c) { onbellek.set(c.key, c.value); c.continue(); } else coz(); };
+        imlec.onerror = () => coz();
+      } catch { coz(); }
+    });
+    const p = al().profil;
+    const eskiler = (p.fotograflar || []).filter((f) => String(f).startsWith('data:'));
+    if (!eskiler.length && !String(p.foto || '').startsWith('data:')) return;
+    const harita = new Map();
+    for (const f of new Set([...eskiler, ...(String(p.foto || '').startsWith('data:') ? [p.foto] : [])])) harita.set(f, await medyaYaz(f));
+    degistir((v) => {
+      v.profil.fotograflar = (v.profil.fotograflar || []).map((f) => harita.get(f) || f);
+      if (harita.has(v.profil.foto)) v.profil.foto = harita.get(v.profil.foto);
+    });
+  })(), bekle]);
+}
+
+// Yedek için: başvuruların resimleri { kimlik: veri } olarak.
+export function medyaDisaAktar() {
+  const p = al().profil;
+  const sonuc = {};
+  for (const f of [...(p.fotograflar || []), p.foto]) if (f && String(f).startsWith(ONEK)) sonuc[String(f).slice(ONEK.length)] = fotoAdresi(f);
+  return sonuc;
+}
+export async function medyaIceAktar(medya) {
+  for (const [kimlik, veri] of Object.entries(medya || {})) {
+    if (typeof veri !== 'string' || !veri.startsWith('data:image/')) continue;
+    if (await islem('readwrite', (d) => d.put(veri, kimlik))) onbellek.set(kimlik, veri);
+  }
+}
+// "Verileri sil": tüm resimler de silinir.
+export async function medyaSil() {
+  onbellek.clear();
+  await islem('readwrite', (d) => d.clear());
+}
 
 export const FOTO_SINIRI = 6;
 const EN_UZUN_KENAR = 480;
@@ -42,7 +133,7 @@ export async function fotografEkle({ profilYap = false } = {}) {
   const dosya = await dosyaSec();
   if (!dosya) return 'vazgecti';
   try {
-    const veri = await kucult(dosya);
+    const veri = await medyaYaz(await kucult(dosya));
     degistir((v) => {
       const liste = (v.profil.fotograflar || []).slice(0, FOTO_SINIRI - 1);
       v.profil.fotograflar = [veri, ...liste];
@@ -59,6 +150,7 @@ export function profilFotografiYap(veri) {
 }
 
 export function fotografSil(veri) {
+  if (String(veri).startsWith(ONEK)) { const k = String(veri).slice(ONEK.length); onbellek.delete(k); islem('readwrite', (d) => d.delete(k)); }
   degistir((v) => {
     v.profil.fotograflar = (v.profil.fotograflar || []).filter((f) => f !== veri);
     if (v.profil.foto === veri) v.profil.foto = v.profil.fotograflar[0] || null;

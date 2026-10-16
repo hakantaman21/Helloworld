@@ -14,7 +14,7 @@
   }
   .gls-karne-baslik { font-size: var(--yazi-kucuk); font-weight: 700; letter-spacing: 0.04em; color: var(--renk-gece-soluk); }
   .gls-olcu { display: flex; flex-direction: column; gap: 2px; }
-  .gls-deger { font-size: 26px; font-weight: 700; }
+  .gls-deger { font-size: calc(26px * var(--yazi-olcek)); font-weight: 700; }
   .gls-deger-vurgu { color: var(--renk-gece-vurgu); }
   .gls-etiket { font-size: var(--yazi-kucuk); color: var(--renk-gece-soluk); }
 
@@ -50,7 +50,7 @@
     border-radius: var(--kose-tam);
     background: var(--renk-vurgu-acik);
     color: var(--renk-vurgu-acik-metin);
-    font-size: 22px;
+    font-size: calc(22px * var(--yazi-olcek));
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -69,28 +69,28 @@
 @layer moduller {
   .gls-seri-hap { display: inline-flex; align-items: center; gap: 4px; min-height: 36px; padding: 0 10px 0 6px; border-radius: var(--kose-tam); background: var(--renk-yuzey); font-weight: 800; }
   .gls-ben { display: flex; align-items: center; gap: 14px; width: 100%; padding: 6px 0; border: 0; background: transparent; color: var(--renk-murekkep); font: inherit; text-align: left; cursor: pointer; }
-  .gls-ben-av { width: 76px; height: 76px; font-size: 32px; }
+  .gls-ben-av { width: 76px; height: 76px; font-size: calc(32px * var(--yazi-olcek)); }
   .gls-ben-ic { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
-  .gls-ben-ad { display: flex; align-items: center; gap: 8px; font-size: 22px; }
-  .gls-ben-sayilar { font-size: 13.5px; color: var(--renk-soluk); }
+  .gls-ben-ad { display: flex; align-items: center; gap: 8px; font-size: calc(22px * var(--yazi-olcek)); }
+  .gls-ben-sayilar { font-size: calc(13.5px * var(--yazi-olcek)); color: var(--renk-soluk); }
   .gls-ben-sayilar b { color: var(--renk-murekkep); }
   .gls-istat { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .gls-istat-kutu { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 76px; padding: 10px 14px; border: 1px solid var(--renk-cizgi); border-radius: 16px; background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; font-size: 13.5px; text-align: left; cursor: pointer; }
-  .gls-istat-deger { display: flex; align-items: center; gap: 6px; font-size: 26px; font-weight: 800; line-height: 1.1; }
-  .gls-satir { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 0 14px; border: 1px solid var(--renk-cizgi); border-radius: 16px; background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; font-size: 16px; cursor: pointer; }
+  .gls-istat-kutu { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 76px; padding: 10px 14px; border: 1px solid var(--renk-cizgi); border-radius: 16px; background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; font-size: calc(13.5px * var(--yazi-olcek)); text-align: left; cursor: pointer; }
+  .gls-istat-deger { display: flex; align-items: center; gap: 6px; font-size: calc(26px * var(--yazi-olcek)); font-weight: 800; line-height: 1.1; }
+  .gls-satir { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 0 14px; border: 1px solid var(--renk-cizgi); border-radius: 16px; background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; font-size: calc(16px * var(--yazi-olcek)); cursor: pointer; }
   .gls-satir b { flex: 1; text-align: left; }
   .gls-satir-sayi { font-weight: 800; }
   .gls-merkez { display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 16px; background: var(--renk-yuzey); border: 1px solid var(--renk-cizgi); }
-  .gls-merkez-baslik { font-size: 17px; font-weight: 800; }
+  .gls-merkez-baslik { font-size: calc(17px * var(--yazi-olcek)); font-weight: 800; }
   .gls-istat-kutu:focus-visible, .gls-satir:focus-visible, .gls-ben:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
 }
 
 @layer moduller {
   .gls-ilgi { display: flex; flex-direction: column; gap: 8px; width: 100%; min-height: 56px; padding: 10px 14px; border: 1px solid var(--renk-cizgi); border-radius: 16px; background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; text-align: left; cursor: pointer; }
   .gls-ilgi-ust { display: flex; align-items: center; gap: 8px; }
-  .gls-ilgi-ust b { flex: 1; font-size: 16px; }
+  .gls-ilgi-ust b { flex: 1; font-size: calc(16px * var(--yazi-olcek)); }
   .gls-ilgi-haplar { display: flex; flex-wrap: wrap; gap: 6px; }
-  .gls-ilgi-hap { padding: 4px 10px; border-radius: var(--kose-tam); background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); font-size: 13px; font-weight: 700; }
+  .gls-ilgi-hap { padding: 4px 10px; border-radius: var(--kose-tam); background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); font-size: calc(13px * var(--yazi-olcek)); font-weight: 700; }
   .gls-ilgi:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
 }
 
@@ -102,9 +102,9 @@
 /* v0.6.0 karne açıklaması, fotoğraflar, cümle defteri */
 @layer moduller {
   .gls-karne-alt { display: flex; justify-content: flex-end; margin-top: -6px; }
-  .gls-ne-anlama { min-height: 44px; padding: 0 12px; border: 0; border-radius: var(--kose-tam); background: color-mix(in srgb, var(--renk-gece-soluk) 22%, transparent); color: var(--renk-gece-soluk); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .gls-ne-anlama { min-height: 44px; padding: 0 12px; border: 0; border-radius: var(--kose-tam); background: color-mix(in srgb, var(--renk-gece-soluk) 22%, transparent); color: var(--renk-gece-soluk); font: inherit; font-size: calc(12px * var(--yazi-olcek)); font-weight: 600; cursor: pointer; }
   .gls-ne-anlama:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
-  .gls-ne-anlama-metin { font-size: 12.5px; line-height: 1.45; color: var(--renk-gece-soluk); }
+  .gls-ne-anlama-metin { font-size: calc(12.5px * var(--yazi-olcek)); line-height: 1.45; color: var(--renk-gece-soluk); }
   .gls-fotolar, .gls-defter { display: flex; flex-direction: column; gap: 8px; }
   .gls-foto { aspect-ratio: 1; padding: 0; border: 0; border-radius: 14px; overflow: hidden; cursor: pointer; background: var(--renk-yuzey-ikinci); box-shadow: 0 2px 6px var(--renk-golge); }
   .gls-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -114,8 +114,8 @@
   .gls-foto-buyuk { width: 100%; max-height: 60dvh; object-fit: contain; border-radius: 16px; }
   .gls-defter-liste { display: flex; flex-direction: column; gap: 6px; }
   .gls-defter-satir { display: flex; align-items: center; gap: 4px; padding: 4px 4px 4px 12px; border-radius: 12px; background: var(--renk-yuzey-ikinci); }
-  .gls-defter-metin { flex: 1; display: flex; flex-direction: column; font-size: 14px; line-height: 1.4; min-width: 0; overflow-wrap: anywhere; }
-  .gls-defter-metin small { font-size: 11.5px; color: var(--renk-soluk); }
+  .gls-defter-metin { flex: 1; display: flex; flex-direction: column; font-size: calc(14px * var(--yazi-olcek)); line-height: 1.4; min-width: 0; overflow-wrap: anywhere; }
+  .gls-defter-metin small { font-size: calc(11.5px * var(--yazi-olcek)); color: var(--renk-soluk); }
   .gls-defter-dugme { flex-shrink: 0; display: grid; place-items: center; width: 44px; min-height: 48px; border: 0; background: transparent; color: var(--renk-soluk); cursor: pointer; }
 }
 
@@ -124,10 +124,10 @@
   .gls-puanlar { display: flex; flex-direction: column; gap: 8px; }
   .gls-puan { gap: 2px; min-height: 76px; }
   .gls-puan-ikon { color: var(--renk-baslik); display: inline-flex; }
-  .gls-puan-deger { font-size: 20px; font-weight: 800; line-height: 1.1; }
+  .gls-puan-deger { font-size: calc(20px * var(--yazi-olcek)); font-weight: 800; line-height: 1.1; }
   .gls-davet { display: flex; align-items: center; gap: 12px; }
   .gls-davet-metin { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .gls-davet-metin b { font-size: 16px; }
-  .gls-davet-metin span { font-size: 12.5px; color: var(--renk-soluk); }
+  .gls-davet-metin b { font-size: calc(16px * var(--yazi-olcek)); }
+  .gls-davet-metin span { font-size: calc(12.5px * var(--yazi-olcek)); color: var(--renk-soluk); }
   .gls-davet-dugme { width: auto; padding: 0 16px; }
 }

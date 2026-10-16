@@ -26,7 +26,7 @@ export default {
   suzgec: {
     tumYaslar: 'Tüm yaşlar', 
     sik: 'Sık kullanılan', detay: 'Detaylı', sikBaslik: 'Tek dokunuşla',
-    hizli: { cevrimici: 'Çevrimiçi', yeni: 'Yeni üyeler', yakin: 'Seviyeme yakın', ortakIlgi: 'Ortak ilgi', hizli: 'Hızlı yanıt', karsilikli: 'Dilimi öğrenen' },
+    hizli: { cevrimici: 'Çevrimiçi', yeni: 'Yeni üyeler', yakin: 'Seviyeme yakın', ortakIlgi: 'Ortak ilgi', hizli: 'Hızlı yanıt', karsilikli: 'Dilimi öğrenen', ciddi: 'Ciddi öğrenen', saat: 'Yakın saat dilimi' }, kaldir: 'kaldır',
     anaDili: 'Ana dili', ogreniyor: 'Öğrendiği dil', seviye: 'Seviye', ulke: 'Ülke',
     goster: '{n} kişiyi göster', sifirla: 'Sıfırla', etkin: '{n} süzgeç etkin', temizle: 'Temizle',
     ucretsiz: 'Tüm süzgeçler herkese açık; ücretli üyelik gerekmez.',
@@ -80,7 +80,7 @@ export default {
     sohbetBaslik: 'Dil Sohbetleri', hizliErisim: 'Hızlı erişim', ara: 'Arama', cevrimici: 'Çevrimiçi', sen: 'Sen', yzPratik: 'yapay zekâ pratiği',
     hizli: { senaryolar: 'Senaryolar', hafiza: 'Hata Hafızası', koc: 'AI Koç', partner: 'Partner bul', anlar: 'Dil Anları' , telaffuz: 'Telaffuz', defter: 'Cümle defteri', karne: 'Karne', odalar: 'Konu odaları' },
     uyum: '%{n} uyum', uyumKisa: 'uyum', uyumBaslik: 'Dil değişimi uyumu', oneriSatir: 'Sana en uygun dil ortağı · selam vermek için dokun',
-    ciddi: 'Ciddi öğrenenler', yakinSaat: 'Yakın saat dilimi', karsilikli: 'Karşılıklı', kadin: 'Kadın', erkek: 'Erkek', ogren: 'Öğren', sinif: 'Sınıf arkadaşları', okunmamis: 'Okunmamış',
+    uyumDuzey: { cok: 'Çok uygun', iyi: 'Uygun', olasi: 'Olası eşleşme' }, ciddi: 'Ciddi öğrenenler', yakinSaat: 'Yakın saat dilimi', karsilikli: 'Karşılıklı', kadin: 'Kadın', erkek: 'Erkek', ogren: 'Öğren', sinif: 'Sınıf arkadaşları', okunmamis: 'Okunmamış',
     ortakBul: 'Dil Ortakları Bul', sanaUygun: 'Sana uygun', yeni: 'Yeni', tumDiller: 'Tüm diller', dil: 'Dil', dilimiOgrenen: '{dil} öğrenenler',
     suzgecler: 'Süzgeçler', yas: 'Yaş', cinsiyet: 'Cinsiyet', cins: { tum: 'Tümü', k: 'Kadın', e: 'Erkek' },
     yasAralik: { tum: 'Tümü', genc: '18–25', orta: '26–35', ust: '36+' }, yalnizHizli: 'Yalnız hızlı yanıt verenler',
@@ -135,6 +135,7 @@ export default {
   },
 
   ekran: {
+    telaffuz: 'Telaffuz çalışması',
     karsilama: 'Hoş geldin',
     bugun: 'Pratik',
     sohbetler: 'Sohbetler',
@@ -450,6 +451,7 @@ export default {
   },
 
   senaryolar: {
+    sureDk: '~{n} dk', basari: 'Başarı ölçütü',
     baslik: 'Senaryolar',
     alt: 'Teknoloji ve yapay zekâ dahil 9 yaşam alanı, A1’den B2’ye',
     seviyeEtiket: 'Seviye',
@@ -535,6 +537,7 @@ export default {
     ortaDugme: 'Orta düğme kısayolu', ortaDugmeAciklama: 'Ortadaki Pratik düğmesine dokununca ne olsun? Basılı tutunca hepsi açılır.',
     ortaSecenek: { pratik: 'Pratik', arama: 'Koç araması', senaryo: 'Senaryo', telaffuz: 'Telaffuz' },
     renkAd: { altin: 'Altın', mavi: 'Mavi', yesil: 'Yeşil', mercan: 'Mercan', mor: 'Mor', turkuaz: 'Turkuaz', varsayilan: 'Varsayılan', notr: 'Nötr', gece: 'Gece mavisi', bordo: 'Bordo', antrasit: 'Antrasit', sayfa: 'Sayfa rengi' },
+    kocSesi: 'Koç sesi', kocSesiOto: 'Otomatik (en iyi İngilizce ses)', kocSesiAciklama: 'Cihazındaki İngilizce sesler: ABD, İngiltere, Avustralya… Seçince örnek cümle çalar.',
     yakinda: 'yakında', ogrenilenDilNot: 'Konuşma koçu, sözlük ve düzeltmeler şimdilik yalnız İngilizce. Diğer diller hazır olunca açılacak.',
     gelismis: 'Gelişmiş özelleştirme', ozelGorunum: 'Özel görünüm', varsayilanaDon: 'Görünümü varsayılana döndür',
     geriYukle: 'Yedekten geri yükle (.json)', geriYukleOnay: 'Seçtiğin yedek, bu cihazdaki tüm verilerin yerine geçecek. Devam edilsin mi?', geriYukleEvet: 'Geri yükle', geriYuklendi: 'Yedek geri yüklendi.',
@@ -641,7 +644,7 @@ export default {
     kesfetEtiket: 'Bağlan panosu',
     anlarEtiket: 'Dil Anları panosu',
     eslesmeEtiket: 'Sana en uygun',
-    eslesmeBaslik: '{ad} · %{n} uyum',
+    eslesmeBaslik: '{ad} · {duzey}',
     eslesmeDugme: 'Profili gör',
     cevrimiciEtiket: 'Şu an',
     cevrimiciBaslik: '{n} kişi çevrimiçi',
@@ -681,6 +684,18 @@ export default {
     defterBaslik: 'Beğendiğin cümleyi sakla',
     defterAlt: 'Yer imi simgesi cümleyi Cümle Defterine kaydeder; sonra tekrar edersin.',
     defterDugme: 'Deftere git',
+  },
+  telaffuz: {
+    baslik: 'Telaffuz çalışması', alt: 'Dinle, söyle, karşılaştır, tekrar et',
+    kaynakEtiket: 'Cümle kaynağı', kaynak: { seviye: 'Seviyeme uygun', tum: 'Tüm senaryolar', hafiza: 'Hata Hafızam' },
+    dinle: 'Dinle', yavas: 'Yavaş', soyle: 'Şimdi söyle', dinliyorum: 'Dinliyorum…', tekrarDene: 'Yeniden dene',
+    onceki: 'Önceki', sonraki: 'Sonraki', kaydet: 'Deftere kaydet', kayitli: 'Defterde',
+    taninan: 'Tanınan metin', hepsi: 'Hedef cümledeki bütün sözcükler tanındı.', eksikler: '{n} sözcük tanınmadı; altı çizili olanları dinleyip yeniden dene.',
+    puanDegil: 'Bu bir telaffuz puanı değildir: tarayıcının ses tanıması yalnız ne duyduğunu yazar.',
+    tanimaYok: 'Bu tarayıcı ses tanımayı desteklemiyor. Dinle ve cümleyi sesli tekrar et; Chrome\'da karşılaştırma da çalışır.',
+    izinYok: 'Mikrofon izni olmadan yalnız dinleyip tekrar edebilirsin.', duyulmadi: 'Ses duyulmadı; yeniden dene.',
+    bos: 'Bu seviyede cümle yok; "Tüm senaryolar"ı seç.', hafizaBos: 'Hata Hafızanda telaffuz öğesi yok.',
+    nasil: 'Önce dinle, sonra söyle. Tanınmayan sözcükler altı çizili görünür; onları yavaş dinleyip yeniden dene.',
   },
   zamanOnce: { simdi: 'şimdi', dk: '{n} dk önce', saat: '{n} sa önce', gun: '{n} gün önce' },
 };

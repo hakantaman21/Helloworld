@@ -12,12 +12,16 @@ export function temaUygula() {
   if (ayarlar.zemin && ayarlar.zemin !== 'varsayilan') kok.setAttribute('data-zemin', ayarlar.zemin); else kok.removeAttribute('data-zemin');
   kok.setAttribute('data-bant', ayarlar.bantRengi || 'sayfa');
   kok.setAttribute('data-suzgec', ayarlar.suzgecBicimi || 'klasik');
-  if (tercih === 'sistem') kok.removeAttribute('data-tema');
-  else kok.setAttribute('data-tema', tercih);
+  // "Sistem": cihazın temasına göre koyu/açık yazılır (CSS'te tek koyu blok var).
+  kok.setAttribute('data-tema', tercih === 'sistem' || !tercih ? (sistemKoyu() ? 'koyu' : 'acik') : tercih);
 }
+
+const sistemSorgusu = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+function sistemKoyu() { return Boolean(sistemSorgusu && sistemSorgusu.matches); }
 
 export function temaBaslat() {
   temaUygula();
+  if (sistemSorgusu && sistemSorgusu.addEventListener) sistemSorgusu.addEventListener('change', temaUygula);
   dinle('depo:degisti', temaUygula);
 }
 

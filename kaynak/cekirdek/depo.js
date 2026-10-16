@@ -91,6 +91,7 @@ export function iceAktar(metin) {
   try { aday = JSON.parse(metin); } catch { return { tamam: false, neden: 'json' }; }
   if (!aday || typeof aday !== 'object' || !aday.profil || typeof aday.profil !== 'object' || !(aday.semaSurumu >= 1)) return { tamam: false, neden: 'bicim' };
   if ((aday.semaSurumu || 0) > GUNCEL_SEMA) return { tamam: false, neden: 'yeni' };
+  delete aday.medya;
   const onceki = veri;
   try {
     const yeni = goc(aday);

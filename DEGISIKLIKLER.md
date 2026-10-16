@@ -1,3 +1,18 @@
+## 0.14.0 — 16.10.2026 · Değerlendirmelerden kalanların tamamı
+
+- Bağlan sadeleşti: üstte yalnız Tümü · Sana uygun · Çevrimiçi · Yeni. Ciddi öğrenen, yakın saat dilimi, karşılıklı, seviye ve cinsiyet süzgeç penceresinde.
+- Etkin süzgeçler adlarıyla görünür ve tek tek × ile kaldırılır; Bağlan seçimi uygulama kapanıp açılınca da hatırlanır.
+- "%93 uyum" yerine sözlü düzey: Çok uygun / Uygun / Olası eşleşme (puan bilimsel bir olasılık değil, kural toplamı).
+- Yeni ekran: Telaffuz çalışması — dinle, yavaş dinle, söyle, tanınan sözcükleri karşılaştır (tanınmayanlar altı çizili), yeniden dene, deftere kaydet. Puan verilmez; ses tanıma telaffuz puanı değildir. Orta düğmenin "Telaffuz" kısayolu ve Pratik/Profil kısayolları buraya gider.
+- Koç sesi seçimi (Ayarlar › Koç ve pratik): cihazdaki İngilizce sesler (ABD, İngiltere, Avustralya…), seçince örnek cümle çalar.
+- Koç, kullanıcı soruya cevap yerine kendi sorusunu sorarsa bunu kabul edip aynı soruyu bir kez yeniden soruyor.
+- Senaryo satırlarında tahmini süre ve başarı ölçütü (görev).
+- Fotoğraflar artık tarayıcının IndexedDB deposunda (localStorage kota sorunu yok); eski fotoğraflar açılışta taşınır; yedek dosyası fotoğrafları da içerir; "Verileri sil" fotoğrafları da siler.
+- "Büyük yazı" artık ekranı zoom ile büyütmüyor; tüm yazı boyutları ölçeklenir (alt menü ve yapışkan başlık kaymaz).
+- Koyu tema tek blokta; "Sistem" teması sayfa açılmadan önce belirlenir (koyu cihazda açık ekran yanıp sönmez).
+- Geliştirici: araclar/davranis-sinama.py — her ekranı boş veri ve test moduyla açar, hata/boş ekran/çevrimdışı duyurusunu denetler.
+- Şema 15: ayarlar.kocSesi, ayarlar.kesfetSecimi.
+
 ## 0.13.0 — 16.10.2026 · Güvenilirlik sürümü (ChatGPT, Gemini ve Grok değerlendirmelerinden)
 
 - Veri güvenliği: "Verileri sil" artık yedek kopyaları da siliyor; kayıt yazılamazsa ekran "kaydedilemedi" diyor; bozuk eski kayıt sessizce silinmiyor; indirilen yedek Ayarlar'dan geri yüklenebiliyor.

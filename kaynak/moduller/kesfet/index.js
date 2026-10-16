@@ -5,15 +5,28 @@ import './kesfet.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, altGezinme, basBant, afisKaydirici, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman, kurallarSeridi, aralikKaydirici } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
-import { al } from '../../cekirdek/depo.js';
+import { al, degistir } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
-import { saatFarki, YAKIN_SAAT_FARKI, testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler } from '../../cekirdek/test-modu.js';
+import { uyumDuzeyi, saatFarki, YAKIN_SAAT_FARKI, testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler } from '../../cekirdek/test-modu.js';
 import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 
 const SELAM_YANIT_GECIKMESI = 1500;
 const kayitli = { durum: null, suzgec: null };
+// v0.14.0: Bağlan seçimi uygulama kapanıp açılınca da hatırlanır (cihazda, ayarlar.kesfetSecimi).
+function secimiOku() {
+  const k = al().profil.ayarlar.kesfetSecimi;
+  if (!k || kayitli.durum) return;
+  kayitli.durum = { sekme: k.sekme || 'tum', dil: k.dil || 'hedef', eslesmeSira: -1 };
+  const f = bosSuzgec();
+  kayitli.suzgec = { ...f, ...k.suzgec, hizli: new Set((k.suzgec || {}).hizli || []), ulkeler: new Set((k.suzgec || {}).ulkeler || []), ilgiler: new Set((k.suzgec || {}).ilgiler || []), yas: (k.suzgec || {}).yas || f.yas, seviye: (k.suzgec || {}).seviye || f.seviye };
+}
+function secimiYaz(d, f) {
+  const yeni = { sekme: d.sekme, dil: d.dil, suzgec: { ...f, hizli: [...f.hizli], ulkeler: [...f.ulkeler], ilgiler: [...f.ilgiler] } };
+  if (JSON.stringify(yeni) === JSON.stringify(al().profil.ayarlar.kesfetSecimi || null)) return;
+  degistir((v) => { v.profil.ayarlar.kesfetSecimi = yeni; });
+}
 const YAS_MIN = 18;
 const YAS_MAX = 60;
 
@@ -28,6 +41,7 @@ function selamla(p, yenile) {
 const HIZLI_SUZGECLER = [
   ['cevrimici', '🟢'], ['yeni', '✨'], ['yakin', '🎯'],
   ['ortakIlgi', '♥'], ['hizli', '⚡'], ['karsilikli', '🤝'],
+  ['ciddi', '🎓'], ['saat', '🕒'],
 ];
 
 function bosSuzgec() {
@@ -53,6 +67,8 @@ function suzgecUygula(liste, f) {
     if (f.hizli.has('ortakIlgi') && !ortakIlgiler(k).length) return false;
     if (f.hizli.has('hizli') && !(k.rozetler || []).includes('hizli')) return false;
     if (f.hizli.has('karsilikli') && !(ben.anaDil && k.ogrenilenDil === ben.anaDil)) return false;
+    if (f.hizli.has('ciddi') && !(k.rozetler || []).includes('ciddi')) return false;
+    if (f.hizli.has('saat') && saatFarki(k) > YAKIN_SAAT_FARKI) return false;
     if (k.yas < f.yas[0] || (f.yas[1] < YAS_MAX && k.yas > f.yas[1])) return false;
     const sv = SEVIYE_SIRASI.indexOf(k.seviye);
     if (sv < f.seviye[0] || sv > f.seviye[1]) return false;
@@ -183,7 +199,7 @@ function eslesmeKarti(sonuc, b, { sonraki, kapat, yenile }) {
         dilCifti(p.anaDil, p.ogrenilenDil, p.seviye),
         h('span', { class: 'b-kucuk' }, `${yerel(p.ulke)} · ${aktiflikMetni(p)}`),
       ),
-      h('span', { class: 'kft-puan', style: `--kft-puan:${sonuc.puan}%`, 'aria-label': t('ht.uyum', { n: sonuc.puan }) }, h('b', null, `%${sonuc.puan}`), h('small', null, t('ht.uyumKisa'))),
+      h('span', { class: 'kft-puan', style: `--kft-puan:${sonuc.puan}%`, 'aria-label': t(`ht.uyumDuzey.${uyumDuzeyi(sonuc.puan)}`) }, h('b', { class: 'kft-puan-duzey' }, t(`ht.uyumDuzey.${uyumDuzeyi(sonuc.puan)}`))),
     ),
     h('ul', { class: 'kft-nedenler' }, sonuc.nedenler.map((n) => h('li', null, ikon('onay', 14), t(`ht.neden.${n}`, { dil: t(`diller.${n === 'karsilikli' ? p.ogrenilenDil : p.anaDil}`), ortak: sonuc.ortak.map((i) => yerel(i)).join(', ') })))),
     h('div', { class: 'kft-eslesme-eylem' },
@@ -224,8 +240,11 @@ function ciz(kok, b) {
 
   const ben = al().profil;
   // v0.13.0: sekme, dil hapı ve süzgeç ekran yeniden kurulunca (profile girip geri dönünce) korunur.
+  secimiOku();
   const durum = kayitli.durum || { sekme: 'tum', dil: 'hedef', eslesmeSira: -1 };
   durum.eslesmeSira = -1;
+  // v0.14.0: üst sekmeler 4'e indi (Tümü · Sana uygun · Çevrimiçi · Yeni); diğer ölçütler süzgeç penceresinde.
+  if (!['tum', 'uygun', 'cevrimici', 'yeni'].includes(durum.sekme)) durum.sekme = 'tum';
   let suzgec = kayitli.suzgec || bosSuzgec();
   const liste = h('div', { class: 'b-liste kft-liste', 'aria-live': 'polite' });
   const eslesmeAlani = h('div');
@@ -235,8 +254,19 @@ function ciz(kok, b) {
   function suzgecRozeti() {
     const n = etkinSayisi(suzgec);
     yerlestir(suzgecDugmesi, ikon('suzgec', 22), n ? h('span', { class: 'b-ht-rozet' }, String(n)) : null);
+    // v0.14.0: etkin süzgeçler adlarıyla, tek tek kaldırılabilir haplar olarak görünür.
+    const haplar = [];
+    const ekle = (ad, kaldir) => haplar.push(h('button', { type: 'button', class: 'kft-etkin-hap', 'aria-label': `${ad} — ${t('suzgec.kaldir')}`, onClick: () => { kaldir(); yenile(); } }, ad, ' ×'));
+    suzgec.hizli.forEach((k) => ekle(t(`suzgec.hizli.${k}`), () => suzgec.hizli.delete(k)));
+    if (suzgec.cinsiyet !== 'tum') ekle(t(`ht.cins.${suzgec.cinsiyet}`), () => { suzgec.cinsiyet = 'tum'; });
+    if (suzgec.anaDil !== 'tum') ekle(`${t('suzgec.anaDili')}: ${t(`diller.${suzgec.anaDil}`)}`, () => { suzgec.anaDil = 'tum'; });
+    if (suzgec.ogrDil !== 'tum') ekle(`${t('suzgec.ogreniyor')}: ${t(`diller.${suzgec.ogrDil}`)}`, () => { suzgec.ogrDil = 'tum'; });
+    if (suzgec.yas[0] !== YAS_MIN || suzgec.yas[1] !== YAS_MAX) ekle(`${suzgec.yas[0]}–${suzgec.yas[1]}`, () => { suzgec.yas = [YAS_MIN, YAS_MAX]; });
+    if (suzgec.seviye[0] !== 0 || suzgec.seviye[1] !== SEVIYE_SIRASI.length - 1) ekle(`${SEVIYE_SIRASI[suzgec.seviye[0]]}–${SEVIYE_SIRASI[suzgec.seviye[1]]}`, () => { suzgec.seviye = [0, SEVIYE_SIRASI.length - 1]; });
+    suzgec.ulkeler.forEach((u) => ekle(u, () => suzgec.ulkeler.delete(u)));
+    suzgec.ilgiler.forEach((i) => ekle(yerel(ILGI_ALANLARI.find((x) => x.kimlik === i) || { tr: i, en: i }), () => suzgec.ilgiler.delete(i)));
     yerlestir(etkinAlani, n ? h('div', { class: 'kft-etkin' },
-      h('span', null, t('suzgec.etkin', { n })),
+      h('div', { class: 'kft-etkin-haplar' }, haplar),
       h('button', { type: 'button', class: 'kft-etkin-temizle', onClick: () => { suzgec = bosSuzgec(); yenile(); } }, t('suzgec.temizle'))) : null);
   }
 
@@ -254,6 +284,7 @@ function ciz(kok, b) {
 
   function yenile() {
     kayitli.durum = durum; kayitli.suzgec = suzgec;
+    secimiYaz(durum, suzgec);
     suzgecRozeti();
     const kisiler = suz(testProfilleri(), durum, suzgec);
     const temizle = () => { durum.sekme = 'tum'; durum.dil = 'tum'; kayitli.durum = durum; kayitli.suzgec = bosSuzgec(); b.git('/kesfet', { degistir: true }); };
@@ -269,7 +300,7 @@ function ciz(kok, b) {
   const cevrimiciSayisi = testProfilleri().filter((p) => aktiflik(p).cevrimici).length;
   const ilgiVar = (ben.ilgiler || []).length > 0;
   const pano = afisKaydirici([
-    enIyi ? { test: true, renk: 5, etiket: t('pano.eslesmeEtiket'), baslik: t('pano.eslesmeBaslik', { ad: enIyi.profil.ad, n: enIyi.puan }), alt: `${yerel(enIyi.profil.ulke)} · ${enIyi.profil.seviye}`, dugme: t('pano.eslesmeDugme'), gorsel: testAvatar(enIyi.profil, 76, { cevrimici: aktiflik(enIyi.profil).cevrimici }), git: () => b.git(`/kisi?k=${enIyi.profil.kimlik}`) } : null,
+    enIyi ? { test: true, renk: 5, etiket: t('pano.eslesmeEtiket'), baslik: t('pano.eslesmeBaslik', { ad: enIyi.profil.ad, duzey: t(`ht.uyumDuzey.${uyumDuzeyi(enIyi.puan)}`) }), alt: `${yerel(enIyi.profil.ulke)} · ${enIyi.profil.seviye}`, dugme: t('pano.eslesmeDugme'), gorsel: testAvatar(enIyi.profil, 76, { cevrimici: aktiflik(enIyi.profil).cevrimici }), git: () => b.git(`/kisi?k=${enIyi.profil.kimlik}`) } : null,
     cevrimiciSayisi ? { test: true, ikon: 'baglanti', renk: 4, etiket: t('pano.cevrimiciEtiket'), baslik: t('pano.cevrimiciBaslik', { n: cevrimiciSayisi }), alt: t('pano.cevrimiciAlt'), dugme: t('pano.cevrimiciDugme'), git: () => sekmeyeGec('cevrimici') } : null,
     { ikon: 'hedef', renk: 1, etiket: t('pano.ilgiEtiket'), baslik: t('pano.ilgiBaslik'), alt: ilgiVar ? t('pano.ilgiVarAlt') : t('pano.ilgiAlt'), dugme: ilgiVar ? t('pano.ilgiVarDugme') : t('pano.ilgiDugme'), git: () => (ilgiVar ? sekmeyeGec('uygun') : b.git('/ayarlar?bolum=ilgi')) },
     { ikon: 'mektup', renk: 3, etiket: t('pano.selamEtiket'), baslik: t('pano.selamBaslik'), alt: t('pano.selamAlt'), git: () => sekmeyeGec('uygun') },
@@ -282,7 +313,7 @@ function ciz(kok, b) {
       baslik: t('ht.ortakBul'),
       sag: suzgecDugmesi,
     }),
-    sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')], ['ciddi', t('ht.ciddi')], ['saat', t('ht.yakinSaat')], ['karsilikli', t('ht.karsilikli')], ['yakin', t('kesfet.suzgec.seviye')], ['kadin', t('ht.kadin')], ['erkek', t('ht.erkek')]], durum.sekme, (id) => { durum.sekme = id; yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
+    sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')]], durum.sekme, (id) => { durum.sekme = id; yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
     pano,
     sekmeler([
       ['hedef', t(`diller.${ben.ogrenilenDil || 'en'}`)],

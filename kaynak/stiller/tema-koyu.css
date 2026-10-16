@@ -1,5 +1,6 @@
 /* Koyu tema: yalnız renk jetonlarını değiştirir (Y3).
-   Aynı değerler iki yerde durur: kullanıcı "koyu" seçtiğinde ve sistem koyuyken. Robot ikisinin aynı olduğunu denetler. */
+   v0.14.0: değerler tek yerde. "Sistem" seçiliyken tema.js (ve index.html'deki erken betik) cihaz temasına göre
+   data-tema="koyu" ya da "acik" yazar; önceki @media kopyası kaldırıldı. */
 @layer tema {
   :root[data-tema="koyu"] {
     color-scheme: dark;
@@ -60,83 +61,14 @@
     --renk-perde: rgba(0, 0, 0, 0.62);
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-tema="acik"]) {
-      color-scheme: dark;
-      --renk-zemin: #121A1C;
-    --renk-kart-ust: #1E3236; --renk-kart-alt: #020506; --renk-kart-parilti: color-mix(in srgb, #8AF3E5 9%, transparent); --renk-kart-alt-golge: color-mix(in srgb, #000000 55%, transparent);
-      --renk-yuzey: #142E30;
-      --renk-yuzey-ikinci: #0F2223;
-      --renk-murekkep: #F3F1EB;
-      --renk-soluk: #A4B9B7;
-      --renk-cizgi: #24494A;
-      --renk-cizgi-guclu: #3A6363;
-      --renk-vurgu: #DCB35C;
-      --renk-vurgu-uzerinde: #251B0C;
-      --renk-vurgu-metin: #F0D080;
-      --renk-vurgu-acik: #2E2814;
-      --renk-vurgu-acik-metin: #F3D58A;
-      --renk-sayfa-mavi: #8AB4F8;
-      --renk-sayfa-yesil: #81C995;
-      --renk-sayfa-kirmizi: #F28B82;
-      --renk-sayfa-sari: #FDD663;
-      --renk-sayfa-mor: #D7AEFB;
-      --renk-onizleme-zemin-notr: #050607;
-      --renk-onizleme-zemin-mavi: #0B1222;
-      --renk-onizleme-zemin-mor: #150D1C;
-      --renk-onizleme-zemin-yesil: #0B140F;
-      --renk-onizleme-zemin-varsayilan: #121A1C;
-      --renk-iyi: #2E9E65;
-      --renk-iyi-metin: #7AD3A0;
-      --renk-iyi-acik: #173A2A;
-      --renk-orta-metin: #E8BE5E;
-      --renk-orta-acik: #3A2E14;
-      --renk-kotu: #B42318;
-      --renk-kotu-metin: #F49A92;
-      --renk-kotu-acik: #3D1A18;
-      --renk-gece: #0A1314;
-      --renk-gece-yuzey: #142E30;
-      --renk-gece-cizgi: #3A6363;
-      --renk-gece-metin: #FFFFFF;
-      --renk-gece-soluk: #C9CDD6;
-      --renk-gece-vurgu: #F0C866;
-      --renk-golge: rgba(0, 0, 0, 0.45);
-      --renk-yuzey-ust: #1D4A4C;
-      --renk-kabartma-isik: rgba(255, 255, 255, 0.06);
-      --renk-vurgu-parlak: #F0D080;
-      --renk-grup-1: #7CB4F5;
-      --renk-grup-2: #5FD4C4;
-      --renk-grup-3: #B79BF5;
-      --renk-grup-4: #F0C866;
-      --renk-grup-5: #7AD3A0;
-    --renk-zemin-ust: #182528;
-      --renk-baslik: #72D4CF;
-      --renk-kutu-1: #2C2347;
-      --renk-kutu-2: #3A2E12;
-      --renk-kutu-3: #123528;
-      --renk-kutu-4: #17243F;
-      --renk-kutu-5: #0F3233;
-      --renk-kutu-6: #3A3115;
-      --renk-perde: rgba(0, 0, 0, 0.62);
-    }
-  }
   /* v0.9.0 seçim rengi ve zemin seçenekleri, koyu tema karşılıkları */
   :root[data-tema="koyu"][data-secim="mavi"] { --renk-vurgu: #8AB4F8; --renk-vurgu-parlak: #AECBFA; --renk-vurgu-uzerinde: #0B1F3A; --renk-vurgu-metin: #AECBFA; --renk-vurgu-acik: #1A2A44; --renk-vurgu-acik-metin: #AECBFA; }
-  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-secim="mavi"] { --renk-vurgu: #8AB4F8; --renk-vurgu-parlak: #AECBFA; --renk-vurgu-uzerinde: #0B1F3A; --renk-vurgu-metin: #AECBFA; --renk-vurgu-acik: #1A2A44; --renk-vurgu-acik-metin: #AECBFA; } }
   :root[data-tema="koyu"][data-secim="yesil"] { --renk-vurgu: #81C995; --renk-vurgu-parlak: #A8DAB5; --renk-vurgu-uzerinde: #0B2A16; --renk-vurgu-metin: #A8DAB5; --renk-vurgu-acik: #16301F; --renk-vurgu-acik-metin: #A8DAB5; }
-  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-secim="yesil"] { --renk-vurgu: #81C995; --renk-vurgu-parlak: #A8DAB5; --renk-vurgu-uzerinde: #0B2A16; --renk-vurgu-metin: #A8DAB5; --renk-vurgu-acik: #16301F; --renk-vurgu-acik-metin: #A8DAB5; } }
   :root[data-tema="koyu"][data-secim="mercan"] { --renk-vurgu: #F28B82; --renk-vurgu-parlak: #F6AEA9; --renk-vurgu-uzerinde: #3A0F0B; --renk-vurgu-metin: #F6AEA9; --renk-vurgu-acik: #3D1C1A; --renk-vurgu-acik-metin: #F6AEA9; }
-  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-secim="mercan"] { --renk-vurgu: #F28B82; --renk-vurgu-parlak: #F6AEA9; --renk-vurgu-uzerinde: #3A0F0B; --renk-vurgu-metin: #F6AEA9; --renk-vurgu-acik: #3D1C1A; --renk-vurgu-acik-metin: #F6AEA9; } }
   :root[data-tema="koyu"][data-secim="mor"] { --renk-vurgu: #C58AF9; --renk-vurgu-parlak: #D7AEFB; --renk-vurgu-uzerinde: #24103A; --renk-vurgu-metin: #D7AEFB; --renk-vurgu-acik: #2C1E40; --renk-vurgu-acik-metin: #D7AEFB; }
-  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-secim="mor"] { --renk-vurgu: #C58AF9; --renk-vurgu-parlak: #D7AEFB; --renk-vurgu-uzerinde: #24103A; --renk-vurgu-metin: #D7AEFB; --renk-vurgu-acik: #2C1E40; --renk-vurgu-acik-metin: #D7AEFB; } }
   :root[data-tema="koyu"][data-secim="turkuaz"] { --renk-vurgu: #78D9EC; --renk-vurgu-parlak: #A1E4F2; --renk-vurgu-uzerinde: #06303A; --renk-vurgu-metin: #A1E4F2; --renk-vurgu-acik: #10343B; --renk-vurgu-acik-metin: #A1E4F2; }
-  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-secim="turkuaz"] { --renk-vurgu: #78D9EC; --renk-vurgu-parlak: #A1E4F2; --renk-vurgu-uzerinde: #06303A; --renk-vurgu-metin: #A1E4F2; --renk-vurgu-acik: #10343B; --renk-vurgu-acik-metin: #A1E4F2; } }
   :root[data-tema="koyu"][data-zemin="notr"] { --renk-zemin: #050607; --renk-zemin-ust: #0B0D0F; }
-  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-zemin="notr"] { --renk-zemin: #050607; --renk-zemin-ust: #0B0D0F; } }
   :root[data-tema="koyu"][data-zemin="mavi"] { --renk-zemin: #0B1222; --renk-zemin-ust: #111B30; }
-  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-zemin="mavi"] { --renk-zemin: #0B1222; --renk-zemin-ust: #111B30; } }
   :root[data-tema="koyu"][data-zemin="mor"] { --renk-zemin: #150D1C; --renk-zemin-ust: #1F1428; }
-  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-zemin="mor"] { --renk-zemin: #150D1C; --renk-zemin-ust: #1F1428; } }
   :root[data-tema="koyu"][data-zemin="yesil"] { --renk-zemin: #0B140F; --renk-zemin-ust: #122019; }
-  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-zemin="yesil"] { --renk-zemin: #0B140F; --renk-zemin-ust: #122019; } }
 }

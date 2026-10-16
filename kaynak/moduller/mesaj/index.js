@@ -9,7 +9,7 @@ import { t, yerel } from '../../cekirdek/metin.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { al } from '../../cekirdek/depo.js';
 import { kelimeFarki } from '../../cekirdek/dil/fark.js';
-import { testProfili, testMesajlari, testMesajEkle, otomatikYanit, gonderimOncesiOneri, testEngelle, testSikayet, testYazarAnlari, aktiflik, yerelSaat, eslesme, takipte, takipDegistir, selamVer, selamVerildi, selamYaniti, okunduIsaretle } from '../../cekirdek/test-modu.js';
+import { testProfili, testMesajlari, testMesajEkle, otomatikYanit, gonderimOncesiOneri, testEngelle, testSikayet, testYazarAnlari, aktiflik, yerelSaat, eslesme, takipte, takipDegistir, selamVer, selamVerildi, selamYaniti, okunduIsaretle, uyumDuzeyi } from '../../cekirdek/test-modu.js';
 import { TEST_KONULARI } from '../../veri/test-profiller.js';
 import { hizliYanitlar } from '../../veri/hizli-yanitlar.js';
 import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
@@ -282,8 +282,8 @@ function kisiCiz(kok, b) {
       h('span', { class: `msj-aktif${a.cevrimici ? ' msj-aktif-var' : ''}` }, a.cevrimici ? h('i') : null, aktiflikMetni(p)),
       h('div', { class: 'msj-dil' }, dilCifti(p.anaDil, p.ogrenilenDil, p.seviye, { adlarla: true })),
     ),
-    h('section', { class: 'msj-uyum', 'aria-label': t('ht.uyum', { n: uyum.puan }) },
-      h('div', { class: 'msj-uyum-ust' }, h('b', null, t('ht.uyumBaslik')), h('span', { class: 'msj-uyum-puan' }, `%${uyum.puan}`)),
+    h('section', { class: 'msj-uyum', 'aria-label': t(`ht.uyumDuzey.${uyumDuzeyi(uyum.puan)}`) },
+      h('div', { class: 'msj-uyum-ust' }, h('b', null, t('ht.uyumBaslik')), h('span', { class: 'msj-uyum-puan' }, t(`ht.uyumDuzey.${uyumDuzeyi(uyum.puan)}`))),
       h('span', { class: 'msj-uyum-cubuk' }, h('i', { style: `width:${uyum.puan}%` })),
       h('div', { class: 'msj-uyum-nedenler' }, uyum.nedenler.slice(0, 3).map((n) => h('span', null, ikon('onay', 12), t(`ht.neden.${n}`, { dil: t(`diller.${n === 'karsilikli' ? p.ogrenilenDil : p.anaDil}`), ortak: uyum.ortak.map((i) => yerel(i)).join(', ') })))),
     ),

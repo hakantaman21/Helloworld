@@ -3,7 +3,7 @@
 import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar, enUsteKaydir } from '../../cekirdek/arayuz.js';
-import { fotografEkle } from '../../cekirdek/fotograf.js';
+import { fotografEkle, medyaDisaAktar, medyaIceAktar, medyaSil } from '../../cekirdek/fotograf.js';
 import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
 import { al, degistir, sifirla, disaAktarMetni, iceAktar } from '../../cekirdek/depo.js';
@@ -12,7 +12,7 @@ import { simdiAra } from '../../cekirdek/zamanlayici.js';
 import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { SURUM } from '../../cekirdek/surum.js';
 import { duyur } from '../../cekirdek/duyuru.js';
-import { destek } from '../../cekirdek/ses/ses-hatti.js';
+import { destek, soyle, ingilizceSesler } from '../../cekirdek/ses/ses-hatti.js';
 import { testModuAcik, testModuAyarla, testVerileriniSil } from '../../cekirdek/test-modu.js';
 
 const DILLER = ['tr', 'en', 'es', 'ar', 'de', 'fr', 'ru', 'pt', 'fa', 'ko', 'ja', 'diger'];
@@ -214,6 +214,18 @@ function ciz(kok, b) {
     ),
 
     grup('koc', 'yz', t('ayarlar.grup.koc'),
+      destek.sentez ? satir(t('ayarlar.kocSesi'), (id) => {
+        const sec = h('select', { class: 'ayr-girdi ayr-secim', 'aria-labelledby': id });
+        const doldur = () => {
+          const sesler = ingilizceSesler();
+          yerlestir(sec, h('option', { value: '' }, t('ayarlar.kocSesiOto')), sesler.map((v) => h('option', { value: v.ad }, `${v.ad} · ${v.dil}`)));
+          sec.value = a.kocSesi || '';
+        };
+        doldur();
+        if (window.speechSynthesis && window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', doldur, { once: true });
+        sec.addEventListener('change', () => { ayarKaydet((pr) => { pr.ayarlar.kocSesi = sec.value || null; }); soyle('Hi! I am your speaking coach.', a.kocHizi || 'normal'); });
+        return sec;
+      }, { aciklama: t('ayarlar.kocSesiAciklama'), altta: true }) : null,
       satir(t('ayarlar.duzeltme'), (id) => bolumlu(id, ['az', 'orta', 'cok'].map((k) => [k, t(`ayarlar.duzeltmeSecenek.${k}`)]), a.duzeltmeYogunlugu, (k) => ayarKaydet((pr) => { pr.ayarlar.duzeltmeYogunlugu = k; })), { aciklama: t('ayarlar.duzeltmeAciklama'), altta: true }),
       satir(t('ayarlar.hiz'), (id) => bolumlu(id, ['yavas', 'normal', 'hizli'].map((k) => [k, t(`ayarlar.hizSecenek.${k}`)]), a.kocHizi, (k) => ayarKaydet((pr) => { pr.ayarlar.kocHizi = k; })), { altta: true }),
       anahtar(t('ayarlar.gonderimOneri'), a.gonderimOneri !== false, (v) => ayarKaydet((pr) => { pr.ayarlar.gonderimOneri = v; }), t('ayarlar.gonderimOneriAciklama')),
@@ -242,7 +254,7 @@ function ciz(kok, b) {
     grup('gizlilik', 'kilit', t('ayarlar.grup.gizlilik'),
       h('p', { class: 'ayr-not ayr-not-kutu' }, t('ayarlar.gizlilikMetni')),
       h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => {
-        const blob = new Blob([disaAktarMetni()], { type: 'application/json' });
+        const blob = new Blob([JSON.stringify({ ...JSON.parse(disaAktarMetni()), medya: medyaDisaAktar() }, null, 2)], { type: 'application/json' });
         const baglanti = h('a', { href: URL.createObjectURL(blob), download: 'helloworld-verilerim.json' });
         document.body.append(baglanti); baglanti.click(); baglanti.remove();
       } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.disaAktar')), ikon('sag', 18)),
@@ -253,7 +265,9 @@ function ciz(kok, b) {
           if (!dosya) return;
           const evet = await onayIste({ metin: t('ayarlar.geriYukleOnay'), evet: t('ayarlar.geriYukleEvet'), hayir: t('genel.vazgec') });
           if (!evet) { e.target.value = ''; return; }
-          const sonuc = iceAktar(await dosya.text());
+          const metin = await dosya.text();
+          try { await medyaIceAktar(JSON.parse(metin).medya); } catch { /* JSON hatasını iceAktar bildirir */ }
+          const sonuc = iceAktar(metin);
           duyur(sonuc.tamam ? t('ayarlar.geriYuklendi') : t(`ayarlar.geriYukleHata.${sonuc.neden}`), 6000);
           if (sonuc.tamam) b.git('/bugun', { degistir: true });
         } })),
@@ -263,7 +277,7 @@ function ciz(kok, b) {
       h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme ayr-tehlike', onClick: async () => {
         const evet = await onayIste({ metin: t('ayarlar.silOnay'), evet: t('ayarlar.silEvet'), hayir: t('genel.vazgec') });
         if (!evet) return;
-        sifirla(); duyur(t('ayarlar.silindi')); b.git('/karsilama', { degistir: true });
+        await medyaSil(); sifirla(); duyur(t('ayarlar.silindi')); b.git('/karsilama', { degistir: true });
       } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.sil')), ikon('kapat', 18)),
     ),
 
