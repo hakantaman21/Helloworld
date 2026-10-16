@@ -3,7 +3,8 @@ import './gelisim.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d, htUst, htIkon, dilCifti } from '../../cekirdek/arayuz.js';
 import { testAnlari, takipSayisi } from '../../cekirdek/test-modu.js';
-import { t } from '../../cekirdek/metin.js';
+import { t, yerel } from '../../cekirdek/metin.js';
+import { ILGI_ALANLARI } from '../../veri/ilgi-alanlari.js';
 import { al } from '../../cekirdek/depo.js';
 import { donemOzeti, dondurmaHakki, seriHesapla } from '../../cekirdek/gunluk.js';
 import { tarihAnahtari, gunEkle, haftaBaslangici, kisaTarih } from '../../cekirdek/zaman.js';
@@ -126,6 +127,12 @@ function ciz(kok, b) {
     ),
     h('button', { type: 'button', class: 'gls-satir', onClick: () => b.git('/dil-anlari') },
       ikon3d('anlar', 28), h('b', null, t('anlar.baslik')), h('span', { class: 'gls-satir-sayi' }, String(benimAnSayisi)), ikon('sag', 18)),
+    h('button', { type: 'button', class: 'gls-ilgi', onClick: () => b.git('/ayarlar?bolum=ilgi') },
+      h('span', { class: 'gls-ilgi-ust' }, h('b', null, t('ilgi.baslik')), h('span', { class: 'b-kucuk' }, (v.profil.ilgiler || []).length ? t('ilgi.duzenle') : t('ilgi.ekle')), ikon('sag', 18)),
+      (v.profil.ilgiler || []).length
+        ? h('span', { class: 'gls-ilgi-haplar' }, ILGI_ALANLARI.filter((i) => v.profil.ilgiler.includes(i.kimlik)).map((i) => h('span', { class: 'gls-ilgi-hap' }, `${i.simge} ${yerel(i)}`)))
+        : h('span', { class: 'b-kucuk' }, t('ilgi.davet')),
+    ),
     h('section', { class: 'gls-merkez', 'aria-labelledby': 'gls-merkez-baslik' },
       h('h2', { class: 'gls-merkez-baslik', id: 'gls-merkez-baslik' }, t('ht.ogrenmeMerkezi')),
       h('div', { class: 'b-uygulamalar gls-uygulamalar' },

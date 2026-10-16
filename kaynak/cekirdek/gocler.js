@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 7;
+export const GUNCEL_SEMA = 8;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -85,5 +85,10 @@ export const gocler = {
   7: (eski) => ({
     ...eski,
     test: eski.test || { acik: false, sohbetler: {}, engelli: [], sikayetler: [] },
+  }),
+  // 7 → 8: kullanıcının ilgi alanları (katalog kimlikleri; eşleşmede ortak ilgi için). Varsayılan boş.
+  8: (eski) => ({
+    ...eski,
+    profil: { ...eski.profil, ilgiler: Array.isArray(eski.profil.ilgiler) ? eski.profil.ilgiler : [] },
   }),
 };

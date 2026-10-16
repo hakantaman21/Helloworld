@@ -84,3 +84,12 @@
   .gls-merkez-baslik { font-size: 17px; font-weight: 800; }
   .gls-istat-kutu:focus-visible, .gls-satir:focus-visible, .gls-ben:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
 }
+
+@layer moduller {
+  .gls-ilgi { display: flex; flex-direction: column; gap: 8px; width: 100%; min-height: 56px; padding: 10px 14px; border: 1px solid var(--renk-cizgi); border-radius: 16px; background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; text-align: left; cursor: pointer; }
+  .gls-ilgi-ust { display: flex; align-items: center; gap: 8px; }
+  .gls-ilgi-ust b { flex: 1; font-size: 16px; }
+  .gls-ilgi-haplar { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gls-ilgi-hap { padding: 4px 10px; border-radius: var(--kose-tam); background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); font-size: 13px; font-weight: 700; }
+  .gls-ilgi:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+}

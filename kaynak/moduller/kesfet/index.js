@@ -7,7 +7,7 @@ import { h, ikon, ikon3d, altGezinme, durumKutusu, yerlestir, testEtiketi, testA
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
-import { testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle } from '../../cekirdek/test-modu.js';
+import { testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler } from '../../cekirdek/test-modu.js';
 import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 
@@ -49,7 +49,9 @@ function satir(k, b, yenile) {
         h('span', { class: 'b-liste-ust' }, h('b', null, k.ad), yasRozeti(k), testEtiketi()),
         dilCifti(k.anaDil, k.ogrenilenDil, k.seviye),
         h('span', { class: 'kft-tanitim b-iki-satir' }, yerel(k.tanitim)),
-        rozetler(k),
+        h('span', { class: 'b-etiketler' },
+          ortakIlgiler(k).slice(0, 2).map((i) => h('span', { class: 'b-etiket-hap b-etiket-hap-iyi' }, `♥ ${yerel(i)}`)),
+          rozetler(k)),
       ),
     ),
     h('button', { type: 'button', class: `kft-el${selamlandi ? ' kft-el-tamam' : ''}`, 'aria-label': selamlandi ? t('ht.mesajGonder', { ad: k.ad }) : t('ht.selamVer', { ad: k.ad }), title: selamlandi ? t('test.mesajYaz') : t('ht.selam'),
@@ -74,7 +76,7 @@ function eslesmeKarti(sonuc, b, { sonraki, kapat, yenile }) {
       ),
       h('span', { class: 'kft-puan', style: `--kft-puan:${sonuc.puan}%`, 'aria-label': t('ht.uyum', { n: sonuc.puan }) }, h('b', null, `%${sonuc.puan}`), h('small', null, t('ht.uyumKisa'))),
     ),
-    h('ul', { class: 'kft-nedenler' }, sonuc.nedenler.map((n) => h('li', null, ikon('onay', 14), t(`ht.neden.${n}`, { dil: t(`diller.${n === 'karsilikli' ? p.ogrenilenDil : p.anaDil}`) })))),
+    h('ul', { class: 'kft-nedenler' }, sonuc.nedenler.map((n) => h('li', null, ikon('onay', 14), t(`ht.neden.${n}`, { dil: t(`diller.${n === 'karsilikli' ? p.ogrenilenDil : p.anaDil}`), ortak: sonuc.ortak.map((i) => yerel(i)).join(', ') })))),
     h('div', { class: 'kft-eslesme-eylem' },
       h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve kft-eylem-dugme', onClick: sonraki }, t('ht.sonraki')),
       h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve kft-eylem-dugme', onClick: () => b.git(`/kisi?k=${p.kimlik}`) }, t('test.profiliGor')),
@@ -167,6 +169,7 @@ function ciz(kok, b) {
     durum.eslesmeSira < 0 ? h('button', { type: 'button', class: 'kft-eslesme-serit', onClick: () => { durum.eslesmeSira = 0; eslesmeCiz(); } },
       ikon3d('seri', 26), h('span', null, h('b', null, t('ht.eslesmeBaslik')), h('small', null, t('ht.eslesmeSerit'))), ikon('sag', 18)) : null,
     eslesmeAlani,
+    (ben.ilgiler || []).length ? null : h('button', { type: 'button', class: 'kft-ilgi-davet', onClick: () => b.git('/ayarlar?bolum=ilgi') }, '♥ ', t('ilgi.davet'), ikon('sag', 16)),
     h('p', { class: 'kft-uyari' }, testEtiketi(), ' ', t('ht.testNotu')),
     liste,
     h('details', { class: 'b-kart kft-kural' },

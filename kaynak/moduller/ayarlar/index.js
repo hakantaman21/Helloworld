@@ -2,7 +2,8 @@
 import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ustBaslik, onayIste, yerlestir, ikon3d } from '../../cekirdek/arayuz.js';
-import { t, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
+import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
+import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
 import { al, degistir, sifirla, disaAktarMetni } from '../../cekirdek/depo.js';
 import { siradaki } from '../../cekirdek/gunluk.js';
 import { simdiAra } from '../../cekirdek/zamanlayici.js';
@@ -66,6 +67,25 @@ function ciz(kok, b) {
   tanitimGirdisi.value = p.tanitimMetni || '';
   tanitimGirdisi.addEventListener('change', () => ayarKaydet((pr) => { pr.tanitimMetni = tanitimGirdisi.value.trim().slice(0, 300); }));
 
+  // İlgi alanları (HelloTalk "Hobiler"): en çok ILGI_SINIRI tane; eşleşmede ortak ilgi puanı verir.
+  const ilgiSayac = h('span', { class: 'b-kucuk ayr-ilgi-sayac', 'aria-live': 'polite' });
+  const ilgiSecici = h('div', { class: 'ayr-ilgiler', role: 'group', 'aria-labelledby': 'ayr-ilgi-baslik' });
+  function ilgiCiz() {
+    const secili = al().profil.ilgiler || [];
+    ilgiSayac.textContent = t('ilgi.sayac', { n: secili.length, en: ILGI_SINIRI });
+    yerlestir(ilgiSecici, ILGI_ALANLARI.map((i) => {
+      const var_ = secili.includes(i.kimlik);
+      return h('button', { type: 'button', class: 'ayr-ilgi', 'aria-pressed': String(var_), onClick: () => {
+        const simdiki = al().profil.ilgiler || [];
+        if (!var_ && simdiki.length >= ILGI_SINIRI) { duyur(t('ilgi.sinir', { en: ILGI_SINIRI })); return; }
+        // Sessiz kayıt: her dokunuşta bildirim yığılmasın; sayaç (aria-live) durumu söyler.
+        degistir((v) => { v.profil.ilgiler = var_ ? simdiki.filter((k) => k !== i.kimlik) : [...simdiki, i.kimlik]; });
+        ilgiCiz();
+      } }, `${i.simge} ${yerel(i)}`);
+    }));
+  }
+  ilgiCiz();
+
   yerlestir(kok, 
     ustBaslik({ baslik: t('ayarlar.baslik'), ikon: 'ayarlar', geri: () => b.geri('/gelisim') }),
 
@@ -110,6 +130,10 @@ function ciz(kok, b) {
       dilSecimi('ayr-ogrenilen-dil', t('ayarlar.ogrenilenDil'), 'ogrenilenDil'),
       h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-hedef' }, t('ayarlar.dilHedefi')), hedefGirdisi),
       h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-tanitim' }, t('ayarlar.tanitim')), tanitimGirdisi),
+      h('div', { class: 'ayr-satir', id: 'ayr-ilgi' },
+        h('div', { class: 'ayr-ilgi-ust' }, h('span', { class: 'b-etiket', id: 'ayr-ilgi-baslik' }, t('ilgi.baslik')), ilgiSayac),
+        h('p', { class: 'b-kucuk' }, t('ilgi.aciklama')),
+        ilgiSecici),
       h('p', { class: 'b-kucuk' }, t('ayarlar.profilGizlilik')),
     ),
 
@@ -214,6 +238,7 @@ function ciz(kok, b) {
     h('button', { type: 'button', class: 'ayr-surum-dugme', onClick: () => { surumDokunma += 1; if (surumDokunma === 5) { duyur(t('test.gorunur'), 2500); b.git('/ayarlar', { degistir: true }); } } },
       h('span', { class: 'b-kucuk ayr-surum' }, t('ayarlar.surum', { s: SURUM, saglayici: a.saglayici }))),
   );
+  if (b.p.bolum === 'ilgi') requestAnimationFrame(() => { const hedef = kok.querySelector('#ayr-ilgi'); if (hedef) hedef.scrollIntoView({ block: 'start' }); });
   return null;
 }
 

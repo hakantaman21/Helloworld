@@ -1,3 +1,12 @@
+## 0.4.1 — 16.10.2026 · İlgi alanları ve ortak ilgiye göre eşleşme
+
+- Ayarlar › Dil profili: 26 ilgi alanından en çok 8'ini seç (HelloTalk "Hobiler").
+- Otomatik eşleşme ortak ilgiyi de sayar (ilgi başına +6, en çok +12) ve nedeni yazar: "Ortak ilgi: Yemek, Seyahat".
+- Dil Ortakları listesinde ortak ilgiler ♥ ile, kişi profilinde ortak hobiler yeşil görünür.
+- Ben ekranında "İlgi alanların" kartı; ilgi seçilmemişse Bağlantı'da davet şeridi.
+- Şema 8: profil.ilgiler (varsayılan boş; mevcut veriler korunur).
+- Düzeltme: aynı bildirim art arda dokunuşlarda üst üste yığılmıyor (ör. ayarlarda "Kaydedildi").
+
 ## 0.4.0 — 16.10.2026 · HelloTalk düzeni: sıkı, dolu, kullanıcı dostu
 
 - Yoğunluk: daha küçük aralıklar, ince üst çubuk (geri · başlık · simgeler), düz liste satırları, tam genişlik alt menü; ekranlar daha az kaydırılıyor.

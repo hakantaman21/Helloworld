@@ -4,6 +4,8 @@ import { h } from './arayuz.js';
 export function duyur(mesaj, sure = 3500) {
   const kap = document.getElementById('duyurular');
   if (!kap) return;
+  // Aynı metin zaten ekrandaysa eskisini kaldır: art arda dokunuşlarda bildirimler yığılmaz.
+  [...kap.children].forEach((c) => { if (c.textContent === String(mesaj)) c.remove(); });
   const oge = h('div', { class: 'b-duyuru', role: 'status' }, mesaj);
   let baslangicX = null;
   let kapandi = false;

@@ -9,6 +9,11 @@ export default {
     yzAciklama: 'Bu bir yapay zekâ; gerçek bir kişi değil.',
   },
 
+  ilgi: {
+    baslik: 'İlgi alanların', aciklama: 'Ortak ilgisi olan dil ortakları eşleşmede öne çıkar ve profilde ♥ ile görünür.',
+    sayac: '{n} / {en}', sinir: 'En çok {en} ilgi alanı seçebilirsin.', ekle: 'Ekle', duzenle: 'Düzenle',
+    davet: 'İlgi alanlarını seç; ortak ilgisi olan dil ortaklarını öne çıkaralım.',
+  },
   ht: {
     sohbetBaslik: 'Dil Sohbetleri', hizliErisim: 'Hızlı erişim', ara: 'Arama', cevrimici: 'Çevrimiçi', sen: 'Sen', yzPratik: 'yapay zekâ pratiği',
     hizli: { senaryolar: 'Senaryolar', hafiza: 'Hata Hafızası', koc: 'AI Koç', partner: 'Partner bul', anlar: 'Dil Anları' },
@@ -18,7 +23,7 @@ export default {
     yasAralik: { tum: 'Tümü', genc: '18–25', orta: '26–35', ust: '36+' }, yalnizHizli: 'Yalnız hızlı yanıt verenler',
     eslesmeBaslik: 'Otomatik eşleş', eslesmeSerit: 'Dil, seviye ve etkinliğe göre sana en uygun ortağı bul',
     eslesmeAciklama: 'Uyum puanı kuraldır: ana dili öğrendiğin dil mi, senin dilini mi öğreniyor, seviyen yakın mı, şu an aktif mi.',
-    neden: { anaDil: 'Ana dili {dil} — öğrendiğin dil', karsilikli: '{dil} öğreniyor — karşılıklı yardım', seviye: 'Seviyen yakın', aktif: 'Şu an aktif', hizli: 'Hızlı yanıt veriyor' },
+    neden: { ilgi: 'Ortak ilgi: {ortak}', anaDil: 'Ana dili {dil} — öğrendiğin dil', karsilikli: '{dil} öğreniyor — karşılıklı yardım', seviye: 'Seviyen yakın', aktif: 'Şu an aktif', hizli: 'Hızlı yanıt veriyor' },
     sonraki: 'Sonraki', selam: 'Selam ver', selamVer: '{ad} kişisine el salla', selamMetni: 'Hi! 👋 Nice to meet you.', selamGitti: '{ad} kişisine el salladın 👋',
     mesajGonder: '{ad} ile sohbeti aç', testNotu: 'Sanal kullanıcılar: yaş, ülke, çevrimiçi durumu ve yanıtları test verisidir, gerçek kişi değildir.',
     rozet: { hizli: 'Hızlı yanıt', musait: 'Sohbete müsait', yeni: 'Yeni', ciddi: 'Ciddi öğrenen' },

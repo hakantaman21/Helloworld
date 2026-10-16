@@ -5,6 +5,7 @@ import { al, degistir } from './depo.js';
 import { TEST_PROFILLERI, TEST_ANLARI, TEST_YORUM_KALIPLARI, TEST_HAZIR_YORUMLAR } from '../veri/test-profiller.js';
 import { SEVIYE_SIRASI } from './oneri.js';
 import { aktifDil } from './metin.js';
+import { ilgiKimligi } from '../veri/ilgi-alanlari.js';
 import { duzeltmeleriBul, tumunuDuzelt } from './dil/duzeltme-motoru.js';
 
 const MESAJ_SINIRI = 200;
@@ -184,7 +185,9 @@ export function eslesme(p, ben = al().profil) {
   const a = aktiflik(p);
   if (a.cevrimici || a.dk < 60) { puan += 6; nedenler.push('aktif'); }
   if ((p.rozetler || []).includes('hizli')) { puan += 4; nedenler.push('hizli'); }
-  return { puan: Math.min(99, puan), nedenler };
+  const ortak = ortakIlgiler(p, ben);
+  if (ortak.length) { puan += Math.min(12, ortak.length * 6); nedenler.push('ilgi'); }
+  return { puan: Math.min(99, puan), nedenler, ortak };
 }
 
 export function enIyiEslesmeler() {
@@ -194,4 +197,10 @@ export function enIyiEslesmeler() {
 // El sallamaya otomatik test yanıtı (kalıp; yapay zekâ değildir).
 export function selamYaniti(p) {
   return { kim: 'o', metin: `Hi! 👋 Thanks for the wave, I'm ${p.ad}. How is your day going?`, otomatik: true };
+}
+
+// Kullanıcının seçtiği ilgilerle test profilinin ilgilerinin kesişimi (profildeki {tr,en} nesneleri döner).
+export function ortakIlgiler(p, ben = al().profil) {
+  const benim = new Set(ben.ilgiler || []);
+  return (p.ilgi || []).filter((i) => benim.has(ilgiKimligi(i)));
 }

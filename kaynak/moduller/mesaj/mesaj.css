@@ -95,3 +95,7 @@
   .msj-alt-sohbet { flex: 1; min-height: 52px; }
   .msj-alt-takip:focus-visible, .msj-alt-selam:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
 }
+
+@layer moduller {
+  .msj-hap-ortak { background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); border-color: transparent; font-weight: 700; }
+}

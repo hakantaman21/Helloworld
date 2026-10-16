@@ -17,3 +17,12 @@
   .ayr-kutu-baslik { font-size: 13.5px; line-height: 1.2; }
   .ayr-bolum { scroll-margin-top: 16px; }
 }
+
+@layer moduller {
+  .ayr-ilgi-ust { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .ayr-ilgiler { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ayr-ilgi { min-height: 48px; padding: 0 14px; border: 0; border-block: 6px solid transparent; border-radius: var(--kose-tam); background: var(--renk-yuzey-ikinci) padding-box; box-shadow: inset 0 0 0 1px var(--renk-cizgi); color: var(--renk-murekkep); font: inherit; font-size: 13.5px; cursor: pointer; }
+  .ayr-ilgi[aria-pressed="true"] { background: var(--renk-iyi-acik) padding-box; color: var(--renk-iyi-metin); box-shadow: inset 0 0 0 1.5px var(--renk-iyi-metin); font-weight: 700; }
+  .ayr-ilgi:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 1px; }
+  #ayr-ilgi { scroll-margin-top: 64px; }
+}

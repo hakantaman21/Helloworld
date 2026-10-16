@@ -8,6 +8,11 @@ export default {
     yzAciklama: 'This is an AI, not a real person.',
   },
 
+  ilgi: {
+    baslik: 'Your interests', aciklama: 'Partners who share your interests rank higher in matching and show ♥ on their profile.',
+    sayac: '{n} / {en}', sinir: 'You can choose up to {en} interests.', ekle: 'Add', duzenle: 'Edit',
+    davet: 'Pick your interests so we can surface partners who share them.',
+  },
   ht: {
     sohbetBaslik: 'Language Chats', hizliErisim: 'Quick access', ara: 'Search', cevrimici: 'Online', sen: 'You', yzPratik: 'AI practice',
     hizli: { senaryolar: 'Scenarios', hafiza: 'Mistakes', koc: 'AI Coach', partner: 'Find partner', anlar: 'Moments' },
@@ -17,7 +22,7 @@ export default {
     yasAralik: { tum: 'All', genc: '18–25', orta: '26–35', ust: '36+' }, yalnizHizli: 'Only fast responders',
     eslesmeBaslik: 'Auto match', eslesmeSerit: 'Find your best partner by language, level and activity',
     eslesmeAciklama: 'The match score is rule-based: native in your target language, learning your language, similar level, active now.',
-    neden: { anaDil: 'Native {dil} — your target language', karsilikli: 'Learning {dil} — mutual help', seviye: 'Similar level', aktif: 'Active now', hizli: 'Replies fast' },
+    neden: { ilgi: 'Shared interests: {ortak}', anaDil: 'Native {dil} — your target language', karsilikli: 'Learning {dil} — mutual help', seviye: 'Similar level', aktif: 'Active now', hizli: 'Replies fast' },
     sonraki: 'Next', selam: 'Say hi', selamVer: 'Wave at {ad}', selamMetni: 'Hi! 👋 Nice to meet you.', selamGitti: 'You waved at {ad} 👋',
     mesajGonder: 'Open chat with {ad}', testNotu: 'Virtual users: age, country, online status and replies are test data, not real people.',
     rozet: { hizli: 'Fast replies', musait: 'Free to chat', yeni: 'New', ciddi: 'Serious learner' },
