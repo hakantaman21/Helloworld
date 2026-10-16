@@ -518,4 +518,29 @@
   .b-aralik-girdi::-moz-range-track { background: transparent; }
   .b-aralik-girdi:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
   .b-aralik-noktalar { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--renk-soluk); padding: 0 6px; margin-top: -8px; }
+  /* Kayan tanıtım afişleri */
+  .b-afislar { display: flex; flex-direction: column; gap: 6px; }
+  .b-afis-iz { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 20px; box-shadow: 0 8px 18px var(--renk-golge); }
+  .b-afis-iz::-webkit-scrollbar { display: none; }
+  .b-afis-slayt { flex: 0 0 100%; scroll-snap-align: start; display: flex; align-items: center; gap: 8px; min-height: 132px; padding: 14px 10px 14px 16px; border: 0; color: var(--renk-murekkep); font: inherit; text-align: left; cursor: pointer; }
+  .b-afis-metin { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .b-afis-etiket { align-self: flex-start; padding: 2px 8px; border-radius: 6px; background: color-mix(in srgb, var(--renk-zemin) 55%, transparent); font-size: 10.5px; font-weight: 800; letter-spacing: .08em; color: var(--renk-baslik); }
+  .b-afis-baslik { font-family: var(--yazi-serif); font-size: 20px; line-height: 1.15; }
+  .b-afis-alt { font-size: 12.5px; color: var(--renk-soluk); line-height: 1.35; }
+  .b-afis-dugme { align-self: flex-start; margin-top: 4px; padding: 6px 12px; border-radius: var(--kose-tam); background: linear-gradient(135deg, var(--renk-vurgu-parlak), var(--renk-vurgu)); color: var(--renk-vurgu-uzerinde); font-size: 12.5px; font-weight: 800; }
+  .b-afis-slayt .b-ikon3d { flex-shrink: 0; filter: drop-shadow(0 8px 12px var(--renk-golge)); }
+  .b-afis-slayt:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: -3px; }
+  .b-afis-noktalar { display: flex; justify-content: center; gap: 5px; }
+  .b-afis-noktalar i { width: 6px; height: 6px; border-radius: 3px; background: var(--renk-cizgi-guclu); transition: width .2s; }
+  .b-afis-noktalar i.b-afis-nokta-etkin { width: 18px; background: var(--renk-vurgu); }
+
+  /* Yatay kayan kart sırası (Öğren bölümü) */
+  .b-kart-sirasi { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; margin: 0 calc(var(--bosluk-4) * -1); padding: 2px var(--bosluk-4) 8px; }
+  .b-kart-sirasi::-webkit-scrollbar { display: none; }
+
+  /* Sekme geçiş canlandırması (kaydırarak geçiş) */
+  :root[data-gecis="sola"] .b-ekran { animation: b-gir-sagdan .22s ease-out; }
+  :root[data-gecis="saga"] .b-ekran { animation: b-gir-soldan .22s ease-out; }
+  @keyframes b-gir-sagdan { from { transform: translateX(28px); opacity: .4; } to { transform: none; opacity: 1; } }
+  @keyframes b-gir-soldan { from { transform: translateX(-28px); opacity: .4; } to { transform: none; opacity: 1; } }
 }

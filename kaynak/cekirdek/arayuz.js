@@ -370,3 +370,70 @@ export function aralikKaydirici({ min, max, adim = 1, deger, etiket, bicim = (v)
     noktalar ? h('div', { class: 'b-aralik-noktalar', 'aria-hidden': 'true' }, Array.from({ length: (max - min) / adim + 1 }, (_, i) => h('span', null, bicim(min + i * adim)))) : null,
   );
 }
+
+// Kayan tanıtım afişleri (HelloTalk üst banner'ı): yatay kaydırılır, birkaç saniyede bir kendiliğinden ilerler,
+// parmak değince durur. "Hareketi azalt" açıkken kendiliğinden ilerlemez. Noktalar hangi afişte olunduğunu gösterir.
+const AFIS_SURESI_MS = 4500;
+export function afisKaydirici(slaytlar, { etiket } = {}) {
+  const iz = h('div', { class: 'b-afis-iz', 'data-yatay': '' });
+  const noktalar = h('div', { class: 'b-afis-noktalar', 'aria-hidden': 'true' });
+  slaytlar.forEach((s, i) => {
+    iz.append(h('button', { type: 'button', class: `b-afis-slayt b-kutu-${s.renk || (i % 6) + 1}`, onClick: s.git, 'aria-label': `${s.baslik}. ${s.alt || ''}` },
+      h('span', { class: 'b-afis-metin' },
+        s.etiket ? h('span', { class: 'b-afis-etiket' }, s.etiket) : null,
+        h('b', { class: 'b-afis-baslik' }, s.baslik),
+        s.alt ? h('span', { class: 'b-afis-alt' }, s.alt) : null,
+        s.dugme ? h('span', { class: 'b-afis-dugme' }, s.dugme) : null),
+      ikon3d(s.ikon, 92)));
+    noktalar.append(h('i'));
+  });
+  let sira = 0;
+  let zamanlayici = null;
+  const isaretle = () => [...noktalar.children].forEach((n, i) => n.classList.toggle('b-afis-nokta-etkin', i === sira));
+  iz.addEventListener('scroll', () => { const yeni = Math.round(iz.scrollLeft / iz.clientWidth); if (yeni !== sira) { sira = yeni; isaretle(); } }, { passive: true });
+  const azalt = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dur = () => { clearInterval(zamanlayici); zamanlayici = null; };
+  const basla = () => {
+    if (azalt || zamanlayici || slaytlar.length < 2) return;
+    zamanlayici = setInterval(() => {
+      if (!iz.isConnected) { dur(); return; }
+      sira = (sira + 1) % slaytlar.length;
+      iz.scrollTo({ left: sira * iz.clientWidth, behavior: 'smooth' });
+      isaretle();
+    }, AFIS_SURESI_MS);
+  };
+  iz.addEventListener('pointerdown', dur);
+  iz.addEventListener('touchstart', dur, { passive: true });
+  iz.addEventListener('focusin', dur);
+  isaretle();
+  basla();
+  return h('section', { class: 'b-afislar', 'aria-roledescription': 'carousel', 'aria-label': etiket || null }, iz, noktalar);
+}
+
+// Ana sekmeler arasında parmakla kaydırarak geçiş (HelloTalk gibi). Yatay kayan öğelerin (afiş, sekme satırı,
+// kaydırıcı) üzerinde başlayan hareket sayılmaz; dikey kaydırmaya karışmamak için yatay hareket belirgin olmalı.
+const KAYDIRMA_ESIGI = 70;
+export function sekmeKaydirmaBaslat(git) {
+  let bas = null;
+  const yatayAlan = (el) => el.closest('[data-yatay], .b-sekmeler, .b-uygulamalar, .b-aralik, input, textarea, select, .b-alt-pencere-perde, .shb-menu-perde, .b-perde');
+  document.addEventListener('touchstart', (e) => {
+    const t0 = e.touches[0];
+    bas = e.touches.length === 1 && !yatayAlan(e.target) ? { x: t0.clientX, y: t0.clientY, zaman: Date.now() } : null;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (!bas) return;
+    const t1 = e.changedTouches[0];
+    const dx = t1.clientX - bas.x, dy = t1.clientY - bas.y;
+    const hizli = Date.now() - bas.zaman < 600;
+    bas = null;
+    if (!hizli || Math.abs(dx) < KAYDIRMA_ESIGI || Math.abs(dx) < Math.abs(dy) * 2) return;
+    const yol = (location.hash.slice(1) || '/bugun').split('?')[0];
+    const i = GEZINME.findIndex((g) => g.yol === yol);
+    if (i < 0) return;
+    const hedef = GEZINME[i + (dx < 0 ? 1 : -1)];
+    if (!hedef) return;
+    document.documentElement.dataset.gecis = dx < 0 ? 'sola' : 'saga';
+    git(hedef.yol);
+    setTimeout(() => { delete document.documentElement.dataset.gecis; }, 400);
+  }, { passive: true });
+}

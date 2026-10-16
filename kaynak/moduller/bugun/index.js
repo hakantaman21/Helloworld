@@ -1,8 +1,9 @@
 // Bugün: günün döngüsü, sıradaki adım (tabela), Hata Hafızası kısayolu ve tek dokunuşla "Konuş".
 import './bugun.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d, htUst, htIkon, testAvatar, sekmeler } from '../../cekirdek/arayuz.js';
-import { testModuAcik, testProfilleri } from '../../cekirdek/test-modu.js';
+import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d, htUst, htIkon, testAvatar, sekmeler, afisKaydirici, testEtiketi } from '../../cekirdek/arayuz.js';
+import { testModuAcik, testModuAyarla, testProfilleri, aktiflik } from '../../cekirdek/test-modu.js';
+import tumSenaryolar from '../../veri/senaryolar/index.js';
 import { t, yerel, aktifDil } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { gunKaydi, siradaki, seriHesapla, bugunkuSenaryo } from '../../cekirdek/gunluk.js';
@@ -35,7 +36,7 @@ function donguOgesi({ baslik, alt, durum, onClick }) {
   );
 }
 
-let pratikSekme = 'bugun';
+let pratikSekme = 'ai';
 
 function ciz(kok, b) {
   kok.classList.add('b-ekran-gezinmeli');
@@ -85,7 +86,53 @@ function ciz(kok, b) {
         h('button', { type: 'button', class: 'b-dugme b-dugme-ana bgn-hizli-katil', onClick: () => odayaGit(o) }, ikon('mikrofon', 18), t('odalar.hizliKatil'))));
   }
   hizliOdaCiz();
-  const pratikSekmeleri = sekmeler([['bugun', t('bugun.sekme.bugun')], ['odalar', t('odalar.baslik')]], pratikSekme, (id) => { pratikSekme = id; pratikSekmeGoster(); }, { etiket: t('gezinme.pratik') });
+  // Üç sekme (HelloTalk Ses · Canlı · Öğren karşılığı): AI sohbet · Gerçek sohbet · Öğren.
+  const pratikSekmeleri = sekmeler([['ai', t('pratik.sekme.ai')], ['gercek', t('pratik.sekme.gercek')], ['ogren', t('pratik.sekme.ogren')]], pratikSekme, (id) => { pratikSekme = id; pratikSekmeGoster(); window.scrollTo(0, 0); }, { etiket: t('gezinme.pratik') });
+
+  // En üstte kayan tanıtım afişleri: uygulamanın kendi özelliklerini tanıtır, dokununca ilgili yere götürür.
+  const afisler = afisKaydirici([
+    { ikon: 'telaffuz', renk: 1, etiket: t('pratik.afis.1.etiket'), baslik: t('pratik.afis.1.baslik'), alt: t('pratik.afis.1.alt'), dugme: t('pratik.afis.1.dugme'), git: senaryoyaGit },
+    { ikon: 'baglanti', renk: 4, etiket: t('pratik.afis.2.etiket'), baslik: t('pratik.afis.2.baslik'), alt: t('pratik.afis.2.alt'), dugme: t('pratik.afis.2.dugme'), git: () => b.git('/kesfet') },
+    { ikon: 'kitap', renk: 3, etiket: t('pratik.afis.3.etiket'), baslik: t('pratik.afis.3.baslik'), alt: t('pratik.afis.3.alt'), dugme: t('pratik.afis.3.dugme'), git: () => b.git('/gelisim?sekme=profil') },
+    { ikon: 'anlar', renk: 6, etiket: t('pratik.afis.4.etiket'), baslik: t('pratik.afis.4.baslik'), alt: t('pratik.afis.4.alt'), dugme: t('pratik.afis.4.dugme'), git: () => b.git('/dil-anlari') },
+    { ikon: 'kupa', renk: 5, etiket: t('pratik.afis.5.etiket'), baslik: t('pratik.afis.5.baslik'), alt: t('pratik.afis.5.alt'), dugme: t('pratik.afis.5.dugme'), git: () => b.git('/gelisim?sekme=gelisim') },
+  ], { etiket: t('pratik.afisEtiket') });
+
+  // Gerçek sohbet: şu an aktif dil ortakları (test modunda TEST rozetli sanal kullanıcılar), renkli 2 sütunlu kartlar.
+  const aktifler = testler.slice().sort((x, y) => aktiflik(x).dk - aktiflik(y).dk).slice(0, 6);
+  const gercekBolumu = h('section', { class: 'bgn-gercek', 'aria-labelledby': 'bgn-gercek-baslik' },
+    h('div', { class: 'bgn-dongu-ust' }, h('h2', { class: 'bgn-dongu-baslik', id: 'bgn-gercek-baslik' }, t('pratik.gercekBaslik')),
+      h('button', { type: 'button', class: 'bgn-tumu', onClick: () => b.git('/kesfet') }, t('pratik.tumunuGor'), ikon('sag', 16))),
+    aktifler.length ? h('div', { class: 'bgn-canli-izgara' }, aktifler.map((p, i) => h('button', { type: 'button', class: `bgn-canli b-kutu-${(i % 6) + 1}`, onClick: () => b.git(`/kisi?k=${p.kimlik}`) },
+      h('span', { class: 'bgn-oda-etiketler' }, h('span', { class: 'bgn-oda-hap' }, p.anaDil.toUpperCase()), h('span', { class: 'bgn-oda-hap' }, `# ${yerel(p.ilgi[0])}`), testEtiketi()),
+      h('span', { class: 'bgn-canli-av' }, testAvatar(p, 72, { cevrimici: aktiflik(p).cevrimici })),
+      h('span', { class: 'bgn-canli-ad' }, p.ad),
+      h('b', { class: 'bgn-canli-konu' }, t('pratik.konusalim', { dil: t(`diller.${p.ogrenilenDil}`) })),
+      h('span', { class: 'bgn-canli-alt' }, aktiflik(p).cevrimici ? t('ht.cevrimiciSimdi') : `${p.seviye} · ${yerel(p.ulke).split(' · ')[0]}`),
+    ))) : h('div', { class: 'b-platform bgn-gercek-bos' },
+      h('p', null, t('pratik.gercekBos')),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-ana', onClick: () => { testModuAyarla(true); b.git('/bugun', { degistir: true }); } }, ikon('kisi', 18), t('test.davetDugme'))),
+    h('p', { class: 'b-kucuk' }, t('pratik.gercekNot')),
+  );
+
+  // Öğren: yatay kayan kart sıraları (HelloTalk Öğren · Kelimeler): senaryolar ve araçlar.
+  const tamam = v.tamamlananSenaryolar || {};
+  const SENARYO_SIMGE = { alisveris: 'hediye', ulasim: 'senaryo' };
+  const ogrenBolumu = h('section', { class: 'bgn-ogren', 'aria-label': t('pratik.sekme.ogren') },
+    h('h2', { class: 'bgn-dongu-baslik' }, t('pratik.onerilen')),
+    h('div', { class: 'b-kart-sirasi', 'data-yatay': '' }, tumSenaryolar.map((s, i) => h('button', { type: 'button', class: 'bgn-ogren-kart', onClick: () => b.git(`/gorusme?tur=senaryo&id=${s.kimlik}`) },
+      h('span', { class: `bgn-ogren-gorsel b-kutu-${(i % 6) + 1}` }, ikon3d(SENARYO_SIMGE[s.alan] || 'senaryo', 64), tamam[s.kimlik] ? h('span', { class: 'bgn-ogren-rozet' }, ikon('onay', 14)) : null),
+      h('b', null, yerel(s.baslik)),
+      h('small', null, `${s.seviye} · ${alanAdi(s.alan)}`)))),
+    h('h2', { class: 'bgn-dongu-baslik' }, t('pratik.araclar')),
+    h('div', { class: 'b-kart-sirasi', 'data-yatay': '' }, [
+      ['hafiza', t('ht.merkez.hafiza'), t('pratik.tekrarSayisi', { n: vadesi.length }), () => b.git('/hafiza'), 3],
+      ['kitap', t('defter.baslik'), t('pratik.cumleSayisi', { n: (v.kayitliCumleler || []).length }), () => b.git('/gelisim?sekme=profil'), 6],
+      ['kupa', t('ht.merkez.karne'), t('pratik.karneAlt'), () => b.git('/gelisim?sekme=gelisim'), 2],
+      ['senaryo', t('ht.merkez.senaryolar'), t('yanMenu.senaryoAlt'), () => b.git('/senaryolar'), 1],
+    ].map(([ik, ad, alt, fn, renk]) => h('button', { type: 'button', class: 'bgn-ogren-kart', onClick: fn },
+      h('span', { class: `bgn-ogren-gorsel b-kutu-${renk}` }, ikon3d(ik, 64)), h('b', null, ad), h('small', null, alt)))),
+  );
   function pratikSekmeGoster() { kok.querySelectorAll('[data-psekme]').forEach((c) => { c.hidden = c.dataset.psekme !== pratikSekme; }); }
 
   let siradaMetni;
@@ -103,22 +150,11 @@ function ciz(kok, b) {
       sag: htIkon(ikon3d('hedef', 28), t('ht.hedefim'), () => b.git('/gelisim')),
     }),
     pratikSekmeleri,
+    afisler,
     h('p', { class: 'bgn-selam' },
       h('b', null, t(`bugun.selam.${gunBolumu()}`, { ad: v.profil.ad })), ' · ',
       new Date().toLocaleDateString(aktifDil() === 'tr' ? 'tr-TR' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }),
       ' · ', t('bugun.seviye', { s: v.profil.seviye })),
-    h('section', { class: 'bgn-afis', 'aria-labelledby': 'bgn-afis-baslik' },
-      h('div', { class: 'bgn-afis-metin' },
-        h('span', { class: 'bgn-afis-etiket' }, t('bugun.hizliEtiket')),
-        h('h2', { class: 'bgn-afis-baslik', id: 'bgn-afis-baslik' }, t('bugun.hizliBaslik')),
-        h('p', { class: 'bgn-secim-bilgi' }, yzEtiketi(), ' ', t('bugun.partnerSecim.bilgi')),
-      ),
-      ikon3d('telaffuz', 72),
-      h('div', { class: 'bgn-afis-eylem' },
-        h('button', { type: 'button', class: 'b-dugme b-dugme-ana bgn-afis-dugme', onClick: senaryoyaGit }, ikon('mikrofon', 18), t('bugun.partnerSecim.yz')),
-        h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve bgn-afis-dugme', onClick: () => b.git('/kesfet') }, ikon('kisi', 18), t('bugun.partnerSecim.insan')),
-      ),
-    ),
     h('nav', { class: 'b-uygulamalar bgn-uygulamalar', 'aria-label': t('bugun.yollarBaslik') },
       [['senaryo', t('ht.merkez.senaryolar'), () => b.git('/senaryolar'), 1, 0],
         ['telaffuz', t('ht.merkez.telaffuz'), senaryoyaGit, 5, 0],
@@ -128,6 +164,8 @@ function ciz(kok, b) {
       ].map(([ik, ad, fn, renk, rozet]) => h('button', { type: 'button', class: 'b-uygulama', onClick: fn },
         h('span', { class: `b-uygulama-ikon b-kutu-${renk} bgn-uyg` }, ikon3d(ik, 38), rozet ? h('span', { class: 'b-ht-rozet' }, String(rozet)) : null), ad)),
     ),
+    gercekBolumu,
+    ogrenBolumu,
     h('section', { class: 'bgn-odalar', 'aria-labelledby': 'bgn-oda-baslik' },
       h('div', { class: 'bgn-dongu-ust' }, h('h2', { class: 'bgn-dongu-baslik', id: 'bgn-oda-baslik' }, t('odalar.baslik')), h('span', { class: 'b-kucuk' }, t('odalar.alt'))),
       hizliOda,
@@ -169,7 +207,8 @@ function ciz(kok, b) {
   );
   [...kok.children].forEach((c) => {
     if (c === pratikSekmeleri || c.classList.contains('b-ht-ust') || c.classList.contains('b-gezinme')) return;
-    c.dataset.psekme = c.classList.contains('bgn-odalar') ? 'odalar' : 'bugun';
+    if (c === afisler) return;
+    c.dataset.psekme = c === gercekBolumu ? 'gercek' : (c === ogrenBolumu || c.classList.contains('bgn-uygulamalar')) ? 'ogren' : 'ai';
   });
   pratikSekmeGoster();
 }

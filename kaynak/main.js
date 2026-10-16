@@ -15,6 +15,7 @@ import { zamanlayiciBaslat } from './cekirdek/zamanlayici.js';
 import { duyur } from './cekirdek/duyuru.js';
 import { t, dilAyarla, tarayiciDili } from './cekirdek/metin.js';
 import { pwaBaslat } from './cekirdek/pwa.js';
+import { sekmeKaydirmaBaslat } from './cekirdek/arayuz.js';
 
 import karsilama from './moduller/karsilama/index.js';
 import sohbetler from './moduller/sohbetler/index.js';
@@ -52,6 +53,7 @@ function uygulamayiBaslat() {
 
   baslat(document.getElementById('uygulama'));
   zamanlayiciBaslat();
+  sekmeKaydirmaBaslat(git);
   pwaBaslat();
 }
 
