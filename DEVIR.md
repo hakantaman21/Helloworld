@@ -21,7 +21,7 @@
 
 - **Yapan:** Claude (Opus 5.5), 16.10.2026
 - **Neden:** Hakan (canlı v0.11.2 ekran görüntüsü): "Alanı sıkışma yaratmadan maksimum daralt; aşağıda ve solda bölümün hatları kaybolmamalı"; sohbet satırlarında "Hatları görünsün, sağda-solda kaybolmasın".
-- **Ne:** `bilesenler.css` v0.11.3 bloğu: bant alt boşluğu 4 px, simge 38 px, yazı 11 px, tutamak negatif boşluklu; bant `border` (altın %38, üst hariç); kart/satır çerçevesi `color-mix(--sayfa 38%, --renk-cizgi-guclu)`; `kesfet.css` kişi kartı aynı çerçeve.
+- **Ne:** `bilesenler.css` v0.11.3 bloğu: bant alt boşluğu 4 px, simge 38 px, yazı 11 px, tutamak negatif boşluklu; bant `border` (altın %38, üst hariç); kart/satır çerçevesi `color-mix(--sayfa 38%, --renk-cizgi-guclu)`; `kesfet.css` kişi kartı aynı çerçeve. Profil terim düzeni (v0.11.0'da kuruldu) tamamlandı: başka kişinin sayfasındaki sekme `ht.profilSekme` = "Hakkında". Kural: "Profil" yalnız alt menü sekmesi ve kişi sayfası başlığıdır; görüntüleme Profil'de, düzenleme Ayarlar › Kişisel bilgiler'de; yan menü ve Ayarlar kartı yalnız "Profilini gör" kısayoludur.
 - **Şema:** değişmedi (12). **Durum:** canlıya (Hakan'ın bu turdaki istekleri canlı sürüm üzerinden).
 
 ## v0.11.2

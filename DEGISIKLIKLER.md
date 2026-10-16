@@ -3,6 +3,7 @@
 - Sohbet üst bandı sıkışma yaratmadan en dar hâline getirildi (başlık, simgeler, yazılar ve "Daha fazla" arası).
 - Bandın alt ve yan hatları ince altın çizgiyle her yerde görünür.
 - Kart ve sohbet satırlarının çerçevesi belirginleşti; koyu temada sağda-solda kaybolmuyor.
+- Profil adları: başka bir kişinin sayfasındaki "Profil" sekmesi "Hakkında" oldu (kendi Profil sayfandaki "Hakkımda" ile uyumlu).
 
 ## 0.11.2 — 16.10.2026 · Video notlarından kalanlar
 

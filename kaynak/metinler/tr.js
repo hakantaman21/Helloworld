@@ -92,7 +92,7 @@ export default {
     cevrimiciSimdi: 'Şu an çevrimiçi', aktifOnce: '{zaman} aktifti',
     dahaFazla: 'Daha fazla', katildi: '{n} gün önce katıldı', anSayisi: '{n} Dil Anı', yerelSaat: 'Yerel saat {saat}',
     hobiler: 'Hobiler', meslek: 'Meslek', gezilecek: 'Gezilecek yerler', ozellikler: 'Sohbet tarzı',
-    profilSekme: 'Profil', anlarSekme: 'Dil Anları {n}', sohbet: 'Sohbet',
+    profilSekme: 'Hakkında', anlarSekme: 'Dil Anları {n}', sohbet: 'Sohbet',
     takipEt: 'Takip et', takiptesin: 'Takipte', takipEdildi: '{ad} takip ediliyor', takiptenCikti: '{ad} takipten çıkarıldı',
     guncel: 'Güncel', seninIcin: 'Senin için', yardimEt: 'Başkalarına yardım et', takipEdilen: 'Takip',
     takipBos: 'Takip ettiğin kimsenin gönderisi yok. Bir profilde "Takip et"e dokun.', anAra: 'Dil Anlarında ara', bildirimler: 'Bildirimler',
