@@ -7,7 +7,7 @@ export function temaUygula() {
   const tercih = ayarlar.tema;
   const kok = document.documentElement;
   kok.setAttribute('data-gorunum', ayarlar.gorunum === 'kompakt' ? 'kompakt' : 'dengeli');
-  kok.setAttribute('data-yazi', ayarlar.yaziBoyutu === 'buyuk' ? 'buyuk' : 'normal');
+  kok.setAttribute('data-yazi', ['buyuk', 'cokbuyuk'].includes(ayarlar.yaziBoyutu) ? ayarlar.yaziBoyutu : 'normal');
   if (ayarlar.secimRengi && ayarlar.secimRengi !== 'altin') kok.setAttribute('data-secim', ayarlar.secimRengi); else kok.removeAttribute('data-secim');
   if (ayarlar.zemin && ayarlar.zemin !== 'varsayilan') kok.setAttribute('data-zemin', ayarlar.zemin); else kok.removeAttribute('data-zemin');
   kok.setAttribute('data-bant', ayarlar.bantRengi || 'sayfa');

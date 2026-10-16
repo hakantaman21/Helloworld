@@ -145,7 +145,8 @@ const GEZINME = [
   { yol: '/kesfet', ikon: 'baglanti', anahtar: 'gezinme.baglanti' },
   { yol: '/bugun', ikon: 'pratik', anahtar: 'gezinme.pratik', orta: true },
   { yol: '/dil-anlari', ikon: 'anlar', anahtar: 'gezinme.dilAnlari' },
-  { yol: '/gelisim', ikon: 'profil', anahtar: 'gezinme.profil' },
+  // v0.16.0: sağ alt sekme "Gelişim"; Profil (kimlik) üst banttaki fotoğrafın arkasında.
+  { yol: '/gelisim', ikon: 'kupa', anahtar: 'gezinme.gelisim' },
 ];
 const ORTA = GEZINME.findIndex((g) => g.orta);
 
@@ -386,8 +387,9 @@ export function onayIste({ baslik, metin, evet, hayir }) {
         baslik ? h('h2', { class: 'b-bolum-baslik' }, baslik) : null,
         h('p', null, metin),
         h('div', { class: 'b-yigin' },
-          h('button', { class: 'b-dugme b-dugme-ana', onClick: () => kapat(true) }, evet),
-          h('button', { class: 'b-dugme b-dugme-cerceve', 'data-vazgec': '', onClick: () => kapat(false) }, hayir),
+          // Yalnız bilgi veren pencere (hayir yok): tek düğme; geri tuşu ve boş alan da onu kullanır.
+          h('button', { class: 'b-dugme b-dugme-ana', ...(hayir ? {} : { 'data-vazgec': '' }), onClick: () => kapat(true) }, evet),
+          hayir ? h('button', { class: 'b-dugme b-dugme-cerceve', 'data-vazgec': '', onClick: () => kapat(false) }, hayir) : null,
         ),
       ),
     );

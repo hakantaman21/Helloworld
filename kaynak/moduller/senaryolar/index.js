@@ -8,7 +8,8 @@ import { oneriSenaryo, SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import senaryolar from '../../veri/senaryolar/index.js';
 import alanlar from '../../veri/alanlar.js';
 
-const GOSTERILEN_SEVIYELER = SEVIYE_SIRASI.slice(0, 4);
+// v0.16.0: C1 içerik eklendi; beş seviyenin tamamı seçilebilir.
+const GOSTERILEN_SEVIYELER = SEVIYE_SIRASI;
 let secilenSeviye = null; // ekranlar arasında hatırlanır (oturum boyunca)
 
 function seviyeSecici(aktif, degisti) {
@@ -77,13 +78,18 @@ function alanEkrani(kok, b) {
   kok.classList.add('b-ekran-gezinmeli');
   const seviye = secilenSeviye || (GOSTERILEN_SEVIYELER.includes(al().profil.seviye) ? al().profil.seviye : 'A1');
   const liste = senaryolar.filter((s) => s.alan === alan.kimlik && s.seviye === seviye);
-  const digerSeviyeler = senaryolar.filter((s) => s.alan === alan.kimlik && s.seviye !== seviye);
+  // v0.16.0: diğer seviyeler, seçilen seviyeye yakınlığına göre sıralanır; boşsa en yakını önerilir (akış kesilmez).
+  const uzaklik = (s) => Math.abs(SEVIYE_SIRASI.indexOf(s.seviye) - SEVIYE_SIRASI.indexOf(seviye));
+  const digerSeviyeler = senaryolar.filter((s) => s.alan === alan.kimlik && s.seviye !== seviye).sort((x, y) => uzaklik(x) - uzaklik(y));
+  const enYakin = digerSeviyeler[0];
 
   yerlestir(kok, 
     ustBaslik({ tabela: `${t('gezinme.pratik')} › ${t('senaryolar.baslik')}`, baslik: t(alan.metin), geri: () => b.geri('/senaryolar') }),
     seviyeSecici(seviye, (s) => { secilenSeviye = s; alanEkrani(kok, b); }),
-    liste.length ? h('div', { class: 'b-yigin' }, liste.map((s) => senaryoSatiri(s, b))) : durumKutusu('bos', t('senaryolar.alanBos', { s: seviye })),
-    digerSeviyeler.length ? h('div', { class: 'b-yigin' }, digerSeviyeler.map((s) => senaryoSatiri(s, b))) : null,
+    liste.length ? h('div', { class: 'b-yigin' }, liste.map((s) => senaryoSatiri(s, b)))
+      : enYakin ? h('div', { class: 'b-kart snr-yakin' }, h('p', null, t('senaryolar.yakinOner', { s: seviye, y: enYakin.seviye })), senaryoSatiri(enYakin, b))
+        : durumKutusu('bos', t('senaryolar.alanBos', { s: seviye })),
+    digerSeviyeler.length ? h('div', { class: 'b-yigin' }, digerSeviyeler.filter((s) => liste.length || s !== enYakin).map((s) => senaryoSatiri(s, b))) : null,
     altGezinme('/bugun'),
   );
   return null;
@@ -91,7 +97,7 @@ function alanEkrani(kok, b) {
 
 export default {
   kimlik: 'senaryolar',
-  surum: '0.2.0',
+  surum: '0.3.0',
   onek: 'snr',
   semaSurumu: 1,
   cekirdekServisleri: ['depo'],

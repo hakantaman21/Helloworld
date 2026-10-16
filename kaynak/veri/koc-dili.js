@@ -9,6 +9,6 @@ export default {
     koc: 'No problem. Let me say it again, more slowly.',
   },
   // v0.14.0 Sapma: kullanıcı kendi sorusunu sorarsa ya da konudan çıkarsa koç kabul eder, soruyu bir kez yineler.
-  sapma: { soru: 'Good question! Let me come back to it in a minute.', konu: 'Interesting! Let\u2019s stay with our situation for a moment.' },
+  sapma: { soru: 'Good question! Let me come back to it in a minute.', konu: 'Okay. Let me ask that once more, in a full sentence if you can.' },
   bosCevap: 'Take your time. You can say just a few words.',
 };

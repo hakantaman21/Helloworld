@@ -1,7 +1,8 @@
 // Bugün: günün döngüsü, sıradaki adım (tabela), Hata Hafızası kısayolu ve tek dokunuşla "Konuş".
 import './bugun.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d, htUst, htIkon, testAvatar, sekmeler, afisKaydirici, testEtiketi, enUsteKaydir } from '../../cekirdek/arayuz.js';
+import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d, htUst, testAvatar, sekmeler, afisKaydirici, testEtiketi, enUsteKaydir } from '../../cekirdek/arayuz.js';
+import { benDugmesi } from '../../cekirdek/yan-menu.js';
 import { testModuAcik, testModuAyarla, testProfilleri, aktiflik } from '../../cekirdek/test-modu.js';
 import tumSenaryolar from '../../veri/senaryolar/index.js';
 import { t, yerel, aktifDil } from '../../cekirdek/metin.js';
@@ -93,9 +94,9 @@ function ciz(kok, b) {
   const afisler = afisKaydirici([
     { ikon: 'telaffuz', renk: 1, etiket: t('pratik.afis.1.etiket'), baslik: t('pratik.afis.1.baslik'), alt: t('pratik.afis.1.alt'), dugme: t('pratik.afis.1.dugme'), git: senaryoyaGit },
     { ikon: 'baglanti', renk: 4, etiket: t('pratik.afis.2.etiket'), baslik: t('pratik.afis.2.baslik'), alt: t('pratik.afis.2.alt'), dugme: t('pratik.afis.2.dugme'), git: () => b.git('/kesfet') },
-    { ikon: 'kitap', renk: 3, etiket: t('pratik.afis.3.etiket'), baslik: t('pratik.afis.3.baslik'), alt: t('pratik.afis.3.alt'), dugme: t('pratik.afis.3.dugme'), git: () => b.git('/gelisim?sekme=profil') },
+    { ikon: 'kitap', renk: 3, etiket: t('pratik.afis.3.etiket'), baslik: t('pratik.afis.3.baslik'), alt: t('pratik.afis.3.alt'), dugme: t('pratik.afis.3.dugme'), git: () => b.git('/gelisim') },
     { ikon: 'anlar', renk: 6, etiket: t('pratik.afis.4.etiket'), baslik: t('pratik.afis.4.baslik'), alt: t('pratik.afis.4.alt'), dugme: t('pratik.afis.4.dugme'), git: () => b.git('/dil-anlari') },
-    { ikon: 'kupa', renk: 5, etiket: t('pratik.afis.5.etiket'), baslik: t('pratik.afis.5.baslik'), alt: t('pratik.afis.5.alt'), dugme: t('pratik.afis.5.dugme'), git: () => b.git('/gelisim?sekme=gelisim') },
+    { ikon: 'kupa', renk: 5, etiket: t('pratik.afis.5.etiket'), baslik: t('pratik.afis.5.baslik'), alt: t('pratik.afis.5.alt'), dugme: t('pratik.afis.5.dugme'), git: () => b.git('/gelisim') },
   ], { etiket: t('pratik.afisEtiket') });
 
   // Gerçek sohbet: şu an aktif dil ortakları (test modunda TEST rozetli sanal kullanıcılar), renkli 2 sütunlu kartlar.
@@ -127,8 +128,8 @@ function ciz(kok, b) {
     h('h2', { class: 'bgn-dongu-baslik' }, t('pratik.araclar')),
     h('div', { class: 'b-kart-sirasi', 'data-yatay': '' }, [
       ['hafiza', t('ht.merkez.hafiza'), t('pratik.tekrarSayisi', { n: vadesi.length }), () => b.git('/hafiza'), 3],
-      ['kitap', t('defter.baslik'), t('pratik.cumleSayisi', { n: (v.kayitliCumleler || []).length }), () => b.git('/gelisim?sekme=profil'), 6],
-      ['kupa', t('ht.merkez.karne'), t('pratik.karneAlt'), () => b.git('/gelisim?sekme=gelisim'), 2],
+      ['kitap', t('defter.baslik'), t('pratik.cumleSayisi', { n: (v.kayitliCumleler || []).length }), () => b.git('/gelisim'), 6],
+      ['kupa', t('ht.merkez.karne'), t('pratik.karneAlt'), () => b.git('/gelisim'), 2],
       ['senaryo', t('ht.merkez.senaryolar'), t('yanMenu.senaryoAlt'), () => b.git('/senaryolar'), 1],
     ].map(([ik, ad, alt, fn, renk]) => h('button', { type: 'button', class: 'bgn-ogren-kart', onClick: fn },
       h('span', { class: `bgn-ogren-gorsel b-kutu-${renk}` }, ikon3d(ik, 64)), h('b', null, ad), h('small', null, alt)))),
@@ -145,9 +146,9 @@ function ciz(kok, b) {
 
   yerlestir(kok, 
     htUst({
-      sol: h('span', { class: 'bgn-seri', title: t('bugun.seri', { n: seri }) }, ikon3d('seri', 22), String(seri)),
+      sol: benDugmesi(b),
       baslik: t('gezinme.pratik'),
-      sag: htIkon(ikon3d('hedef', 28), t('ht.hedefim'), () => b.git('/gelisim')),
+      sag: h('span', { class: 'bgn-seri', title: t('bugun.seri', { n: seri }) }, ikon3d('seri', 22), String(seri)),
     }),
     pratikSekmeleri,
     afisler,
@@ -216,7 +217,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'bugun',
-  surum: '0.4.0',
+  surum: '0.5.0',
   onek: 'bgn',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'gunluk', 'hafiza', 'zamanlayici'],

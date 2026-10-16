@@ -5,11 +5,13 @@ import './mesaj.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, durumKutusu, yerlestir, testEtiketi, farkCiz, onayIste, testAvatar, goreliZaman, dilCifti, sekmeler, enAltaKaydir } from '../../cekirdek/arayuz.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
-import { t, yerel } from '../../cekirdek/metin.js';
+import { t, yerel, aktifDil } from '../../cekirdek/metin.js';
+import { mesajIzni, fotoIzni, iletisimBilgisiVar, iletisimIzni, ILETISIM_GUN } from '../../cekirdek/topluluk-kurallari.js';
+import { fotograflarEkle, fotoAdresi } from '../../cekirdek/fotograf.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { al } from '../../cekirdek/depo.js';
 import { kelimeFarki } from '../../cekirdek/dil/fark.js';
-import { testProfili, testMesajlari, testMesajEkle, otomatikYanit, gonderimOncesiOneri, testEngelle, testSikayet, testYazarAnlari, aktiflik, yerelSaat, eslesme, takipte, takipDegistir, selamVer, selamVerildi, selamYaniti, okunduIsaretle, uyumDuzeyi } from '../../cekirdek/test-modu.js';
+import { testProfili, testMesajlari, testMesajEkle, otomatikYanit, gonderimOncesiOneri, testEngelle, testSikayet, testYazarAnlari, aktiflik, yerelSaat, eslesme, takipte, takipDegistir, selamVer, selamVerildi, selamYaniti, okunduIsaretle, uyumDuzeyi, testSohbetBaslangici, testYanitVerir } from '../../cekirdek/test-modu.js';
 import { TEST_KONULARI } from '../../veri/test-profiller.js';
 import { hizliYanitlar } from '../../veri/hizli-yanitlar.js';
 import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
@@ -17,6 +19,8 @@ import { cumleKayitli, cumleKaydetDegistir } from '../../cekirdek/cumle-defteri.
 import { destek, soyle } from '../../cekirdek/ses/ses-hatti.js';
 
 const YANIT_GECIKMESI = 1300;
+// v0.16.0 Yazılmakta olan mesaj, sohbetten çıkıp dönünce kaybolmaz (uygulama açık kaldıkça).
+const taslaklar = new Map();
 const SIKAYET_NEDENLERI = ['taciz', 'spam', 'uygunsuz', 'konuDisi'];
 
 function saat(zaman) {
@@ -35,11 +39,15 @@ function ciz(kok, b) {
   const liste = h('div', { class: 'msj-liste', role: 'log', 'aria-live': 'polite', 'aria-label': t('test.mesajlar') });
   const girdi = h('textarea', { class: 'b-girdi msj-girdi', rows: 1, maxlength: 600, 'aria-label': t('test.mesajYazEtiket'), placeholder: t('test.mesajYazEtiket') });
   const oneriAlani = h('div', { class: 'msj-oneri-alani' });
+  girdi.value = taslaklar.get(profil.kimlik) || '';
+  girdi.addEventListener('input', () => { if (girdi.value) taslaklar.set(profil.kimlik, girdi.value); else taslaklar.delete(profil.kimlik); });
+  const yazAlani = h('div', { class: 'msj-yaz-alani' });
+  const tarihYaz = (z) => new Date(z).toLocaleDateString(aktifDil(), { day: 'numeric', month: 'long', weekday: 'long' });
 
   function balon(m) {
     if (m.kim === 'ben') {
       return h('div', { class: 'msj-satir msj-ben' },
-        h('div', { class: 'msj-balon msj-balon-ben' }, h('p', null, m.metin), h('span', { class: 'msj-saat' }, saat(m.zaman), m.duzeltildi ? ` · ${t('test.duzeltilerekGonderildi')}` : '')));
+        h('div', { class: 'msj-balon msj-balon-ben' }, m.foto ? h('img', { class: 'msj-foto', src: fotoAdresi(m.foto), alt: t('kural.fotoMesaj') }) : null, m.metin ? h('p', null, m.metin) : null, h('span', { class: 'msj-saat' }, saat(m.zaman), m.duzeltildi ? ` · ${t('test.duzeltilerekGonderildi')}` : '')));
     }
     return h('div', { class: 'msj-satir msj-o' },
       testAvatar(profil, 32),
@@ -66,8 +74,12 @@ function ciz(kok, b) {
     );
   }
 
-  function yenile() {
+  // v0.16.0: eski mesajları okurken yeni mesaj gelirse ekran zorla en alta inmez; yalnız zaten alttaysan ya da sen gönderdiysen.
+  function enAltta() { const a = kok.closest('#uygulama') || document.scrollingElement; return !a || a.scrollHeight - a.scrollTop - a.clientHeight < 120; }
+  function yenile(zorla = false) {
+    const alttaydi = zorla || enAltta();
     const mesajlar = testMesajlari(profil.kimlik);
+    const son = mesajlar[mesajlar.length - 1];
     okunduIsaretle(profil.kimlik);
     hizliCiz();
     yerlestir(liste,
@@ -75,24 +87,73 @@ function ciz(kok, b) {
       mesajlar.length ? null : h('p', { class: 'b-kucuk msj-bos' }, t('test.ilkMesaj', { ad: profil.ad })),
       mesajlar.map(balon),
       yaziyor ? h('div', { class: 'msj-satir msj-o' }, testAvatar(profil, 32), h('div', { class: 'msj-balon msj-balon-o msj-yaziyor' }, t('test.yaziyor', { ad: profil.ad }))) : null,
+      !yaziyor && son && son.kim === 'ben' && !testYanitVerir(profil) ? h('p', { class: 'b-kucuk msj-bos' }, t('kural.cevrimdisi', { ad: profil.ad })) : null,
     );
-    requestAnimationFrame(enAltaKaydir);
+    yazCiz();
+    if (alttaydi) requestAnimationFrame(enAltaKaydir);
+  }
+
+  // v0.16.0 Topluluk kuralları: yanıtsız mesaj sınırı yazma alanının yerine açıklama koyar.
+  function yazCiz() {
+    const izin = mesajIzni(testMesajlari(profil.kimlik));
+    if (!izin.izin) {
+      yerlestir(yazAlani, h('div', { class: 'b-kart msj-kilit', role: 'status' },
+        h('b', null, t('kural.kilitBaslik', { ad: profil.ad })),
+        h('p', { class: 'b-kucuk' }, t('kural.kilitMetin', { tarih: tarihYaz(izin.acilis) })),
+        h('p', { class: 'b-kucuk' }, t('kural.neden'))));
+      return;
+    }
+    yerlestir(yazAlani,
+      izin.haftalik ? h('p', { class: 'b-kucuk msj-kural' }, t('kural.haftalik')) : izin.kalan <= 2 ? h('p', { class: 'b-kucuk msj-kural' }, t('kural.kalan', { n: izin.kalan })) : null,
+      h('div', { class: 'msj-yaz' },
+        h('button', { type: 'button', class: 'b-ht-ikon msj-foto-dugme', 'aria-label': t('kural.fotoEkle'), onClick: fotoGonder }, ikon('kamera', 20)),
+        girdi,
+        h('button', { type: 'button', class: 'b-dugme b-dugme-ana b-dugme-yuvarlak', 'aria-label': t('test.gonder'), onClick: gonderDene }, ikon('gonder', 20))));
+  }
+
+  function kuralPenceresi(baslik, ...metinler) {
+    return onayIste({ baslik, metin: metinler.join(' '), evet: t('kural.tamam') });
+  }
+
+  async function fotoGonder() {
+    const mesajlar = testMesajlari(profil.kimlik);
+    const f = fotoIzni(mesajlar);
+    if (!f.izin) { duyur(t('kural.fotoKilit', { n: f.n, gerekli: f.gerekli }), 5000); return; }
+    if (!mesajIzni(mesajlar).izin) { yazCiz(); return; }
+    const refler = await fotograflarEkle(1);
+    if (!refler || !refler.length) return;
+    testMesajEkle(profil.kimlik, { kim: 'ben', metin: '', foto: refler[0] });
+    yanitPlanla('');
+    yenile(true);
+  }
+
+  function yanitPlanla(metin) {
+    clearTimeout(zamanlayici);
+    if (!testYanitVerir(profil)) { yaziyor = false; return; }
+    yaziyor = true;
+    zamanlayici = setTimeout(() => {
+      testMesajEkle(profil.kimlik, otomatikYanit(profil, metin));
+      yaziyor = false;
+      yenile();
+    }, YANIT_GECIKMESI);
   }
 
   function gonder(metin, duzeltildi) {
     const temiz = metin.trim();
     if (!temiz) return;
+    const mesajlar = testMesajlari(profil.kimlik);
+    if (!mesajIzni(mesajlar).izin) { yazCiz(); return; }
+    // İletişim bilgisi (telefon, e-posta) belirli bir tanışıklıktan önce gönderilmez; mesaj yazma alanında kalır.
+    if (iletisimBilgisiVar(temiz)) {
+      const i = iletisimIzni(mesajlar, testSohbetBaslangici(profil.kimlik));
+      if (!i.izin) { kuralPenceresi(t('kural.iletisimBaslik'), t('kural.iletisimMetin', { gun: ILETISIM_GUN, gerekli: i.gerekli, kalanGun: i.kalanGun, n: i.n }), t('kural.iletisimNeden')); return; }
+    }
     testMesajEkle(profil.kimlik, { kim: 'ben', metin: temiz, duzeltildi: Boolean(duzeltildi) });
     girdi.value = '';
+    taslaklar.delete(profil.kimlik);
     yerlestir(oneriAlani);
-    yaziyor = true;
-    yenile();
-    clearTimeout(zamanlayici);
-    zamanlayici = setTimeout(() => {
-      testMesajEkle(profil.kimlik, otomatikYanit(profil, temiz));
-      yaziyor = false;
-      yenile();
-    }, YANIT_GECIKMESI);
+    yanitPlanla(temiz);
+    yenile(true);
   }
 
   // Gönderim öncesi isteğe bağlı düzeltme önerisi (yerel kurallar; ağ çağrısı yok).
@@ -158,13 +219,10 @@ function ciz(kok, b) {
     liste,
     h('div', { class: 'msj-alt' },
       oneriAlani,
-      h('div', { class: 'msj-yaz' },
-        girdi,
-        h('button', { type: 'button', class: 'b-dugme b-dugme-ana b-dugme-yuvarlak', 'aria-label': t('test.gonder'), onClick: gonderDene }, ikon('gonder', 20)),
-      ),
+      yazAlani,
     ),
   );
-  yenile();
+  yenile(true);
   return () => clearTimeout(zamanlayici);
 }
 
@@ -308,7 +366,7 @@ function kisiCiz(kok, b) {
 
 export default {
   kimlik: 'mesaj',
-  surum: '0.4.0',
+  surum: '0.5.0',
   onek: 'msj',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'metin', 'test-modu'],

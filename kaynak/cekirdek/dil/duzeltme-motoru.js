@@ -37,7 +37,8 @@ function ucuncuTekilHali(fiil) {
 
 const GECMIS_ISARETI = /\b(yesterday|last (night|week|month|year|weekend|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|ago)\b/i;
 // Cümleyi yan cümlelere böler; geçmiş zaman işareti yalnız geçtiği yan cümleyi etkiler.
-const AYIRAC = /(\s*(?:,|;|\band\b|\bbut\b|\bso\b|\bbecause\b|\bthen\b)\s*)/i;
+// v0.16.0: although/though/whereas/while/unless/if de yan cümle sınırı ("I work today although I was sick yesterday" bozulmaz).
+const AYIRAC = /(\s*(?:,|;|\band\b|\bbut\b|\bso\b|\bbecause\b|\bthen\b|\balthough\b|\bthough\b|\bwhereas\b|\bwhile\b|\bunless\b|\bif\b)\s*)/i;
 function yanCumlelerde(c, fn) {
   return c.split(AYIRAC).map((parca, i) => (i % 2 === 1 ? parca : fn(parca))).join('');
 }
@@ -89,6 +90,26 @@ export const KURALLAR = [
       const desen = new RegExp(`(?<!\\b(?:does|did|can|will|would|could|should|must|might|let|to|make|makes|help|helps)\\s)\\b(he|she|it|my (?:mother|father|mom|dad|friend|brother|sister|wife|husband|son|daughter|boss|teacher))\\s+(${UCUNCU_FIILLER.join('|')})\\b`, 'gi');
       return c.replace(desen, (tum, ozne, fiil) => `${ozne} ${ucuncuTekilHali(fiil.toLowerCase())}`);
       });
+    },
+  },
+  {
+    // v0.16.0 Kesin edat kalıpları: yalnız anlamı belirsiz olmayan, sabit kalıplar (genel edat tahmini YAPILMAZ —
+    // yanlış düzeltme riski yüksek). Örn. "married with two kids" doğru olduğu için yalnız "married with him/her" düzeltilir.
+    id: 'edat-kalibi',
+    aciklama: 'duzeltme.edatKalibi',
+    uygula(c) {
+      const GUNLER = 'Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday';
+      return c
+        .replace(/\b(good|bad|better|best|great|terrible)\s+in\s+(English|Turkish|Spanish|French|German|math|maths|sports?|football|cooking|writing|speaking|languages)\b/gi, (t, s, k) => `${s} at ${k}`)
+        .replace(/\b(married|engaged)\s+with\s+(him|her)\b/gi, (t, s, k) => `${s} to ${k}`)
+        .replace(/\b(depend|depends|depended|depending)\s+of\b/gi, (t, s) => `${s} on`)
+        .replace(/\b(interested)\s+(about|on|for)\b/gi, (t, s) => `${s} in`)
+        .replace(/\b(listen|listens|listened|listening)\s+(music|the radio|podcasts?)\b/gi, (t, s, k) => `${s} to ${k}`)
+        .replace(/\b(discuss|discusses|discussed|discussing)\s+about\b/gi, (t, s) => s)
+        .replace(/\b(explain|explains|explained)\s+me\s+(how|why|what|where|when|who)\b/gi, (t, s, k) => `${s} to me ${k}`)
+        .replace(/\b(arrive|arrives|arrived|arriving)\s+to\s+(the\s+)?(airport|station|hotel|office|meeting)\b/gi, (t, s, a, k) => `${s} at ${a || ''}${k}`)
+        .replace(new RegExp(`\\bin\\s+(${GUNLER})\\b(?!\\s+(?:Street|Road|Avenue|Lane|Square|Park))`, 'g'), (t, g) => `on ${g}`)
+        .replace(/\bon\s+((?:19|20)\d\d)\b/g, (t, y) => `in ${y}`);
     },
   },
   {

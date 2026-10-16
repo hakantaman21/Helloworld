@@ -1,13 +1,13 @@
 {
   "name": "konusma-kocu",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "private": true,
   "type": "module",
   "description": "Konuşma Koçu — günlük yaşam İngilizcesini konuşarak öğreten koç uygulaması",
   "scripts": {
     "denetle": "node araclar/yasa-denetcisi.mjs",
     "robot-sinama": "node araclar/yasa-denetcisi.mjs --kendini-sina",
-    "derle": "node araclar/sozdizimi.mjs && node araclar/yasa-denetcisi.mjs && node araclar/derle.mjs && node araclar/yasa-denetcisi.mjs --dagitim",
+    "derle": "node araclar/sozdizimi.mjs && node araclar/duzeltme-sinama.mjs && node araclar/yasa-denetcisi.mjs && node araclar/derle.mjs && node araclar/yasa-denetcisi.mjs --dagitim",
     "build": "npm run derle"
   }
 }

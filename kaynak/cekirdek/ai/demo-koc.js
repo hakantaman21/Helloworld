@@ -132,9 +132,12 @@ export const demoSaglayici = {
         // v0.14.0 Sapma onarımı: kullanıcı soruya cevap vermek yerine kendisi soru sorduysa koç bunu kabul eder
         // ve AYNI soruyu bir kez yeniden sorar (ilerlemez). Her adımda en çok bir kez. Yanlış alarm riskini düşük tutmak için
         // konu dışı cevap tahmini yapılmaz (anahtar kelime eşleşmesi buna yetecek kadar güvenilir değil).
+        // v0.16.0 (Grok önerisi): beklenen bir dal varken cevap çok kısa (en çok 3 sözcük) ve hiçbir dalı karşılamıyorsa koç da
+        // AYNI soruyu bir kez yeniden sorar (sapma.konu). Daha uzun cevaplarda konu dışı tahmini yine yapılmaz.
         const beklenen = (adim.dallar || []).length > 0;
         const kendiSorusu = /\?\s*$/.test(metin.trim());
-        if (!dal && !bulunan.length && beklenen && !(durum.sapma || {})[durum.i] && kendiSorusu && !parcalar.length) {
+        const cokKisa = normal(metin).split(' ').length <= 3;
+        if (!dal && !bulunan.length && beklenen && !(durum.sapma || {})[durum.i] && (kendiSorusu || cokKisa) && !parcalar.length) {
           durum.sapma = { ...(durum.sapma || {}), [durum.i]: true };
           return { metin: `${kendiSorusu ? kocDili.sapma.soru : kocDili.sapma.konu} ${doldur(adim.koc)}`, bitti: false, ceviriler };
         }

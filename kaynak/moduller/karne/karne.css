@@ -35,3 +35,9 @@
   .krn-son { margin-top: var(--bosluk-2); }
   .krn-ortali { text-align: center; }
 }
+
+@layer moduller {
+  /* v0.16.0 Karnedeki kelime ve not: deftere ekleme düğmesi */
+  .krn-defter { display: inline-flex; align-items: center; gap: 5px; min-height: var(--dokunma); border: 0; cursor: pointer; font: inherit; }
+  .krn-defter[aria-pressed="true"] { background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); }
+}

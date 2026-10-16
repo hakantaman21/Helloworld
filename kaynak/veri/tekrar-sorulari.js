@@ -12,6 +12,7 @@ export default {
   'can-to': 'What can you do really well? Tell me two things.',
   'want-to': 'What do you want to do this weekend?',
   'yas-kalibi': 'How old is your best friend? And how old are you?',
+  'edat-kalibi': 'What are you good at? What kind of music do you listen to?',
   'sayilamaz': 'Where do you usually find information about travel? Any advice?',
   kelime: 'Quick one: how do you say “{tr}” in English? Use it in a sentence.',
   telaffuz: 'Let’s practise one sentence. Please say: {dogru}',

@@ -174,4 +174,5 @@
     --renk-kart-alt-golge: color-mix(in srgb, #000000 55%, transparent);
   }
   :root[data-yazi="buyuk"] { --yazi-olcek: 1.12; }
+  :root[data-yazi="cokbuyuk"] { --yazi-olcek: 1.25; }
 }

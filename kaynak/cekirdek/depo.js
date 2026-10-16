@@ -25,10 +25,10 @@ function guvenliYaz(anahtar, deger) {
   }
 }
 
-function goc(ham) {
+function goc(ham, yedekle = true) {
   let surum = (ham && ham.semaSurumu) || 0;
   if (surum >= GUNCEL_SEMA) return ham;
-  if (ham) guvenliYaz(YEDEK_ANAHTARI, ham);
+  if (ham && yedekle) guvenliYaz(YEDEK_ANAHTARI, ham);
   let sonuc = ham;
   for (let s = surum + 1; s <= GUNCEL_SEMA; s++) sonuc = gocler[s](sonuc);
   sonuc.semaSurumu = GUNCEL_SEMA;
@@ -86,18 +86,51 @@ export function disaAktarMetni() {
 }
 
 // v0.13.0 Geri yükleme: dışa aktarılan JSON doğrulanır, göçten geçirilir ve kaydedilir. Başarısızsa mevcut veri değişmez.
-export function iceAktar(metin) {
+// v0.16.0 Doğrulama: göçten sonra veri, boş kurulumun şablonuyla karşılaştırılır. Zorunlu alan yoksa ya da bir alanın
+// türü şablondan farklıysa (dizi yerine nesne gibi) yedek reddedilir; zararsız eksikler şablondan tamamlanır.
+const tur = (x) => (Array.isArray(x) ? 'dizi' : x === null || x === undefined ? 'yok' : typeof x);
+function sablonaUydur(aday, sablon) {
+  for (const [k, v] of Object.entries(sablon)) {
+    if (k === 'semaSurumu') continue;
+    if (!(k in aday) || aday[k] === undefined) { aday[k] = v; continue; }
+    const a = tur(aday[k]); const s = tur(v);
+    if (a !== 'yok' && s !== 'yok' && a !== s) return false;
+  }
+  return true;
+}
+function dogrula(aday) {
+  const p = aday.profil;
+  if (tur(p) !== 'object' || tur(p.ayarlar) !== 'object' || typeof p.kurulumTamam !== 'boolean') return 'eksik';
+  const sablon = goc(null, false);
+  if (!sablonaUydur(aday, sablon) || !sablonaUydur(p, sablon.profil) || !sablonaUydur(p.ayarlar, sablon.profil.ayarlar)) return 'bicim';
+  if (!['gorusmeler', 'hafiza', 'itirazlar'].every((k) => aday[k].every((x) => tur(x) === 'object'))) return 'bicim';
+  return null;
+}
+
+// v0.16.0 İki aşamalı geri yükleme: önce hazırla (hiçbir şey yazılmaz), sonra uygula. Ayarlar ekranı fotoğrafları
+// yalnız hazırlık başarılıysa yazar; böylece reddedilen bir yedek fotoğraf deposuna da dokunmaz.
+export function iceAktarHazirla(metin) {
   let aday;
   try { aday = JSON.parse(metin); } catch { return { tamam: false, neden: 'json' }; }
-  if (!aday || typeof aday !== 'object' || !aday.profil || typeof aday.profil !== 'object' || !(aday.semaSurumu >= 1)) return { tamam: false, neden: 'bicim' };
+  if (!aday || typeof aday !== 'object' || Array.isArray(aday) || !aday.profil || typeof aday.profil !== 'object' || !(aday.semaSurumu >= 1)) return { tamam: false, neden: 'bicim' };
   if ((aday.semaSurumu || 0) > GUNCEL_SEMA) return { tamam: false, neden: 'yeni' };
+  const medya = aday.medya && typeof aday.medya === 'object' ? aday.medya : null;
   delete aday.medya;
-  const onceki = veri;
-  try {
-    const yeni = goc(aday);
-    if (!guvenliYaz(ANAHTAR, yeni)) { veri = onceki; return { tamam: false, neden: 'yazma' }; }
-    veri = yeni;
-  } catch { veri = onceki; return { tamam: false, neden: 'bicim' }; }
+  let yeni;
+  try { yeni = goc(JSON.parse(JSON.stringify(aday)), false); } catch { return { tamam: false, neden: 'bicim' }; }
+  const sorun = dogrula(yeni);
+  if (sorun) return { tamam: false, neden: sorun };
+  return { tamam: true, veri: yeni, medya };
+}
+
+export function iceAktarUygula(hazir) {
+  if (!hazir || !hazir.tamam) return { tamam: false, neden: (hazir && hazir.neden) || 'bicim' };
+  if (!guvenliYaz(ANAHTAR, hazir.veri)) return { tamam: false, neden: 'yazma' };
+  veri = hazir.veri;
   yayinla('depo:degisti', veri);
   return { tamam: true };
+}
+
+export function iceAktar(metin) {
+  return iceAktarUygula(iceAktarHazirla(metin));
 }

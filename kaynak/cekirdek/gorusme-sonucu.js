@@ -47,7 +47,7 @@ export function sonucuIsle(ozet) {
       v.profil.tanismaYapildi = true;
     }
     if (ozet.tur === 'senaryo' && ozet.gorevTamam) v.tamamlananSenaryolar[ozet.senaryoId] = tarihAnahtari();
-    const kayit = { ...ozet, tarih: tarihAnahtari(), eklenenHafiza: eklenen };
+    const kayit = { ...ozet, kimlik: `g-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`, tarih: tarihAnahtari(), eklenenHafiza: eklenen };
     v.sonGorusme = kayit;
     v.gorusmeler.unshift(kayit);
     v.gorusmeler = v.gorusmeler.slice(0, SAKLANAN_GORUSME);

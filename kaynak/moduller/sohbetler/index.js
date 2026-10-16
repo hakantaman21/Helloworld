@@ -3,7 +3,8 @@
 // Test modunda TEST rozetli sanal kullanıcıların sohbetleri ve sana uygun ilk eşleşme önerisi görünür.
 import './sohbetler.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, altGezinme, basBant, durumKutusu, yzEtiketi, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, goreliZaman, benAvatar, dilCifti } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, altGezinme, basBant, durumKutusu, yzEtiketi, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, goreliZaman, dilCifti } from '../../cekirdek/arayuz.js';
+import { benDugmesi } from '../../cekirdek/yan-menu.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { kisaTarih } from '../../cekirdek/zaman.js';
@@ -21,72 +22,11 @@ const HIZLI = [
   ['baglanti', 'partner', '/kesfet', 5],
   ['anlar', 'anlar', '/dil-anlari', 2],
   ['telaffuz', 'telaffuz', '/telaffuz', 5],
-  ['kitap', 'defter', '/gelisim?sekme=profil', 6],
-  ['kupa', 'karne', '/gelisim?sekme=gelisim', 2],
+  ['kitap', 'defter', '/gelisim', 6],
+  ['kupa', 'karne', '/gelisim', 2],
   ['pratik', 'odalar', '/bugun', 1],
 ];
 let hizliAcik = false;
-const MENU_KAPAMA_ESIGI = 70;
-
-// Yan menü (HelloTalk ☰): kategorilere ayrılmış kısa yollar; üstte günün önerisi.
-function yanMenu(b, kocaGit) {
-  const kapat = () => { perde.remove(); document.removeEventListener('keydown', tus); };
-  const tus = (e) => { if (e.key === 'Escape') kapat(); };
-  const git = (yol) => () => { kapat(); if (yol) b.git(yol); else kocaGit(); };
-  const satir = (ik, ad, alt, yol) => h('button', { type: 'button', class: 'shb-menu-satir', onClick: git(yol) },
-    ikon3d(ik, 30), h('span', { class: 'shb-menu-metin' }, h('b', null, ad), alt ? h('small', null, alt) : null), ikon('sag', 16));
-  const grup = (baslik, ...satirlar) => h('section', { class: 'shb-menu-grup' }, h('h3', { class: 'shb-menu-grup-baslik' }, baslik), h('div', { class: 'shb-menu-kart' }, ...satirlar));
-  const v = al();
-  const perde = h('div', { class: 'shb-menu-perde b-katman', onClick: (e) => { if (e.target === perde) kapat(); } },
-    h('aside', { class: 'shb-menu b-katman-ic', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('yanMenu.baslik') },
-      h('div', { class: 'shb-menu-ust' },
-        // Üstteki ad ve fotoğraf = alt menüdeki "Profil" sekmesinin kısayolu (tek profil sayfası; tutarlılık v0.11.0).
-        h('button', { type: 'button', class: 'shb-menu-profil', onClick: git('/gelisim?sekme=profil'), 'aria-label': t('yanMenu.profiliGor') },
-          benAvatar(48),
-          h('span', { class: 'shb-menu-kim' }, h('b', null, v.profil.ad || t('misafir.ad')), h('small', null, t('yanMenu.profiliGor')))),
-        h('button', { type: 'button', class: 'b-ht-ikon b-ht-ikon-saydam', 'aria-label': t('genel.kapat'), onClick: kapat }, ikon('kapat', 20))),
-      h('button', { type: 'button', class: 'shb-menu-afis', onClick: git(null) },
-        h('span', { class: 'shb-menu-afis-metin' }, h('small', null, t('yanMenu.afisEtiket')), h('b', null, t('yanMenu.afisBaslik')), h('span', null, t('yanMenu.afisAlt'))),
-        ikon3d('telaffuz', 56)),
-      grup(t('yanMenu.ogren'),
-        satir('senaryo', t('ht.merkez.senaryolar'), t('yanMenu.senaryoAlt'), '/senaryolar'),
-        satir('hafiza', t('ht.merkez.hafiza'), t('yanMenu.hafizaAlt'), '/hafiza'),
-        satir('kitap', t('defter.baslik'), t('yanMenu.defterAlt'), '/gelisim?sekme=profil')),
-      grup(t('yanMenu.topluluk'),
-        satir('baglanti', t('ht.ortakBul'), t('yanMenu.ortakAlt'), '/kesfet'),
-        satir('anlar', t('anlar.baslik'), t('yanMenu.anlarAlt'), '/dil-anlari'),
-        satir('pratik', t('odalar.baslik'), t('yanMenu.odalarAlt'), '/bugun')),
-      grup(t('yanMenu.hesap'),
-        satir('profil', t('gezinme.profil'), t('yanMenu.profilAlt'), '/gelisim?sekme=profil'),
-        satir('ayarlar', t('ayarlar.baslik'), t('yanMenu.ayarlarAlt'), '/ayarlar')),
-    ));
-  // Parmakla sola (dış kenara) sürükleyince kapanır; az sürüklenirse yerine döner.
-  const menu = perde.querySelector('.shb-menu');
-  let bas = null;
-  let dx = 0;
-  menu.addEventListener('touchstart', (e) => { bas = { x: e.touches[0].clientX, y: e.touches[0].clientY, yatay: null }; dx = 0; }, { passive: true });
-  menu.addEventListener('touchmove', (e) => {
-    if (!bas) return;
-    const x = e.touches[0].clientX - bas.x;
-    const y = e.touches[0].clientY - bas.y;
-    if (bas.yatay === null && (Math.abs(x) > 8 || Math.abs(y) > 8)) bas.yatay = Math.abs(x) > Math.abs(y);
-    if (!bas.yatay) return;
-    dx = Math.min(0, x);
-    menu.classList.add('shb-menu-surukle');
-    menu.style.transform = `translateX(${dx}px)`;
-  }, { passive: true });
-  const birak = () => {
-    if (!bas) return;
-    bas = null;
-    menu.classList.remove('shb-menu-surukle');
-    if (dx < -MENU_KAPAMA_ESIGI) { menu.style.transform = 'translateX(-105%)'; setTimeout(kapat, 200); } else menu.style.transform = '';
-  };
-  menu.addEventListener('touchend', birak, { passive: true });
-  menu.addEventListener('touchcancel', birak, { passive: true });
-  document.addEventListener('keydown', tus);
-  document.body.append(perde);
-  perde.querySelector('button').focus();
-}
 
 function ciz(kok, b) {
   kok.classList.add('b-ekran-gezinmeli');
@@ -106,7 +46,7 @@ function ciz(kok, b) {
     ));
 
   // v0.13.0: geçmiş görüşmeye dokununca yeni senaryo değil, O görüşmenin karnesi açılır.
-  const gecmisSatiri = (g) => h('button', { type: 'button', class: 'b-liste-satir', onClick: () => b.git(`/karne?i=${gecmis.indexOf(g)}`) },
+  const gecmisSatiri = (g) => h('button', { type: 'button', class: 'b-liste-satir', onClick: () => b.git(g.kimlik ? `/karne?g=${g.kimlik}` : `/karne?i=${gecmis.indexOf(g)}`) },
     h('span', { class: 'shb-av-yz shb-av-gecmis', 'aria-hidden': 'true' }, ikon3d('senaryo', 30)),
     h('span', { class: 'b-liste-ic' },
       h('span', { class: 'b-liste-ust' }, h('b', null, yerel(g.baslik)), h('span', { class: 'b-liste-zaman' }, kisaTarih(g.tarih))),
@@ -120,7 +60,7 @@ function ciz(kok, b) {
       h('span', { class: 'b-liste-ic shb-kisi-ic' },
         h('span', { class: 'b-liste-ust' }, h('b', null, o.profil.ad), testEtiketi(), okunmamis(o) ? h('span', { class: 'shb-okunmamis', 'aria-label': t('ht.okunmamis') }) : null, h('span', { class: 'b-liste-zaman' }, goreliZaman(o.son.zaman))),
         h('span', { class: 'shb-kisi-dil' }, dilCifti(o.profil.anaDil, o.profil.ogrenilenDil, o.profil.seviye), a.cevrimici ? t('ht.cevrimiciSimdi') : yerel(o.profil.ulke).split(' · ')[0]),
-        h('span', { class: 'b-liste-alt' }, o.son.kim === 'ben' ? `${t('ht.sen')}: ` : '', o.son.metin),
+        h('span', { class: 'b-liste-alt' }, o.son.kim === 'ben' ? `${t('ht.sen')}: ` : '', o.son.foto ? `📷 ${t('kural.fotoMesaj')}` : o.son.metin),
       ));
   };
 
@@ -168,7 +108,7 @@ function ciz(kok, b) {
     basBant(
       htUst({
         // Profil fotoğrafı (v0.6.0'daki gibi) sol üstte; dokununca yan menü açılır (HelloTalk).
-        sol: htIkon(benAvatar(36, 'shb-ben-av'), t('yanMenu.baslik'), () => yanMenu(b, kocaGit)),
+        sol: benDugmesi(b),
         baslik: t('ht.sohbetBaslik'),
         sag: htIkon('arti', t('sohbetler.yeniKisi'), () => b.git('/kesfet')),
       }),
@@ -189,7 +129,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'sohbetler',
-  surum: '0.4.0',
+  surum: '0.5.0',
   onek: 'shb',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'metin', 'test-modu'],

@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.15.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.15.0'da (17.10.2026, PR #18). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.16.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.15.0'da (17.10.2026, PR #18). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,27 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.16.0
+
+- **Yapan:** Claude (Opus 5.5), 17.10.2026
+- **Neden:** Hakan (17.10, 00:36): değerlendirmelerden (Gemini/Grok/ChatGPT) mimariye uyanlar + C1 içerik + topluluk kuralları (yanıtsız mesaj sınırı, karşılıklılıkla fotoğraf, gerçek engelleme, gecikmeli numara paylaşımı) + h–i önerisi ("gerisi sana katılıyorum").
+- **Ne:**
+  - `cekirdek/topluluk-kurallari.js` (saf işlevler; sunucuda da aynısı uygulanmalı): `mesajIzni` (YANITSIZ_SINIR 5, 7 gün), `fotoIzni` (karşılıklı 5), `iletisimIzni` (7 gün + karşılıklı 10), `iletisimBilgisiVar` (telefon ≥7 rakam, e-posta). mesaj ekranı bunları kullanır; `testYanitVerir` (sonAktifDk ≤ 30).
+  - `test-modu`: `testProfili` engellileri süzer; `engellenenler`, `testEngelKaldir`, `testSohbetBaslangici` (sohbet `baslangic` alanı).
+  - `depo`: `iceAktarHazirla` / `iceAktarUygula` (şablona göre doğrulama, `goc(ham, yedekle=false)`); ayarlar fotoğrafları yalnız hazırlık başarılıysa yazar.
+  - `fotograf`: `tumBasvurular()` (verinin tamamında `mdy:`), yetim silme, tam medya yedeği. `main.js`: yazı alanı odaktayken yeniden çizim ertelenir.
+  - `cekirdek/yan-menu.js`: `yanMenuAc(b)`, `benDugmesi(b)`; CSS `b-ymenu-*` bilesenler.css'te. Gezinme: `/gelisim` = "Gelişim" (ikon kupa). gelisim modülünde iki ekran: `gelisim` (ilerleme) ve `profil` (kimlik). Eski `?sekme=profil` → `/profil`.
+  - `yonlendirici`: ortak odak tuzağı ve odağı geri verme.
+  - Düzeltme: `AYIRAC` + although/though/whereas/while/unless/if; yeni kural `edat-kalibi`; `araclar/duzeltme-sinama.mjs` derlemede çalışır.
+  - `hafiza`: `OGRENILDI_GUN = 2`, `basariGunleri`.
+  - Telaffuz: düzenleme uzaklığıyla hizalama (tamam/eksik/farkli/fazla), `dinlemeyiDurdur`, Hafızaya ekle. `ses-hatti.tanimaDili()`.
+  - 9 yeni senaryo (B2 ×4, C1 ×5); seviye seçicileri A1–C1.
+  - kesfet: `ulkeKodu` (İngilizce ülke adı, eski kayıtlar `ulkeAnahtari` ile çevrilir), 60+, iki yönlü karşılıklı, Çevrimiçi/Yeni hızlı süzgeçten çıktı.
+  - karsilama: misafir penceresinde ana dil seçimi; `ogrenilenDil = 'en'`, ana dil İngilizce ise rol `yardimci`.
+  - `data-yazi="cokbuyuk"` (1.25).
+- **Bilerek yapılmayanlar / kalanlar:** gerçek sunucu tarafı kural uygulaması (istemci kuralı aşılabilir), canlı yapay zekâ, gerçek hesap/mesajlaşma, moderasyon, çok kişili odalar; B1 içeriği hâlâ 2 senaryo; genel artikel kuralı (yanlış düzeltme riski); kaydırınca küçülen üst bant.
+- **Şema:** 17. **Durum:** `deneme`'de; canlıya alma Hakan onayıyla.
 
 ## v0.15.0
 

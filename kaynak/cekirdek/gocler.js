@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 16;
+export const GUNCEL_SEMA = 17;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -155,4 +155,10 @@ export const gocler = {
     profil: { ...eski.profil, kapak: eski.profil.kapak || null },
     test: eski.test ? { ...eski.test, anlar: (eski.test.anlar || []).map((a) => ({ ...a, fotolar: Array.isArray(a.fotolar) ? a.fotolar : [] })) } : eski.test,
   }),
+  // 16 → 17: görüşme kayıtlarına kalıcı kimlik (karne adresi sıra numarasına bağlı kalmasın).
+  17: (eski) => {
+    const gorusmeler = (eski.gorusmeler || []).map((g, i) => (g && !g.kimlik ? { ...g, kimlik: `g-eski${i}${Math.random().toString(36).slice(2, 6)}` } : g));
+    const son = eski.sonGorusme && !eski.sonGorusme.kimlik && gorusmeler[0] && gorusmeler[0].tarih === eski.sonGorusme.tarih ? { ...eski.sonGorusme, kimlik: gorusmeler[0].kimlik } : eski.sonGorusme;
+    return { ...eski, gorusmeler, sonGorusme: son };
+  },
 };

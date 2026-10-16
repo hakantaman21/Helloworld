@@ -4,12 +4,14 @@
 import './kesfet.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, altGezinme, basBant, afisKaydirici, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman, kurallarSeridi, aralikKaydirici } from '../../cekirdek/arayuz.js';
+import { benDugmesi } from '../../cekirdek/yan-menu.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al, degistir } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { uyumDuzeyi, saatFarki, YAKIN_SAAT_FARKI, testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler } from '../../cekirdek/test-modu.js';
 import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
+import { TEST_PROFILLERI } from '../../veri/test-profiller.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 
 const SELAM_YANIT_GECIKMESI = 1500;
@@ -20,7 +22,7 @@ function secimiOku() {
   if (!k || kayitli.durum) return;
   kayitli.durum = { sekme: k.sekme || 'tum', dil: k.dil || 'hedef', eslesmeSira: -1 };
   const f = bosSuzgec();
-  kayitli.suzgec = { ...f, ...k.suzgec, hizli: new Set((k.suzgec || {}).hizli || []), ulkeler: new Set((k.suzgec || {}).ulkeler || []), ilgiler: new Set((k.suzgec || {}).ilgiler || []), yas: (k.suzgec || {}).yas || f.yas, seviye: (k.suzgec || {}).seviye || f.seviye };
+  kayitli.suzgec = { ...f, ...k.suzgec, hizli: new Set(((k.suzgec || {}).hizli || []).filter((x) => HIZLI_SUZGECLER.some(([a]) => a === x))), ulkeler: new Set(((k.suzgec || {}).ulkeler || []).map(ulkeAnahtari)), ilgiler: new Set((k.suzgec || {}).ilgiler || []), yas: (k.suzgec || {}).yas || f.yas, seviye: (k.suzgec || {}).seviye || f.seviye };
 }
 function secimiYaz(d, f) {
   const yeni = { sekme: d.sekme, dil: d.dil, suzgec: { ...f, hizli: [...f.hizli], ulkeler: [...f.ulkeler], ilgiler: [...f.ilgiler] } };
@@ -39,9 +41,9 @@ function selamla(p, yenile) {
 
 // Hızlı süzgeçler (Sık kullanılan sekmesi): her biri tek dokunuşla açılıp kapanır.
 const HIZLI_SUZGECLER = [
-  ['cevrimici', '🟢'], ['yeni', '✨'], ['yakin', '🎯'],
-  ['ortakIlgi', '♥'], ['hizli', '⚡'], ['karsilikli', '🤝'],
-  ['ciddi', '🎓'], ['saat', '🕒'],
+  // v0.16.0: "Çevrimiçi" ve "Yeni" üst sekmelerde olduğu için burada tekrarlanmaz (aynı iş iki yerde olmasın).
+  ['yakin', '🎯'], ['ortakIlgi', '♥'], ['hizli', '⚡'],
+  ['karsilikli', '🤝'], ['ciddi', '🎓'], ['saat', '🕒'],
 ];
 
 function bosSuzgec() {
@@ -56,6 +58,11 @@ function etkinSayisi(f) {
 }
 
 const ulkeAdi = (k) => yerel(k.ulke).split(' · ')[0];
+// v0.16.0: ülke süzgeci dilden bağımsız sabit anahtarla saklanır (İngilizce ülke adı); ad yalnız gösterimde çevrilir.
+const ulkeKodu = (k) => String((k.ulke && k.ulke.en) || yerel(k.ulke)).split(' · ')[0];
+const ulkeGoster = (kod) => { const k = TEST_PROFILLERI.find((p) => ulkeKodu(p) === kod); return k ? ulkeAdi(k) : kod; };
+// Eski kayıtlarda (v0.14–0.15) çevrilmiş ad saklanmıştı: herhangi bir dildeki adı anahtara çevir.
+const ulkeAnahtari = (ad) => { const k = TEST_PROFILLERI.find((p) => ulkeKodu(p) === ad || Object.values(p.ulke || {}).some((u) => String(u).split(' · ')[0] === ad)); return k ? ulkeKodu(k) : ad; };
 
 function suzgecUygula(liste, f) {
   const ben = al().profil;
@@ -66,7 +73,8 @@ function suzgecUygula(liste, f) {
     if (f.hizli.has('yakin') && Math.abs(SEVIYE_SIRASI.indexOf(k.seviye) - benimSeviye) > 1) return false;
     if (f.hizli.has('ortakIlgi') && !ortakIlgiler(k).length) return false;
     if (f.hizli.has('hizli') && !(k.rozetler || []).includes('hizli')) return false;
-    if (f.hizli.has('karsilikli') && !(ben.anaDil && k.ogrenilenDil === ben.anaDil)) return false;
+    // v0.16.0: karşılıklı = iki yönlü (o senin dilini öğreniyor VE senin öğrendiğin dil onun ana dili), sekmeyle aynı kural.
+    if (f.hizli.has('karsilikli') && !(ben.anaDil && k.ogrenilenDil === ben.anaDil && k.anaDil === (ben.ogrenilenDil || 'en'))) return false;
     if (f.hizli.has('ciddi') && !(k.rozetler || []).includes('ciddi')) return false;
     if (f.hizli.has('saat') && saatFarki(k) > YAKIN_SAAT_FARKI) return false;
     if (k.yas < f.yas[0] || (f.yas[1] < YAS_MAX && k.yas > f.yas[1])) return false;
@@ -75,7 +83,7 @@ function suzgecUygula(liste, f) {
     if (f.cinsiyet !== 'tum' && k.cinsiyet !== f.cinsiyet) return false;
     if (f.anaDil !== 'tum' && k.anaDil !== f.anaDil) return false;
     if (f.ogrDil !== 'tum' && k.ogrenilenDil !== f.ogrDil) return false;
-    if (f.ulkeler.size && !f.ulkeler.has(ulkeAdi(k))) return false;
+    if (f.ulkeler.size && !f.ulkeler.has(ulkeKodu(k))) return false;
     if (f.ilgiler.size && !k.ilgi.some((i) => f.ilgiler.has(ilgiKimligi(i)))) return false;
     return true;
   });
@@ -143,13 +151,13 @@ function suzgecPenceresi(mevcut, uygula, say = (f) => suzgecUygula(testProfiller
         h('p', { class: 'b-kucuk' }, t('suzgec.ucretsiz')),
       );
     } else {
-      const ulkeler = [...new Map(tum.map((k) => [ulkeAdi(k), k.bayrak])).entries()];
+      const ulkeler = [...new Map(tum.map((k) => [ulkeKodu(k), [ulkeAdi(k), k.bayrak]])).entries()];
       const ilgiler = ILGI_ALANLARI.filter((i) => tum.some((k) => k.ilgi.some((x) => ilgiKimligi(x) === i.kimlik)));
       yerlestir(ic,
         grupla(t('suzgec.anaDili'), tekli('anaDil', diller('anaDil'), 3)),
         grupla(t('suzgec.ogreniyor'), tekli('ogrDil', diller('ogrenilenDil'), 3)),
         h('section', { class: 'b-platform' }, aralikKaydirici({ min: 0, max: SEVIYE_SIRASI.length - 1, deger: f.seviye, etiket: t('suzgec.seviye'), noktalar: true, bicim: (v) => (v === null ? `${SEVIYE_SIRASI[0]} – ${SEVIYE_SIRASI[SEVIYE_SIRASI.length - 1]}` : SEVIYE_SIRASI[v]), degisti: (d) => { f.seviye = d; sayiGuncelle(); } })),
-        katla('ulke', t('suzgec.ulke'), f.ulkeler, coklu(f.ulkeler, ulkeler.map(([ad, bayrak]) => [ad, ad, bayrak]))),
+        katla('ulke', t('suzgec.ulke'), f.ulkeler, coklu(f.ulkeler, ulkeler.map(([kod, [ad, bayrak]]) => [kod, ad, bayrak]))),
         katla('ilgi', t('ilgi.baslik'), f.ilgiler, coklu(f.ilgiler, ilgiler.map((i) => [i.kimlik, yerel(i), i.simge]))),
       );
     }
@@ -271,9 +279,9 @@ function ciz(kok, b) {
     if (suzgec.cinsiyet !== 'tum') ekle(t(`ht.cins.${suzgec.cinsiyet}`), () => { suzgec.cinsiyet = 'tum'; });
     if (suzgec.anaDil !== 'tum') ekle(`${t('suzgec.anaDili')}: ${t(`diller.${suzgec.anaDil}`)}`, () => { suzgec.anaDil = 'tum'; });
     if (suzgec.ogrDil !== 'tum') ekle(`${t('suzgec.ogreniyor')}: ${t(`diller.${suzgec.ogrDil}`)}`, () => { suzgec.ogrDil = 'tum'; });
-    if (suzgec.yas[0] !== YAS_MIN || suzgec.yas[1] !== YAS_MAX) ekle(`${suzgec.yas[0]}–${suzgec.yas[1]}`, () => { suzgec.yas = [YAS_MIN, YAS_MAX]; });
+    if (suzgec.yas[0] !== YAS_MIN || suzgec.yas[1] !== YAS_MAX) ekle(`${suzgec.yas[0]}–${suzgec.yas[1] >= YAS_MAX ? `${YAS_MAX}+` : suzgec.yas[1]}`, () => { suzgec.yas = [YAS_MIN, YAS_MAX]; });
     if (suzgec.seviye[0] !== 0 || suzgec.seviye[1] !== SEVIYE_SIRASI.length - 1) ekle(`${SEVIYE_SIRASI[suzgec.seviye[0]]}–${SEVIYE_SIRASI[suzgec.seviye[1]]}`, () => { suzgec.seviye = [0, SEVIYE_SIRASI.length - 1]; });
-    suzgec.ulkeler.forEach((u) => ekle(u, () => suzgec.ulkeler.delete(u)));
+    suzgec.ulkeler.forEach((u) => ekle(ulkeGoster(u), () => suzgec.ulkeler.delete(u)));
     suzgec.ilgiler.forEach((i) => ekle(yerel(ILGI_ALANLARI.find((x) => x.kimlik === i) || { tr: i, en: i }), () => suzgec.ilgiler.delete(i)));
     yerlestir(etkinAlani, n ? h('div', { class: 'kft-etkin' },
       h('div', { class: 'kft-etkin-haplar' }, haplar),
@@ -319,9 +327,10 @@ function ciz(kok, b) {
 
   yerlestir(kok,
     basBant(htUst({
-      sol: htIkon(ikon3d('seri', 30), t('ht.eslesmeBaslik'), () => { durum.eslesmeSira = durum.eslesmeSira < 0 ? 0 : -1; eslesmeCiz(); if (durum.eslesmeSira >= 0) eslesmeAlani.scrollIntoView({ block: 'nearest' }); }),
+      // v0.16.0: solda profil fotoğrafı (yan menü); otomatik eşleşme düğmesi sağa, süzgecin yanına taşındı.
+      sol: benDugmesi(b),
       baslik: t('ht.ortakBul'),
-      sag: suzgecDugmesi,
+      sag: [htIkon(ikon3d('seri', 30), t('ht.eslesmeBaslik'), () => { durum.eslesmeSira = durum.eslesmeSira < 0 ? 0 : -1; eslesmeCiz(); if (durum.eslesmeSira >= 0) eslesmeAlani.scrollIntoView({ block: 'nearest' }); }), suzgecDugmesi],
     }),
     sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')]], durum.sekme, (id) => { durum.sekme = id; yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
     pano,
@@ -347,7 +356,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'kesfet',
-  surum: '0.4.0',
+  surum: '0.5.0',
   onek: 'kft',
   semaSurumu: 1,
   cekirdekServisleri: ['metin', 'depo', 'test-modu'],

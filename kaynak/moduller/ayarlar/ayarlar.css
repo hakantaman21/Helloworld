@@ -173,3 +173,9 @@
   .ayr-gelismis > .ayr-satir { margin-top: 6px; }
   .ayr-ozel-isaret { color: var(--renk-vurgu-metin); font-weight: 800; }
 }
+
+@layer moduller {
+  /* v0.16.0 Engellenenler listesi */
+  .ayr-engel-liste { display: flex; flex-direction: column; gap: 4px; padding: 4px 0; }
+  .ayr-engel-dugme { min-height: var(--dokunma); padding: 0 14px; flex: none; }
+}

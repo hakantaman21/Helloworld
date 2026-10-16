@@ -89,9 +89,36 @@ function katmanKapat(el) {
   }, 0);
 }
 
+// v0.16.0 Ortak odak yönetimi (erişilebilirlik): açık pencerede Tab odağı pencere içinde döner; pencere kapanınca odak
+// onu açan öğeye (pencerelerin dışında en son odaklanan öğe) geri döner. Her pencere bunu ayrıca yazmak zorunda kalmaz.
+let sonOdak = null;
+const ODAKLANABILIR = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])';
+function odakYonetimi() {
+  document.addEventListener('focusin', (e) => {
+    if (e.target instanceof Element && !e.target.closest(KATMAN)) sonOdak = e.target;
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const ust = aciklar().pop();
+    if (!ust) return;
+    const ogeler = [...ust.querySelectorAll(ODAKLANABILIR)].filter((x) => x.offsetParent !== null || x === document.activeElement);
+    if (!ogeler.length) return;
+    const ilk = ogeler[0]; const son = ogeler[ogeler.length - 1];
+    if (!ust.contains(document.activeElement)) { e.preventDefault(); ilk.focus(); }
+    else if (e.shiftKey && document.activeElement === ilk) { e.preventDefault(); son.focus(); }
+    else if (!e.shiftKey && document.activeElement === son) { e.preventDefault(); ilk.focus(); }
+  });
+}
+function odagiGeriVer() {
+  if (aciklar().length) return;
+  if (sonOdak && sonOdak.isConnected) { try { sonOdak.focus({ preventScroll: true }); } catch { /* odaklanamıyor */ } }
+}
+
 function katmanIzle() {
+  odakYonetimi();
   new MutationObserver(() => {
     const n = aciklar().length;
+    if (n < katmanDerinligi) setTimeout(odagiGeriVer, 0);
     if (n > katmanDerinligi) {
       while (katmanDerinligi < n) { katmanDerinligi += 1; history.pushState({ katman: katmanDerinligi }, ''); }
     } else if (n < katmanDerinligi) {

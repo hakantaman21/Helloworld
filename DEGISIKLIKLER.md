@@ -1,3 +1,19 @@
+## 0.16.0 — 17.10.2026 · Güvenilirlik, topluluk kuralları, C1, yeni menü
+
+- Yeni menü düzeni: beş ana sayfanın üst bandında solda profil fotoğrafın; dokununca yan menü açılır (Profilini gör, kısa yollar, Gelişim, Ayarlar). Sağ alttaki sekme artık "Gelişim" (seri, puanlar, karne, Cümle Defteri, seviye yolu). Kimlik bilgileri (kapak, fotoğraflar, ilgi alanları) ayrı "Profil" sayfasında.
+- Topluluk kuralları (sohbet): karşı taraf yanıt vermeden en çok 5 mesaj; yanıt gelmezse haftada bir mesaj. Fotoğraf göndermek iki taraf da en az 5 mesaj yazınca açılır. Telefon numarası ve e-posta, sohbet 7 gün sürüp iki taraf da 10 mesaj yazınca paylaşılabilir. Engellenen kişi artık doğrudan adresle de açılmaz; engel Ayarlar › Gizlilik › Engellenenler'den kaldırılır.
+- Sohbette fotoğraf gönderme; yazılan mesaj taslağı sohbetten çıkınca kaybolmuyor; eski mesajları okurken ekran zorla en alta inmiyor. Çevrimdışı test kişileri otomatik yanıt vermiyor (sınır gerçekçi sınanabilsin diye).
+- Yedekten geri yükleme: eksik ya da bozuk yedek reddediliyor (mevcut veri değişmez); fotoğraflar yalnız yedek kabul edilirse yazılıyor. Yedeğe kapak, gönderi ve mesaj fotoğrafları da giriyor; kullanılmayan fotoğraflar depodan temizleniyor. Fotoğraflar geç yüklenince yazmakta olduğun metin kaybolmuyor.
+- Düzeltme: "although/though/while/if" yan cümleleri ayrı değerlendiriliyor ("I work today although I was sick yesterday" artık bozulmuyor). Yeni kesin edat kalıpları: good at, married to (him/her), depend on, interested in, listen to, discuss (edatsız), explain to me how…, arrive at, on Monday, in 1995. Her derlemede 23 doğru cümle ve 10 hatalı cümleyle sınanıyor.
+- Koç: çok kısa ve beklenen yanıtı karşılamayan cevapta soruyu bir kez daha soruyor.
+- Hata Hafızası: "öğrenildi" için başarılar en az iki farklı günde olmalı. "Yeni kelime" sayacı dürüst adıyla: "hedef kelime".
+- Telaffuz: sözcükler sırayla hizalanıyor; eksik, farklı duyulan ve fazladan sözcükler ayrı gösteriliyor ("happy am I" artık doğru sayılmıyor). "Kaçanı yavaş dinle" ve isteğe bağlı "Hafızaya ekle". Ekrandan çıkınca ya da cümle değişince dinleme duruyor. Seçilen koç sesinin aksanı ses tanımada da kullanılıyor.
+- C1: seviye seçilebiliyor; 4 B2 ve 5 C1 senaryo (toplantıda itiraz, ev sahibiyle tamir, uzaktan çalışma tartışması, iptal edilen uçuş, sunum sonrası zor sorular, fatura şikâyeti, yapay zekâ politikası, akademik eleştiri, maaş pazarlığı). Bir alanda seçilen seviyede senaryo yoksa en yakın seviyeden öneri.
+- Bağlan: ülke süzgeci dil değişince bozulmuyor; yaş hapı "60+"; "Karşılıklı" iki yönlü; Çevrimiçi/Yeni artık yalnız üst sekmede.
+- Misafir girişinde ana dil soruluyor (arayüz dili ana dil sayılmıyor); öğrenilen dil İngilizce.
+- Karnedeki kelimeler ve kültür notu tek dokunuşla Cümle Defteri'ne. "Çok büyük" yazı boyutu. Açılan pencerelerde klavye odağı pencere içinde kalıyor, kapanınca açan düğmeye dönüyor.
+- Şema 17: görüşmelere kalıcı kimlik (karne adresi sıra numarasına bağlı değil).
+
 ## 0.15.0 — 17.10.2026 · Üst bant, kartlar, kapak görseli, çoklu fotoğraf
 
 - Marka şeridi (logo + helloworld) sola dayalı ve sayfa adının yazdığı banda değiyor.

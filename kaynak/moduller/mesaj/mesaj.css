@@ -163,3 +163,13 @@
   .msj-hobi { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: var(--kose-tam); background: var(--renk-yuzey-ikinci); font-size: calc(13px * var(--yazi-olcek)); font-weight: 600; white-space: nowrap; box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), 0 2px 4px var(--renk-golge); }
   .msj-hobi-ortak { color: var(--renk-iyi-metin); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--renk-iyi-metin) 45%, transparent); }
 }
+
+@layer moduller {
+  /* v0.16.0 Topluluk kuralları: kalan mesaj notu, yanıt bekleme kartı, fotoğraf düğmesi ve fotoğraf mesajı. */
+  .msj-yaz-alani { display: flex; flex-direction: column; gap: 6px; }
+  .msj-kural { margin: 0; padding: 0 4px; color: var(--renk-soluk); }
+  .msj-kilit { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; }
+  .msj-kilit p { margin: 0; }
+  .msj-foto-dugme { flex: none; align-self: center; }
+  .msj-foto { display: block; max-width: 220px; width: 100%; border-radius: 12px; margin-bottom: 4px; }
+}

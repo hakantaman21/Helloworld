@@ -10,6 +10,7 @@ import { duyur } from '../../cekirdek/duyuru.js';
 import { destek, soyle, dinle, sus } from '../../cekirdek/ses/ses-hatti.js';
 import { izinDurumu, mikrofonIste } from '../../cekirdek/izin.js';
 import { cumleKayitli, cumleKaydetDegistir } from '../../cekirdek/cumle-defteri.js';
+import { kayitOlustur, hafizayaEkle } from '../../cekirdek/hafiza.js';
 import senaryolar from '../../veri/senaryolar/index.js';
 
 const BOSLUK = ' ';
@@ -28,10 +29,28 @@ function cumleler(kaynak) {
   return liste;
 }
 
-// Sözcük karşılaştırması: hedefteki her sözcük tanınan metinde var mı? (sıra gözetmez; puan değil, ipucu)
+// v0.16.0 Sıralı hizalama (düzenleme uzaklığı): hedef ve tanınan sözcükler sırayla eşlenir. Sonuç parçaları:
+// tamam · eksik (hedefte var, duyulmadı) · farkli (yerine başka sözcük duyuldu) · fazla (hedefte yok, duyuldu).
+// "happy am I" artık "I am happy" sayılmaz; "I can not help" içindeki "not" fazla olarak görünür. Puan değildir.
 function karsilastir(hedef, taninan) {
-  const tanSet = new Set(normal(taninan).split(BOSLUK));
-  return hedef.split(/\s+/).map((ham) => ({ ham, tamam: tanSet.has(normal(ham)) }));
+  const H = hedef.split(/\s+/).filter(Boolean);
+  const Hn = H.map(normal);
+  const T = normal(taninan).split(BOSLUK).filter(Boolean);
+  const n = H.length; const m = T.length;
+  const d = Array.from({ length: n + 1 }, (_, i) => Array.from({ length: m + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0)));
+  for (let i = 1; i <= n; i += 1) for (let j = 1; j <= m; j += 1) {
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (Hn[i - 1] === T[j - 1] ? 0 : 1));
+  }
+  const parcalar = [];
+  let i = n; let j = m;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && d[i][j] === d[i - 1][j - 1] + (Hn[i - 1] === T[j - 1] ? 0 : 1)) {
+      parcalar.unshift(Hn[i - 1] === T[j - 1] ? { tur: 'tamam', ham: H[i - 1] } : { tur: 'farkli', ham: H[i - 1], duyulan: T[j - 1] });
+      i -= 1; j -= 1;
+    } else if (i > 0 && d[i][j] === d[i - 1][j] + 1) { parcalar.unshift({ tur: 'eksik', ham: H[i - 1] }); i -= 1; }
+    else { parcalar.unshift({ tur: 'fazla', ham: T[j - 1] }); j -= 1; }
+  }
+  return parcalar;
 }
 
 let kaynakSecimi = 'seviye';
@@ -53,11 +72,10 @@ function ciz(kok, b) {
     const kayitli = cumleKayitli(c.metin);
     yerlestir(kart,
       h('span', { class: 'b-ust-etiket' }, `${(sira % liste.length) + 1} / ${liste.length} · ${c.kaynak}`),
-      h('p', { class: 'tlf-cumle', lang: 'en' }, sonuc ? sonuc.sozcukler.map((s) => h('span', { class: s.tamam ? 'tlf-tamam' : 'tlf-eksik' }, s.ham, ' ')) : c.metin),
-      sonuc ? h('div', { class: 'tlf-sonuc' },
-        h('small', null, t('telaffuz.taninan')), h('p', { lang: 'en' }, sonuc.metin || '—'),
-        h('p', { class: 'b-kucuk' }, sonuc.sozcukler.every((s) => s.tamam) ? t('telaffuz.hepsi') : t('telaffuz.eksikler', { n: sonuc.sozcukler.filter((s) => !s.tamam).length })),
-        h('p', { class: 'b-kucuk tlf-not' }, t('telaffuz.puanDegil'))) : null,
+      h('p', { class: 'tlf-cumle', lang: 'en' }, sonuc ? sonuc.sozcukler.map((s) => (s.tur === 'fazla'
+        ? h('span', { class: 'tlf-fazla', title: t('telaffuz.fazlaEtiket') }, `+${s.ham}`, ' ')
+        : h('span', { class: `tlf-${s.tur}` }, s.ham, s.tur === 'farkli' ? h('small', { class: 'tlf-duyulan' }, s.duyulan) : null, ' '))) : c.metin),
+      sonuc ? sonucKutusu(c, sonuc) : null,
       h('div', { class: 'tlf-eylemler' },
         h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => soyle(c.metin, hiz) }, ikon('hoparlor', 18), t('telaffuz.dinle')),
         h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => soyle(c.metin, 'yavas') }, ikon('hoparlor', 18), t('telaffuz.yavas')),
@@ -65,11 +83,32 @@ function ciz(kok, b) {
           ? h('button', { type: 'button', class: 'b-dugme b-dugme-ana', 'aria-pressed': String(dinleniyor), onClick: () => soyleVeKarsilastir(c.metin) }, ikon('mikrofon', 18), dinleniyor ? t('telaffuz.dinliyorum') : sonuc ? t('telaffuz.tekrarDene') : t('telaffuz.soyle'))
           : h('p', { class: 'b-kucuk' }, t('telaffuz.tanimaYok'))),
       h('div', { class: 'tlf-eylemler' },
-        h('button', { type: 'button', class: 'b-dugme', onClick: () => { sira -= 1; kartCiz(); } }, ikon('sol', 18), t('telaffuz.onceki')),
+        h('button', { type: 'button', class: 'b-dugme', onClick: () => { dinlemeyiDurdur(); sira -= 1; kartCiz(); } }, ikon('sol', 18), t('telaffuz.onceki')),
         h('button', { type: 'button', class: 'b-dugme', 'aria-pressed': String(kayitli), onClick: () => { cumleKaydetDegistir(c.metin, c.kaynak); kartCiz(sonuc); } }, ikon('yerImi', 18), kayitli ? t('telaffuz.kayitli') : t('telaffuz.kaydet')),
-        h('button', { type: 'button', class: 'b-dugme', onClick: () => { sira += 1; kartCiz(); } }, t('telaffuz.sonraki'), ikon('sag', 18))),
+        h('button', { type: 'button', class: 'b-dugme', onClick: () => { dinlemeyiDurdur(); sira += 1; kartCiz(); } }, t('telaffuz.sonraki'), ikon('sag', 18))),
     );
   }
+
+  function sonucKutusu(c, sonuc) {
+    const say = (tur) => sonuc.sozcukler.filter((s) => s.tur === tur).length;
+    const hepsi = sonuc.sozcukler.every((s) => s.tur === 'tamam');
+    const kacan = sonuc.sozcukler.filter((s) => s.tur === 'eksik' || s.tur === 'farkli').map((s) => s.ham);
+    return h('div', { class: 'tlf-sonuc' },
+      h('small', null, t('telaffuz.taninan')), h('p', { lang: 'en' }, sonuc.metin || '—'),
+      h('p', { class: 'b-kucuk' }, hepsi ? t('telaffuz.hepsi') : t('telaffuz.ozet', { eksik: say('eksik'), farkli: say('farkli'), fazla: say('fazla') })),
+      hepsi ? null : h('div', { class: 'tlf-eylemler' },
+        kacan.length ? h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => soyle(kacan.join(' '), 'yavas') }, ikon('hoparlor', 18), t('telaffuz.kacaniDinle')) : null,
+        h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => {
+          // Kullanıcının seçimiyle (otomatik değil): ses tanımanın yanılgısı kullanıcının hatası sayılmaz.
+          const eklenen = hafizayaEkle([kayitOlustur({ tur: 'telaffuz', dogru: c.metin, kullanici: sonuc.metin, baglam: c.kaynak, seviye: al().profil.seviye, kaynak: 'telaffuz', kuralId: null })]);
+          duyur(eklenen ? t('telaffuz.hafizayaEklendi') : t('telaffuz.hafizadaVar'), 2500);
+        } }, ikon('arti', 18), t('telaffuz.hafizayaEkle'))),
+      h('p', { class: 'b-kucuk tlf-not' }, t('telaffuz.puanDegil')));
+  }
+
+  // v0.16.0: dinleme ekrandan çıkınca ya da cümle değişince durdurulur; eski cümlenin sonucu yeni karta yazılmaz.
+  let dinleyici = null;
+  function dinlemeyiDurdur() { if (dinleyici) { try { dinleyici.iptal(); } catch { /* bitmiş */ } dinleyici = null; } dinleniyor = false; }
 
   async function soyleVeKarsilastir(hedef) {
     if (dinleniyor) return;
@@ -79,29 +118,30 @@ function ciz(kok, b) {
     }
     sus();
     dinleniyor = true; kartCiz();
+    const bu = sira;
     try {
-      dinle({
-        onSonuc: ({ metin }) => { dinleniyor = false; kartCiz({ metin, sozcukler: karsilastir(hedef, metin) }); },
-        onHata: () => { dinleniyor = false; kartCiz(); duyur(t('telaffuz.duyulmadi')); },
+      dinleyici = dinle({
+        onSonuc: ({ metin }) => { dinleyici = null; dinleniyor = false; if (bu === sira) kartCiz({ metin, sozcukler: karsilastir(hedef, metin) }); },
+        onHata: () => { dinleyici = null; dinleniyor = false; kartCiz(); duyur(t('telaffuz.duyulmadi')); },
         sessizlikMs: 5000,
       });
-    } catch { dinleniyor = false; kartCiz(); duyur(t('telaffuz.tanimaYok')); }
+    } catch { dinleyici = null; dinleniyor = false; kartCiz(); duyur(t('telaffuz.tanimaYok')); }
   }
 
   yerlestir(kok,
     ustBaslik({ tabela: t('gezinme.pratik'), baslik: t('telaffuz.baslik'), alt: t('telaffuz.alt'), ikon: 'telaffuz', geri: () => b.geri('/bugun') }),
-    sekmeler([['seviye', t('telaffuz.kaynak.seviye')], ['tum', t('telaffuz.kaynak.tum')], ['hafiza', t('telaffuz.kaynak.hafiza')]], kaynakSecimi, (id) => { kaynakSecimi = id; sira = 0; kartCiz(); }, { tur: 'hap', etiket: t('telaffuz.kaynakEtiket') }),
+    sekmeler([['seviye', t('telaffuz.kaynak.seviye')], ['tum', t('telaffuz.kaynak.tum')], ['hafiza', t('telaffuz.kaynak.hafiza')]], kaynakSecimi, (id) => { dinlemeyiDurdur(); kaynakSecimi = id; sira = 0; kartCiz(); }, { tur: 'hap', etiket: t('telaffuz.kaynakEtiket') }),
     kart,
     h('p', { class: 'b-kucuk' }, t('telaffuz.nasil')),
     altGezinme('/bugun'),
   );
   kartCiz();
-  return () => sus();
+  return () => { dinlemeyiDurdur(); sus(); };
 }
 
 export default {
   kimlik: 'telaffuz',
-  surum: '0.1.0',
+  surum: '0.2.0',
   onek: 'tlf',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'metin'],

@@ -68,7 +68,17 @@ function uygulamayiBaslat() {
   baslat(document.getElementById('uygulama'));
   if (bozukKayitVardi()) duyur(t('depo.bozukKayit'), 9000);
   // v0.14.0: fotoğraflar IndexedDB'den arka planda belleğe alınır; ekranlar beklemez. Fotoğraf varsa açık ekran bir kez yenilenir.
-  medyaHazirla().then((yuklendi) => { if (yuklendi) git((location.hash.slice(1) || '/bugun'), {}); });
+  // v0.16.0: fotoğraflar geç yüklenince ekran yeniden çizilir — ama kullanıcı o an yazı yazıyorsa taslağı gitmesin diye
+  // yazı alanından çıkana kadar beklenir.
+  const yaziyor = () => { const a = document.activeElement; return !!a && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && !['button', 'checkbox', 'radio', 'range', 'file'].includes(a.type)) || a.isContentEditable); };
+  medyaHazirla().then((yuklendi) => {
+    if (!yuklendi) return;
+    const adres = location.hash;
+    const yenile = () => { if (location.hash === adres) git((location.hash.slice(1) || '/bugun'), {}); };
+    if (!yaziyor()) { yenile(); return; }
+    const bekle = () => { setTimeout(() => { if (yaziyor()) return; document.removeEventListener('focusout', bekle); yenile(); }, 0); };
+    document.addEventListener('focusout', bekle);
+  });
   zamanlayiciBaslat();
   sekmeKaydirmaBaslat(git);
   // Orta Pratik düğmesi: basılı tutunca hızlı işlemler; "atanabilir" olanlar dokunma kısayolu olarak seçilebilir.
