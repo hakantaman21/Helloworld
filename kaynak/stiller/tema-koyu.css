@@ -4,7 +4,7 @@
   :root[data-tema="koyu"] {
     color-scheme: dark;
     --renk-zemin: #121A1C;
-    --renk-kart-ust: #1A2B2E; --renk-kart-alt: #04080A; --renk-kart-parilti: color-mix(in srgb, #8AF3E5 9%, transparent); --renk-kart-alt-golge: color-mix(in srgb, #000000 55%, transparent);
+    --renk-kart-ust: #1E3236; --renk-kart-alt: #020506; --renk-kart-parilti: color-mix(in srgb, #8AF3E5 9%, transparent); --renk-kart-alt-golge: color-mix(in srgb, #000000 55%, transparent);
     --renk-yuzey: #142E30;
     --renk-yuzey-ikinci: #0F2223;
     --renk-murekkep: #F3F1EB;
@@ -64,7 +64,7 @@
     :root:not([data-tema="acik"]) {
       color-scheme: dark;
       --renk-zemin: #121A1C;
-    --renk-kart-ust: #1A2B2E; --renk-kart-alt: #04080A; --renk-kart-parilti: color-mix(in srgb, #8AF3E5 9%, transparent); --renk-kart-alt-golge: color-mix(in srgb, #000000 55%, transparent);
+    --renk-kart-ust: #1E3236; --renk-kart-alt: #020506; --renk-kart-parilti: color-mix(in srgb, #8AF3E5 9%, transparent); --renk-kart-alt-golge: color-mix(in srgb, #000000 55%, transparent);
       --renk-yuzey: #142E30;
       --renk-yuzey-ikinci: #0F2223;
       --renk-murekkep: #F3F1EB;

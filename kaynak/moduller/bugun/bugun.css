@@ -66,3 +66,12 @@
   .bgn-ogren-kart b { font-size: 14px; line-height: 1.25; }
   .bgn-ogren-kart small { font-size: 12px; color: var(--renk-soluk); }
 }
+
+/* v0.11.1 Konu odaları daha kompakt; günün döngüsü satırları arası biraz daha boşluk */
+@layer moduller {
+  .bgn-hizli-oda { gap: 4px; padding: 10px 12px; }
+  .bgn-hizli-baslik { font-size: 15px; }
+  .bgn-hizli-katil { font-size: 14px; }
+  .bgn-oda { min-height: 96px; gap: 4px; padding: 8px 10px; }
+  .bgn-dongu { gap: 12px; }
+}

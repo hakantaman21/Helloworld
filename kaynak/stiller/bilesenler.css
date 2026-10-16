@@ -678,3 +678,39 @@
   .b-orta-oynat { margin: 2px 0 0; border-top-width: 13px; border-bottom-width: 13px; border-left-width: 22px; transform: translateX(4px); }
   .b-orta-ad { font-size: 9.5px; letter-spacing: .1em; }
 }
+
+/* ===== v0.11.1 Hakan'ın video notları: sıkı bant, simgeler zeminde, koyu panolar, satır arası boşluk, ışıklı seçili süzgeç ===== */
+@layer bilesenler {
+  /* Sohbet bandı daraltıldı: başlık ile simgeler ve "Daha fazla" arası sıkı */
+  .b-bas-bant { gap: 2px; padding-bottom: 10px; }
+  .b-bas-bant .b-ht-ust { min-height: 52px; }
+  .b-bas-bant .b-uygulamalar { gap: 2px; }
+  .b-bas-bant .b-uygulama { gap: 2px; padding: 0; }
+  .b-bas-bant .b-uygulama-ikon { height: 46px; }
+  .b-bas-bant .b-bant-tutamak { margin: -10px 0 -14px; }
+
+  /* Kısayol simgeleri her yerde doğrudan zemine oturur (kutu yok) */
+  .b-uygulama .b-uygulama-ikon { background: radial-gradient(closest-side, color-mix(in srgb, var(--renk-gezinme-turkuaz) 16%, transparent), transparent); box-shadow: none; }
+  .b-uygulama .b-uygulama-ikon .b-ikon3d { width: 44px; height: 44px; filter: drop-shadow(0 6px 8px var(--renk-golge)); }
+
+  /* Liste satırları arasında daha çok boşluk */
+  .b-ekran .b-liste { gap: 10px; }
+
+  /* Seçili süzgeç ayrıca ışıklı */
+  .b-sekmeler .b-sekme[aria-pressed="true"] { filter: drop-shadow(0 0 7px color-mix(in srgb, var(--renk-vurgu) 55%, transparent)); }
+
+  /* Panolar (Bağlan, Dil Anları): siyaha yakın, sayfa rengiyle ışık-koyuluk geçişi (Güvenli pratik slaytı örnek alındı) */
+  .b-afislar-pano .b-afis-slayt {
+    --renk-murekkep: var(--renk-gece-metin);
+    --renk-soluk: var(--renk-gece-soluk);
+    --renk-baslik: var(--renk-gece-vurgu);
+    color: var(--renk-gece-metin);
+    background:
+      radial-gradient(90% 130% at 100% 0%, color-mix(in srgb, var(--sayfa) 34%, transparent), transparent 62%),
+      linear-gradient(150deg, color-mix(in srgb, var(--sayfa) 16%, var(--renk-bant-2)), var(--renk-bant-1) 75%);
+  }
+  .b-afislar-pano .b-afis-iz { box-shadow: inset 0 1px 0 color-mix(in srgb, var(--renk-gece-metin) 10%, transparent), 0 10px 22px var(--renk-golge); }
+
+  /* Pencereler (şikâyet, onay, alt pencere) temaya uygun koyu geçişli zemin */
+  .b-pencere, .b-alt-pencere { background: radial-gradient(120% 80% at 0% 0%, var(--renk-kart-parilti), transparent 60%), linear-gradient(165deg, var(--renk-kart-ust), var(--renk-kart-alt)); }
+}

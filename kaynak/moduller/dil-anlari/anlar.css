@@ -43,3 +43,8 @@
   .anl-yorum-form { display: flex; gap: var(--bosluk-2); align-items: center; margin-top: 4px; }
   .anl-yorum-girdi { flex: 1; min-width: 0; }
 }
+
+/* v0.11.1 Gönderiler arası ayrım daha belirgin: sayfa renginde ince çizgi + koyu boşluk */
+@layer moduller {
+  .anl-kart { border-bottom: 0; box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--sayfa) 45%, var(--renk-cizgi)); margin-bottom: 10px; }
+}

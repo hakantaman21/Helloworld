@@ -1,3 +1,14 @@
+## 0.11.1 — 16.10.2026 · Hakan'ın video notları
+
+- Sohbet: üst bant daraltıldı (başlık, simgeler ve "Daha fazla" arası sıkı).
+- Kısayol simgeleri her yerde (Profil › Öğrenme merkezi dahil) kutusuz, doğrudan zeminde.
+- Sohbet satırları arasında daha çok boşluk; koyu temada daha koyu ışık-gölge geçişi.
+- Seçili süzgeç ayrıca ışıklı.
+- Bağlan ve Dil Anları panoları siyaha yakın, sayfa rengiyle ışık-koyuluk geçişli ("Güvenli pratik" slaytı örnek alındı).
+- Pratik: konu odaları kartları daha kompakt; günün döngüsü satırları arasında biraz daha boşluk.
+- Dil Anları: gönderiler arası ayrım daha belirgin.
+- Şikâyet, onay ve alt pencereler temaya uygun koyu geçişli zemin.
+
 ## 0.11.0 — 16.10.2026 · Siyaha yakın bant, ışık-gölge geçişli kartlar, kabartmalı süzgeçler, siyah-turkuaz alt menü, geri tuşu düzeltmesi
 
 - Üst bant siyaha yakın (varsayılan çok koyu yeşil); diğer bant renkleri de koyulaştı.
