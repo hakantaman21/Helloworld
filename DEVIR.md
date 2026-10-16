@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.11.1 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.9.0'da (16.10.2026, PR #12). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.11.2 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.1'de (16.10.2026, PR #13). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,13 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.11.2
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan: "Tekrar dikkat et ekran resmi ve videosuna. Unuttukların var." Kayıt tam çözünürlükte yeniden incelendi. Kalanlar: Bağlan'daki şeritler (Otomatik eşleş, ilgi daveti, TEST notu) "Güvenli pratik" slaytı örneğindeki gibi koyu renk geçişli ve kabartmalı; kişi kartları kabartmalı; seçili/dokunulan öğe ışıklı; Pratik hızlı oda daha kompakt; Dil Anları gönderi arası boşluk belirgin.
+- **Ne:** `kesfet.css`, `bugun.css`, `anlar.css` v0.11.2 ekleri; `bilesenler.css` dokunma ışığı (`.b-liste-satir:active/:focus-visible`).
+- **Şema:** değişmedi (12). **Durum:** canlıya (Hakan "yayına al" onayı bu tur için de geçerli: önceki istek "Yayına al ve şunu da incele").
 
 ## v0.11.1
 

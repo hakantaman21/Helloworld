@@ -714,3 +714,12 @@
   /* Pencereler (şikâyet, onay, alt pencere) temaya uygun koyu geçişli zemin */
   .b-pencere, .b-alt-pencere { background: radial-gradient(120% 80% at 0% 0%, var(--renk-kart-parilti), transparent 60%), linear-gradient(165deg, var(--renk-kart-ust), var(--renk-kart-alt)); }
 }
+
+/* v0.11.2 Dokunulan/seçilen kart ışıklanır (seçili öğe ayrıca ışıklı) */
+@layer bilesenler {
+  .b-liste-satir { transition: box-shadow .18s, filter .18s; }
+  .b-liste-satir:active, .b-liste-satir:focus-visible, .b-uygulama:active .b-uygulama-ikon {
+    filter: brightness(1.12);
+    box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 0 0 1.5px color-mix(in srgb, var(--renk-vurgu) 70%, transparent), 0 0 18px color-mix(in srgb, var(--renk-vurgu) 40%, transparent), 0 8px 18px var(--renk-golge);
+  }
+}

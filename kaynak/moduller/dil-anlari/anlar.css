@@ -46,5 +46,5 @@
 
 /* v0.11.1 Gönderiler arası ayrım daha belirgin: sayfa renginde ince çizgi + koyu boşluk */
 @layer moduller {
-  .anl-kart { border-bottom: 0; box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--sayfa) 45%, var(--renk-cizgi)); margin-bottom: 10px; }
+  .anl-kart { border-bottom: 0; box-shadow: inset 0 -3px 0 color-mix(in srgb, var(--sayfa) 55%, var(--renk-cizgi)); margin-bottom: 16px; padding-bottom: 18px; }
 }
