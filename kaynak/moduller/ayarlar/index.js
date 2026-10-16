@@ -147,6 +147,8 @@ function ciz(kok, b) {
         h('b', { class: 'ayr-profil-ad' }, p.ad || t('misafir.ad')),
         dilCifti(p.anaDil || 'tr', p.ogrenilenDil || 'en', p.seviye),
         h('span', { class: 'ayr-profil-alt' }, `${p.seviye} · ${t(`gelisim.rol.${p.rol || 'ogrenen'}`)}${(p.ilgiler || []).length ? ` · ${t('ayarlar.ilgiSayisi', { n: p.ilgiler.length })}` : ''}`),
+        // Ayarlar profili DÜZENLER; görüntülemek tek yerde: alt menüdeki Profil sekmesi (v0.11.0 tutarlılık).
+        h('button', { type: 'button', class: 'ayr-profil-git', onClick: () => b.git('/gelisim?sekme=profil') }, t('yanMenu.profiliGor'), ikon('sag', 14)),
       ),
     ),
     p.misafir ? h('div', { class: 'ayr-misafir', role: 'note' },

@@ -138,7 +138,7 @@ function ciz(kok, b) {
         htIkon(ikon3d('ayarlar', 28), t('ayarlar.baslik'), () => b.git('/ayarlar')),
       ],
     }),
-    h('button', { type: 'button', class: 'gls-ben', onClick: () => b.git('/ayarlar'), 'aria-label': t('gelisim.kimlik.duzenle') },
+    h('button', { type: 'button', class: 'gls-ben', onClick: () => b.git('/ayarlar?grup=profil'), 'aria-label': t('gelisim.kimlik.duzenle') },
       benAvatar(76, 'gls-ben-av'),
       h('span', { class: 'gls-ben-ic' },
         h('span', { class: 'gls-ben-ad' }, h('b', null, v.profil.ad || '?'), h('span', { class: 'b-etiket-hap' }, v.profil.seviye)),

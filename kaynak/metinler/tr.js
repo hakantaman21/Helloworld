@@ -45,7 +45,7 @@ export default {
     ogren: 'Öğren', topluluk: 'Topluluk', hesap: 'Hesabım',
     senaryoAlt: 'Kafe, market, yol tarifi…', hafizaAlt: 'Tekrar zamanı gelen hatalar', defterAlt: 'Kaydettiğin cümleler',
     ortakAlt: 'Süzgeç ve otomatik eşleşme', anlarAlt: 'Paylaş, düzelt, yorum yap', odalarAlt: 'Konu odaları ve koçla pratik',
-    profilAlt: 'Fotoğraflar, puanlar, gelişim', ayarlarAlt: 'Dil, bildirim, görünüm, gizlilik',
+    profilAlt: 'Hakkımda, fotoğraflar, puanlar, gelişim', profiliGor: 'Profilini gör', ayarlarAlt: 'Dil, bildirim, görünüm, gizlilik',
   },
   odalar: {
     baslik: 'Konu odaları', alt: 'Seviyene uygun bir konuya katıl', hizliEtiket: 'Seviyene uygun', hizliKatil: 'Şimdi katıl', degistir: 'Başka oda öner',
@@ -475,7 +475,7 @@ export default {
   },
 
   gelisim: {
-    sekme: { profil: 'Profil', gelisim: 'Gelişim' },
+    sekme: { profil: 'Hakkımda', gelisim: 'Gelişim' },
     menu: {
       baslik: 'Menü',
       ayarlar: { baslik: 'Ayarlar', alt: 'Dil, bildirim saatleri, görünüm, gizlilik' },
@@ -528,11 +528,11 @@ export default {
     suzgecBicimi: 'Süzgeç biçimi', suzgecBicimiAciklama: 'Seçili sekme ve süzgeçlerin görünümü',
     suzgecAd: { klasik: 'Klasik', dolu: 'Dolu', cizgi: 'Çizgi', cerceve: 'Çerçeve', beyaz: 'Beyaz' },
     gizlilikOzet: 'Verilerin bu cihazda', acik: 'Açık', kapali: 'Kapalı',
-    grup: { profil: 'Profilim', dil: 'Dil', bildirim: 'Bildirimler ve koç aramaları', koc: 'Koç ve pratik', gorunum: 'Görünüm', gizlilik: 'Gizlilik ve veriler' },
+    grup: { profil: 'Kişisel bilgiler', dil: 'Dil', bildirim: 'Bildirimler ve koç aramaları', koc: 'Koç ve pratik', gorunum: 'Görünüm', gizlilik: 'Gizlilik ve veriler' },
     sabahAciklama: 'Güne kısa bir konuşmayla başla', aksamAciklama: 'Günün hatalarını tekrar et',
     gonderimOneri: 'Göndermeden önce düzeltme öner', gonderimOneriAciklama: 'Mesajında olası bir hata varsa göndermeden önce düzgün hâlini gösterir.',
     yaziBoyutu: 'Yazı boyutu', yaziSecenek: { normal: 'Normal', buyuk: 'Büyük' }, ilgiSayisi: '{n} ilgi',
-    kutu: { baslik: 'Ayar grupları', genel: 'Genel', profil: 'Profilim', dil: 'Dil profili', saat: 'Hatırlatıcılar', gorunum: 'Görünüm ve koç', gizlilik: 'Gizlilik ve yedek' },
+    kutu: { baslik: 'Ayar grupları', genel: 'Genel', profil: 'Kişisel bilgiler', dil: 'Dil profili', saat: 'Hatırlatıcılar', gorunum: 'Görünüm ve koç', gizlilik: 'Gizlilik ve yedek' },
     dilProfili: 'Dil profilim', anaDil: 'Ana dilim', ogrenilenDil: 'Öğrendiğim dil', dilSeciniz: 'Dil seçiniz', dilHedefi: 'Dil öğrenme hedefim', hedefOrnek: 'Örneğin: Akıcı günlük konuşma', tanitim: 'Kendimi tanıtıyorum', tanitimOrnek: 'Kendinizden kısaca bahsedin', profilGizlilik: 'Bu bilgiler şu anda yalnızca cihazınızda tutulur; başkalarıyla paylaşılmaz.',
     gorunumBaslik: 'Görünüm ve özelleştirme',
     gorunum: 'Kart yerleşimi',

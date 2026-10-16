@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.10.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.9.0'da (16.10.2026, PR #12). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.11.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.9.0'da (16.10.2026, PR #12). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,21 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.11.0
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan (v0.10.0 sonrası): Sohbet'in üst öğeleri doğrudan zemine otursun (ayrı kutuda değil); bant siyaha yakın yeşil; yan menü dışa sürükleyince kapansın; koyu temada sohbet satırları koyu ve zeminden ayrışsın, yüzeyler tek ton olmasın (yer yer gölge, yer yer ışık); alt menü siyah + yer yer turkuaz (yan menüdeki "siyah zeminde turkuaz" ve "koçla 5 dk konuş" geçişini övdü); Bağlan ve Dil Anları'nda üst bant aşağısına göre çok koyu; tüm sayfalarda süzgeçler kabartmalı; yatay kartlarda renk ve koyuluk geçişi; Pratik oku daha büyük ve ortada; "Profil" adının üç farklı yerde üç farklı şey olması tutarsız; Bağlan'da süzgeç açıkken geri tuşu alttaki sayfaya uygulanıyor. Pratik'e dokunulmadı.
+- **Ne:**
+  - `jetonlar.css`: bant renkleri siyaha yakın; `--renk-gezinme-*` (siyah + turkuaz, her temada aynı); `--renk-kart-ust/-alt/-parilti/-alt-golge` (kart geçişi; koyu değerler `tema-koyu.css` iki blokta); bant içinde kart jetonları yeniden tanımlı.
+  - `bilesenler.css` v0.11.0 bloğu: kart/satır/platform geçişi; süzgeç tepsisi gömük, `.b-sekme` kabartmalı (klasik seçili = altın kabartma, dolu = sayfa rengi, çizgi düz, çerçeve, beyaz); alt menü siyah-turkuaz, seçili gösterge turkuaz; orta ok büyük, `translateX(4px)` ile optik orta.
+  - Sohbet: kısayollar bantta kutusuz (`.b-bas-bant .b-platform` saydam); yan menü sola sürükleyince kapanır (eşik 70 px); yan menü üstü = "Profilini gör" düğmesi.
+  - Profil tutarlılığı: alt menü "Profil" tek görüntüleme yeri (içindeki sekme "Hakkımda"); Ayarlar'da grup adı "Kişisel bilgiler" (düzenleme yeri), kartta "Profilini gör"; Profil'deki kimlik satırı → `/ayarlar?grup=profil`.
+  - `yonlendirici.js` katman geçmişi: `.b-alt-pencere-perde, .b-katman, .b-perde` açılınca aynı adresle `history.pushState({ katman })`; geri tuşu (popstate) en üstteki katmanı kapatır (Esc gönderir; dinlemiyorsa `.b-dugme-cerceve`'ye basar ya da kaldırır). Katman kendi düğmesiyle kapanınca kayıt `history.go(-n)` ile sessizce geri alınır; kapanıp başka sayfaya gidildiyse arta kalan kayıt popstate'te atlanır.
+- **Kural:** Yeni üstten açılan pencere bu üç sınıftan birini taşısın ve Esc ile kapansın; geri tuşu kendiliğinden çalışır, modülde history kullanma (Y21).
+- **Karşılaştırma:** `python3 araclar/karsilastir.py 0.10.0 0.11.0` — kaybolan öğe yok (yalnız ad değişiklikleri: Profil sekmesi → Hakkımda).
+- **Şema:** değişmedi (12).
+- **Durum:** `deneme` dalında; canlıya alma Hakan onayıyla.
 
 ## v0.10.0
 

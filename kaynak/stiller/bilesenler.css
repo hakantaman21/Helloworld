@@ -631,3 +631,50 @@
   .b-bant-tutamak { align-self: center; display: inline-flex; align-items: center; gap: 4px; min-height: 48px; margin: -14px 0 -16px; padding: 0 14px; border: 0; border-radius: var(--kose-tam); background: transparent; color: var(--renk-soluk); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
   .b-bant-tutamak:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
 }
+
+/* ===== v0.11.0 Işık-koyuluk geçişli kartlar, kabartmalı süzgeçler, siyah-turkuaz alt menü ===== */
+@layer bilesenler {
+  /* Yatay kartlar ve liste satırları: üst-solda ışık, alt-sağa doğru koyuluk; alt kenarda gölge, üst kenarda ışık çizgisi */
+  .b-ekran .b-platform, .b-ekran .b-liste-satir, .b-ekran .b-kart {
+    background:
+      radial-gradient(120% 90% at 0% 0%, var(--renk-kart-parilti), transparent 58%),
+      linear-gradient(155deg, color-mix(in srgb, var(--sayfa) 12%, var(--renk-kart-ust)), color-mix(in srgb, var(--sayfa) 6%, var(--renk-kart-alt)));
+    box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 -2px 0 var(--renk-kart-alt-golge), inset 0 0 0 1px color-mix(in srgb, var(--sayfa) 18%, var(--renk-cizgi)), 0 8px 18px var(--renk-golge);
+  }
+  .b-bas-bant .b-platform { background: transparent; box-shadow: none; padding: 2px 0 0; }
+  /* Bant içindeki kısayol simgeleri doğrudan koyu zemine oturur (kutu yok), altlarında hafif turkuaz ışık */
+  .b-bas-bant .b-uygulama-ikon { background: radial-gradient(closest-side, color-mix(in srgb, var(--renk-gezinme-turkuaz) 18%, transparent), transparent); box-shadow: none; }
+  .b-bas-bant .b-uygulama-ikon .b-ikon3d { width: 46px; height: 46px; filter: drop-shadow(0 6px 8px var(--renk-golge)); }
+
+  /* Süzgeçler: tepsi içe gömük, her öğe kabartmalı; seçili öğe daha yüksek ve parlak */
+  .b-ekran .b-sekmeler { background: color-mix(in srgb, var(--sayfa) 6%, var(--renk-yuzey-ikinci)); box-shadow: inset 0 2px 5px var(--renk-kart-alt-golge), inset 0 0 0 1px var(--renk-cizgi), 0 1px 0 var(--renk-kabartma-isik); }
+  .b-sekmeler .b-sekme, .b-sekmeler-hap .b-sekme { color: var(--renk-murekkep); background-color: transparent; background-image: linear-gradient(180deg, var(--renk-kart-ust), var(--renk-kart-alt)); box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 -2px 0 var(--renk-kart-alt-golge), 0 2px 5px var(--renk-golge); }
+  .b-sekmeler .b-sekme + .b-sekme { margin-left: 2px; }
+  :root[data-suzgec="klasik"] .b-sekme[aria-pressed="true"], :root:not([data-suzgec]) .b-sekme[aria-pressed="true"] { color: var(--renk-vurgu-uzerinde); background-image: linear-gradient(180deg, var(--renk-vurgu-parlak), var(--renk-vurgu)); box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 -3px 0 color-mix(in srgb, var(--renk-vurgu-uzerinde) 22%, transparent), 0 4px 10px var(--renk-golge); }
+  :root[data-suzgec="klasik"] .b-bas-bant .b-sekmeler-metin .b-sekme[aria-pressed="true"] { color: var(--renk-vurgu-uzerinde); background-color: transparent; background-image: linear-gradient(180deg, var(--renk-vurgu-parlak), var(--renk-vurgu)); }
+  :root[data-suzgec="dolu"] .b-sekme[aria-pressed="true"] { color: var(--renk-zemin); background-color: var(--sayfa); background-image: linear-gradient(180deg, color-mix(in srgb, var(--sayfa) 80%, var(--renk-kart-ust)), var(--sayfa)); }
+  :root[data-suzgec="cizgi"] .b-sekmeler .b-sekme { background-image: none; box-shadow: none; }
+  :root[data-suzgec="cizgi"] .b-sekmeler .b-sekme[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--renk-vurgu); }
+  :root[data-suzgec="cerceve"] .b-sekme[aria-pressed="true"] { background-image: linear-gradient(180deg, var(--renk-kart-ust), var(--renk-kart-alt)); box-shadow: inset 0 0 0 2px var(--renk-vurgu), 0 0 12px color-mix(in srgb, var(--renk-vurgu) 30%, transparent), 0 3px 8px var(--renk-golge); }
+  :root[data-suzgec="beyaz"] .b-sekme[aria-pressed="true"] { background-image: linear-gradient(180deg, var(--renk-suzgec-beyaz), var(--renk-kart-alt)); }
+
+  /* Alt menü: siyah çubuk, yer yer turkuaz (üst ışık çizgisi, seçili kutu, seçili yazı) */
+  .b-gezinme-ic {
+    --renk-murekkep: var(--renk-gezinme-metin);
+    --renk-soluk: var(--renk-gezinme-soluk);
+    border: 1px solid color-mix(in srgb, var(--renk-gezinme-turkuaz) 26%, transparent);
+    background:
+      radial-gradient(55% 130% at 50% 0%, color-mix(in srgb, var(--renk-gezinme-turkuaz) 16%, transparent), transparent 70%),
+      linear-gradient(180deg, var(--renk-gezinme-zemin-2), var(--renk-gezinme-zemin-1));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--renk-gezinme-turkuaz-parlak) 35%, transparent), 0 10px 26px var(--renk-golge), 0 0 0 1px color-mix(in srgb, var(--renk-gezinme-zemin-1) 60%, transparent);
+  }
+  .b-gezinme-oge { color: var(--renk-gezinme-soluk); }
+  .b-gezinme-oge[aria-current="page"] { color: var(--renk-gezinme-turkuaz-parlak); }
+  .b-gezinme-isik::before { background: linear-gradient(180deg, color-mix(in srgb, var(--renk-gezinme-turkuaz) 30%, var(--renk-gezinme-zemin-2)), color-mix(in srgb, var(--renk-gezinme-turkuaz) 8%, var(--renk-gezinme-zemin-1))); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--renk-gezinme-turkuaz-parlak) 45%, transparent), inset 0 -3px 0 var(--renk-gezinme-turkuaz), 0 0 16px color-mix(in srgb, var(--renk-gezinme-turkuaz) 35%, transparent); }
+  .b-orta-daire { border-color: var(--renk-gezinme-zemin-1); box-shadow: 0 0 0 1px color-mix(in srgb, var(--renk-gezinme-turkuaz) 40%, transparent), 0 8px 22px var(--renk-golge), 0 0 24px color-mix(in srgb, var(--renk-vurgu) 28%, transparent); }
+  .b-gezinme-orta[aria-current="page"] .b-orta-daire { border-color: var(--renk-gezinme-turkuaz); box-shadow: 0 0 0 3px color-mix(in srgb, var(--renk-gezinme-turkuaz) 35%, transparent), 0 0 28px color-mix(in srgb, var(--renk-gezinme-turkuaz) 50%, transparent), 0 8px 22px var(--renk-golge); }
+  /* Ok daha büyük ve optik olarak ortada (üçgenin ağırlık merkezi kutunun ortasına gelir) */
+  .b-orta-daire { gap: 0; }
+  .b-orta-oynat { margin: 2px 0 0; border-top-width: 13px; border-bottom-width: 13px; border-left-width: 22px; transform: translateX(4px); }
+  .b-orta-ad { font-size: 9.5px; letter-spacing: .1em; }
+}

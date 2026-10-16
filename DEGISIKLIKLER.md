@@ -1,3 +1,14 @@
+## 0.11.0 — 16.10.2026 · Siyaha yakın bant, ışık-gölge geçişli kartlar, kabartmalı süzgeçler, siyah-turkuaz alt menü, geri tuşu düzeltmesi
+
+- Üst bant siyaha yakın (varsayılan çok koyu yeşil); diğer bant renkleri de koyulaştı.
+- Sohbet: üstteki kısayol simgeleri ayrı bir kutuda değil, doğrudan koyu bandın üstünde (altlarında hafif turkuaz ışık).
+- Yan menü parmakla sola (dış kenara) sürüklenince de kapanıyor.
+- Kartlar ve liste satırları her sayfada üst-solda ışık, alt-sağa doğru koyuluk geçişi taşıyor; koyu temada sohbet satırları koyu ve zeminden ayrışıyor.
+- Süzgeçler kabartmalı: tepsi içe gömük, her süzgeç öğesi kabarık, seçili olan daha yüksek ve parlak (tüm sayfalarda).
+- Alt menü her temada siyah; üst ışık çizgisi, seçili kutu ve seçili yazı turkuaz. Ortadaki Pratik oku daha büyük ve tam ortada.
+- Profil tutarlılığı: tek profil sayfası alt menüdeki "Profil". Yan menünün üstündeki ad/fotoğraf "Profilini gör" kısayolu; Profil içindeki sekme "Hakkımda"; Ayarlar'daki grup "Kişisel bilgiler" (düzenleme yeri) ve oradan "Profilini gör" bağlantısı.
+- Düzeltme: Bağlan'da süzgeç penceresi açıkken telefonun geri tuşu artık alttaki sayfayı değil pencereyi kapatıyor (tüm üstten açılan pencerelerde).
+
 ## 0.10.0 — 16.10.2026 · Koyu üst bant, siyah arama, Bağlan, kayan panolar, alt menü kayması düzeltmesi
 
 - Düzeltme: alt menü artık kaydırırken ya da sekme değiştirirken aşağı kayıp geri gelmiyor. Sebep: ekranı tam dolduran kaydırma alanını Android Chrome "kök kaydırıcı" sayıp adres çubuğunu gizleyip açıyordu. İçerik alanı artık alt menünün üstünde bitiyor; son öğe de menünün altında kalmıyor.

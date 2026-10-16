@@ -36,3 +36,15 @@
   .shb-menu-metin small { font-size: 12px; color: var(--renk-soluk); }
   .shb-menu-satir:focus-visible, .shb-menu-afis:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
 }
+
+/* v0.11.0 Bant içindeki kısayollar doğrudan koyu zemine oturur (kutu yok), altlarında hafif turkuaz ışık */
+@layer moduller {
+  .shb-menu.shb-menu-surukle { transition: none; }
+  .shb-menu { transition: transform .22s ease-out; touch-action: pan-y; }
+}
+
+@layer moduller {
+  .shb-menu-profil { flex: 1; display: flex; align-items: center; gap: 10px; min-width: 0; min-height: 56px; padding: 0; border: 0; background: transparent; color: var(--renk-murekkep); font: inherit; text-align: left; cursor: pointer; }
+  .shb-menu-profil small { color: var(--renk-vurgu-metin); font-weight: 700; }
+  .shb-menu-profil:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; border-radius: 12px; }
+}

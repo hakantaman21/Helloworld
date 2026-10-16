@@ -44,7 +44,7 @@ export default {
     ogren: 'Learn', topluluk: 'Community', hesap: 'My account',
     senaryoAlt: 'Café, market, directions…', hafizaAlt: 'Mistakes due for review', defterAlt: 'Sentences you saved',
     ortakAlt: 'Filters and auto match', anlarAlt: 'Post, correct, comment', odalarAlt: 'Topic rooms and coach practice',
-    profilAlt: 'Photos, points, progress', ayarlarAlt: 'Language, reminders, appearance, privacy',
+    profilAlt: 'About me, photos, points, progress', profiliGor: 'View your profile', ayarlarAlt: 'Language, reminders, appearance, privacy',
   },
   odalar: {
     baslik: 'Topic rooms', alt: 'Join a topic at your level', hizliEtiket: 'Matches your level', hizliKatil: 'Join now', degistir: 'Suggest another room',
@@ -474,7 +474,7 @@ export default {
   },
 
   gelisim: {
-    sekme: { profil: 'Profile', gelisim: 'Progress' },
+    sekme: { profil: 'About me', gelisim: 'Progress' },
     menu: {
       baslik: 'Menu',
       ayarlar: { baslik: 'Settings', alt: 'Language, reminder times, appearance, privacy' },
@@ -527,11 +527,11 @@ export default {
     suzgecBicimi: 'Filter style', suzgecBicimiAciklama: 'How the selected tab and filters look',
     suzgecAd: { klasik: 'Classic', dolu: 'Filled', cizgi: 'Underline', cerceve: 'Outline', beyaz: 'White' },
     gizlilikOzet: 'Your data stays on this device', acik: 'On', kapali: 'Off',
-    grup: { profil: 'My profile', dil: 'Language', bildirim: 'Notifications and coach calls', koc: 'Coach and practice', gorunum: 'Appearance', gizlilik: 'Privacy and data' },
+    grup: { profil: 'Personal details', dil: 'Language', bildirim: 'Notifications and coach calls', koc: 'Coach and practice', gorunum: 'Appearance', gizlilik: 'Privacy and data' },
     sabahAciklama: 'Start the day with a short talk', aksamAciklama: 'Review the day’s mistakes',
     gonderimOneri: 'Suggest a fix before sending', gonderimOneriAciklama: 'If your message may contain a mistake, shows the corrected version before sending.',
     yaziBoyutu: 'Text size', yaziSecenek: { normal: 'Normal', buyuk: 'Large' }, ilgiSayisi: '{n} interests',
-    kutu: { baslik: 'Setting groups', genel: 'General', profil: 'My profile', dil: 'Language profile', saat: 'Reminders', gorunum: 'Appearance & coach', gizlilik: 'Privacy & backup' },
+    kutu: { baslik: 'Setting groups', genel: 'General', profil: 'Personal details', dil: 'Language profile', saat: 'Reminders', gorunum: 'Appearance & coach', gizlilik: 'Privacy & backup' },
     dilProfili: 'My language profile', anaDil: 'Native language', ogrenilenDil: 'Language I am learning', dilSeciniz: 'Select a language', dilHedefi: 'My language goal', hedefOrnek: 'For example: Fluent everyday conversation', tanitim: 'About me', tanitimOrnek: 'Write a short introduction', profilGizlilik: 'These details are currently stored only on your device and are not shared with others.',
     gorunumBaslik: 'Appearance and customization',
     gorunum: 'Card density',

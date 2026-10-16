@@ -3,7 +3,8 @@
 @layer tema {
   :root[data-tema="koyu"] {
     color-scheme: dark;
-    --renk-zemin: #0D1112;
+    --renk-zemin: #121A1C;
+    --renk-kart-ust: #1A2B2E; --renk-kart-alt: #04080A; --renk-kart-parilti: color-mix(in srgb, #8AF3E5 9%, transparent); --renk-kart-alt-golge: color-mix(in srgb, #000000 55%, transparent);
     --renk-yuzey: #142E30;
     --renk-yuzey-ikinci: #0F2223;
     --renk-murekkep: #F3F1EB;
@@ -24,7 +25,7 @@
     --renk-onizleme-zemin-mavi: #0B1222;
     --renk-onizleme-zemin-mor: #150D1C;
     --renk-onizleme-zemin-yesil: #0B140F;
-    --renk-onizleme-zemin-varsayilan: #0D1112;
+    --renk-onizleme-zemin-varsayilan: #121A1C;
     --renk-iyi: #2E9E65;
     --renk-iyi-metin: #7AD3A0;
     --renk-iyi-acik: #173A2A;
@@ -48,7 +49,7 @@
     --renk-grup-3: #B79BF5;
     --renk-grup-4: #F0C866;
     --renk-grup-5: #7AD3A0;
-    --renk-zemin-ust: #0D1618;
+    --renk-zemin-ust: #182528;
     --renk-baslik: #72D4CF;
     --renk-kutu-1: #2C2347;
     --renk-kutu-2: #3A2E12;
@@ -62,7 +63,8 @@
   @media (prefers-color-scheme: dark) {
     :root:not([data-tema="acik"]) {
       color-scheme: dark;
-      --renk-zemin: #0D1112;
+      --renk-zemin: #121A1C;
+    --renk-kart-ust: #1A2B2E; --renk-kart-alt: #04080A; --renk-kart-parilti: color-mix(in srgb, #8AF3E5 9%, transparent); --renk-kart-alt-golge: color-mix(in srgb, #000000 55%, transparent);
       --renk-yuzey: #142E30;
       --renk-yuzey-ikinci: #0F2223;
       --renk-murekkep: #F3F1EB;
@@ -83,7 +85,7 @@
       --renk-onizleme-zemin-mavi: #0B1222;
       --renk-onizleme-zemin-mor: #150D1C;
       --renk-onizleme-zemin-yesil: #0B140F;
-      --renk-onizleme-zemin-varsayilan: #0D1112;
+      --renk-onizleme-zemin-varsayilan: #121A1C;
       --renk-iyi: #2E9E65;
       --renk-iyi-metin: #7AD3A0;
       --renk-iyi-acik: #173A2A;
@@ -107,7 +109,7 @@
       --renk-grup-3: #B79BF5;
       --renk-grup-4: #F0C866;
       --renk-grup-5: #7AD3A0;
-    --renk-zemin-ust: #0D1618;
+    --renk-zemin-ust: #182528;
       --renk-baslik: #72D4CF;
       --renk-kutu-1: #2C2347;
       --renk-kutu-2: #3A2E12;

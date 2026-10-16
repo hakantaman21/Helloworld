@@ -26,6 +26,7 @@ const HIZLI = [
   ['pratik', 'odalar', '/bugun', 1],
 ];
 let hizliAcik = false;
+const MENU_KAPAMA_ESIGI = 70;
 
 // Yan menü (HelloTalk ☰): kategorilere ayrılmış kısa yollar; üstte günün önerisi.
 function yanMenu(b, kocaGit) {
@@ -39,8 +40,10 @@ function yanMenu(b, kocaGit) {
   const perde = h('div', { class: 'shb-menu-perde b-katman', onClick: (e) => { if (e.target === perde) kapat(); } },
     h('aside', { class: 'shb-menu b-katman-ic', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('yanMenu.baslik') },
       h('div', { class: 'shb-menu-ust' },
-        benAvatar(48),
-        h('span', { class: 'shb-menu-kim' }, h('b', null, v.profil.ad || t('misafir.ad')), h('small', null, `${(v.profil.anaDil || 'tr').toUpperCase()} → ${(v.profil.ogrenilenDil || 'en').toUpperCase()} · ${v.profil.seviye}`)),
+        // Üstteki ad ve fotoğraf = alt menüdeki "Profil" sekmesinin kısayolu (tek profil sayfası; tutarlılık v0.11.0).
+        h('button', { type: 'button', class: 'shb-menu-profil', onClick: git('/gelisim?sekme=profil'), 'aria-label': t('yanMenu.profiliGor') },
+          benAvatar(48),
+          h('span', { class: 'shb-menu-kim' }, h('b', null, v.profil.ad || t('misafir.ad')), h('small', null, t('yanMenu.profiliGor')))),
         h('button', { type: 'button', class: 'b-ht-ikon b-ht-ikon-saydam', 'aria-label': t('genel.kapat'), onClick: kapat }, ikon('kapat', 20))),
       h('button', { type: 'button', class: 'shb-menu-afis', onClick: git(null) },
         h('span', { class: 'shb-menu-afis-metin' }, h('small', null, t('yanMenu.afisEtiket')), h('b', null, t('yanMenu.afisBaslik')), h('span', null, t('yanMenu.afisAlt'))),
@@ -54,9 +57,32 @@ function yanMenu(b, kocaGit) {
         satir('anlar', t('anlar.baslik'), t('yanMenu.anlarAlt'), '/dil-anlari'),
         satir('pratik', t('odalar.baslik'), t('yanMenu.odalarAlt'), '/bugun')),
       grup(t('yanMenu.hesap'),
-        satir('profil', t('gezinme.profil'), t('yanMenu.profilAlt'), '/gelisim'),
+        satir('profil', t('gezinme.profil'), t('yanMenu.profilAlt'), '/gelisim?sekme=profil'),
         satir('ayarlar', t('ayarlar.baslik'), t('yanMenu.ayarlarAlt'), '/ayarlar')),
     ));
+  // Parmakla sola (dış kenara) sürükleyince kapanır; az sürüklenirse yerine döner.
+  const menu = perde.querySelector('.shb-menu');
+  let bas = null;
+  let dx = 0;
+  menu.addEventListener('touchstart', (e) => { bas = { x: e.touches[0].clientX, y: e.touches[0].clientY, yatay: null }; dx = 0; }, { passive: true });
+  menu.addEventListener('touchmove', (e) => {
+    if (!bas) return;
+    const x = e.touches[0].clientX - bas.x;
+    const y = e.touches[0].clientY - bas.y;
+    if (bas.yatay === null && (Math.abs(x) > 8 || Math.abs(y) > 8)) bas.yatay = Math.abs(x) > Math.abs(y);
+    if (!bas.yatay) return;
+    dx = Math.min(0, x);
+    menu.classList.add('shb-menu-surukle');
+    menu.style.transform = `translateX(${dx}px)`;
+  }, { passive: true });
+  const birak = () => {
+    if (!bas) return;
+    bas = null;
+    menu.classList.remove('shb-menu-surukle');
+    if (dx < -MENU_KAPAMA_ESIGI) { menu.style.transform = 'translateX(-105%)'; setTimeout(kapat, 200); } else menu.style.transform = '';
+  };
+  menu.addEventListener('touchend', birak, { passive: true });
+  menu.addEventListener('touchcancel', birak, { passive: true });
   document.addEventListener('keydown', tus);
   document.body.append(perde);
   perde.querySelector('button').focus();
