@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.11.2 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.1'de (16.10.2026, PR #13). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.11.3 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.2'de (16.10.2026, PR #14). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,13 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.11.3
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan (canlı v0.11.2 ekran görüntüsü): "Alanı sıkışma yaratmadan maksimum daralt; aşağıda ve solda bölümün hatları kaybolmamalı"; sohbet satırlarında "Hatları görünsün, sağda-solda kaybolmasın".
+- **Ne:** `bilesenler.css` v0.11.3 bloğu: bant alt boşluğu 4 px, simge 38 px, yazı 11 px, tutamak negatif boşluklu; bant `border` (altın %38, üst hariç); kart/satır çerçevesi `color-mix(--sayfa 38%, --renk-cizgi-guclu)`; `kesfet.css` kişi kartı aynı çerçeve. Profil terim düzeni (v0.11.0'da kuruldu) tamamlandı: başka kişinin sayfasındaki sekme `ht.profilSekme` = "Hakkında". Kural: "Profil" yalnız alt menü sekmesi ve kişi sayfası başlığıdır; görüntüleme Profil'de, düzenleme Ayarlar › Kişisel bilgiler'de; yan menü ve Ayarlar kartı yalnız "Profilini gör" kısayoludur.
+- **Şema:** değişmedi (12). **Durum:** canlıya (Hakan'ın bu turdaki istekleri canlı sürüm üzerinden).
 
 ## v0.11.2
 

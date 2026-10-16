@@ -1,3 +1,10 @@
+## 0.11.3 — 16.10.2026 · Sohbet bandı en sıkı hâl, belirgin kart hatları
+
+- Sohbet üst bandı sıkışma yaratmadan en dar hâline getirildi (başlık, simgeler, yazılar ve "Daha fazla" arası).
+- Bandın alt ve yan hatları ince altın çizgiyle her yerde görünür.
+- Kart ve sohbet satırlarının çerçevesi belirginleşti; koyu temada sağda-solda kaybolmuyor.
+- Profil adları: başka bir kişinin sayfasındaki "Profil" sekmesi "Hakkında" oldu (kendi Profil sayfandaki "Hakkımda" ile uyumlu).
+
 ## 0.11.2 — 16.10.2026 · Video notlarından kalanlar
 
 - Bağlan: "Otomatik eşleş", ilgi daveti ve TEST notu şeritleri "Güvenli pratik" slaytı gibi koyu, kendi renkleriyle ışık-koyuluk geçişli ve kabartmalı; kişi kartları da geçişli ve kabartmalı, aralarında daha çok boşluk.

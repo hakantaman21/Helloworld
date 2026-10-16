@@ -91,7 +91,7 @@ export default {
     cevrimiciSimdi: 'Online now', aktifOnce: 'Active {zaman}',
     dahaFazla: 'More', katildi: 'Joined {n} days ago', anSayisi: '{n} Moments', yerelSaat: 'Local time {saat}',
     hobiler: 'Hobbies', meslek: 'Occupation', gezilecek: 'Places to visit', ozellikler: 'Chat style',
-    profilSekme: 'Profile', anlarSekme: 'Moments {n}', sohbet: 'Chat',
+    profilSekme: 'About', anlarSekme: 'Moments {n}', sohbet: 'Chat',
     takipEt: 'Follow', takiptesin: 'Following', takipEdildi: 'Following {ad}', takiptenCikti: 'Unfollowed {ad}',
     guncel: 'Latest', seninIcin: 'For you', yardimEt: 'Help others', takipEdilen: 'Following',
     takipBos: 'No posts from people you follow. Tap "Follow" on a profile.', anAra: 'Search Moments', bildirimler: 'Notifications',
