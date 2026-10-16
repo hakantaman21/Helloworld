@@ -16,7 +16,7 @@
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
   }
-  body { min-height: 100dvh; background: var(--renk-zemin); }
+  body { min-height: 100dvh; background: radial-gradient(70% 60% at 88% 4%, var(--renk-zemin-ust), var(--renk-zemin)) fixed; background-color: var(--renk-zemin); }
   a { color: var(--renk-vurgu-metin); }
 
   /* Y13: tüm dokunulabilir öğeler en az 48 piksel */

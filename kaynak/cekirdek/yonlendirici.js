@@ -4,7 +4,7 @@ import { ekranAl } from './modul-kaydi.js';
 import { al } from './depo.js';
 import { yayinla } from './olay-hatti.js';
 import { t } from './metin.js';
-import { h, ustKontroller } from './arayuz.js';
+import { h } from './arayuz.js';
 
 let kok = null;
 let aktifTemizle = null;
@@ -49,7 +49,7 @@ function ciz() {
   document.title = `${t(ekran.baslikAnahtari)} · ${t('uygulama.ad')}`;
   try {
     aktifTemizle = ekran.ciz(kap, { p: parametreler, git, geri }) || null;
-    if (['sohbetler', 'kesfet', 'dil-anlari', 'bugun', 'gelisim'].includes(id)) kap.prepend(ustKontroller(veri.profil.ad, git));
+    // v0.4.0: HelloTalk düzeninde her ana sekme kendi ince üst çubuğunu (htUst) çizer; ortak şerit kaldırıldı.
   } catch (hata) {
     console.error('[yonlendirici]', id, hata);
     kap.replaceChildren(h('div', { class: 'b-durum', role: 'alert' }, t('genel.hata')));

@@ -4,19 +4,19 @@
   :root {
     color-scheme: light;
 
-    --renk-zemin: #F4F6F8;
+    --renk-zemin: #ECEFEE;
     --renk-yuzey: #FFFFFF;
-    --renk-yuzey-ikinci: #EEF0F3;
-    --renk-murekkep: #14213D;
-    --renk-soluk: #5B6472;
-    --renk-cizgi: #E3E6EB;
-    --renk-cizgi-guclu: #C9CED6;
+    --renk-yuzey-ikinci: #F0F4F3;
+    --renk-murekkep: #14201F;
+    --renk-soluk: #4F5F5D;
+    --renk-cizgi: #DCE4E2;
+    --renk-cizgi-guclu: #BFCBC9;
 
-    --renk-vurgu: #C2410C;
-    --renk-vurgu-uzerinde: #FFFFFF;
-    --renk-vurgu-metin: #B23C0B;
-    --renk-vurgu-acik: #FDEDE6;
-    --renk-vurgu-acik-metin: #8A3110;
+    --renk-vurgu: #DCB35C;
+    --renk-vurgu-uzerinde: #251B0C;
+    --renk-vurgu-metin: #7A5600;
+    --renk-vurgu-acik: #FBF1D6;
+    --renk-vurgu-acik-metin: #5F4300;
 
     --renk-iyi: #1F7A4D;
     --renk-iyi-metin: #1A6B43;
@@ -27,17 +27,45 @@
     --renk-kotu-metin: #B42318;
     --renk-kotu-acik: #FDECEA;
 
-    --renk-gece: #14213D;
-    --renk-gece-yuzey: #22335A;
-    --renk-gece-cizgi: #45557A;
+    --renk-gece: #14161D;
+    --renk-gece-yuzey: #22252E;
+    --renk-gece-cizgi: #3B3F4B;
     --renk-gece-metin: #FFFFFF;
-    --renk-gece-soluk: #C9D1E0;
-    --renk-gece-vurgu: #F8B597;
+    --renk-gece-soluk: #C9CDD6;
+    --renk-gece-vurgu: #F0C866;
 
-    --renk-golge: rgba(20, 33, 61, 0.10);
-    --renk-perde: rgba(14, 21, 38, 0.55);
+    --renk-golge: rgba(26, 29, 38, 0.10);
+    --renk-yuzey-ust: #FFFFFF;
+    --renk-kabartma-isik: rgba(255, 255, 255, 0.95);
+    --renk-vurgu-parlak: #F0D080;
+    --renk-grup-1: #2563A8;
+    --renk-grup-2: #0F766E;
+    --renk-grup-3: #6D3FC0;
+    --renk-grup-4: #7E5A00;
+    --renk-grup-5: #1F7A4D;
+    --renk-zemin-ust: #F6F8F7;
+    --renk-baslik: #0E6560;
+    --renk-ten-1: #F2CBA8;
+    --renk-ten-2: #DDAA80;
+    --renk-ten-3: #B97D55;
+    --renk-ten-4: #7E5236;
+    --renk-sac-1: #2B1D16;
+    --renk-sac-2: #7A4A26;
+    --renk-sac-3: #C99A4E;
+    --renk-sac-4: #121214;
+    --renk-ortu: #3F7F7A;
+    --renk-avc-goz: #1E1A18;
+    --renk-avc-agiz: #8A3C30;
+    --renk-kutu-1: #EFEAFB;
+    --renk-kutu-2: #FBF1DA;
+    --renk-kutu-3: #E3F4EA;
+    --renk-kutu-4: #E6EDF9;
+    --renk-kutu-5: #E0F2F1;
+    --renk-kutu-6: #FAF2DC;
+    --renk-perde: rgba(10, 11, 15, 0.55);
 
-    --yazi-aile: Figtree, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --yazi-serif: Georgia, "Times New Roman", serif;
+    --yazi-aile: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Figtree, system-ui, -apple-system, "Segoe UI", sans-serif;
     --yazi-baslik: 28px;
     --yazi-altbaslik: 17px;
     --yazi-govde: 15px;
@@ -56,7 +84,7 @@
     --kose-tam: 999px;
 
     --dokunma: 48px;
-    --gezinme-yukseklik: 76px;
+    --gezinme-yukseklik: 64px;
     --icerik-genislik: 560px;
 
     --sure-kisa: 160ms;

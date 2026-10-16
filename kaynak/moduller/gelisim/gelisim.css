@@ -64,3 +64,32 @@
   .gls-aciklama { gap: var(--bosluk-2); }
   .gls-aciklama summary { cursor: pointer; min-height: 48px; display: flex; align-items: center; }
 }
+
+/* v0.4.0 HelloTalk "Ben" düzeni */
+@layer moduller {
+  .gls-seri-hap { display: inline-flex; align-items: center; gap: 4px; min-height: 36px; padding: 0 10px 0 6px; border-radius: var(--kose-tam); background: var(--renk-yuzey); font-weight: 800; }
+  .gls-ben { display: flex; align-items: center; gap: 14px; width: 100%; padding: 6px 0; border: 0; background: transparent; color: var(--renk-murekkep); font: inherit; text-align: left; cursor: pointer; }
+  .gls-ben-av { width: 76px; height: 76px; font-size: 32px; }
+  .gls-ben-ic { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+  .gls-ben-ad { display: flex; align-items: center; gap: 8px; font-size: 22px; }
+  .gls-ben-sayilar { font-size: 13.5px; color: var(--renk-soluk); }
+  .gls-ben-sayilar b { color: var(--renk-murekkep); }
+  .gls-istat { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .gls-istat-kutu { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 76px; padding: 10px 14px; border: 1px solid var(--renk-cizgi); border-radius: 16px; background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; font-size: 13.5px; text-align: left; cursor: pointer; }
+  .gls-istat-deger { display: flex; align-items: center; gap: 6px; font-size: 26px; font-weight: 800; line-height: 1.1; }
+  .gls-satir { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 0 14px; border: 1px solid var(--renk-cizgi); border-radius: 16px; background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; font-size: 16px; cursor: pointer; }
+  .gls-satir b { flex: 1; text-align: left; }
+  .gls-satir-sayi { font-weight: 800; }
+  .gls-merkez { display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 16px; background: var(--renk-yuzey); border: 1px solid var(--renk-cizgi); }
+  .gls-merkez-baslik { font-size: 17px; font-weight: 800; }
+  .gls-istat-kutu:focus-visible, .gls-satir:focus-visible, .gls-ben:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+}
+
+@layer moduller {
+  .gls-ilgi { display: flex; flex-direction: column; gap: 8px; width: 100%; min-height: 56px; padding: 10px 14px; border: 1px solid var(--renk-cizgi); border-radius: 16px; background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; text-align: left; cursor: pointer; }
+  .gls-ilgi-ust { display: flex; align-items: center; gap: 8px; }
+  .gls-ilgi-ust b { flex: 1; font-size: 16px; }
+  .gls-ilgi-haplar { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gls-ilgi-hap { padding: 4px 10px; border-radius: var(--kose-tam); background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); font-size: 13px; font-weight: 700; }
+  .gls-ilgi:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+}

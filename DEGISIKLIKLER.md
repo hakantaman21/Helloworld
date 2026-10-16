@@ -1,3 +1,48 @@
+## 0.4.1 — 16.10.2026 · İlgi alanları ve ortak ilgiye göre eşleşme
+
+- Ayarlar › Dil profili: 26 ilgi alanından en çok 8'ini seç (HelloTalk "Hobiler").
+- Otomatik eşleşme ortak ilgiyi de sayar (ilgi başına +6, en çok +12) ve nedeni yazar: "Ortak ilgi: Yemek, Seyahat".
+- Dil Ortakları listesinde ortak ilgiler ♥ ile, kişi profilinde ortak hobiler yeşil görünür.
+- Ben ekranında "İlgi alanların" kartı; ilgi seçilmemişse Bağlantı'da davet şeridi.
+- Şema 8: profil.ilgiler (varsayılan boş; mevcut veriler korunur).
+- Düzeltme: aynı bildirim art arda dokunuşlarda üst üste yığılmıyor (ör. ayarlarda "Kaydedildi").
+
+## 0.4.0 — 16.10.2026 · HelloTalk düzeni: sıkı, dolu, kullanıcı dostu
+
+- Yoğunluk: daha küçük aralıklar, ince üst çubuk (geri · başlık · simgeler), düz liste satırları, tam genişlik alt menü; ekranlar daha az kaydırılıyor.
+- Sohbetler ("Dil Sohbetleri"): üstte hızlı erişim simgeleri, arama, Tümü / Çevrimiçi / İnsanlar / Yapay zekâ hapları, avatar + bayrak + son mesaj + zaman satırları, sana uygun ortak önerisi.
+- Bağlantı ("Dil Ortakları Bul"): Tümü / Sana uygun / Çevrimiçi / Yeni / Seviyeme yakın sekmeleri, dil hapları, yaş-cinsiyet-hızlı yanıt süzgeci, dil çifti (EN ⇄ TR + seviye noktaları), yaş rozeti, "x dk önce aktifti", rozetler, el sallama (selam), otomatik eşleşme kartı (uyum yüzdesi ve nedenleri).
+- Kişi profili: noktalı dünya kapağı, yerel saat, büyük avatar + bayrak + çevrimiçi noktası, yaş, @kullanıcı adı, dil çifti, uyum, katılma günü, hobiler, meslek, gezilecek yerler, Profil / Dil Anları sekmeleri; altta Takip · Sohbet · Selam çubuğu; şikâyet/engelle "…" menüsünde.
+- Dil Anları: arama + bildirim + yaz; Güncel / Senin için / Başkalarına yardım et / Takip sekmeleri; takip et, beğen, yorum, düzelt, paylaş; satır içi yorum önizlemesi.
+- Pratik: tek afiş (yapay zekâ / gerçek kişi), uygulama simgeleri, günün döngüsü; yinelenen bölümler ve üstte kalan Konuş düğmesi kaldırıldı.
+- Ben (Profil): avatar, dil çifti, takip sayıları, günlük seri ve tekrar kutuları, Dil Anları satırı, Öğrenme merkezi simgeleri.
+- Sanal kullanıcı sayısı 10'a çıktı (ABD, Avustralya, Hindistan, Kore eklendi). Yaş, etkinlik ve rozetler TEST verisidir ve öyle yazılır.
+
+## 0.3.0 — 16.10.2026 · Gerçek English Prime görünümü + HelloTalk içeriği
+
+- English Prime'ın kendi 3B ikonları (30 ikon, webp) uygulamaya gömüldü: alt menü, sayfa başlıkları, Pratik kutuları, Profil menüsü, Ayarlar grupları.
+- Zemin ve renkler English Prime'dan: koyu mat zemin (köşeden ışık alan degrade), petrol-yeşili mücevher kartlar, altın düğmeler, serif çerçeveli başlıklar; açık tema da aynı dille.
+- Pratik: seçenekler renkli 2 sütunlu kutular (Senaryolar, Telaffuz, Hata Hafızası, Gelişimim).
+- Profil: HelloTalk "Ben" menüsü (Ayarlar, Hata Hafızam, Senaryolar, Dil Anları, Dil partneri bul).
+- Ayarlar: üstte 6 renkli grup kutusu; dokununca ilgili bölüme kayar.
+- Sanal kullanıcılar (TEST): çizim profil resimleri ve ülke bayrakları; Dil Anları gönderilerinde görseller.
+
+## 0.2.9 — 16.10.2026 · English Prime görünümü ve HelloTalk öğeleri
+
+- Görünüm English Prime'a geçti: koyu mat yüzey, kabartmalı kartlar ve düğmeler, altın vurgu, yüzen alt menü, bölüm renkli üst etiketler. Açık tema da aynı dille. Yalnız tasarım jetonları değişti (Y3), kontrast denetimi geçti (Y14).
+- Dil Anları (HelloTalk "Moments"): test modunda sanal kullanıcı gönderileri; beğen, yorum, gönderiyi düzelt (yeşil/kırmızı fark), şikâyet, kendi anını paylaş (otomatik test yorumu gelir).
+- Bağlantı (HelloTalk "Dil ortakları"): süzgeçler (Tümü / Ana dili İngilizce / Seviyeme yakın / Türkçe öğrenenler) ve kişi satırları; yeni Kişi profili ekranı (dil kimliği, seviye çubuğu, ilgiler, paylaşımları, mesaj, şikâyet, engelle).
+- Test modu kapalıyken Bağlantı ve Dil Anları'nda "Sanal kullanıcılarla dene" daveti.
+- Sanal kullanıcılar her yerde TEST rozetli; beğeni/yorum sayıları uydurulmaz, gelişime yazılmaz.
+
+## 0.2.8 — 16.10.2026 · Test modu
+
+- Ayarlar › Test modu (sürüm satırına 5 dokunuşla görünür; varsayılan kapalı).
+- Açıkken Bağlantı'da 6 TEST rozetli profil; "Mesaj yaz" ile yeni Mesaj ekranı.
+- Mesaj ekranı: gönderim öncesi düzeltme önerisi, partner düzeltmesi (yeşil fark), konu önerisi, şikâyet (4 neden) ve engelleme.
+- Yanıtlar otomatik kalıptır ve "Otomatik test yanıtı" diye etiketlenir; yapay zekâ değildir, gerçek kişi gibi sunulmaz.
+- Test sohbetleri Sohbetler › İnsanlar altında TEST rozetiyle; gelişim, seviye ve Hata Hafızası'na yazılmaz. Şema 6 → 7 (test alanı).
+
 ## 0.2.7 — 16.10.2026 · Anayasal bölüm ayrımı
 
 - Sohbet geçmiş iletişim odağına taşındı; hızlı pratik kartı kaldırıldı.

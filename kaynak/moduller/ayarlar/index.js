@@ -1,8 +1,9 @@
 // Profil ve ayarlar: kontrol kullanıcıda (Anayasa bölüm 3). Gizlilik görünür; veriler indirilebilir ve silinebilir.
 import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ustBaslik, onayIste, yerlestir } from '../../cekirdek/arayuz.js';
-import { t, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
+import { h, ustBaslik, onayIste, yerlestir, ikon3d } from '../../cekirdek/arayuz.js';
+import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
+import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
 import { al, degistir, sifirla, disaAktarMetni } from '../../cekirdek/depo.js';
 import { siradaki } from '../../cekirdek/gunluk.js';
 import { simdiAra } from '../../cekirdek/zamanlayici.js';
@@ -10,6 +11,10 @@ import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { SURUM } from '../../cekirdek/surum.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { destek } from '../../cekirdek/ses/ses-hatti.js';
+import { testModuAcik, testModuAyarla, testVerileriniSil } from '../../cekirdek/test-modu.js';
+
+// Test modu bölümü varsayılan gizlidir: sürüm satırına 5 kez dokununca ya da test modu açıkken görünür.
+let surumDokunma = 0;
 
 function secimGrubu({ etiket, aciklama, secenekler, aktif, degisti }) {
   const kimlik = 'ayr-' + Math.random().toString(36).slice(2, 7);
@@ -62,10 +67,38 @@ function ciz(kok, b) {
   tanitimGirdisi.value = p.tanitimMetni || '';
   tanitimGirdisi.addEventListener('change', () => ayarKaydet((pr) => { pr.tanitimMetni = tanitimGirdisi.value.trim().slice(0, 300); }));
 
-  yerlestir(kok, 
-    ustBaslik({ tabela: t('ayarlar.tabela'), baslik: t('ayarlar.baslik'), geri: () => b.geri('/gelisim') }),
+  // İlgi alanları (HelloTalk "Hobiler"): en çok ILGI_SINIRI tane; eşleşmede ortak ilgi puanı verir.
+  const ilgiSayac = h('span', { class: 'b-kucuk ayr-ilgi-sayac', 'aria-live': 'polite' });
+  const ilgiSecici = h('div', { class: 'ayr-ilgiler', role: 'group', 'aria-labelledby': 'ayr-ilgi-baslik' });
+  function ilgiCiz() {
+    const secili = al().profil.ilgiler || [];
+    ilgiSayac.textContent = t('ilgi.sayac', { n: secili.length, en: ILGI_SINIRI });
+    yerlestir(ilgiSecici, ILGI_ALANLARI.map((i) => {
+      const var_ = secili.includes(i.kimlik);
+      return h('button', { type: 'button', class: 'ayr-ilgi', 'aria-pressed': String(var_), onClick: () => {
+        const simdiki = al().profil.ilgiler || [];
+        if (!var_ && simdiki.length >= ILGI_SINIRI) { duyur(t('ilgi.sinir', { en: ILGI_SINIRI })); return; }
+        // Sessiz kayıt: her dokunuşta bildirim yığılmasın; sayaç (aria-live) durumu söyler.
+        degistir((v) => { v.profil.ilgiler = var_ ? simdiki.filter((k) => k !== i.kimlik) : [...simdiki, i.kimlik]; });
+        ilgiCiz();
+      } }, `${i.simge} ${yerel(i)}`);
+    }));
+  }
+  ilgiCiz();
 
-    h('section', { class: 'b-kart ayr-bolum' },
+  yerlestir(kok, 
+    ustBaslik({ baslik: t('ayarlar.baslik'), ikon: 'ayarlar', geri: () => b.geri('/gelisim') }),
+
+    h('nav', { class: 'ayr-kutular', 'aria-label': t('ayarlar.kutu.baslik') },
+      [['genel', 'dil', 4], ['profil', 'profil', 1], ['dil', 'kitap', 3], ['saat', 'bildirim', 2], ['gorunum', 'gorunum', 5], ['gizlilik', 'kilit', 6]].map(([k, ik, renk]) =>
+        h('button', { type: 'button', class: `b-kutu b-kutu-${renk} ayr-kutu`, onClick: () => { const hedef = kok.querySelector(`#ayr-b-${k}`); if (hedef) hedef.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
+          ikon3d(ik, 34),
+          h('span', { class: 'b-kutu-baslik ayr-kutu-baslik' }, t(`ayarlar.kutu.${k}`)),
+        )),
+    ),
+
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-genel' },
+      h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.kutu.genel')),
       secimGrubu({
         etiket: t('ayarlar.arayuzDili'),
         secenekler: ARAYUZ_DILLERI.map((d) => [d, d.toUpperCase()]),
@@ -80,7 +113,8 @@ function ciz(kok, b) {
       }),
     ),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-profil' },
+      h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.kutu.profil')),
       h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-ad' }, t('ayarlar.ad')), adGirdisi),
       secimGrubu({
         etiket: t('ayarlar.seviye'),
@@ -90,16 +124,20 @@ function ciz(kok, b) {
       }),
     ),
 
-    h('section', { class: 'b-kart ayr-bolum', 'aria-label': t('ayarlar.dilProfili') },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-dil', 'aria-label': t('ayarlar.dilProfili') },
       h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.dilProfili')),
       dilSecimi('ayr-ana-dil', t('ayarlar.anaDil'), 'anaDil'),
       dilSecimi('ayr-ogrenilen-dil', t('ayarlar.ogrenilenDil'), 'ogrenilenDil'),
       h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-hedef' }, t('ayarlar.dilHedefi')), hedefGirdisi),
       h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-tanitim' }, t('ayarlar.tanitim')), tanitimGirdisi),
+      h('div', { class: 'ayr-satir', id: 'ayr-ilgi' },
+        h('div', { class: 'ayr-ilgi-ust' }, h('span', { class: 'b-etiket', id: 'ayr-ilgi-baslik' }, t('ilgi.baslik')), ilgiSayac),
+        h('p', { class: 'b-kucuk' }, t('ilgi.aciklama')),
+        ilgiSecici),
       h('p', { class: 'b-kucuk' }, t('ayarlar.profilGizlilik')),
     ),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-saat' },
       h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.saatler')),
       h('div', { class: 'b-izgara-2' },
         h('div', { class: 'ayr-satir' }, h('label', { class: 'b-etiket', for: 'ayr-sabah' }, t('ayarlar.sabah')), saatGirdisi('ayr-sabah', 'sabahSaati')),
@@ -107,7 +145,7 @@ function ciz(kok, b) {
       ),
     ),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-gorunum' },
       secimGrubu({
         etiket: t('ayarlar.duzeltme'),
         aciklama: t('ayarlar.duzeltmeAciklama'),
@@ -145,7 +183,7 @@ function ciz(kok, b) {
       ) : null,
     ),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-deneme' },
       h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.deneme')),
       h('button', {
         class: 'b-dugme',
@@ -156,7 +194,7 @@ function ciz(kok, b) {
       }, t('ayarlar.demoArama')),
     ),
 
-    h('section', { class: 'b-kart ayr-bolum' },
+    h('section', { class: 'b-kart ayr-bolum', id: 'ayr-b-gizlilik' },
       h('h2', { class: 'b-bolum-baslik' }, t('ayarlar.gizlilik')),
       h('p', { class: 'b-kucuk' }, t('ayarlar.gizlilikMetni')),
       h('div', { class: 'b-yigin' },
@@ -183,14 +221,30 @@ function ciz(kok, b) {
       ),
     ),
 
-    h('p', { class: 'b-kucuk ayr-surum' }, t('ayarlar.surum', { s: SURUM, saglayici: a.saglayici })),
+    testModuAcik() || surumDokunma >= 5 ? h('section', { class: 'b-kart ayr-bolum ayr-test', 'aria-labelledby': 'ayr-test-baslik' },
+      h('h2', { class: 'b-bolum-baslik', id: 'ayr-test-baslik' }, t('test.ayarBaslik')),
+      h('p', { class: 'b-kucuk' }, t('test.ayarAciklama')),
+      h('label', { class: 'ayr-anahtar' },
+        h('input', { type: 'checkbox', checked: testModuAcik(), onChange: (e) => { testModuAyarla(e.currentTarget.checked); duyur(t(e.currentTarget.checked ? 'test.acildi' : 'test.kapandi'), 2500); } }),
+        h('span', null, t('test.ayarAnahtar')),
+      ),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: async () => {
+        const evet = await onayIste({ metin: t('test.silOnay'), evet: t('test.silEvet'), hayir: t('genel.vazgec') });
+        if (!evet) return;
+        testVerileriniSil();
+        duyur(t('test.silindi'));
+      } }, t('test.sil')),
+    ) : null,
+    h('button', { type: 'button', class: 'ayr-surum-dugme', onClick: () => { surumDokunma += 1; if (surumDokunma === 5) { duyur(t('test.gorunur'), 2500); b.git('/ayarlar', { degistir: true }); } } },
+      h('span', { class: 'b-kucuk ayr-surum' }, t('ayarlar.surum', { s: SURUM, saglayici: a.saglayici }))),
   );
+  if (b.p.bolum === 'ilgi') requestAnimationFrame(() => { const hedef = kok.querySelector('#ayr-ilgi'); if (hedef) hedef.scrollIntoView({ block: 'start' }); });
   return null;
 }
 
 export default {
   kimlik: 'ayarlar',
-  surum: '0.2.7',
+  surum: '0.2.8',
   onek: 'ayr',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'zamanlayici'],
