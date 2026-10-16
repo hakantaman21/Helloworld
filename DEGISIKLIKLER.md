@@ -1,3 +1,15 @@
+## 0.9.0 — 16.10.2026 · Kalıcı alt menü, ışıklı gösterge, orta Pratik düğmesi, sayfa renkleri, kişisel renkler
+
+- Alt menü artık tek ve kalıcı: sayfa geçişlerinde ve kaydırırken yerinde durur, kaybolup gelmez.
+- Seçili öğenin üstünde saydam, ışıklı bir kare gezinir; parmakla sekme kaydırırken parmağı izler.
+- Pratik ortada büyük yuvarlak düğme (Yoldaş Akıllı Asistan düzeni): normalde koyu çerçeveli, seçilince çerçevesi seçim rengini alır ve parlar; üstünde küçük ok. Basılı tutunca "Hızlı işlemler": Koç araması (yapay zekâ), Senaryo, Telaffuz, Hata Hafızası, Dil ortağı bul; dokunma kısayolu buradan ya da Ayarlar'dan atanır.
+- Sekme sırası: Sohbet · Bağlantı · Pratik · Dil Anları · Profil (kaydırarak geçiş de bu sırayla).
+- Üstten açılan pencereler (süzgeç, yan menü, onay pencereleri) açıkken arka sayfa ve alt menü kaymaz.
+- Sayfa renkleri Google renk anlamlarıyla: Sohbet mavi, Bağlantı yeşil, Pratik kırmızı, Dil Anları sarı, Profil ve Ayarlar mor. Zemin hariç başlıklar, kartlar ve sekme platformları bu rengi açık-koyu geçişlerle taşır.
+- Ayarlar › Görünüm: seçim rengi (Altın, Mavi, Yeşil, Mercan, Mor, Turkuaz), zemin rengi (Varsayılan, Nötr, Mavi, Mor, Yeşil), orta düğme kısayolu.
+- Düzeltme: Ayarlar'da bir gruba girip geri dönünce (telefonun geri tuşu dahil) bir adım geri gelinir; artık iki adım atlanmaz.
+- Şema 11: ayarlar.secimRengi, ayarlar.zemin, ayarlar.ortaDugme.
+
 ## 0.8.0 — 16.10.2026 · Kayan afişler, Pratik üç sekme, kaydırarak sekme geçişi
 
 - Pratik'in en üstünde kayan tanıtım afişleri: 4,5 saniyede bir kendiliğinden ilerler, parmakla kaydırılır, dokununca ilgili yere götürür ("hareketi azalt" açıksa kendiliğinden ilerlemez).

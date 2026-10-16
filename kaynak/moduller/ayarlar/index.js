@@ -38,6 +38,19 @@ function bolumlu(etiketId, secenekler, aktif, degisti) {
     }, metin)));
 }
 
+// Renk seçici: yuvarlak renk örnekleri (seçim rengi / zemin rengi). Renkler jetonlardan önizlenir.
+function renkSecici(etiketId, tur, secenekler, aktif, degisti) {
+  return h('div', { class: 'ayr-renkler', role: 'radiogroup', 'aria-labelledby': etiketId },
+    secenekler.map((k) => h('button', {
+      type: 'button', class: `ayr-renk ayr-renk-${tur}`, role: 'radio', 'aria-checked': String(k === aktif), 'data-renk': k, 'aria-label': t(`ayarlar.renkAd.${k}`), title: t(`ayarlar.renkAd.${k}`),
+      onClick: (e) => {
+        for (const d of e.currentTarget.parentElement.children) d.setAttribute('aria-checked', 'false');
+        e.currentTarget.setAttribute('aria-checked', 'true');
+        degisti(k);
+      },
+    }, h('span', { class: 'ayr-renk-ornek', 'aria-hidden': 'true' }))));
+}
+
 let satirSayac = 0;
 // Satır: solda etiket (+ isteğe bağlı açıklama), sağda denetim. altta: true ise denetim tam genişlikte alta iner.
 function satir(etiket, denetim, { aciklama, altta = false, kimlik } = {}) {
@@ -112,7 +125,7 @@ function ciz(kok, b) {
   const seviyeler = SEVIYE_SIRASI.slice(0, 4);
 
   yerlestir(kok,
-    ustBaslik({ baslik: t('ayarlar.baslik'), ikon: 'ayarlar', geri: () => (aktifGrup ? goster(null) : b.geri('/gelisim')) }),
+    ustBaslik({ baslik: t('ayarlar.baslik'), ikon: 'ayarlar', geri: () => (aktifGrup ? b.geri('/ayarlar') : b.geri('/gelisim')) }),
 
     h('section', { class: 'ayr-profil' },
       h('button', { type: 'button', class: 'ayr-foto-dugme', 'aria-label': t('foto.degistir'), onClick: async () => { const s = await fotografEkle({ profilYap: true }); if (s === 'eklendi') { duyur(t('foto.eklendi')); ciz(kok, b); } else if (s === 'hata') duyur(t('foto.hata')); } },
@@ -167,6 +180,9 @@ function ciz(kok, b) {
       satir(t('ayarlar.tema'), (id) => bolumlu(id, ['sistem', 'acik', 'koyu'].map((k) => [k, t(`ayarlar.temaSecenek.${k}`)]), a.tema, (k) => ayarKaydet((pr) => { pr.ayarlar.tema = k; })), { altta: true }),
       satir(t('ayarlar.gorunum'), (id) => bolumlu(id, ['dengeli', 'kompakt'].map((k) => [k, t(`ayarlar.gorunumSecenek.${k}`)]), a.gorunum || 'dengeli', (k) => ayarKaydet((pr) => { pr.ayarlar.gorunum = k; }))),
       satir(t('ayarlar.yaziBoyutu'), (id) => bolumlu(id, ['normal', 'buyuk'].map((k) => [k, t(`ayarlar.yaziSecenek.${k}`)]), a.yaziBoyutu || 'normal', (k) => ayarKaydet((pr) => { pr.ayarlar.yaziBoyutu = k; }))),
+      satir(t('ayarlar.secimRengi'), (id) => renkSecici(id, 'secim', ['altin', 'mavi', 'yesil', 'mercan', 'mor', 'turkuaz'], a.secimRengi || 'altin', (k) => ayarKaydet((pr) => { pr.ayarlar.secimRengi = k; }, true)), { aciklama: t('ayarlar.secimRengiAciklama'), altta: true }),
+      satir(t('ayarlar.zeminRengi'), (id) => renkSecici(id, 'zemin', ['varsayilan', 'notr', 'mavi', 'mor', 'yesil'], a.zemin || 'varsayilan', (k) => ayarKaydet((pr) => { pr.ayarlar.zemin = k; }, true)), { aciklama: t('ayarlar.zeminRengiAciklama'), altta: true }),
+      satir(t('ayarlar.ortaDugme'), (id) => bolumlu(id, ['pratik', 'arama', 'senaryo', 'telaffuz'].map((k) => [k, t(`ayarlar.ortaSecenek.${k}`)]), a.ortaDugme || 'pratik', (k) => ayarKaydet((pr) => { pr.ayarlar.ortaDugme = k; })), { aciklama: t('ayarlar.ortaDugmeAciklama'), altta: true }),
     ),
 
     grup('gizlilik', 'kilit', t('ayarlar.grup.gizlilik'),
@@ -222,7 +238,7 @@ function ciz(kok, b) {
       return h('div', { class: 'ayr-menu-kart' }, varolan.map((k) => {
         const g = gruplar.find((x) => x.id === `ayr-g-${k}`);
         const simge = g.querySelector('.ayr-grup-baslik .b-ikon3d');
-        return h('button', { type: 'button', class: 'ayr-menu-satir', onClick: () => goster(k) },
+        return h('button', { type: 'button', class: 'ayr-menu-satir', onClick: () => b.git(`/ayarlar?grup=${k}`) },
           h('span', { class: `ayr-menu-simge b-kutu-${RENK[k]}` }, simge ? Object.assign(simge.cloneNode(true), { className: 'b-ikon3d ayr-menu-ikon' }) : null),
           h('span', { class: 'ayr-menu-metin' }, h('b', null, g.querySelector('.ayr-grup-baslik').textContent), h('small', null, ozet[k] || '')),
           ikon('sag', 18));

@@ -69,6 +69,12 @@ export default {
     gercekNot: 'Sanal kullanıcılar TEST rozetlidir; gerçek kişi değildir. Gerçek topluluk hesaplar ve güvenlik önlemleriyle açılacak.',
     onerilen: 'Senin için önerilenler', araclar: 'Araçlar', tekrarSayisi: '{n} tekrar bekliyor', cumleSayisi: '{n} cümle', karneAlt: 'Haftalık gelişimin',
   },
+  orta: {
+    baslik: 'Hızlı işlemler', varsayilan: 'Orta düğmeye dokununca', aciklama: 'Basılı tutunca bu menü açılır. Dokunma kısayolunu buradan seçebilirsin.',
+    ipucu: 'Pratik · basılı tut: hızlı işlemler', kaydedildi: 'Orta düğme kısayolu kaydedildi.',
+    eylem: { pratik: 'Pratik sayfası', arama: 'Koç araması (yapay zekâ)', senaryo: 'Senaryo seç', telaffuz: 'Telaffuz pratiği', hafiza: 'Hata Hafızası', partner: 'Dil ortağı bul' },
+    kisa: { arama: 'Koç araması', senaryo: 'Senaryo', telaffuz: 'Telaffuz' },
+  },
   ht: {
     gizle: 'Gizle',
     sohbetBaslik: 'Dil Sohbetleri', hizliErisim: 'Hızlı erişim', ara: 'Arama', cevrimici: 'Çevrimiçi', sen: 'Sen', yzPratik: 'yapay zekâ pratiği',
@@ -514,6 +520,10 @@ export default {
   },
 
   ayarlar: {
+    secimRengi: 'Seçim rengi', secimRengiAciklama: 'Seçili sekme, düğme ve vurgu rengi', zeminRengi: 'Zemin rengi', zeminRengiAciklama: 'Sayfaların arka plan tonu',
+    ortaDugme: 'Orta düğme kısayolu', ortaDugmeAciklama: 'Ortadaki Pratik düğmesine dokununca ne olsun? Basılı tutunca hepsi açılır.',
+    ortaSecenek: { pratik: 'Pratik', arama: 'Koç araması', senaryo: 'Senaryo', telaffuz: 'Telaffuz' },
+    renkAd: { altin: 'Altın', mavi: 'Mavi', yesil: 'Yeşil', mercan: 'Mercan', mor: 'Mor', turkuaz: 'Turkuaz', varsayilan: 'Varsayılan', notr: 'Nötr' },
     gizlilikOzet: 'Verilerin bu cihazda', acik: 'Açık', kapali: 'Kapalı',
     grup: { profil: 'Profilim', dil: 'Dil', bildirim: 'Bildirimler ve koç aramaları', koc: 'Koç ve pratik', gorunum: 'Görünüm', gizlilik: 'Gizlilik ve veriler' },
     sabahAciklama: 'Güne kısa bir konuşmayla başla', aksamAciklama: 'Günün hatalarını tekrar et',

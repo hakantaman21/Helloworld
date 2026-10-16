@@ -38,6 +38,22 @@
     --renk-yuzey-ust: #FFFFFF;
     --renk-kabartma-isik: rgba(255, 255, 255, 0.95);
     --renk-vurgu-parlak: #F0D080;
+    --renk-sayfa-mavi: #1967D2;
+    --renk-sayfa-yesil: #188038;
+    --renk-sayfa-kirmizi: #C5221F;
+    --renk-sayfa-sari: #A35200;
+    --renk-sayfa-mor: #8430CE;
+    --renk-onizleme-secim-altin: #DCB35C;
+    --renk-onizleme-secim-mavi: #8AB4F8;
+    --renk-onizleme-secim-yesil: #81C995;
+    --renk-onizleme-secim-mercan: #F28B82;
+    --renk-onizleme-secim-mor: #C58AF9;
+    --renk-onizleme-secim-turkuaz: #78D9EC;
+    --renk-onizleme-zemin-varsayilan: #ECEFEE;
+    --renk-onizleme-zemin-notr: #F1F1EF;
+    --renk-onizleme-zemin-mavi: #E8EEF6;
+    --renk-onizleme-zemin-mor: #EEEAF6;
+    --renk-onizleme-zemin-yesil: #E6F2EC;
     --renk-grup-1: #2563A8;
     --renk-grup-2: #0F766E;
     --renk-grup-3: #6D3FC0;
@@ -97,4 +113,14 @@
     --z-pencere: 30;
     --z-bildirim: 40;
   }
+  /* v0.9.0 seçim rengi ve zemin seçenekleri (Ayarlar › Görünüm) */
+  :root[data-secim="mavi"] { --renk-vurgu: #8AB4F8; --renk-vurgu-parlak: #AECBFA; --renk-vurgu-uzerinde: #0B1F3A; --renk-vurgu-metin: #1A56B8; --renk-vurgu-acik: #E3EDFD; --renk-vurgu-acik-metin: #174EA6; }
+  :root[data-secim="yesil"] { --renk-vurgu: #81C995; --renk-vurgu-parlak: #A8DAB5; --renk-vurgu-uzerinde: #0B2A16; --renk-vurgu-metin: #137333; --renk-vurgu-acik: #E6F4EA; --renk-vurgu-acik-metin: #0D652D; }
+  :root[data-secim="mercan"] { --renk-vurgu: #F28B82; --renk-vurgu-parlak: #F6AEA9; --renk-vurgu-uzerinde: #3A0F0B; --renk-vurgu-metin: #B3261E; --renk-vurgu-acik: #FCE8E6; --renk-vurgu-acik-metin: #A50E0E; }
+  :root[data-secim="mor"] { --renk-vurgu: #C58AF9; --renk-vurgu-parlak: #D7AEFB; --renk-vurgu-uzerinde: #24103A; --renk-vurgu-metin: #7B2CBF; --renk-vurgu-acik: #F3E8FD; --renk-vurgu-acik-metin: #681DA8; }
+  :root[data-secim="turkuaz"] { --renk-vurgu: #78D9EC; --renk-vurgu-parlak: #A1E4F2; --renk-vurgu-uzerinde: #06303A; --renk-vurgu-metin: #006874; --renk-vurgu-acik: #E4F7FB; --renk-vurgu-acik-metin: #00616B; }
+  :root[data-zemin="notr"] { --renk-zemin: #F1F1EF; --renk-zemin-ust: #F8F8F6; }
+  :root[data-zemin="mavi"] { --renk-zemin: #E8EEF6; --renk-zemin-ust: #F3F7FC; }
+  :root[data-zemin="mor"] { --renk-zemin: #EEEAF6; --renk-zemin-ust: #F6F3FB; }
+  :root[data-zemin="yesil"] { --renk-zemin: #E6F2EC; --renk-zemin-ust: #F1F8F4; }
 }

@@ -68,6 +68,12 @@ export default {
     gercekNot: 'Virtual users carry a TEST badge; they are not real people. The real community will open with accounts and safety measures.',
     onerilen: 'Recommended for you', araclar: 'Tools', tekrarSayisi: '{n} due for review', cumleSayisi: '{n} sentences', karneAlt: 'Your weekly progress',
   },
+  orta: {
+    baslik: 'Quick actions', varsayilan: 'When I tap the centre button', aciklama: 'Long-press opens this menu. Choose the tap shortcut here.',
+    ipucu: 'Practice · long-press: quick actions', kaydedildi: 'Centre button shortcut saved.',
+    eylem: { pratik: 'Practice page', arama: 'Coach call (AI)', senaryo: 'Pick a scenario', telaffuz: 'Pronunciation practice', hafiza: 'Mistake memory', partner: 'Find a partner' },
+    kisa: { arama: 'Coach call', senaryo: 'Scenario', telaffuz: 'Pronunciation' },
+  },
   ht: {
     gizle: 'Hide',
     sohbetBaslik: 'Language Chats', hizliErisim: 'Quick access', ara: 'Search', cevrimici: 'Online', sen: 'You', yzPratik: 'AI practice',
@@ -513,6 +519,10 @@ export default {
   },
 
   ayarlar: {
+    secimRengi: 'Selection colour', secimRengiAciklama: 'Colour of selected tabs, buttons and highlights', zeminRengi: 'Background colour', zeminRengiAciklama: 'Background tone of pages',
+    ortaDugme: 'Centre button shortcut', ortaDugmeAciklama: 'What should tapping the centre Practice button do? Long-press shows all.',
+    ortaSecenek: { pratik: 'Practice', arama: 'Coach call', senaryo: 'Scenario', telaffuz: 'Pronunciation' },
+    renkAd: { altin: 'Gold', mavi: 'Blue', yesil: 'Green', mercan: 'Coral', mor: 'Purple', turkuaz: 'Turquoise', varsayilan: 'Default', notr: 'Neutral' },
     gizlilikOzet: 'Your data stays on this device', acik: 'On', kapali: 'Off',
     grup: { profil: 'My profile', dil: 'Language', bildirim: 'Notifications and coach calls', koc: 'Coach and practice', gorunum: 'Appearance', gizlilik: 'Privacy and data' },
     sabahAciklama: 'Start the day with a short talk', aksamAciklama: 'Review the day’s mistakes',

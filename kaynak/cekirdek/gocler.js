@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 10;
+export const GUNCEL_SEMA = 11;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -109,5 +109,13 @@ export const gocler = {
     ...eski,
     profil: { ...eski.profil, foto: eski.profil.foto || null, fotograflar: Array.isArray(eski.profil.fotograflar) ? eski.profil.fotograflar : [] },
     kayitliCumleler: Array.isArray(eski.kayitliCumleler) ? eski.kayitliCumleler : [],
+  }),
+  // 10 → 11: seçim rengi, zemin rengi ve orta düğme ataması (Ayarlar › Görünüm). Varsayılanlar mevcut görünümü korur.
+  11: (eski) => ({
+    ...eski,
+    profil: {
+      ...eski.profil,
+      ayarlar: { ...eski.profil.ayarlar, secimRengi: eski.profil.ayarlar.secimRengi || 'altin', zemin: eski.profil.ayarlar.zemin || 'varsayilan', ortaDugme: eski.profil.ayarlar.ortaDugme || 'pratik' },
+    },
   }),
 };

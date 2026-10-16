@@ -90,3 +90,23 @@
   .ayr-menu-satir:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; border-radius: 10px; }
   .ayr-grup-baslik { display: none; }
 }
+
+/* v0.9.0 renk seçiciler */
+@layer moduller {
+  .ayr-renkler { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ayr-renk { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
+  .ayr-renk-ornek { width: 36px; height: 36px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--renk-cizgi-guclu), 0 2px 6px var(--renk-golge); }
+  .ayr-renk[aria-checked="true"] .ayr-renk-ornek { box-shadow: 0 0 0 3px var(--renk-zemin), 0 0 0 5px var(--renk-murekkep); }
+  .ayr-renk:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 1px; }
+  .ayr-renk-secim[data-renk="altin"] .ayr-renk-ornek { background: var(--renk-onizleme-secim-altin); }
+  .ayr-renk-secim[data-renk="mavi"] .ayr-renk-ornek { background: var(--renk-onizleme-secim-mavi); }
+  .ayr-renk-secim[data-renk="yesil"] .ayr-renk-ornek { background: var(--renk-onizleme-secim-yesil); }
+  .ayr-renk-secim[data-renk="mercan"] .ayr-renk-ornek { background: var(--renk-onizleme-secim-mercan); }
+  .ayr-renk-secim[data-renk="mor"] .ayr-renk-ornek { background: var(--renk-onizleme-secim-mor); }
+  .ayr-renk-secim[data-renk="turkuaz"] .ayr-renk-ornek { background: var(--renk-onizleme-secim-turkuaz); }
+  .ayr-renk-zemin[data-renk="varsayilan"] .ayr-renk-ornek { background: var(--renk-onizleme-zemin-varsayilan); }
+  .ayr-renk-zemin[data-renk="notr"] .ayr-renk-ornek { background: var(--renk-onizleme-zemin-notr); }
+  .ayr-renk-zemin[data-renk="mavi"] .ayr-renk-ornek { background: var(--renk-onizleme-zemin-mavi); }
+  .ayr-renk-zemin[data-renk="mor"] .ayr-renk-ornek { background: var(--renk-onizleme-zemin-mor); }
+  .ayr-renk-zemin[data-renk="yesil"] .ayr-renk-ornek { background: var(--renk-onizleme-zemin-yesil); }
+}

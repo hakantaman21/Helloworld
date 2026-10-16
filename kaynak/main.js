@@ -15,7 +15,10 @@ import { zamanlayiciBaslat } from './cekirdek/zamanlayici.js';
 import { duyur } from './cekirdek/duyuru.js';
 import { t, dilAyarla, tarayiciDili } from './cekirdek/metin.js';
 import { pwaBaslat } from './cekirdek/pwa.js';
-import { sekmeKaydirmaBaslat } from './cekirdek/arayuz.js';
+import { sekmeKaydirmaBaslat, ortaDugmeAyarla } from './cekirdek/arayuz.js';
+import { simdiAra } from './cekirdek/zamanlayici.js';
+import { siradaki } from './cekirdek/gunluk.js';
+import { oneriSenaryo } from './cekirdek/oneri.js';
 
 import karsilama from './moduller/karsilama/index.js';
 import sohbetler from './moduller/sohbetler/index.js';
@@ -54,6 +57,18 @@ function uygulamayiBaslat() {
   baslat(document.getElementById('uygulama'));
   zamanlayiciBaslat();
   sekmeKaydirmaBaslat(git);
+  // Orta Pratik düğmesi: basılı tutunca hızlı işlemler; "atanabilir" olanlar dokunma kısayolu olarak seçilebilir.
+  ortaDugmeAyarla({
+    eylemler: () => [
+      { kimlik: 'pratik', ikon: 'pratik', ad: t('orta.eylem.pratik'), kisa: t('gezinme.pratik'), atanabilir: true, calistir: () => git('/bugun') },
+      { kimlik: 'arama', ikon: 'bildirim', ad: t('orta.eylem.arama'), kisa: t('orta.kisa.arama'), atanabilir: true, calistir: () => simdiAra(siradaki() === 'aksam' ? 'aksam' : 'sabah') },
+      { kimlik: 'senaryo', ikon: 'senaryo', ad: t('orta.eylem.senaryo'), kisa: t('orta.kisa.senaryo'), atanabilir: true, calistir: () => git('/senaryolar') },
+      { kimlik: 'telaffuz', ikon: 'telaffuz', ad: t('orta.eylem.telaffuz'), kisa: t('orta.kisa.telaffuz'), atanabilir: true, calistir: () => git(`/gorusme?tur=senaryo&id=${oneriSenaryo().senaryo.kimlik}`) },
+      { kimlik: 'hafiza', ikon: 'hafiza', ad: t('orta.eylem.hafiza'), calistir: () => git('/hafiza') },
+      { kimlik: 'partner', ikon: 'baglanti', ad: t('orta.eylem.partner'), calistir: () => git('/kesfet') },
+    ],
+    atamaKaydet: (k) => { degistir((v) => { v.profil.ayarlar.ortaDugme = k; }); duyur(t('orta.kaydedildi'), 1800); },
+  });
   pwaBaslat();
 }
 

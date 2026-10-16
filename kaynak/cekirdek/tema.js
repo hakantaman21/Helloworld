@@ -8,6 +8,8 @@ export function temaUygula() {
   const kok = document.documentElement;
   kok.setAttribute('data-gorunum', ayarlar.gorunum === 'kompakt' ? 'kompakt' : 'dengeli');
   kok.setAttribute('data-yazi', ayarlar.yaziBoyutu === 'buyuk' ? 'buyuk' : 'normal');
+  if (ayarlar.secimRengi && ayarlar.secimRengi !== 'altin') kok.setAttribute('data-secim', ayarlar.secimRengi); else kok.removeAttribute('data-secim');
+  if (ayarlar.zemin && ayarlar.zemin !== 'varsayilan') kok.setAttribute('data-zemin', ayarlar.zemin); else kok.removeAttribute('data-zemin');
   if (tercih === 'sistem') kok.removeAttribute('data-tema');
   else kok.setAttribute('data-tema', tercih);
 }

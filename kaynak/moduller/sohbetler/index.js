@@ -35,8 +35,8 @@ function yanMenu(b, kocaGit) {
     ikon3d(ik, 30), h('span', { class: 'shb-menu-metin' }, h('b', null, ad), alt ? h('small', null, alt) : null), ikon('sag', 16));
   const grup = (baslik, ...satirlar) => h('section', { class: 'shb-menu-grup' }, h('h3', { class: 'shb-menu-grup-baslik' }, baslik), h('div', { class: 'shb-menu-kart' }, ...satirlar));
   const v = al();
-  const perde = h('div', { class: 'shb-menu-perde', onClick: (e) => { if (e.target === perde) kapat(); } },
-    h('aside', { class: 'shb-menu', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('yanMenu.baslik') },
+  const perde = h('div', { class: 'shb-menu-perde b-katman', onClick: (e) => { if (e.target === perde) kapat(); } },
+    h('aside', { class: 'shb-menu b-katman-ic', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('yanMenu.baslik') },
       h('div', { class: 'shb-menu-ust' },
         benAvatar(48),
         h('span', { class: 'shb-menu-kim' }, h('b', null, v.profil.ad || t('misafir.ad')), h('small', null, `${(v.profil.anaDil || 'tr').toUpperCase()} → ${(v.profil.ogrenilenDil || 'en').toUpperCase()} · ${v.profil.seviye}`)),
