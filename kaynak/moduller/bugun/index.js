@@ -1,7 +1,7 @@
 // Bugün: günün döngüsü, sıradaki adım (tabela), Hata Hafızası kısayolu ve tek dokunuşla "Konuş".
 import './bugun.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d, htUst, htIkon, testAvatar, sekmeler, afisKaydirici, testEtiketi } from '../../cekirdek/arayuz.js';
+import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d, htUst, htIkon, testAvatar, sekmeler, afisKaydirici, testEtiketi, enUsteKaydir } from '../../cekirdek/arayuz.js';
 import { testModuAcik, testModuAyarla, testProfilleri, aktiflik } from '../../cekirdek/test-modu.js';
 import tumSenaryolar from '../../veri/senaryolar/index.js';
 import { t, yerel, aktifDil } from '../../cekirdek/metin.js';
@@ -87,7 +87,7 @@ function ciz(kok, b) {
   }
   hizliOdaCiz();
   // Üç sekme (HelloTalk Ses · Canlı · Öğren karşılığı): AI sohbet · Gerçek sohbet · Öğren.
-  const pratikSekmeleri = sekmeler([['ai', t('pratik.sekme.ai')], ['gercek', t('pratik.sekme.gercek')], ['ogren', t('pratik.sekme.ogren')]], pratikSekme, (id) => { pratikSekme = id; pratikSekmeGoster(); window.scrollTo(0, 0); }, { etiket: t('gezinme.pratik') });
+  const pratikSekmeleri = sekmeler([['ai', t('pratik.sekme.ai')], ['gercek', t('pratik.sekme.gercek')], ['ogren', t('pratik.sekme.ogren')]], pratikSekme, (id) => { pratikSekme = id; pratikSekmeGoster(); enUsteKaydir(); }, { etiket: t('gezinme.pratik') });
 
   // En üstte kayan tanıtım afişleri: uygulamanın kendi özelliklerini tanıtır, dokununca ilgili yere götürür.
   const afisler = afisKaydirici([

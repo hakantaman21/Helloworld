@@ -1,3 +1,48 @@
+## 0.11.1 — 16.10.2026 · Hakan'ın video notları
+
+- Sohbet: üst bant daraltıldı (başlık, simgeler ve "Daha fazla" arası sıkı).
+- Kısayol simgeleri her yerde (Profil › Öğrenme merkezi dahil) kutusuz, doğrudan zeminde.
+- Sohbet satırları arasında daha çok boşluk; koyu temada daha koyu ışık-gölge geçişi.
+- Seçili süzgeç ayrıca ışıklı.
+- Bağlan ve Dil Anları panoları siyaha yakın, sayfa rengiyle ışık-koyuluk geçişli ("Güvenli pratik" slaytı örnek alındı).
+- Pratik: konu odaları kartları daha kompakt; günün döngüsü satırları arasında biraz daha boşluk.
+- Dil Anları: gönderiler arası ayrım daha belirgin.
+- Şikâyet, onay ve alt pencereler temaya uygun koyu geçişli zemin.
+
+## 0.11.0 — 16.10.2026 · Siyaha yakın bant, ışık-gölge geçişli kartlar, kabartmalı süzgeçler, siyah-turkuaz alt menü, geri tuşu düzeltmesi
+
+- Üst bant siyaha yakın (varsayılan çok koyu yeşil); diğer bant renkleri de koyulaştı.
+- Sohbet: üstteki kısayol simgeleri ayrı bir kutuda değil, doğrudan koyu bandın üstünde (altlarında hafif turkuaz ışık).
+- Yan menü parmakla sola (dış kenara) sürüklenince de kapanıyor.
+- Kartlar ve liste satırları her sayfada üst-solda ışık, alt-sağa doğru koyuluk geçişi taşıyor; koyu temada sohbet satırları koyu ve zeminden ayrışıyor.
+- Süzgeçler kabartmalı: tepsi içe gömük, her süzgeç öğesi kabarık, seçili olan daha yüksek ve parlak (tüm sayfalarda).
+- Alt menü her temada siyah; üst ışık çizgisi, seçili kutu ve seçili yazı turkuaz. Ortadaki Pratik oku daha büyük ve tam ortada.
+- Profil tutarlılığı: tek profil sayfası alt menüdeki "Profil". Yan menünün üstündeki ad/fotoğraf "Profilini gör" kısayolu; Profil içindeki sekme "Hakkımda"; Ayarlar'daki grup "Kişisel bilgiler" (düzenleme yeri) ve oradan "Profilini gör" bağlantısı.
+- Düzeltme: Bağlan'da süzgeç penceresi açıkken telefonun geri tuşu artık alttaki sayfayı değil pencereyi kapatıyor (tüm üstten açılan pencerelerde).
+
+## 0.10.0 — 16.10.2026 · Koyu üst bant, siyah arama, Bağlan, kayan panolar, alt menü kayması düzeltmesi
+
+- Düzeltme: alt menü artık kaydırırken ya da sekme değiştirirken aşağı kayıp geri gelmiyor. Sebep: ekranı tam dolduran kaydırma alanını Android Chrome "kök kaydırıcı" sayıp adres çubuğunu gizleyip açıyordu. İçerik alanı artık alt menünün üstünde bitiyor; son öğe de menünün altında kalmıyor.
+- Sohbet: v0.6.0'dan kaybolan öğeler geri geldi — sol üstte profil fotoğrafı (dokununca yan menü), ilk satırda 5 kısayol (Dil Anları dahil); "Daha fazla" artık bandın altında küçük bir tutamak.
+- Koyu baş bandı: Sohbet, Bağlan ve Dil Anları'nda sayfanın ilk yatay bölümleri çok koyu bir şeritte; sayfa onun altından başlıyor. Renk Ayarlar › Görünüm › Üst bant rengi: Yeşil (varsayılan), Gece mavisi, Mor, Bordo, Antrasit, Sayfa rengi.
+- Arama kutularının içi her temada siyah.
+- Süzgeç (sekme) biçimi seçeneği: Klasik, Dolu, Çizgi, Çerçeve, Beyaz.
+- "Bağlantı" menü öğesi "Bağlan" oldu.
+- Bağlan'da kayan bilgi panosu: sana en uygun kişi, şu an çevrimiçi sayısı, ilgi ipucu, tanışma, güvenlik.
+- Dil Anları'nda süzgeçlerden sonra kayan pano: tanıtım, yardım bekleyen paylaşımlar, en çok paylaşan, en çok etkileşim alan, cümle defteri ipucu. Sayılar cihazdaki TEST verisinden hesaplanır, uydurulmaz.
+- Şema 12: ayarlar.bantRengi, ayarlar.suzgecBicimi.
+
+## 0.9.2 — 16.10.2026 · Alt menü yeni görünüm
+
+- Alt menü yüzen, yuvarlak köşeli bir çubuk oldu.
+- Orta düğme: kalın koyu çerçeveli altın daire, içinde ▶ ve "PRATİK" yazısı; seçilince çerçeve ve parıltı seçim rengini alır.
+- Seçili öğe: seçim rengine boyanmış yuvarlak kutu, altında açık renkli çizgi; sekmeler arasında kayarak gider.
+
+## 0.9.1 — 16.10.2026 · Alt menü sayfa geçişinde artık kaybolmuyor
+
+- Düzeltme: Android Chrome'da sekme değiştirirken (özellikle ortaya, Pratik'e geçerken) alt menü bir an aşağı kayıp kayboluyor, sonra geri geliyordu. Sebep: her geçişte sayfa en üste kaydırılınca tarayıcının adres çubuğu yeniden açılıyor, ekran yüksekliği değişiyor ve tarayıcı sabit menüyü bir an aşağıda bırakıyordu. Artık belge hiç kaymıyor; kaydırma uygulamanın kendi alanında (#uygulama) oluyor. Adres çubuğu yerinde kalıyor, alt menü de.
+- Üstten açılan pencere kilidi bu yeni kaydırma alanına taşındı.
+
 ## 0.9.0 — 16.10.2026 · Kalıcı alt menü, ışıklı gösterge, orta Pratik düğmesi, sayfa renkleri, kişisel renkler
 
 - Alt menü artık tek ve kalıcı: sayfa geçişlerinde ve kaydırırken yerinde durur, kaybolup gelmez.

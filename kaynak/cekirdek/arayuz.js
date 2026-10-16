@@ -137,7 +137,7 @@ export function ustBaslik({ tabela, baslik, alt, sag, geri, ikon }) {
   );
 }
 
-// Beş sekme (Anayasa bölüm 14): Sohbet · Bağlantı · Dil Anları · Pratik · Profil
+// Beş sekme (Anayasa bölüm 14): Sohbet · Bağlan · Pratik · Dil Anları · Profil
 // Beş sekme; Pratik ortada büyük yuvarlak düğme (Yoldaş Akıllı Asistan düzeni).
 const GEZINME = [
   { yol: '/sohbetler', ikon: 'sohbet', anahtar: 'gezinme.sohbetler' },
@@ -215,8 +215,9 @@ function gezinmeKur() {
     let zamanlayici = null;
     let uzunBasildi = false;
     const oge = h('a', { class: 'b-gezinme-oge b-gezinme-orta', href: '#' + g.yol, 'data-yol': g.yol, 'aria-haspopup': 'dialog', title: t('orta.ipucu') },
-      h('span', { class: 'b-orta-daire' }, ikon3d(g.ikon, 34), h('span', { class: 'b-orta-ok', 'aria-hidden': 'true' }, ikonCiz('yukari', 12, 3))),
-      h('span', { class: 'b-orta-ad' }, t(g.anahtar)));
+      h('span', { class: 'b-orta-daire' },
+        h('span', { class: 'b-orta-oynat', 'aria-hidden': 'true' }),
+        h('span', { class: 'b-orta-ad' }, t(g.anahtar))));
     const iptal = () => { clearTimeout(zamanlayici); zamanlayici = null; };
     oge.addEventListener('pointerdown', () => { uzunBasildi = false; zamanlayici = setTimeout(() => { uzunBasildi = true; if (navigator.vibrate) navigator.vibrate(15); ortaMenuAc(); }, 480); });
     ['pointerup', 'pointerleave', 'pointercancel'].forEach((o) => oge.addEventListener(o, iptal));
@@ -233,6 +234,17 @@ function gezinmeKur() {
   });
   gezinme = h('nav', { class: 'b-gezinme', 'aria-label': t('gezinme.etiket') }, ic);
   document.body.append(gezinme);
+  // v0.10.0: içerik alanı alt menünün ÜSTÜNDE biter (#uygulama ekranı tam doldurmaz). Böylece Android Chrome
+  // kaydırıcıyı "kök kaydırıcı" sayıp adres çubuğunu gizleyip açmaz → alt menü aşağı kayıp geri gelmez; son öğe de menünün altında kalmaz.
+  const olc = () => { if (!gezinme.hidden) document.documentElement.style.setProperty('--gezinme-alan', `${Math.ceil(gezinme.getBoundingClientRect().height)}px`); };
+  if (window.ResizeObserver) new ResizeObserver(olc).observe(gezinme);
+  requestAnimationFrame(olc);
+}
+
+// Koyu baş bandı: sayfanın ilk yatay bölüm(ler)i koyu bir şeritte durur; sayfa onun altından başlar
+// (kâğıdın en üstüne yazılmış dilekçe gibi görünmez). Renk Ayarlar › Görünüm › Üst bant rengi ile seçilir.
+export function basBant(...cocuklar) {
+  return h('div', { class: 'b-bas-bant' }, ...cocuklar);
 }
 
 export function altGezinme(aktifYol) {
@@ -464,17 +476,17 @@ export function aralikKaydirici({ min, max, adim = 1, deger, etiket, bicim = (v)
 // Kayan tanıtım afişleri (HelloTalk üst banner'ı): yatay kaydırılır, birkaç saniyede bir kendiliğinden ilerler,
 // parmak değince durur. "Hareketi azalt" açıkken kendiliğinden ilerlemez. Noktalar hangi afişte olunduğunu gösterir.
 const AFIS_SURESI_MS = 4500;
-export function afisKaydirici(slaytlar, { etiket } = {}) {
+export function afisKaydirici(slaytlar, { etiket, pano = false } = {}) {
   const iz = h('div', { class: 'b-afis-iz', 'data-yatay': '' });
   const noktalar = h('div', { class: 'b-afis-noktalar', 'aria-hidden': 'true' });
   slaytlar.forEach((s, i) => {
     iz.append(h('button', { type: 'button', class: `b-afis-slayt b-kutu-${s.renk || (i % 6) + 1}`, onClick: s.git, 'aria-label': `${s.baslik}. ${s.alt || ''}` },
       h('span', { class: 'b-afis-metin' },
-        s.etiket ? h('span', { class: 'b-afis-etiket' }, s.etiket) : null,
+        s.etiket || s.test ? h('span', { class: 'b-afis-etiket' }, s.test ? testEtiketi() : null, s.test && s.etiket ? ' ' : null, s.etiket || null) : null,
         h('b', { class: 'b-afis-baslik' }, s.baslik),
         s.alt ? h('span', { class: 'b-afis-alt' }, s.alt) : null,
         s.dugme ? h('span', { class: 'b-afis-dugme' }, s.dugme) : null),
-      ikon3d(s.ikon, 92)));
+      s.gorsel || ikon3d(s.ikon, pano ? 72 : 92)));
     noktalar.append(h('i'));
   });
   let sira = 0;
@@ -497,7 +509,7 @@ export function afisKaydirici(slaytlar, { etiket } = {}) {
   iz.addEventListener('focusin', dur);
   isaretle();
   basla();
-  return h('section', { class: 'b-afislar', 'aria-roledescription': 'carousel', 'aria-label': etiket || null }, iz, noktalar);
+  return h('section', { class: `b-afislar${pano ? ' b-afislar-pano' : ''}`, 'aria-roledescription': 'carousel', 'aria-label': etiket || null }, iz, noktalar);
 }
 
 // Ana sekmeler arasında parmakla kaydırarak geçiş (HelloTalk gibi). Yatay kayan öğelerin (afiş, sekme satırı,
@@ -534,3 +546,10 @@ export function sekmeKaydirmaBaslat(git) {
     setTimeout(() => { delete document.documentElement.dataset.gecis; }, 400);
   }, { passive: true });
 }
+
+// Kaydırma alanı: belge değil #uygulama kayar (bkz. temel.css). Ekranlar yukarı/aşağı kaydırmak için bunu kullanır.
+export function kaydirmaAlani() {
+  return document.getElementById('uygulama') || document.scrollingElement;
+}
+export function enUsteKaydir() { kaydirmaAlani().scrollTo(0, 0); }
+export function enAltaKaydir() { const a = kaydirmaAlani(); a.scrollTo(0, a.scrollHeight); }

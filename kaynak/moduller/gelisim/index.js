@@ -138,7 +138,7 @@ function ciz(kok, b) {
         htIkon(ikon3d('ayarlar', 28), t('ayarlar.baslik'), () => b.git('/ayarlar')),
       ],
     }),
-    h('button', { type: 'button', class: 'gls-ben', onClick: () => b.git('/ayarlar'), 'aria-label': t('gelisim.kimlik.duzenle') },
+    h('button', { type: 'button', class: 'gls-ben', onClick: () => b.git('/ayarlar?grup=profil'), 'aria-label': t('gelisim.kimlik.duzenle') },
       benAvatar(76, 'gls-ben-av'),
       h('span', { class: 'gls-ben-ic' },
         h('span', { class: 'gls-ben-ad' }, h('b', null, v.profil.ad || '?'), h('span', { class: 'b-etiket-hap' }, v.profil.seviye)),
@@ -189,7 +189,7 @@ function ciz(kok, b) {
           h('button', { type: 'button', class: 'gls-defter-dugme', 'aria-label': t('defter.sil'), onClick: () => { cumleSil(c.metin); ciz(kok, b); } }, ikon('kapat', 16)))))
         : h('p', { class: 'b-kucuk' }, t('defter.bos')),
     ),
-    h('section', { class: 'gls-merkez', 'aria-labelledby': 'gls-merkez-baslik' },
+    h('section', { class: 'b-platform gls-merkez', 'aria-labelledby': 'gls-merkez-baslik' },
       h('h2', { class: 'gls-merkez-baslik', id: 'gls-merkez-baslik' }, t('ht.ogrenmeMerkezi')),
       h('div', { class: 'b-uygulamalar gls-uygulamalar' },
         [['senaryo', 'senaryolar', '/senaryolar', 1], ['telaffuz', 'telaffuz', `/gorusme?tur=senaryo&id=${oneri.kimlik}`, 5], ['hafiza', 'hafiza', '/hafiza', 3], ['kupa', 'karne', '/karne', 2], ['baglanti', 'partner', '/kesfet', 4]].map(([ik, ad, yol, renk]) =>

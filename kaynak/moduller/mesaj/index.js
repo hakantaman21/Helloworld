@@ -3,7 +3,7 @@
 // Gerçek topluluk açılınca aynı ekran sunucudaki gerçek sohbete bağlanır. Test mesajları gelişime sayılmaz.
 import './mesaj.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, durumKutusu, yerlestir, testEtiketi, farkCiz, onayIste, testAvatar, goreliZaman, dilCifti, sekmeler } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, durumKutusu, yerlestir, testEtiketi, farkCiz, onayIste, testAvatar, goreliZaman, dilCifti, sekmeler, enAltaKaydir } from '../../cekirdek/arayuz.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { duyur } from '../../cekirdek/duyuru.js';
@@ -75,7 +75,7 @@ function ciz(kok, b) {
       mesajlar.map(balon),
       yaziyor ? h('div', { class: 'msj-satir msj-o' }, testAvatar(profil, 32), h('div', { class: 'msj-balon msj-balon-o msj-yaziyor' }, t('test.yaziyor', { ad: profil.ad }))) : null,
     );
-    requestAnimationFrame(() => window.scrollTo(0, document.body.scrollHeight));
+    requestAnimationFrame(enAltaKaydir);
   }
 
   function gonder(metin, duzeltildi) {

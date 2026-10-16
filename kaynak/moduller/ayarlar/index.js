@@ -2,7 +2,7 @@
 // her satır solda etiket, sağda denetim. Kontrol kullanıcıda (Anayasa bölüm 3): veriler indirilebilir ve silinebilir.
 import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar, enUsteKaydir } from '../../cekirdek/arayuz.js';
 import { fotografEkle } from '../../cekirdek/fotograf.js';
 import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
@@ -49,6 +49,19 @@ function renkSecici(etiketId, tur, secenekler, aktif, degisti) {
         degisti(k);
       },
     }, h('span', { class: 'ayr-renk-ornek', 'aria-hidden': 'true' }))));
+}
+
+// Süzgeç biçimi seçici: her seçenek, o biçimde çizilmiş küçük bir seçili-sekme önizlemesi gösterir.
+function suzgecSecici(etiketId, aktif, degisti) {
+  return h('div', { class: 'ayr-suzgecler', role: 'radiogroup', 'aria-labelledby': etiketId },
+    ['klasik', 'dolu', 'cizgi', 'cerceve', 'beyaz'].map((k) => h('button', {
+      type: 'button', class: 'ayr-suzgec', role: 'radio', 'aria-checked': String(k === aktif), 'data-bicim': k,
+      onClick: (e) => {
+        for (const d of e.currentTarget.parentElement.children) d.setAttribute('aria-checked', 'false');
+        e.currentTarget.setAttribute('aria-checked', 'true');
+        degisti(k);
+      },
+    }, h('span', { class: 'ayr-suzgec-ornek', 'aria-hidden': 'true' }, 'Aa'), t(`ayarlar.suzgecAd.${k}`))));
 }
 
 let satirSayac = 0;
@@ -134,6 +147,8 @@ function ciz(kok, b) {
         h('b', { class: 'ayr-profil-ad' }, p.ad || t('misafir.ad')),
         dilCifti(p.anaDil || 'tr', p.ogrenilenDil || 'en', p.seviye),
         h('span', { class: 'ayr-profil-alt' }, `${p.seviye} · ${t(`gelisim.rol.${p.rol || 'ogrenen'}`)}${(p.ilgiler || []).length ? ` · ${t('ayarlar.ilgiSayisi', { n: p.ilgiler.length })}` : ''}`),
+        // Ayarlar profili DÜZENLER; görüntülemek tek yerde: alt menüdeki Profil sekmesi (v0.11.0 tutarlılık).
+        h('button', { type: 'button', class: 'ayr-profil-git', onClick: () => b.git('/gelisim?sekme=profil') }, t('yanMenu.profiliGor'), ikon('sag', 14)),
       ),
     ),
     p.misafir ? h('div', { class: 'ayr-misafir', role: 'note' },
@@ -182,6 +197,8 @@ function ciz(kok, b) {
       satir(t('ayarlar.yaziBoyutu'), (id) => bolumlu(id, ['normal', 'buyuk'].map((k) => [k, t(`ayarlar.yaziSecenek.${k}`)]), a.yaziBoyutu || 'normal', (k) => ayarKaydet((pr) => { pr.ayarlar.yaziBoyutu = k; }))),
       satir(t('ayarlar.secimRengi'), (id) => renkSecici(id, 'secim', ['altin', 'mavi', 'yesil', 'mercan', 'mor', 'turkuaz'], a.secimRengi || 'altin', (k) => ayarKaydet((pr) => { pr.ayarlar.secimRengi = k; }, true)), { aciklama: t('ayarlar.secimRengiAciklama'), altta: true }),
       satir(t('ayarlar.zeminRengi'), (id) => renkSecici(id, 'zemin', ['varsayilan', 'notr', 'mavi', 'mor', 'yesil'], a.zemin || 'varsayilan', (k) => ayarKaydet((pr) => { pr.ayarlar.zemin = k; }, true)), { aciklama: t('ayarlar.zeminRengiAciklama'), altta: true }),
+      satir(t('ayarlar.bantRengi'), (id) => renkSecici(id, 'bant', ['yesil', 'gece', 'mor', 'bordo', 'antrasit', 'sayfa'], a.bantRengi || 'yesil', (k) => ayarKaydet((pr) => { pr.ayarlar.bantRengi = k; }, true)), { aciklama: t('ayarlar.bantRengiAciklama'), altta: true }),
+      satir(t('ayarlar.suzgecBicimi'), (id) => suzgecSecici(id, a.suzgecBicimi || 'klasik', (k) => ayarKaydet((pr) => { pr.ayarlar.suzgecBicimi = k; }, true)), { aciklama: t('ayarlar.suzgecBicimiAciklama'), altta: true }),
       satir(t('ayarlar.ortaDugme'), (id) => bolumlu(id, ['pratik', 'arama', 'senaryo', 'telaffuz'].map((k) => [k, t(`ayarlar.ortaSecenek.${k}`)]), a.ortaDugme || 'pratik', (k) => ayarKaydet((pr) => { pr.ayarlar.ortaDugme = k; })), { aciklama: t('ayarlar.ortaDugmeAciklama'), altta: true }),
     ),
 
@@ -254,7 +271,7 @@ function ciz(kok, b) {
     kok.querySelector('.ayr-hakkinda').hidden = Boolean(k);
     gruplar.forEach((g) => { g.hidden = g.id !== `ayr-g-${k}`; });
     if (baslikYazi) baslikYazi.textContent = k ? gruplar.find((g) => g.id === `ayr-g-${k}`).querySelector('.ayr-grup-baslik').textContent : t('ayarlar.baslik');
-    window.scrollTo(0, 0);
+    enUsteKaydir();
   }
   goster(ilgiAcik ? 'profil' : (b.p.grup || null));
   if (ilgiAcik) requestAnimationFrame(() => { const hedef = kok.querySelector('#ayr-ilgi'); if (hedef) hedef.scrollIntoView({ block: 'start' }); });

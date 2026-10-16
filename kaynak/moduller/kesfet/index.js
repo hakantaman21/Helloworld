@@ -1,9 +1,9 @@
-// Bağlantı (HelloTalk "Dil Ortakları Bul" düzeni): metin sekmeleri, dil hapları, süzgeç paneli, otomatik eşleşme
+// Bağlan (HelloTalk "Dil Ortakları Bul" düzeni): metin sekmeleri, dil hapları, süzgeç paneli, otomatik eşleşme
 // ve el sallama (selam). Hesap ve sunucu olmadan gerçek kişi gösterilmez.
 // Test modunda TEST rozetli sanal kullanıcılar listelenir; yaş, çevrimiçi durumu ve rozetler de TEST verisidir.
 import './kesfet.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, altGezinme, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman, kurallarSeridi, aralikKaydirici } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, altGezinme, basBant, afisKaydirici, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman, kurallarSeridi, aralikKaydirici } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
@@ -191,7 +191,11 @@ function eslesmeKarti(sonuc, b, { sonraki, kapat, yenile }) {
 
 function testsizCiz(kok, b) {
   yerlestir(kok,
-    htUst({ baslik: t('ht.ortakBul') }),
+    basBant(htUst({ baslik: t('ht.ortakBul') })),
+    afisKaydirici([
+      { ikon: 'baglanti', renk: 4, etiket: t('pano.nasilEtiket'), baslik: t('pano.nasilBaslik'), alt: t('pano.nasilAlt') },
+      { ikon: 'kilit', renk: 2, etiket: t('pano.guvenEtiket'), baslik: t('pano.guvenBaslik'), alt: t('pano.guvenAlt') },
+    ], { etiket: t('pano.kesfetEtiket'), pano: true }),
     h('section', { class: 'b-kart kft-hero', 'aria-labelledby': 'kft-giris' },
       h('span', { class: 'b-ust-etiket' }, t('kesfet.heroEtiket')),
       h('h2', { class: 'b-bolum-baslik', id: 'kft-giris' }, t('kesfet.heroBaslik')),
@@ -247,13 +251,29 @@ function ciz(kok, b) {
   }
 
   suzgecDugmesi = htIkon('suzgec', t('ht.suzgecler'), () => suzgecPenceresi(suzgec, (yeni) => { suzgec = yeni; yenile(); }));
+
+  // v0.10.0 Bilgi panosu (kayan): en iyi eşleşme, şu an çevrimiçi sayısı, ilgi ipucu, tanışma ve güvenlik.
+  // Sayılar ve eşleşme bu cihazdaki TEST verisinden hesaplanır; uydurulmaz.
+  const sekmeyeGec = (id) => { const d = kok.querySelector(`.b-sekme[data-id="${id}"]`); if (d) { d.click(); d.scrollIntoView({ block: 'nearest', inline: 'center' }); } };
+  const enIyi = enIyiEslesmeler()[0];
+  const cevrimiciSayisi = testProfilleri().filter((p) => aktiflik(p).cevrimici).length;
+  const ilgiVar = (ben.ilgiler || []).length > 0;
+  const pano = afisKaydirici([
+    enIyi ? { test: true, renk: 5, etiket: t('pano.eslesmeEtiket'), baslik: t('pano.eslesmeBaslik', { ad: enIyi.profil.ad, n: enIyi.puan }), alt: `${yerel(enIyi.profil.ulke)} · ${enIyi.profil.seviye}`, dugme: t('pano.eslesmeDugme'), gorsel: testAvatar(enIyi.profil, 76, { cevrimici: aktiflik(enIyi.profil).cevrimici }), git: () => b.git(`/kisi?k=${enIyi.profil.kimlik}`) } : null,
+    cevrimiciSayisi ? { test: true, ikon: 'baglanti', renk: 4, etiket: t('pano.cevrimiciEtiket'), baslik: t('pano.cevrimiciBaslik', { n: cevrimiciSayisi }), alt: t('pano.cevrimiciAlt'), dugme: t('pano.cevrimiciDugme'), git: () => sekmeyeGec('cevrimici') } : null,
+    { ikon: 'hedef', renk: 1, etiket: t('pano.ilgiEtiket'), baslik: t('pano.ilgiBaslik'), alt: ilgiVar ? t('pano.ilgiVarAlt') : t('pano.ilgiAlt'), dugme: ilgiVar ? t('pano.ilgiVarDugme') : t('pano.ilgiDugme'), git: () => (ilgiVar ? sekmeyeGec('uygun') : b.git('/ayarlar?bolum=ilgi')) },
+    { ikon: 'mektup', renk: 3, etiket: t('pano.selamEtiket'), baslik: t('pano.selamBaslik'), alt: t('pano.selamAlt'), git: () => sekmeyeGec('uygun') },
+    { ikon: 'kilit', renk: 2, etiket: t('pano.guvenEtiket'), baslik: t('pano.guvenBaslik'), alt: t('pano.guvenAlt'), dugme: t('pano.guvenDugme'), git: () => { const k = kok.querySelector('.b-kurallar'); if (k) k.scrollIntoView({ behavior: 'smooth', block: 'center' }); } },
+  ].filter(Boolean), { etiket: t('pano.kesfetEtiket'), pano: true });
+
   yerlestir(kok,
-    htUst({
+    basBant(htUst({
       sol: htIkon(ikon3d('seri', 30), t('ht.eslesmeBaslik'), () => { durum.eslesmeSira = durum.eslesmeSira < 0 ? 0 : -1; eslesmeCiz(); if (durum.eslesmeSira >= 0) eslesmeAlani.scrollIntoView({ block: 'nearest' }); }),
       baslik: t('ht.ortakBul'),
       sag: suzgecDugmesi,
     }),
-    sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')], ['yakin', t('kesfet.suzgec.seviye')]], durum.sekme, (id) => { durum.sekme = id; yenile(); }, { etiket: t('kesfet.filtreBaslik') }),
+    sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')], ['yakin', t('kesfet.suzgec.seviye')]], durum.sekme, (id) => { durum.sekme = id; yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
+    pano,
     sekmeler([
       ['hedef', t(`diller.${ben.ogrenilenDil || 'en'}`)],
       ['benimDilim', t('ht.dilimiOgrenen', { dil: t(`diller.${ben.anaDil || 'tr'}`) })],

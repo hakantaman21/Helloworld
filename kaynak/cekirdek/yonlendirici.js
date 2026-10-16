@@ -55,14 +55,62 @@ function ciz() {
     console.error('[yonlendirici]', id, hata);
     kap.replaceChildren(h('div', { class: 'b-durum', role: 'alert' }, t('genel.hata')));
   }
-  window.scrollTo(0, 0);
+  kok.scrollTo(0, 0);
   kap.focus({ preventScroll: true });
   yayinla('ekran:degisti', { id, parametreler });
+}
+
+// v0.11.0 Üstten açılan katmanlar (süzgeç, yan menü, alt pencere, onay) telefonun geri tuşuyla kapanır.
+// Her açılan katman için aynı adresle bir geçmiş kaydı eklenir; geri tuşu önce en üstteki katmanı kapatır,
+// alttaki sayfaya dokunmaz. Katman kendi düğmesiyle kapanınca eklenen kayıt sessizce geri alınır.
+const KATMAN = '.b-alt-pencere-perde, .b-katman, .b-perde';
+let katmanDerinligi = 0;
+let yoksay = 0;
+const aciklar = () => [...document.querySelectorAll(KATMAN)];
+
+function katmanKapat(el) {
+  el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  // Esc dinlemeyen katman: varsa "vazgeç" türü ikincil düğmeye bas (bekleyen soru yanıtsız kalmasın), yoksa kaldır.
+  setTimeout(() => {
+    if (!el.isConnected) return;
+    const vazgec = el.querySelector('.b-dugme-cerceve');
+    if (vazgec) vazgec.click();
+    if (el.isConnected) el.remove();
+  }, 0);
+}
+
+function katmanIzle() {
+  new MutationObserver(() => {
+    const n = aciklar().length;
+    if (n > katmanDerinligi) {
+      while (katmanDerinligi < n) { katmanDerinligi += 1; history.pushState({ katman: katmanDerinligi }, ''); }
+    } else if (n < katmanDerinligi) {
+      const fark = katmanDerinligi - n;
+      katmanDerinligi = n;
+      // Kapanırken başka sayfaya gidildiyse (kayıt bizim değilse) geri alma; ölü kayıt popstate'te atlanır.
+      if (history.state && history.state.katman) { yoksay += 1; history.go(-fark); }
+    }
+  }).observe(document.body, { childList: true, subtree: true });
+
+  window.addEventListener('popstate', (e) => {
+    if (yoksay > 0) { yoksay -= 1; return; }
+    const hedef = (e.state && e.state.katman) || 0;
+    const acik = aciklar();
+    if (acik.length > hedef) {
+      katmanDerinligi = hedef;
+      acik.slice(hedef).reverse().forEach(katmanKapat);
+    } else if (hedef > 0 && acik.length === 0) {
+      // Katman kapatılıp başka sayfaya gidilmişti: arta kalan kaydı atla.
+      katmanDerinligi = 0;
+      history.back();
+    }
+  });
 }
 
 export function baslat(kokOge) {
   kok = kokOge;
   window.addEventListener('hashchange', ciz);
+  katmanIzle();
   ciz();
 }
 
