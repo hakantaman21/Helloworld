@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Helloworld — Pratik (Prototip)</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #232735;
+    --text: #e8eaf0;
+    --text-dim: #9aa0b0;
+    --accent: #6ee7b7;
+    --accent2: #93c5fd;
+    --danger: #fca5a5;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  .app {
+    max-width: 420px;
+    margin: 0 auto;
+    width: 100%;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+  }
+  header {
+    padding: 20px 20px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  header h1 { font-size: 20px; font-weight: 600; }
+  .badge {
+    background: var(--surface2);
+    color: var(--accent);
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  .main {
+    flex: 1;
+    padding: 12px 20px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .goal-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .goal-card .label { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
+  .goal-card .title { font-size: 18px; font-weight: 600; line-height: 1.3; }
+  .goal-card .sub { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
+
+  .big-start {
+    background: linear-gradient(135deg, #1e3a2f, #1a2f3a);
+    border: 1px solid #2a4a3a;
+    border-radius: var(--radius);
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .big-start:active { transform: scale(0.98); }
+  .big-start .icon {
+    width: 64px; height: 64px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 28px;
+  }
+  .big-start h2 { font-size: 18px; margin-bottom: 4px; }
+  .big-start p { font-size: 13px; color: var(--text-dim); }
+
+  .topics {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .topic {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .topic .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent2);
+  }
+  .topic span { flex: 1; font-size: 15px; }
+  .topic .arrow { color: var(--text-dim); font-size: 14px; }
+
+  .note {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid #2a2e3a;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 20px;
+  }
+  nav .item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-size: 10px; color: var(--text-dim);
+  }
+  nav .item.active { color: var(--accent); }
+  nav .item .icon { font-size: 20px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Pratik</h1>
+    <div class="badge">Demo Koç</div>
+  </header>
+
+  <div class="main">
+    <div class="goal-card">
+      <div class="label">Bugünkü hedef</div>
+      <div class="title">3 dakikalık serbest konuşma</div>
+      <div class="sub">Konu: Günlük rutin veya istediğin herhangi bir şey</div>
+    </div>
+
+    <div class="big-start" onclick="alert('Konuşma başlıyor... (prototip)')">
+      <div class="icon">🎤</div>
+      <h2>Şimdi konuş</h2>
+      <p>AI koçun hazır. Tek dokunuş.</p>
+    </div>
+
+    <div class="topics">
+      <div class="topic" onclick="alert('Konu: Kahvaltı')">
+        <div class="dot"></div>
+        <span>Kahvaltıda ne yersin?</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="topic" onclick="alert('Konu: İş/Okul')">
+        <div class="dot"></div>
+        <span>Bugün ne yaptın?</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="topic" onclick="alert('Konu: Serbest')">
+        <div class="dot"></div>
+        <span>Serbest konuş</span>
+        <span class="arrow">›</span>
+      </div>
+    </div>
+
+    <div class="note">
+      Hata yargılanmaz. Her konuşma veri üretir.<br>
+      Bu prototip yalnızca tasarım önerisidir.
+    </div>
+  </div>
+
+  <nav>
+    <div class="item"><div class="icon">💬</div>Sohbet</div>
+    <div class="item"><div class="icon">🔗</div>Bağlantı</div>
+    <div class="item"><div class="icon">📸</div>Anlar</div>
+    <div class="item active"><div class="icon">🎯</div>Pratik</div>
+    <div class="item"><div class="icon">👤</div>Profil</div>
+  </nav>
+</div>
+</body>
+</html>
