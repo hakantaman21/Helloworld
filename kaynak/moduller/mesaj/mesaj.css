@@ -154,3 +154,12 @@
   .msj-arac[aria-pressed="true"] svg { fill: currentColor; }
   .msj-arac:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 1px; }
 }
+
+/* v0.15.0 Kapak (sistem kapağı) ve kayan hobi şeridi */
+@layer moduller {
+  .msj-kapak { overflow: hidden; background: var(--kapak, var(--renk-yuzey-ikinci)); }
+  .msj-hobiler { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -12px; padding: 0 12px 2px; }
+  .msj-hobiler::-webkit-scrollbar { display: none; }
+  .msj-hobi { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: var(--kose-tam); background: var(--renk-yuzey-ikinci); font-size: calc(13px * var(--yazi-olcek)); font-weight: 600; white-space: nowrap; box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), 0 2px 4px var(--renk-golge); }
+  .msj-hobi-ortak { color: var(--renk-iyi-metin); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--renk-iyi-metin) 45%, transparent); }
+}

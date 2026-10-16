@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 15;
+export const GUNCEL_SEMA = 16;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -148,5 +148,11 @@ export const gocler = {
   15: (eski) => ({
     ...eski,
     profil: { ...eski.profil, ayarlar: { ...eski.profil.ayarlar, kocSesi: eski.profil.ayarlar.kocSesi || null, kesfetSecimi: eski.profil.ayarlar.kesfetSecimi || null } },
+  }),
+  // 15 → 16: profil kapak görseli ('sistem-N' ya da 'mdy:<kimlik>'; null = varsayılan sistem kapağı). Dil Anları gönderisinde fotolar dizisi.
+  16: (eski) => ({
+    ...eski,
+    profil: { ...eski.profil, kapak: eski.profil.kapak || null },
+    test: eski.test ? { ...eski.test, anlar: (eski.test.anlar || []).map((a) => ({ ...a, fotolar: Array.isArray(a.fotolar) ? a.fotolar : [] })) } : eski.test,
   }),
 };

@@ -1,3 +1,14 @@
+## 0.15.0 — 17.10.2026 · Üst bant, kartlar, kapak görseli, çoklu fotoğraf
+
+- Marka şeridi (logo + helloworld) sola dayalı ve sayfa adının yazdığı banda değiyor.
+- Üst bandın çevresindeki çizgi tüm sayfalarda kalktı; yalnız hafif kabartma.
+- Sohbet ve Bağlan kişi kartları hafif kabartmalı; çevrelerindeki renkli ışık çizgisi kalktı.
+- Dil Anları: bir gönderiye en çok 9 fotoğraf; akışta 1/2/3/4'lü ızgara, 4'ten fazlasında dördüncü karede "+N".
+- Kişi kartında profil fotoğrafının arkasında kapak görseli (uygulamanın varsayılan kapakları); kendi profilinde kapağı değiştir: 6 hazır kapak ya da kendi fotoğrafın.
+- Hobiler kişi kartında yana kaydırılan, daha ince bir şeritte; ortak ilgiler vurgulu. TEST profillerinin ilgi alanları 7'ye çıktı.
+- Süzgeç penceresi: yaş ve cinsiyet bantları daha ince; Detaylı karoları daha sık; ülke ve ilgi alanı gruplarına dokununca açılıyor (kapalıyken seçili sayısı görünür).
+- Şema 16: profil.kapak, Dil Anları gönderisinde fotolar.
+
 ## 0.14.0 — 16.10.2026 · Değerlendirmelerden kalanların tamamı
 
 - Bağlan sadeleşti: üstte yalnız Tümü · Sana uygun · Çevrimiçi · Yeni. Ciddi öğrenen, yakın saat dilimi, karşılıklı, seviye ve cinsiyet süzgeç penceresinde.

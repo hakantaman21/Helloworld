@@ -252,9 +252,10 @@ function kisiCiz(kok, b) {
     yerlestir(icerik,
       h('section', { class: 'msj-kart' },
         h('h2', { class: 'msj-kart-baslik' }, t('ht.hobiler')),
-        h('div', { class: 'b-karolar' }, ilgiler.map((i) => {
+        // v0.15.0 Hobiler yatay kayan ince şerit (daha çok hobi, daha az yer).
+        h('div', { class: 'msj-hobiler', 'data-yatay': '' }, ilgiler.map((i) => {
           const k = ILGI_ALANLARI.find((x) => x.kimlik === ilgiKimligi(i));
-          return h('span', { class: `b-karo${ortakMi(i) ? ' b-karo-iyi' : ''}` }, h('span', { class: 'b-karo-simge', 'aria-hidden': 'true' }, ortakMi(i) ? '♥' : (k ? k.simge : '•')), yerel(i));
+          return h('span', { class: `msj-hobi${ortakMi(i) ? ' msj-hobi-ortak' : ''}` }, h('span', { 'aria-hidden': 'true' }, ortakMi(i) ? '♥' : (k ? k.simge : '•')), yerel(i));
         })),
       ),
       h('section', { class: 'msj-kart msj-bilgiler' },
@@ -270,7 +271,8 @@ function kisiCiz(kok, b) {
 
   takipCiz();
   yerlestir(kok,
-    h('div', { class: 'msj-kapak' },
+    // v0.15.0 Kapak: profil fotoğrafının arkasında sistem kapağı (kişiye göre değişir; kendi profilinde seçilebilir).
+    h('div', { class: `msj-kapak b-kapak b-kapak-${((p.renk || 1) - 1) % 6 + 1}` },
       h('button', { type: 'button', class: 'b-ht-ikon msj-kapak-dugme', 'aria-label': t('genel.geri'), onClick: () => b.geri('/kesfet') }, ikon('sol', 22)),
       testEtiketi(),
       h('button', { type: 'button', class: 'b-ht-ikon msj-kapak-dugme', 'aria-label': t('ht.dahaFazla'), onClick: () => eylemMenusu([[t('test.sikayetEt'), sikayet], [t('test.engelle'), engelle, true]]) }, ikon('nokta3', 22)),

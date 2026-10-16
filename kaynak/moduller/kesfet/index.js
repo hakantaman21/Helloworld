@@ -115,6 +115,16 @@ function suzgecPenceresi(mevcut, uygula, say = (f) => suzgecUygula(testProfiller
     h('button', { type: 'button', class: 'b-karo', 'aria-pressed': String(kume.has(deger)), onClick: () => { if (kume.has(deger)) kume.delete(deger); else kume.add(deger); ciz(); } },
       simge ? h('span', { class: 'b-karo-simge', 'aria-hidden': 'true' }, simge) : null, ad)));
   const grupla = (etiket, ...cocuk) => h('section', { class: 'b-platform' }, h('h3', { class: 'b-grup-etiket' }, etiket), ...cocuk);
+  // v0.15.0: çok öğeli gruplar (ilgi alanı, ülke) dokununca açılır; kapalıyken seçili sayısı görünür.
+  const acikGruplar = new Set();
+  const katla = (anahtar, etiket, kume, ...cocuk) => {
+    const d = h('details', { class: 'b-platform b-katla', open: acikGruplar.has(anahtar) || null },
+      h('summary', { class: 'b-katla-ust' }, h('span', { class: 'b-grup-etiket' }, etiket),
+        kume.size ? h('span', { class: 'b-katla-sayi' }, String(kume.size)) : null),
+      ...cocuk);
+    d.addEventListener('toggle', () => { if (d.open) acikGruplar.add(anahtar); else acikGruplar.delete(anahtar); });
+    return d;
+  };
 
   function sayiGuncelle() {
     // v0.13.0: sayı, ana listedeki sekme ve dil haplarıyla AYNI hesaplamadan gelir ("N kişiyi göster" = açılan liste).
@@ -128,8 +138,8 @@ function suzgecPenceresi(mevcut, uygula, say = (f) => suzgecUygula(testProfiller
     if (sekme === 'sik') {
       yerlestir(ic,
         grupla(t('suzgec.sikBaslik'), coklu(f.hizli, HIZLI_SUZGECLER.map(([k, simge]) => [k, t(`suzgec.hizli.${k}`), simge]))),
-        h('section', { class: 'b-platform' }, aralikKaydirici({ min: YAS_MIN, max: YAS_MAX, deger: f.yas, etiket: t('ht.yas'), bicim: (v) => (v === null ? t('suzgec.tumYaslar') : v >= YAS_MAX ? `${YAS_MAX}+` : String(v)), degisti: (d) => { f.yas = d; sayiGuncelle(); } })),
-        grupla(t('ht.cinsiyet'), tekli('cinsiyet', [['tum', t('ht.cins.tum')], ['k', t('ht.cins.k')], ['e', t('ht.cins.e')]], 3)),
+        h('section', { class: 'b-platform b-platform-sikisik' }, aralikKaydirici({ min: YAS_MIN, max: YAS_MAX, deger: f.yas, etiket: t('ht.yas'), bicim: (v) => (v === null ? t('suzgec.tumYaslar') : v >= YAS_MAX ? `${YAS_MAX}+` : String(v)), degisti: (d) => { f.yas = d; sayiGuncelle(); } })),
+        h('section', { class: 'b-platform b-platform-sikisik' }, h('h3', { class: 'b-grup-etiket' }, t('ht.cinsiyet')), tekli('cinsiyet', [['tum', t('ht.cins.tum')], ['k', t('ht.cins.k')], ['e', t('ht.cins.e')]], 3)),
         h('p', { class: 'b-kucuk' }, t('suzgec.ucretsiz')),
       );
     } else {
@@ -139,8 +149,8 @@ function suzgecPenceresi(mevcut, uygula, say = (f) => suzgecUygula(testProfiller
         grupla(t('suzgec.anaDili'), tekli('anaDil', diller('anaDil'), 3)),
         grupla(t('suzgec.ogreniyor'), tekli('ogrDil', diller('ogrenilenDil'), 3)),
         h('section', { class: 'b-platform' }, aralikKaydirici({ min: 0, max: SEVIYE_SIRASI.length - 1, deger: f.seviye, etiket: t('suzgec.seviye'), noktalar: true, bicim: (v) => (v === null ? `${SEVIYE_SIRASI[0]} – ${SEVIYE_SIRASI[SEVIYE_SIRASI.length - 1]}` : SEVIYE_SIRASI[v]), degisti: (d) => { f.seviye = d; sayiGuncelle(); } })),
-        grupla(t('suzgec.ulke'), coklu(f.ulkeler, ulkeler.map(([ad, bayrak]) => [ad, ad, bayrak]))),
-        grupla(t('ilgi.baslik'), coklu(f.ilgiler, ilgiler.map((i) => [i.kimlik, yerel(i), i.simge]))),
+        katla('ulke', t('suzgec.ulke'), f.ulkeler, coklu(f.ulkeler, ulkeler.map(([ad, bayrak]) => [ad, ad, bayrak]))),
+        katla('ilgi', t('ilgi.baslik'), f.ilgiler, coklu(f.ilgiler, ilgiler.map((i) => [i.kimlik, yerel(i), i.simge]))),
       );
     }
   }

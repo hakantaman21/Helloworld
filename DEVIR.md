@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.14.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.14.0'da (16.10.2026, PR #17). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.15.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.14.0'da (16.10.2026, PR #17). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,19 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.15.0
+
+- **Yapan:** Claude (Opus 5.5), 17.10.2026
+- **Neden:** Hakan (16.10, 23:51): marka şeridi banda değsin ve sola dayalı; üst bant çizgisiz, hafif kabartma; kişi kartlarında renkli çizgi olmasın; Dil Anları'nda HelloTalk gibi 4'lü fotoğraf; Facebook gibi kapak görseli; hobiler kaydırmalı ve daha çok; süzgeçte daha sık bantlar ve açılır çok öğeli gruplar.
+- **Ne:**
+  - `bilesenler.css` v0.15.0 blokları: `.b-marka-serit` sola dayalı, `:has(+ .b-bas-bant)` ile banda değer; `.b-bas-bant` çizgisiz; `.b-ekran .b-liste-satir` renkli halkasız; `.b-kapak-1..6` (`--kapak` değişkeni); `.b-platform-sikisik`, `.b-katla` (details/summary, `.b-katla-sayi`).
+  - `cekirdek/fotograf.js`: `dosyalarSec()`, `fotograflarEkle(sinir=9)` → `mdy:` referansları.
+  - `test-modu.anPaylas(metin, fotolar)`; dil-anlari `fotoIzgarasi()` (`anl-fotolar-{1..4}`).
+  - mesaj: `.msj-kapak` (sistem kapağı kişinin renginden), `.msj-hobiler` yatay şerit, ortak hobi vurgusu. gelisim: `.gls-kapak` + `kapakSec()` (6 sistem kapağı ya da kendi fotoğrafı; `profil.kapak`).
+  - kesfet `suzgecPenceresi`: `katla(anahtar, …)` ülke ve ilgi grupları için; açık gruplar yeniden çizimde korunur.
+- **Bekleyen (Hakan onayı):** h–i önerisi — profil fotoğrafı tüm ana sayfaların üst bandında solda, dokununca yan menü (Profilini gör, kısayollar, Ayarlar); sağ alt sekme "Gelişim" (Profil modülü ikiye bölünür: kimlik fotoğrafın arkasında, gelişim sekmede).
+- **Şema:** 16. **Durum:** `deneme`'de, canlıya alınmadı.
 
 ## v0.14.0
 

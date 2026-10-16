@@ -128,9 +128,9 @@ export function anDuzelt(kimlik, kaynak, dogru) {
   testGuncelle((t) => { t.duzeltmeler = { ...(t.duzeltmeler || {}), [kimlik]: { kaynak, dogru, zaman: Date.now() } }; });
 }
 
-export function anPaylas(metin) {
+export function anPaylas(metin, fotolar = []) {
   const kimlik = 'benim-' + Date.now().toString(36);
-  testGuncelle((t) => { t.anlar = [{ kimlik, yazar: 'ben', metin: String(metin).slice(0, 500), zaman: Date.now() }, ...(t.anlar || [])].slice(0, 50); });
+  testGuncelle((t) => { t.anlar = [{ kimlik, yazar: 'ben', metin: String(metin).slice(0, 500), fotolar: fotolar.slice(0, 9), zaman: Date.now() }, ...(t.anlar || [])].slice(0, 50); });
   return kimlik;
 }
 

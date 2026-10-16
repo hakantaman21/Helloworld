@@ -159,3 +159,24 @@ export function fotografSil(veri) {
     if (v.profil.foto === veri) v.profil.foto = v.profil.fotograflar[0] || null;
   });
 }
+
+// v0.15.0 Dil Anları için çoklu fotoğraf: birden çok resim seçilir, her biri küçültülüp medya deposuna yazılır.
+// Döner: başvuru listesi (mdy:… ya da depo yoksa veri adresi). En çok `sinir` resim.
+export function dosyalarSec() {
+  return new Promise((coz) => {
+    const girdi = document.createElement('input');
+    girdi.type = 'file';
+    girdi.accept = 'image/*';
+    girdi.multiple = true;
+    girdi.addEventListener('change', () => coz(girdi.files ? [...girdi.files] : []), { once: true });
+    girdi.click();
+  });
+}
+export async function fotograflarEkle(sinir = 9) {
+  const dosyalar = (await dosyalarSec()).slice(0, sinir);
+  const sonuc = [];
+  for (const d of dosyalar) {
+    try { sonuc.push(await medyaYaz(await kucult(d))); } catch { /* açılamayan resim atlanır */ }
+  }
+  return sonuc;
+}

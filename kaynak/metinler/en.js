@@ -153,6 +153,7 @@ export default {
   },
 
   anlar: {
+    fotoEkle: 'Add photos (up to 9)', fotoSayisi: '{n} photos · add more',
     sen: 'You',
     profiliAc: 'Open {ad}\'s profile',
     seninDuzeltmen: 'Your correction',
@@ -696,5 +697,6 @@ export default {
     bos: 'No sentences at this level; choose "All scenarios".', hafizaBos: 'Your Error Memory has no pronunciation items.',
     nasil: 'Listen first, then say it. Words that were not recognised are underlined; listen slowly and try again.',
   },
+  kapak: { baslik: 'Cover image', degistir: 'Change cover image', sistem: 'System cover {n}', foto: 'Choose your own photo', not: 'The cover appears behind your photo on your profile. It is stored only on this device.' },
   zamanOnce: { simdi: 'just now', dk: '{n} min ago', saat: '{n} h ago', gun: '{n} d ago' },
 };
