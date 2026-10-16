@@ -11,7 +11,7 @@ import { duyur } from '../../cekirdek/duyuru.js';
 import { kelimeFarki } from '../../cekirdek/dil/fark.js';
 import { cumleKayitli, cumleKaydetDegistir } from '../../cekirdek/cumle-defteri.js';
 import { destek, soyle } from '../../cekirdek/ses/ses-hatti.js';
-import { testModuAcik, testModuAyarla, testAnlari, anBegen, anBegenildi, anYorumlari, anYorumEkle, anDuzeltmesi, anDuzelt, anPaylas, anOtomatikYorum, testProfiliHam, testSikayet, takipte, takipDegistir, eslesme, aktiflik } from '../../cekirdek/test-modu.js';
+import { testModuAcik, testModuAyarla, testAnlari, anBegen, anBegenildi, anYorumlari, anYorumEkle, anDuzeltmesi, anDuzelt, anPaylas, anOtomatikYorum, testProfiliHam, testSikayet, takipte, takipDegistir, eslesme, aktiflik, saatFarki, YAKIN_SAAT_FARKI } from '../../cekirdek/test-modu.js';
 
 const OTOMATIK_YORUM_GECIKMESI = 1500;
 const ONIZLEME_YORUM = 2;
@@ -153,6 +153,10 @@ function ciz(kok, b) {
     if (sekme === 'senin') s = s.filter((a) => !a.benim).sort((x, y) => eslesme(y.profil).puan - eslesme(x.profil).puan);
     if (sekme === 'yardim') s = s.filter((a) => !a.benim && (a.duzeltilebilir || (ben.anaDil && a.profil.ogrenilenDil === ben.anaDil)));
     if (sekme === 'takip') s = s.filter((a) => a.benim || takipte(a.yazar));
+    // v0.12.1 HelloTalk'taki gibi ek süzgeçler (hepsi cihazdaki TEST verisinden çalışır):
+    if (sekme === 'yakin') s = s.filter((a) => !a.benim && saatFarki(a.profil) <= YAKIN_SAAT_FARKI);
+    if (sekme === 'ogren') s = s.filter((a) => !a.benim && a.profil.anaDil === (ben.ogrenilenDil || 'en'));
+    if (sekme === 'sinif') s = s.filter((a) => !a.benim && a.profil.seviye === ben.seviye);
     return s;
   }
 
@@ -215,7 +219,7 @@ function ciz(kok, b) {
         htIkon('kalem', t('anlar.paylasBaslik'), () => { yaziyor = true; paylasCiz(); paylasGirdi.focus(); }),
       ],
     }),
-    sekmeler([['guncel', t('ht.guncel')], ['senin', t('ht.seninIcin')], ['yardim', t('ht.yardimEt')], ['takip', t('ht.takipEdilen')]], sekme, (id) => { sekme = id; yenile(); }, { etiket: t('anlar.baslik') })),
+    sekmeler([['guncel', t('ht.guncel')], ['senin', t('ht.seninIcin')], ['yardim', t('ht.yardimEt')], ['takip', t('ht.takipEdilen')], ['ogren', t('ht.ogren')], ['yakin', t('ht.yakinSaat')], ['sinif', t('ht.sinif')]], sekme, (id) => { sekme = id; yenile(); }, { etiket: t('anlar.baslik') })),
     pano,
     h('p', { class: 'anl-uyari' }, testEtiketi(), ' ', t('anlar.testUyari')),
     paylasAlani,

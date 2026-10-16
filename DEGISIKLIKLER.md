@@ -1,3 +1,14 @@
+## 0.12.1 — 16.10.2026 · Marka şeridi, hatları her yerde görünen üst bant, geniş sohbet kartları, HelloTalk'taki eksik süzgeçler
+
+- Ana sekmelerin en üstünde ince marka şeridi: uygulama simgesi + "Konuşma Koçu".
+- Üst bant artık kenarlardan ayrık bir kart: üstte, solda, sağda ve altta hattı görünür.
+- Sohbet: kişi satırları Bağlan'daki kartlar kadar geniş (büyük fotoğraf, dil çifti, çevrimiçi/ülke, son mesaj).
+- Yeni süzgeçler (HelloTalk'ta olup bizde eksik olanlar, hepsi çalışır):
+  - Bağlan: Ciddi öğrenenler, Yakın saat dilimi, Karşılıklı (senin dilini öğrenen ve senin hedef dilini konuşan), Kadın, Erkek.
+  - Sohbet: Sen yazmadın (yanıt bekleyen), Yakın saat dilimi, kişinin diline göre (İngilizce, İspanyolca…).
+  - Dil Anları: Öğren (hedef dilini ana dil olarak konuşanların paylaşımları), Yakın saat dilimi, Sınıf arkadaşları (aynı seviye).
+- Konum tutulmadığı için HelloTalk'taki "Yakında/Şehir" yerine "Yakın saat dilimi" (±3 saat) kullanılır.
+
 ## 0.12.0 — 16.10.2026 · Akıllı sayfa renkleri, tasarım paketleri, 9 yeni senaryo ve 3 yeni kategori
 
 - Akıllı renk: her sayfa içeriğiyle eşleşen bir renk tonu taşır — Sohbet yeşil (sakin konuşma), Bağlan mavi (güven, insanlar), Pratik kırmızı-mercan (enerji, eylem), Dil Anları amber (paylaşım, sıcaklık), Profil ve Ayarlar mor (kimlik, gelişim). Ton üst bantta, sayfanın üst ışığında, başlıkta, kart çerçevelerinde görünür; menüye bakmadan hangi sayfada olduğun anlaşılır.

@@ -48,3 +48,10 @@
   .shb-menu-profil small { color: var(--renk-vurgu-metin); font-weight: 700; }
   .shb-menu-profil:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; border-radius: 12px; }
 }
+
+/* v0.12.1 Kişi satırları Bağlan'daki kartlar gibi geniş: büyük avatar, dil çifti, etkinlik */
+@layer moduller {
+  .shb-liste .shb-kisi { align-items: flex-start; gap: 12px; padding: 12px; min-height: 100px; border-radius: 18px; }
+  .shb-kisi > .shb-kisi-ic { gap: 4px; }
+  .shb-kisi-dil { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--renk-soluk); }
+}

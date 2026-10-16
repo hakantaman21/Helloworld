@@ -4,7 +4,7 @@ import { ekranAl } from './modul-kaydi.js';
 import { al } from './depo.js';
 import { yayinla } from './olay-hatti.js';
 import { t } from './metin.js';
-import { h, gezinmeGizle } from './arayuz.js';
+import { h, gezinmeGizle, markaSeridi } from './arayuz.js';
 
 let kok = null;
 let aktifTemizle = null;
@@ -50,6 +50,8 @@ function ciz() {
   gezinmeGizle();
   try {
     aktifTemizle = ekran.ciz(kap, { p: parametreler, git, geri }) || null;
+    // Ana sekmelerde (alt menülü ekranlar) en üstte ince marka şeridi.
+    if (kap.classList.contains('b-ekran-gezinmeli')) kap.prepend(markaSeridi());
     // v0.4.0: HelloTalk düzeninde her ana sekme kendi ince üst çubuğunu (htUst) çizer; ortak şerit kaldırıldı.
   } catch (hata) {
     console.error('[yonlendirici]', id, hata);

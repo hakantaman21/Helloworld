@@ -79,6 +79,7 @@ export default {
     sohbetBaslik: 'Language Chats', hizliErisim: 'Quick access', ara: 'Search', cevrimici: 'Online', sen: 'You', yzPratik: 'AI practice',
     hizli: { senaryolar: 'Scenarios', hafiza: 'Mistakes', koc: 'AI Coach', partner: 'Find partner', anlar: 'Moments' , telaffuz: 'Pronunciation', defter: 'Phrasebook', karne: 'Report', odalar: 'Topic rooms' },
     uyum: '{n}% match', uyumKisa: 'match', uyumBaslik: 'Language exchange match', oneriSatir: 'Your best language partner · tap to say hi',
+    ciddi: 'Serious learners', yakinSaat: 'Nearby time zone', karsilikli: 'Mutual', kadin: 'Women', erkek: 'Men', ogren: 'Learn', sinif: 'Classmates', okunmamis: 'Awaiting reply',
     ortakBul: 'Find Language Partners', sanaUygun: 'For you', yeni: 'New', tumDiller: 'All languages', dil: 'Language', dilimiOgrenen: 'Learning {dil}',
     suzgecler: 'Filters', yas: 'Age', cinsiyet: 'Gender', cins: { tum: 'All', k: 'Female', e: 'Male' },
     yasAralik: { tum: 'All', genc: '18–25', orta: '26–35', ust: '36+' }, yalnizHizli: 'Only fast responders',

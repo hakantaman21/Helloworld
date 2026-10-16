@@ -173,6 +173,18 @@ export function yerelSaat(p) {
   } catch { return ''; }
 }
 
+// v0.12.1 Yakın zaman dilimi (HelloTalk "Yakın Zaman Dilimi"): kişinin saati ile cihaz saati arasındaki fark (saat).
+// Konum bilgisi tutulmaz; "yakında" yerine saat dilimine bakılır (aynı saatlerde müsait olma olasılığı).
+export function saatFarki(p) {
+  try {
+    const simdi = new Date();
+    const orada = new Date(simdi.toLocaleString('en-US', { timeZone: p.saatDilimi }));
+    const burada = new Date(simdi.toLocaleString('en-US'));
+    return Math.abs(Math.round((orada - burada) / 3600000));
+  } catch { return 99; }
+}
+export const YAKIN_SAAT_FARKI = 3;
+
 // ---- Otomatik eşleşme: dil değişimi uyumu + seviye + etkinlik ----
 // Puan bir kural toplamıdır (yapay zekâ değildir). Nedenler ekranda açıkça yazılır.
 export function eslesme(p, ben = al().profil) {

@@ -80,6 +80,7 @@ export default {
     sohbetBaslik: 'Dil Sohbetleri', hizliErisim: 'Hızlı erişim', ara: 'Arama', cevrimici: 'Çevrimiçi', sen: 'Sen', yzPratik: 'yapay zekâ pratiği',
     hizli: { senaryolar: 'Senaryolar', hafiza: 'Hata Hafızası', koc: 'AI Koç', partner: 'Partner bul', anlar: 'Dil Anları' , telaffuz: 'Telaffuz', defter: 'Cümle defteri', karne: 'Karne', odalar: 'Konu odaları' },
     uyum: '%{n} uyum', uyumKisa: 'uyum', uyumBaslik: 'Dil değişimi uyumu', oneriSatir: 'Sana en uygun dil ortağı · selam vermek için dokun',
+    ciddi: 'Ciddi öğrenenler', yakinSaat: 'Yakın saat dilimi', karsilikli: 'Karşılıklı', kadin: 'Kadın', erkek: 'Erkek', ogren: 'Öğren', sinif: 'Sınıf arkadaşları', okunmamis: 'Sen yazmadın',
     ortakBul: 'Dil Ortakları Bul', sanaUygun: 'Sana uygun', yeni: 'Yeni', tumDiller: 'Tüm diller', dil: 'Dil', dilimiOgrenen: '{dil} öğrenenler',
     suzgecler: 'Süzgeçler', yas: 'Yaş', cinsiyet: 'Cinsiyet', cins: { tum: 'Tümü', k: 'Kadın', e: 'Erkek' },
     yasAralik: { tum: 'Tümü', genc: '18–25', orta: '26–35', ust: '36+' }, yalnizHizli: 'Yalnız hızlı yanıt verenler',

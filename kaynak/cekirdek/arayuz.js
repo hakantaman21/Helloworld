@@ -241,6 +241,11 @@ function gezinmeKur() {
   requestAnimationFrame(olc);
 }
 
+// v0.12.1 Marka şeridi: ana sekmelerin en üstünde ince bir bar — uygulama simgesi + adı (yönlendirici ekler).
+export function markaSeridi() {
+  return h('div', { class: 'b-marka-serit', role: 'banner' }, logo(18), h('span', { class: 'b-marka-ad' }, t('uygulama.ad')));
+}
+
 // Koyu baş bandı: sayfanın ilk yatay bölüm(ler)i koyu bir şeritte durur; sayfa onun altından başlar
 // (kâğıdın en üstüne yazılmış dilekçe gibi görünmez). Renk Ayarlar › Görünüm › Üst bant rengi ile seçilir.
 export function basBant(...cocuklar) {

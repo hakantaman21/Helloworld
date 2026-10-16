@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.12.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.3'te (16.10.2026, PR #15). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.12.1 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.3'te (16.10.2026, PR #15). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,14 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.12.1
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan (ekran görüntüsü + HelloTalk ekran kaydı): üst barın hatları solda-sağda kayboluyor, üstten de belli olmalı; en üstte ince marka bölümü (simge + uygulama adı); Sohbet'te kişi blokları Bağlan'daki gibi geniş; videodaki kaydırılan süzgeçlerden işlevsel olup bizde eksik olanları ekle.
+- **Videodaki HelloTalk süzgeçleri:** Bağla: Tüm, Ciddi Öğrenenler, Yakında, Şehir, Cinsiyet, Ücretli Pratik · Dil Sohbetleri: Yakın Zaman Dilimi, dile göre · Dil Anları: Güncel, Senin için, Yardım et, Yakında, Selfie, Takip, Öğren, Ses, Sınıf arkadaşları. Eklenmeyenler: Şehir/Yakında (konum tutmuyoruz → Yakın saat dilimi), Ücretli pratik (ödeme yok), Ses ve Selfie (sesli/fotoğraflı gönderi verisi yok).
+- **Ne:** `test-modu.js` `saatFarki(p)`, `YAKIN_SAAT_FARKI = 3`; kesfet/sohbetler/dil-anlari süzgeçleri; `arayuz.js` `markaSeridi()` — yönlendirici `.b-ekran-gezinmeli` ekranlara ekler; `bilesenler.css` v0.12.1 (bant ayrık kart + tam çerçeve); `sohbetler` `.shb-kisi` geniş kart.
+- **Şema:** değişmedi (13). **Durum:** `deneme` dalında (v0.12.0 ile birlikte); canlıya alma Hakan onayıyla.
 
 ## v0.12.0
 
