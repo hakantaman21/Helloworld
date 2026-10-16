@@ -86,3 +86,7 @@
   .kft-satir { background: radial-gradient(120% 90% at 0% 0%, var(--renk-kart-parilti), transparent 58%), linear-gradient(155deg, color-mix(in srgb, var(--sayfa) 12%, var(--renk-kart-ust)), color-mix(in srgb, var(--sayfa) 6%, var(--renk-kart-alt))); box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 -2px 0 var(--renk-kart-alt-golge), inset 0 0 0 1px color-mix(in srgb, var(--sayfa) 18%, var(--renk-cizgi)), 0 8px 18px var(--renk-golge); }
   .kft-liste { gap: 10px; }
 }
+
+@layer moduller {
+  .kft-satir { box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 -2px 0 var(--renk-kart-alt-golge), inset 0 0 0 1px color-mix(in srgb, var(--sayfa) 38%, var(--renk-cizgi-guclu)), 0 8px 18px var(--renk-golge); }
+}
