@@ -74,3 +74,19 @@
   .ayr-foto-rozet { position: absolute; right: -2px; bottom: -2px; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--renk-vurgu); color: var(--renk-vurgu-uzerinde); box-shadow: 0 0 0 2px var(--renk-yuzey); }
   .ayr-foto-dugme:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 3px; }
 }
+
+/* v0.7.0 kategori menüsü (HelloTalk Ayarlar düzeni, English Prime renkleri) */
+@layer moduller {
+  .ayr-menu { display: flex; flex-direction: column; gap: 10px; }
+  .ayr-menu-kart { display: flex; flex-direction: column; padding: 4px 12px; border-radius: 18px; background: linear-gradient(170deg, var(--renk-yuzey-ust), var(--renk-yuzey)); box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 0 0 1px var(--renk-cizgi), 0 4px 12px var(--renk-golge); }
+  .ayr-menu-satir { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 6px 0; border: 0; border-bottom: 1px solid var(--renk-cizgi); background: transparent; color: var(--renk-murekkep); font: inherit; text-align: left; cursor: pointer; }
+  .ayr-menu-satir:last-child { border-bottom: 0; }
+  .ayr-menu-satir > svg { color: var(--renk-soluk); flex-shrink: 0; }
+  .ayr-menu-simge { flex-shrink: 0; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; min-height: 0; padding: 0; box-shadow: inset 0 1px 0 var(--renk-kabartma-isik); }
+  .ayr-menu-ikon { width: 28px; height: 28px; }
+  .ayr-menu-metin { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .ayr-menu-metin b { font-size: 15.5px; font-weight: 700; }
+  .ayr-menu-metin small { font-size: 12.5px; color: var(--renk-soluk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ayr-menu-satir:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; border-radius: 10px; }
+  .ayr-grup-baslik { display: none; }
+}

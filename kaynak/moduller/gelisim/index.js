@@ -1,7 +1,7 @@
 // Gelişim: haftalık/aylık Büyüme Karnesi (paylaşılabilir kart), seviye yolu, haftanın günleri ve seri.
 import './gelisim.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d, htUst, htIkon, dilCifti, benAvatar } from '../../cekirdek/arayuz.js';
+import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d, htUst, htIkon, dilCifti, benAvatar, sekmeler } from '../../cekirdek/arayuz.js';
 import { testAnlari, takipSayisi } from '../../cekirdek/test-modu.js';
 import { fotografEkle, profilFotografiYap, fotografSil, FOTO_SINIRI } from '../../cekirdek/fotograf.js';
 import { cumleSil } from '../../cekirdek/cumle-defteri.js';
@@ -17,6 +17,7 @@ import { jeton } from '../../cekirdek/tema.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 
 let donem = 'hafta';
+let benSekme = 'profil';
 
 function ortalama(dizi) {
   return dizi.length ? dizi.reduce((a, b) => a + b, 0) / dizi.length : null;
@@ -119,6 +120,14 @@ function ciz(kok, b) {
   const oneri = oneriSenaryo().senaryo;
   const seri = seriHesapla();
   const benimAnSayisi = testAnlari().filter((a) => a.benim).length;
+  const gunKayitlari = Object.values(v.gunluk || {});
+  const toplamDakika = Math.round(gunKayitlari.reduce((n, g) => n + (g.dakika || 0), 0));
+  const kelimeSayisi = new Set(gunKayitlari.flatMap((g) => g.yeniKelime || [])).size;
+  const ilkGun = Object.keys(v.gunluk || {}).sort()[0];
+  const katilimGunu = ilkGun ? Math.max(1, Math.round((Date.now() - new Date(ilkGun).getTime()) / 86400000) + 1) : 1;
+  // İki sekme (az kaydırma): Profil = kimlik, puanlar, fotoğraflar, defter, araçlar · Gelişim = karne, seviye yolu, hafta.
+  if (b.p.sekme === 'profil' || b.p.sekme === 'gelisim') benSekme = b.p.sekme;
+  const sekmeAlani = sekmeler([['profil', t('gelisim.sekme.profil')], ['gelisim', t('gelisim.sekme.gelisim')]], benSekme, (id) => { benSekme = id; sekmeGoster(); }, { tur: 'hap', etiket: t('gezinme.profil') });
 
   yerlestir(kok, 
     htUst({
@@ -143,6 +152,14 @@ function ciz(kok, b) {
         h('span', { class: 'gls-istat-deger' }, ikon3d('seri', 26), String(seri)), h('span', null, t('ht.gunlukSeri'))),
       h('button', { type: 'button', class: 'gls-istat-kutu', onClick: () => b.git('/hafiza') },
         h('span', { class: 'gls-istat-deger' }, ikon3d('hafiza', 26), String(tekrarSayisi)), h('span', null, t('ht.tekrarBekleyen'))),
+    ),
+    sekmeAlani,
+    h('section', { class: 'b-platform gls-puanlar', 'aria-labelledby': 'gls-puan-baslik' },
+      h('h2', { class: 'b-grup-etiket', id: 'gls-puan-baslik' }, h('span', null, t('puan.baslik')), h('span', null, t('puan.katildi', { n: katilimGunu }))),
+      h('div', { class: 'b-karolar' }, [
+        ['saat', toplamDakika, t('puan.dakika')], ['kitap', kelimeSayisi, t('puan.kelime')], ['onay', (v.hafiza || []).length, t('puan.hata')],
+        ['yerImi', (v.kayitliCumleler || []).length, t('puan.cumle')], ['kalem', benimAnSayisi, t('puan.an')], ['kisi', takipSayisi(), t('puan.takip')],
+      ].map(([ik, deger, ad]) => h('span', { class: 'b-karo gls-puan' }, h('span', { class: 'gls-puan-ikon', 'aria-hidden': 'true' }, ikon(ik, 20)), h('b', { class: 'gls-puan-deger' }, String(deger)), ad))),
     ),
     h('button', { type: 'button', class: 'gls-satir', onClick: () => b.git('/dil-anlari') },
       ikon3d('anlar', 28), h('b', null, t('anlar.baslik')), h('span', { class: 'gls-satir-sayi' }, String(benimAnSayisi)), ikon('sag', 18)),
@@ -178,6 +195,13 @@ function ciz(kok, b) {
         [['senaryo', 'senaryolar', '/senaryolar', 1], ['telaffuz', 'telaffuz', `/gorusme?tur=senaryo&id=${oneri.kimlik}`, 5], ['hafiza', 'hafiza', '/hafiza', 3], ['kupa', 'karne', '/karne', 2], ['baglanti', 'partner', '/kesfet', 4]].map(([ik, ad, yol, renk]) =>
           h('button', { type: 'button', class: 'b-uygulama', onClick: () => b.git(yol) }, h('span', { class: `b-uygulama-ikon b-kutu-${renk}` }, ikon3d(ik, 38)), t(`ht.merkez.${ad}`))),
       ),
+    ),
+    h('section', { class: 'b-platform gls-davet' },
+      h('div', { class: 'gls-davet-metin' }, h('b', null, t('davet.baslik')), h('span', null, t('davet.alt'))),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-ana gls-davet-dugme', onClick: async () => {
+        const veri = { title: t('uygulama.ad'), text: t('davet.metin'), url: location.href.split('#')[0] };
+        try { if (navigator.share) await navigator.share(veri); else { await navigator.clipboard.writeText(`${veri.text} ${veri.url}`); duyur(t('ht.kopyalandi')); } } catch { /* vazgeçildi */ }
+      } }, ikon('paylas', 18), t('davet.dugme')),
     ),
     h('section', { class: 'b-kart gls-siradaki', 'aria-labelledby': 'gls-sonraki-adim' },
       h('span', { class: 'b-ust-etiket' }, t('gelisim.siradakiEtiket')),
@@ -236,6 +260,12 @@ function ciz(kok, b) {
     ),
     altGezinme('/gelisim'),
   );
+  const cocuklar = [...kok.children];
+  const bas = cocuklar.indexOf(sekmeAlani);
+  const ayrim = cocuklar.findIndex((c) => c.classList.contains('gls-siradaki'));
+  cocuklar.forEach((c, i) => { if (i > bas && i < cocuklar.length - 1) c.dataset.sekme = i < ayrim ? 'profil' : 'gelisim'; });
+  function sekmeGoster() { kok.querySelectorAll('[data-sekme]').forEach((c) => { c.hidden = c.dataset.sekme !== benSekme; }); }
+  sekmeGoster();
   return null;
 }
 

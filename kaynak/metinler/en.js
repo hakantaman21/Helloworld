@@ -23,6 +23,7 @@ export default {
   hizliYanit: { etiket: 'Quick reply suggestions' },
   kisi: { katildi: 'Joined', yerelSaat: 'Local time' },
   suzgec: {
+    tumYaslar: 'All ages', 
     sik: 'Frequently used', detay: 'Detailed', sikBaslik: 'One tap',
     hizli: { cevrimici: 'Online', yeni: 'New members', yakin: 'Near my level', ortakIlgi: 'Shared interests', hizli: 'Fast replies', karsilikli: 'Learning my language' },
     anaDili: 'Native language', ogreniyor: 'Learning', seviye: 'Level', ulke: 'Country',
@@ -38,9 +39,25 @@ export default {
     baslik: 'My phrasebook', bos: 'Tap the bookmark next to a sentence in a chat or in Moments; it will be collected here.',
     kaydet: 'Save to phrasebook', kaydedildi: 'Saved to your phrasebook.', cikarildi: 'Removed from your phrasebook.', dinle: 'Listen', sil: 'Delete',
   },
+  yanMenu: {
+    baslik: 'Menu', afisEtiket: 'TODAY', afisBaslik: 'Talk with your coach for 5 minutes', afisAlt: 'A scenario at your level is waiting',
+    ogren: 'Learn', topluluk: 'Community', hesap: 'My account',
+    senaryoAlt: 'Café, market, directions…', hafizaAlt: 'Mistakes due for review', defterAlt: 'Sentences you saved',
+    ortakAlt: 'Filters and auto match', anlarAlt: 'Post, correct, comment', odalarAlt: 'Topic rooms and coach practice',
+    profilAlt: 'Photos, points, progress', ayarlarAlt: 'Language, reminders, appearance, privacy',
+  },
+  odalar: {
+    baslik: 'Topic rooms', alt: 'Join a topic at your level', hizliEtiket: 'Matches your level', hizliKatil: 'Join now', degistir: 'Suggest another room',
+    katil: 'Join', ilgilenen: '{n} interested', not: 'Live community voice rooms will come with the community. For now, joining a room starts a talk on that topic with the AI coach.',
+    konu: { kafe: 'Ordering at a café', market: 'Shopping at the market', yol: 'Asking for directions', bilet: 'Buying a ticket' },
+    etiket: { kafe: 'Daily life', market: 'Shopping', yol: 'Travel', bilet: 'Travel' },
+  },
+  puan: { baslik: 'Learning points', katildi: 'Day {n}', dakika: 'min spoken', kelime: 'new words', hata: 'mistakes saved', cumle: 'saved sentences', an: 'Moments', takip: 'following' },
+  davet: { baslik: 'Invite a friend', alt: 'Practising together is easier', dugme: 'Share', metin: 'I practise speaking English with Konuşma Koçu, join me:' },
   ht: {
+    gizle: 'Hide',
     sohbetBaslik: 'Language Chats', hizliErisim: 'Quick access', ara: 'Search', cevrimici: 'Online', sen: 'You', yzPratik: 'AI practice',
-    hizli: { senaryolar: 'Scenarios', hafiza: 'Mistakes', koc: 'AI Coach', partner: 'Find partner', anlar: 'Moments' },
+    hizli: { senaryolar: 'Scenarios', hafiza: 'Mistakes', koc: 'AI Coach', partner: 'Find partner', anlar: 'Moments' , telaffuz: 'Pronunciation', defter: 'Phrasebook', karne: 'Report', odalar: 'Topic rooms' },
     uyum: '{n}% match', uyumKisa: 'match', uyumBaslik: 'Language exchange match', oneriSatir: 'Your best language partner · tap to say hi',
     ortakBul: 'Find Language Partners', sanaUygun: 'For you', yeni: 'New', tumDiller: 'All languages', dil: 'Language', dilimiOgrenen: 'Learning {dil}',
     suzgecler: 'Filters', yas: 'Age', cinsiyet: 'Gender', cins: { tum: 'All', k: 'Female', e: 'Male' },
@@ -188,6 +205,7 @@ export default {
   },
 
   bugun: {
+    sekme: { bugun: 'Today' },
     gelisimKutu: { baslik: 'My progress', alt: 'Streak, level and goals' },
     partnerSecim: { baslik: 'Who would you like to practise with?', yz: 'Practise with AI', insan: 'Real person', bilgi: 'The AI demo coach is available. Speaking with real people will open when the safe community is ready.' },
     hizliEtiket: 'READY TO SPEAK?',
@@ -436,6 +454,7 @@ export default {
   },
 
   gelisim: {
+    sekme: { profil: 'Profile', gelisim: 'Progress' },
     menu: {
       baslik: 'Menu',
       ayarlar: { baslik: 'Settings', alt: 'Language, reminder times, appearance, privacy' },
@@ -480,6 +499,7 @@ export default {
   },
 
   ayarlar: {
+    gizlilikOzet: 'Your data stays on this device', acik: 'On', kapali: 'Off',
     grup: { profil: 'My profile', dil: 'Language', bildirim: 'Notifications and coach calls', koc: 'Coach and practice', gorunum: 'Appearance', gizlilik: 'Privacy and data' },
     sabahAciklama: 'Start the day with a short talk', aksamAciklama: 'Review the day’s mistakes',
     gonderimOneri: 'Suggest a fix before sending', gonderimOneriAciklama: 'If your message may contain a mistake, shows the corrected version before sending.',

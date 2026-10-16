@@ -9,4 +9,6 @@
       scroll-behavior: auto;
     }
   }
+  /* hidden özniteliği her zaman kazanır (sekmeler, ayar alt sayfaları): son katmanda olduğu için modül görünüm kurallarını ezer. */
+  [hidden] { display: none; }
 }

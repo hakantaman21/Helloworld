@@ -12,13 +12,54 @@ import { testModuAcik, testSohbetOzetleri, aktiflik, enIyiEslesmeler } from '../
 
 const SON_KONUSMA_SAYISI = 30;
 
+// İlk satır her zaman görünür; "Daha fazla" ikinci satırı açar (HelloTalk'taki genişleyen ızgara).
 const HIZLI = [
   ['senaryo', 'senaryolar', '/senaryolar', 1],
   ['hafiza', 'hafiza', '/hafiza', 3],
   ['yz', 'koc', null, 4],
   ['baglanti', 'partner', '/kesfet', 5],
   ['anlar', 'anlar', '/dil-anlari', 2],
+  ['telaffuz', 'telaffuz', null, 5],
+  ['kitap', 'defter', '/gelisim?sekme=profil', 6],
+  ['kupa', 'karne', '/gelisim?sekme=gelisim', 2],
+  ['pratik', 'odalar', '/bugun', 1],
 ];
+let hizliAcik = false;
+
+// Yan menü (HelloTalk ☰): kategorilere ayrılmış kısa yollar; üstte günün önerisi.
+function yanMenu(b, kocaGit) {
+  const kapat = () => { perde.remove(); document.removeEventListener('keydown', tus); };
+  const tus = (e) => { if (e.key === 'Escape') kapat(); };
+  const git = (yol) => () => { kapat(); if (yol) b.git(yol); else kocaGit(); };
+  const satir = (ik, ad, alt, yol) => h('button', { type: 'button', class: 'shb-menu-satir', onClick: git(yol) },
+    ikon3d(ik, 30), h('span', { class: 'shb-menu-metin' }, h('b', null, ad), alt ? h('small', null, alt) : null), ikon('sag', 16));
+  const grup = (baslik, ...satirlar) => h('section', { class: 'shb-menu-grup' }, h('h3', { class: 'shb-menu-grup-baslik' }, baslik), h('div', { class: 'shb-menu-kart' }, ...satirlar));
+  const v = al();
+  const perde = h('div', { class: 'shb-menu-perde', onClick: (e) => { if (e.target === perde) kapat(); } },
+    h('aside', { class: 'shb-menu', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('yanMenu.baslik') },
+      h('div', { class: 'shb-menu-ust' },
+        benAvatar(48),
+        h('span', { class: 'shb-menu-kim' }, h('b', null, v.profil.ad || t('misafir.ad')), h('small', null, `${(v.profil.anaDil || 'tr').toUpperCase()} → ${(v.profil.ogrenilenDil || 'en').toUpperCase()} · ${v.profil.seviye}`)),
+        h('button', { type: 'button', class: 'b-ht-ikon b-ht-ikon-saydam', 'aria-label': t('genel.kapat'), onClick: kapat }, ikon('kapat', 20))),
+      h('button', { type: 'button', class: 'shb-menu-afis', onClick: git(null) },
+        h('span', { class: 'shb-menu-afis-metin' }, h('small', null, t('yanMenu.afisEtiket')), h('b', null, t('yanMenu.afisBaslik')), h('span', null, t('yanMenu.afisAlt'))),
+        ikon3d('telaffuz', 56)),
+      grup(t('yanMenu.ogren'),
+        satir('senaryo', t('ht.merkez.senaryolar'), t('yanMenu.senaryoAlt'), '/senaryolar'),
+        satir('hafiza', t('ht.merkez.hafiza'), t('yanMenu.hafizaAlt'), '/hafiza'),
+        satir('kitap', t('defter.baslik'), t('yanMenu.defterAlt'), '/gelisim?sekme=profil')),
+      grup(t('yanMenu.topluluk'),
+        satir('baglanti', t('ht.ortakBul'), t('yanMenu.ortakAlt'), '/kesfet'),
+        satir('anlar', t('anlar.baslik'), t('yanMenu.anlarAlt'), '/dil-anlari'),
+        satir('pratik', t('odalar.baslik'), t('yanMenu.odalarAlt'), '/bugun')),
+      grup(t('yanMenu.hesap'),
+        satir('profil', t('gezinme.profil'), t('yanMenu.profilAlt'), '/gelisim'),
+        satir('ayarlar', t('ayarlar.baslik'), t('yanMenu.ayarlarAlt'), '/ayarlar')),
+    ));
+  document.addEventListener('keydown', tus);
+  document.body.append(perde);
+  perde.querySelector('button').focus();
+}
 
 function ciz(kok, b) {
   kok.classList.add('b-ekran-gezinmeli');
@@ -78,18 +119,24 @@ function ciz(kok, b) {
     );
   }
 
+  const hizliIzgara = h('nav', { class: 'b-platform shb-hizli', 'aria-label': t('ht.hizliErisim') });
+  function hizliCiz() {
+    const gorunen = hizliAcik ? HIZLI : HIZLI.slice(0, 4);
+    yerlestir(hizliIzgara, h('div', { class: 'b-uygulamalar shb-hizli-izgara' },
+      gorunen.map(([ik, anahtar, yol, renk]) => h('button', { type: 'button', class: 'b-uygulama', onClick: yol ? () => b.git(yol) : kocaGit },
+        h('span', { class: `b-uygulama-ikon b-kutu-${renk}` }, ikon3d(ik, 38)), t(`ht.hizli.${anahtar}`))),
+      h('button', { type: 'button', class: 'b-uygulama', 'aria-expanded': String(hizliAcik), onClick: () => { hizliAcik = !hizliAcik; hizliCiz(); } },
+        h('span', { class: 'b-uygulama-ikon shb-daha' }, ikon(hizliAcik ? 'yukari' : 'asagi', 22)), t(hizliAcik ? 'ht.gizle' : 'ht.dahaFazla'))));
+  }
+  hizliCiz();
+
   yerlestir(kok,
     htUst({
-      sol: h('button', { type: 'button', class: 'b-ht-ikon shb-ben', 'aria-label': t('gezinme.profil'), onClick: () => b.git('/gelisim') }, benAvatar(36, 'shb-ben-av')),
+      sol: htIkon('menu', t('yanMenu.baslik'), () => yanMenu(b, kocaGit)),
       baslik: t('ht.sohbetBaslik'),
       sag: htIkon('arti', t('sohbetler.yeniKisi'), () => b.git('/kesfet')),
     }),
-    h('nav', { class: 'b-uygulamalar shb-hizli', 'aria-label': t('ht.hizliErisim') },
-      HIZLI.map(([ik, anahtar, yol, renk]) => h('button', { type: 'button', class: 'b-uygulama', onClick: yol ? () => b.git(yol) : kocaGit },
-        h('span', { class: `b-uygulama-ikon b-kutu-${renk}` }, ikon3d(ik, 38)),
-        t(`ht.hizli.${anahtar}`),
-      )),
-    ),
+    hizliIzgara,
     h('label', { class: 'b-ht-arama' }, ikon('ara', 18),
       h('input', { type: 'search', placeholder: t('ht.ara'), 'aria-label': t('sohbetler.ara'), onInput: (e) => { arama = e.target.value.trim().toLocaleLowerCase(); yenile(); } })),
     sekmeler([['tum', t('sohbetler.tumFiltre')], ['cevrimici', t('ht.cevrimici')], ['insan', t('sohbetler.insanFiltre')], ['yz', t('sohbetler.yzFiltre')]], filtre, (id) => { filtre = id; yenile(); }, { tur: 'hap', etiket: t('sohbetler.filtreBaslik') }),

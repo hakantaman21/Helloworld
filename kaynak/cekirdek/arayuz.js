@@ -73,6 +73,9 @@ const IKONLAR = {
   kilit: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   degis: '<path d="M4 8h14l-3-3M20 16H6l3 3"/>',
   arti: '<path d="M12 5v14M5 12h14"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  asagi: '<path d="M6 9l6 6 6-6"/>',
+  yukari: '<path d="M6 15l6-6 6 6"/>',
   kamera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
   hoparlor: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/>',
   yerImi: '<path d="M6 4h12v16l-6-4-6 4z"/>',
@@ -342,4 +345,28 @@ export function benAvatar(boyut = 44, sinif = '') {
   const p = al().profil;
   if (p.foto) return h('img', { class: `b-av b-av-foto ${sinif}`, src: p.foto, alt: '', width: boyut, height: boyut, style: `width:${boyut}px;height:${boyut}px` });
   return h('span', { class: `b-av b-av-ben ${sinif}`, style: `width:${boyut}px;height:${boyut}px;font-size:${Math.round(boyut * 0.42)}px`, 'aria-hidden': 'true' }, (p.ad || '?').charAt(0).toLocaleUpperCase());
+}
+
+// İkili aralık kaydırıcısı (seviye, yaş): iki yerel range girdisi üst üste; klavye ve ekran okuyucu ile çalışır.
+export function aralikKaydirici({ min, max, adim = 1, deger, etiket, bicim = (v) => String(v), degisti, noktalar = false }) {
+  let [alt, ust] = deger;
+  const ozet = h('span', { class: 'b-aralik-deger' });
+  const dolgu = h('span', { class: 'b-aralik-dolgu' });
+  const girdi = (v, ad) => h('input', { type: 'range', class: 'b-aralik-girdi', min, max, step: adim, value: v, 'aria-label': `${etiket} ${ad}` });
+  const g1 = girdi(alt, '↓'); const g2 = girdi(ust, '↑');
+  function guncelle(oynayan) {
+    alt = Number(g1.value); ust = Number(g2.value);
+    if (alt > ust) { if (oynayan === g1) { ust = alt; g2.value = ust; } else { alt = ust; g1.value = alt; } }
+    const y = (v) => ((v - min) / (max - min)) * 100;
+    dolgu.style.left = `${y(alt)}%`; dolgu.style.right = `${100 - y(ust)}%`;
+    ozet.textContent = alt === min && ust === max ? bicim(null) : `${bicim(alt)} – ${bicim(ust)}`;
+  }
+  g1.addEventListener('input', () => { guncelle(g1); degisti([alt, ust]); });
+  g2.addEventListener('input', () => { guncelle(g2); degisti([alt, ust]); });
+  guncelle();
+  return h('div', { class: 'b-aralik' },
+    h('div', { class: 'b-aralik-ust' }, h('span', { class: 'b-aralik-etiket' }, etiket), ozet),
+    h('div', { class: 'b-aralik-ray' }, h('span', { class: 'b-aralik-iz' }), dolgu, g1, g2),
+    noktalar ? h('div', { class: 'b-aralik-noktalar', 'aria-hidden': 'true' }, Array.from({ length: (max - min) / adim + 1 }, (_, i) => h('span', null, bicim(min + i * adim)))) : null,
+  );
 }

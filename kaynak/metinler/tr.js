@@ -24,6 +24,7 @@ export default {
   hizliYanit: { etiket: 'Hızlı yanıt önerileri' },
   kisi: { katildi: 'Katılım', yerelSaat: 'Yerel saat' },
   suzgec: {
+    tumYaslar: 'Tüm yaşlar', 
     sik: 'Sık kullanılan', detay: 'Detaylı', sikBaslik: 'Tek dokunuşla',
     hizli: { cevrimici: 'Çevrimiçi', yeni: 'Yeni üyeler', yakin: 'Seviyeme yakın', ortakIlgi: 'Ortak ilgi', hizli: 'Hızlı yanıt', karsilikli: 'Dilimi öğrenen' },
     anaDili: 'Ana dili', ogreniyor: 'Öğrendiği dil', seviye: 'Seviye', ulke: 'Ülke',
@@ -39,9 +40,25 @@ export default {
     baslik: 'Cümle defterim', bos: 'Sohbette ya da Dil Anları\'nda bir cümlenin yanındaki yer imine dokun; burada toplanır.',
     kaydet: 'Cümle defterine kaydet', kaydedildi: 'Cümle defterine kaydedildi.', cikarildi: 'Cümle defterinden çıkarıldı.', dinle: 'Sesli dinle', sil: 'Sil',
   },
+  yanMenu: {
+    baslik: 'Menü', afisEtiket: 'BUGÜN', afisBaslik: 'Koçla 5 dakika konuş', afisAlt: 'Seviyene uygun bir senaryo seni bekliyor',
+    ogren: 'Öğren', topluluk: 'Topluluk', hesap: 'Hesabım',
+    senaryoAlt: 'Kafe, market, yol tarifi…', hafizaAlt: 'Tekrar zamanı gelen hatalar', defterAlt: 'Kaydettiğin cümleler',
+    ortakAlt: 'Süzgeç ve otomatik eşleşme', anlarAlt: 'Paylaş, düzelt, yorum yap', odalarAlt: 'Konu odaları ve koçla pratik',
+    profilAlt: 'Fotoğraflar, puanlar, gelişim', ayarlarAlt: 'Dil, bildirim, görünüm, gizlilik',
+  },
+  odalar: {
+    baslik: 'Konu odaları', alt: 'Seviyene uygun bir konuya katıl', hizliEtiket: 'Seviyene uygun', hizliKatil: 'Şimdi katıl', degistir: 'Başka oda öner',
+    katil: 'Katıl', ilgilenen: '{n} kişi ilgileniyor', not: 'Sesli topluluk odaları topluluk açılınca gelecek. Şimdilik odaya katılınca bu konuda yapay zekâ koçla konuşursun.',
+    konu: { kafe: 'Kafede sipariş', market: 'Markette alışveriş', yol: 'Yol tarifi sorma', bilet: 'Bilet alma' },
+    etiket: { kafe: 'Günlük', market: 'Alışveriş', yol: 'Seyahat', bilet: 'Seyahat' },
+  },
+  puan: { baslik: 'Öğrenme puanları', katildi: '{n}. gün', dakika: 'dk konuşma', kelime: 'yeni kelime', hata: 'hata kaydı', cumle: 'kayıtlı cümle', an: 'Dil Anı', takip: 'takip' },
+  davet: { baslik: 'Arkadaşını davet et', alt: 'Birlikte pratik yapmak daha kolay', dugme: 'Paylaş', metin: 'Konuşma Koçu ile İngilizce konuşma pratiği yapıyorum, sen de gel:' },
   ht: {
+    gizle: 'Gizle',
     sohbetBaslik: 'Dil Sohbetleri', hizliErisim: 'Hızlı erişim', ara: 'Arama', cevrimici: 'Çevrimiçi', sen: 'Sen', yzPratik: 'yapay zekâ pratiği',
-    hizli: { senaryolar: 'Senaryolar', hafiza: 'Hata Hafızası', koc: 'AI Koç', partner: 'Partner bul', anlar: 'Dil Anları' },
+    hizli: { senaryolar: 'Senaryolar', hafiza: 'Hata Hafızası', koc: 'AI Koç', partner: 'Partner bul', anlar: 'Dil Anları' , telaffuz: 'Telaffuz', defter: 'Cümle defteri', karne: 'Karne', odalar: 'Konu odaları' },
     uyum: '%{n} uyum', uyumKisa: 'uyum', uyumBaslik: 'Dil değişimi uyumu', oneriSatir: 'Sana en uygun dil ortağı · selam vermek için dokun',
     ortakBul: 'Dil Ortakları Bul', sanaUygun: 'Sana uygun', yeni: 'Yeni', tumDiller: 'Tüm diller', dil: 'Dil', dilimiOgrenen: '{dil} öğrenenler',
     suzgecler: 'Süzgeçler', yas: 'Yaş', cinsiyet: 'Cinsiyet', cins: { tum: 'Tümü', k: 'Kadın', e: 'Erkek' },
@@ -189,6 +206,7 @@ export default {
   },
 
   bugun: {
+    sekme: { bugun: 'Bugün' },
     gelisimKutu: { baslik: 'Gelişimim', alt: 'Seri, seviye ve hedefler' },
     partnerSecim: { baslik: 'Kiminle pratik yapacaksın?', yz: 'AI ile pratik', insan: 'Gerçek kişi', bilgi: 'AI demo koç hazırdır. Gerçek kişilerle konuşma, güvenli topluluk açıldığında kullanılabilir.' },
     hizliEtiket: 'KONUŞMAYA HAZIR MISIN?',
@@ -437,6 +455,7 @@ export default {
   },
 
   gelisim: {
+    sekme: { profil: 'Profil', gelisim: 'Gelişim' },
     menu: {
       baslik: 'Menü',
       ayarlar: { baslik: 'Ayarlar', alt: 'Dil, bildirim saatleri, görünüm, gizlilik' },
@@ -481,6 +500,7 @@ export default {
   },
 
   ayarlar: {
+    gizlilikOzet: 'Verilerin bu cihazda', acik: 'Açık', kapali: 'Kapalı',
     grup: { profil: 'Profilim', dil: 'Dil', bildirim: 'Bildirimler ve koç aramaları', koc: 'Koç ve pratik', gorunum: 'Görünüm', gizlilik: 'Gizlilik ve veriler' },
     sabahAciklama: 'Güne kısa bir konuşmayla başla', aksamAciklama: 'Günün hatalarını tekrar et',
     gonderimOneri: 'Göndermeden önce düzeltme öner', gonderimOneriAciklama: 'Mesajında olası bir hata varsa göndermeden önce düzgün hâlini gösterir.',

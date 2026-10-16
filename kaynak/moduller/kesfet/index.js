@@ -3,7 +3,7 @@
 // Test modunda TEST rozetli sanal kullanıcılar listelenir; yaş, çevrimiçi durumu ve rozetler de TEST verisidir.
 import './kesfet.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, altGezinme, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman, kurallarSeridi } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, altGezinme, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman, kurallarSeridi, aralikKaydirici } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
@@ -13,7 +13,8 @@ import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 
 const SELAM_YANIT_GECIKMESI = 1500;
-const YAS_ARALIKLARI = { tum: [0, 200], genc: [18, 25], orta: [26, 35], ust: [36, 200] };
+const YAS_MIN = 18;
+const YAS_MAX = 60;
 
 function selamla(p, yenile) {
   selamVer(p.kimlik, t('ht.selamMetni'));
@@ -29,12 +30,14 @@ const HIZLI_SUZGECLER = [
 ];
 
 function bosSuzgec() {
-  return { hizli: new Set(), yas: 'tum', cinsiyet: 'tum', anaDil: 'tum', ogrDil: 'tum', seviyeler: new Set(), ulkeler: new Set(), ilgiler: new Set() };
+  return { hizli: new Set(), yas: [YAS_MIN, YAS_MAX], cinsiyet: 'tum', anaDil: 'tum', ogrDil: 'tum', seviye: [0, SEVIYE_SIRASI.length - 1], ulkeler: new Set(), ilgiler: new Set() };
 }
 
 function etkinSayisi(f) {
-  return f.hizli.size + f.seviyeler.size + f.ulkeler.size + f.ilgiler.size
-    + ['yas', 'cinsiyet', 'anaDil', 'ogrDil'].filter((k) => f[k] !== 'tum').length;
+  return f.hizli.size + f.ulkeler.size + f.ilgiler.size
+    + (f.yas[0] !== YAS_MIN || f.yas[1] !== YAS_MAX ? 1 : 0)
+    + (f.seviye[0] !== 0 || f.seviye[1] !== SEVIYE_SIRASI.length - 1 ? 1 : 0)
+    + ['cinsiyet', 'anaDil', 'ogrDil'].filter((k) => f[k] !== 'tum').length;
 }
 
 const ulkeAdi = (k) => yerel(k.ulke).split(' · ')[0];
@@ -49,12 +52,12 @@ function suzgecUygula(liste, f) {
     if (f.hizli.has('ortakIlgi') && !ortakIlgiler(k).length) return false;
     if (f.hizli.has('hizli') && !(k.rozetler || []).includes('hizli')) return false;
     if (f.hizli.has('karsilikli') && !(ben.anaDil && k.ogrenilenDil === ben.anaDil)) return false;
-    const [alt, ust] = YAS_ARALIKLARI[f.yas];
-    if (k.yas < alt || k.yas > ust) return false;
+    if (k.yas < f.yas[0] || (f.yas[1] < YAS_MAX && k.yas > f.yas[1])) return false;
+    const sv = SEVIYE_SIRASI.indexOf(k.seviye);
+    if (sv < f.seviye[0] || sv > f.seviye[1]) return false;
     if (f.cinsiyet !== 'tum' && k.cinsiyet !== f.cinsiyet) return false;
     if (f.anaDil !== 'tum' && k.anaDil !== f.anaDil) return false;
     if (f.ogrDil !== 'tum' && k.ogrenilenDil !== f.ogrDil) return false;
-    if (f.seviyeler.size && !f.seviyeler.has(k.seviye)) return false;
     if (f.ulkeler.size && !f.ulkeler.has(ulkeAdi(k))) return false;
     if (f.ilgiler.size && !k.ilgi.some((i) => f.ilgiler.has(ilgiKimligi(i)))) return false;
     return true;
@@ -77,7 +80,7 @@ function suz(liste, d, f) {
 // İki sekmeli süzgeç penceresi: Sık kullanılan (tek dokunuş karoları) · Detaylı (yaş, cinsiyet, diller, seviye, ülke, ilgi).
 // Değişiklikler canlı sayılır ("N kişiyi göster"); Uygula'ya kadar listeye yansımaz, Sıfırla hepsini temizler.
 function suzgecPenceresi(mevcut, uygula) {
-  const f = { ...mevcut, hizli: new Set(mevcut.hizli), seviyeler: new Set(mevcut.seviyeler), ulkeler: new Set(mevcut.ulkeler), ilgiler: new Set(mevcut.ilgiler) };
+  const f = { ...mevcut, hizli: new Set(mevcut.hizli), yas: [...mevcut.yas], seviye: [...mevcut.seviye], ulkeler: new Set(mevcut.ulkeler), ilgiler: new Set(mevcut.ilgiler) };
   const tum = testProfilleri();
   let sekme = 'sik';
   const ic = h('div', { class: 'b-alt-pencere-ic' });
@@ -92,15 +95,18 @@ function suzgecPenceresi(mevcut, uygula) {
       simge ? h('span', { class: 'b-karo-simge', 'aria-hidden': 'true' }, simge) : null, ad)));
   const grupla = (etiket, ...cocuk) => h('section', { class: 'b-platform' }, h('h3', { class: 'b-grup-etiket' }, etiket), ...cocuk);
 
-  function ciz() {
+  function sayiGuncelle() {
     const sayi = suzgecUygula(tum, f).length;
     yerlestir(gosterDugmesi, t('suzgec.goster', { n: sayi }));
     gosterDugmesi.disabled = sayi === 0;
+  }
+  function ciz() {
+    sayiGuncelle();
     const diller = (alan) => [['tum', t('ht.cins.tum')], ...[...new Set(tum.map((k) => k[alan]))].map((d) => [d, t(`diller.${d}`)])];
     if (sekme === 'sik') {
       yerlestir(ic,
         grupla(t('suzgec.sikBaslik'), coklu(f.hizli, HIZLI_SUZGECLER.map(([k, simge]) => [k, t(`suzgec.hizli.${k}`), simge]))),
-        grupla(t('ht.yas'), tekli('yas', Object.keys(YAS_ARALIKLARI).map((k) => [k, t(`ht.yasAralik.${k}`)]))),
+        h('section', { class: 'b-platform' }, aralikKaydirici({ min: YAS_MIN, max: YAS_MAX, deger: f.yas, etiket: t('ht.yas'), bicim: (v) => (v === null ? t('suzgec.tumYaslar') : v >= YAS_MAX ? `${YAS_MAX}+` : String(v)), degisti: (d) => { f.yas = d; sayiGuncelle(); } })),
         grupla(t('ht.cinsiyet'), tekli('cinsiyet', [['tum', t('ht.cins.tum')], ['k', t('ht.cins.k')], ['e', t('ht.cins.e')]], 3)),
         h('p', { class: 'b-kucuk' }, t('suzgec.ucretsiz')),
       );
@@ -110,7 +116,7 @@ function suzgecPenceresi(mevcut, uygula) {
       yerlestir(ic,
         grupla(t('suzgec.anaDili'), tekli('anaDil', diller('anaDil'), 3)),
         grupla(t('suzgec.ogreniyor'), tekli('ogrDil', diller('ogrenilenDil'), 3)),
-        grupla(t('suzgec.seviye'), coklu(f.seviyeler, SEVIYE_SIRASI.map((s) => [s, s]), 5)),
+        h('section', { class: 'b-platform' }, aralikKaydirici({ min: 0, max: SEVIYE_SIRASI.length - 1, deger: f.seviye, etiket: t('suzgec.seviye'), noktalar: true, bicim: (v) => (v === null ? `${SEVIYE_SIRASI[0]} – ${SEVIYE_SIRASI[SEVIYE_SIRASI.length - 1]}` : SEVIYE_SIRASI[v]), degisti: (d) => { f.seviye = d; sayiGuncelle(); } })),
         grupla(t('suzgec.ulke'), coklu(f.ulkeler, ulkeler.map(([ad, bayrak]) => [ad, ad, bayrak]))),
         grupla(t('ilgi.baslik'), coklu(f.ilgiler, ilgiler.map((i) => [i.kimlik, yerel(i), i.simge]))),
       );

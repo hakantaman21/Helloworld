@@ -502,4 +502,20 @@
   .b-alt-pencere-alt { display: grid; grid-template-columns: 1fr 1.6fr; gap: 8px; padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--renk-cizgi); }
   .b-grup-etiket { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--renk-baslik); margin-bottom: 6px; display: flex; justify-content: space-between; }
   .b-av-foto { object-fit: cover; padding: 0; }
+  /* İkili aralık kaydırıcısı */
+  .b-aralik { display: flex; flex-direction: column; gap: 6px; }
+  .b-aralik-ust { display: flex; justify-content: space-between; align-items: baseline; }
+  .b-aralik-etiket { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--renk-baslik); }
+  .b-aralik-deger { font-size: 14px; font-weight: 800; color: var(--renk-vurgu-metin); }
+  .b-aralik-ray { position: relative; height: 48px; }
+  .b-aralik-iz, .b-aralik-dolgu { position: absolute; top: 50%; height: 6px; margin-top: -3px; border-radius: 3px; }
+  .b-aralik-iz { left: 0; right: 0; background: var(--renk-cizgi-guclu); }
+  .b-aralik-dolgu { background: linear-gradient(90deg, var(--renk-vurgu-parlak), var(--renk-vurgu)); }
+  .b-aralik-girdi { position: absolute; inset: 0; width: 100%; height: 48px; margin: 0; background: transparent; pointer-events: none; -webkit-appearance: none; appearance: none; }
+  .b-aralik-girdi::-webkit-slider-runnable-track { background: transparent; height: 48px; }
+  .b-aralik-girdi::-webkit-slider-thumb { -webkit-appearance: none; pointer-events: auto; width: 30px; height: 30px; margin-top: 9px; border-radius: 50%; background: var(--renk-yuzey); border: 3px solid var(--renk-vurgu); box-shadow: 0 2px 8px var(--renk-golge); cursor: pointer; }
+  .b-aralik-girdi::-moz-range-thumb { pointer-events: auto; width: 26px; height: 26px; border-radius: 50%; background: var(--renk-yuzey); border: 3px solid var(--renk-vurgu); cursor: pointer; }
+  .b-aralik-girdi::-moz-range-track { background: transparent; }
+  .b-aralik-girdi:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+  .b-aralik-noktalar { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--renk-soluk); padding: 0 6px; margin-top: -8px; }
 }
