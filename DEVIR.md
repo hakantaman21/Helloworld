@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.15.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.14.0'da (16.10.2026, PR #17). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.15.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.15.0'da (17.10.2026, PR #18). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -28,7 +28,16 @@
   - mesaj: `.msj-kapak` (sistem kapağı kişinin renginden), `.msj-hobiler` yatay şerit, ortak hobi vurgusu. gelisim: `.gls-kapak` + `kapakSec()` (6 sistem kapağı ya da kendi fotoğrafı; `profil.kapak`).
   - kesfet `suzgecPenceresi`: `katla(anahtar, …)` ülke ve ilgi grupları için; açık gruplar yeniden çizimde korunur.
 - **Bekleyen (Hakan onayı):** h–i önerisi — profil fotoğrafı tüm ana sayfaların üst bandında solda, dokununca yan menü (Profilini gör, kısayollar, Ayarlar); sağ alt sekme "Gelişim" (Profil modülü ikiye bölünür: kimlik fotoğrafın arkasında, gelişim sekmede).
-- **Şema:** 16. **Durum:** `deneme`'de, canlıya alınmadı.
+- **Şema:** 16. **Durum:** canlıda (PR #18, Hakan onayı: "Önceki sürümü de yayınla", 17.10.2026).
+- **Değerlendirme (17.10, Gemini/Grok/ChatGPT 0.12.1 ve 0.14.0 raporları) — kodda doğrulanan açıklar, v0.16.0 adayı:**
+  - `depo.iceAktar` yalnız `profil` nesnesine bakıyor: `{"semaSurumu":15,"profil":{}}` kabul edilir (ayarlar yok → ekranlar bozulur). Ayarlar'da `medyaIceAktar` doğrulamadan ÖNCE çalışıyor.
+  - `test-modu.testProfili(kimlik)` engellileri süzmüyor (doğrudan `/kisi?k=` ve mesaj açılır).
+  - Telaffuz `karsilastir` sözcük kümesi (sıra/tekrar/ek sözcük yok); `sus()` yalnız sentezi durdurur, tanıma ekrandan çıkışta sürer.
+  - Düzeltme: "I work today although I was sick yesterday." → "worked" (yan cümle ayrımı yok).
+  - `demo-koc` `sapma.konu` ölü dal (koşul hep `kendiSorusu`).
+  - Bağlan: ülke süzgeci çevrilmiş adla saklanıyor (dil değişince kayboluyor); etkin yaş hapında "60+" yerine "60"; hızlı `karsilikli` tek yönlü (sekme iki yönlü).
+  - Misafir girişinde İngilizce arayüz → anaDil 'en', öğrenilen 'tr' (Ayarlar'daki yalnız-İngilizce kuralıyla çelişir).
+  - Karne adresi `?i=<sıra>`; kalıcı kimlik yok.
 
 ## v0.14.0
 
