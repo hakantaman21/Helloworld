@@ -23,6 +23,22 @@ export default {
   },
   hizliYanit: { etiket: 'Hızlı yanıt önerileri' },
   kisi: { katildi: 'Katılım', yerelSaat: 'Yerel saat' },
+  suzgec: {
+    sik: 'Sık kullanılan', detay: 'Detaylı', sikBaslik: 'Tek dokunuşla',
+    hizli: { cevrimici: 'Çevrimiçi', yeni: 'Yeni üyeler', yakin: 'Seviyeme yakın', ortakIlgi: 'Ortak ilgi', hizli: 'Hızlı yanıt', karsilikli: 'Dilimi öğrenen' },
+    anaDili: 'Ana dili', ogreniyor: 'Öğrendiği dil', seviye: 'Seviye', ulke: 'Ülke',
+    goster: '{n} kişiyi göster', sifirla: 'Sıfırla', etkin: '{n} süzgeç etkin', temizle: 'Temizle',
+    ucretsiz: 'Tüm süzgeçler herkese açık; ücretli üyelik gerekmez.',
+  },
+  foto: {
+    baslik: 'Fotoğraflarım', ekle: 'Ekle', ac: 'Fotoğraf {n}', degistir: 'Profil fotoğrafını değiştir', eklendi: 'Fotoğraf eklendi.', hata: 'Bu resim açılamadı.',
+    sinir: 'En çok {n} fotoğraf ekleyebilirsin.', sil: 'Sil', silindi: 'Fotoğraf silindi.', profilYap: 'Profil fotoğrafı yap', profilYapildi: 'Profil fotoğrafın güncellendi.',
+    gizlilik: 'Fotoğraflar küçültülüp yalnız bu cihazda saklanır.',
+  },
+  defter: {
+    baslik: 'Cümle defterim', bos: 'Sohbette ya da Dil Anları\'nda bir cümlenin yanındaki yer imine dokun; burada toplanır.',
+    kaydet: 'Cümle defterine kaydet', kaydedildi: 'Cümle defterine kaydedildi.', cikarildi: 'Cümle defterinden çıkarıldı.', dinle: 'Sesli dinle', sil: 'Sil',
+  },
   ht: {
     sohbetBaslik: 'Dil Sohbetleri', hizliErisim: 'Hızlı erişim', ara: 'Arama', cevrimici: 'Çevrimiçi', sen: 'Sen', yzPratik: 'yapay zekâ pratiği',
     hizli: { senaryolar: 'Senaryolar', hafiza: 'Hata Hafızası', koc: 'AI Koç', partner: 'Partner bul', anlar: 'Dil Anları' },

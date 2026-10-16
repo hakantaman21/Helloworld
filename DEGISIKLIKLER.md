@@ -1,3 +1,13 @@
+## 0.6.0 — 16.10.2026 · İki sekmeli süzgeç, platformlar, profil fotoğrafı, cümle defteri
+
+- Kişi süzgeci yeniden: alttan açılan pencerede "Sık kullanılan" (tek dokunuş karoları: çevrimiçi, yeni, seviyeme yakın, ortak ilgi, hızlı yanıt, dilimi öğrenen; yaş, cinsiyet) ve "Detaylı" (ana dil, öğrendiği dil, seviye, ülke, ilgi alanları). Canlı sonuç sayısı, Sıfırla, etkin süzgeç şeridi. Tüm süzgeçler ücretsiz.
+- Dil Anları, Bağlantı ve Sohbetler'deki üst süzgeçler kabartmalı bir platform üzerinde; zeminden ve içerikten ayrılıyor.
+- İlgi alanları ve benzer seçim grupları English Prime'daki gibi simetrik karo ızgarasında, platform üzerinde (Ayarlar, Ben, kişi sayfası, süzgeç).
+- Profil fotoğrafı: telefondan resim seç ya da çek; küçültülüp yalnız cihazda saklanır (en çok 6). Ben ekranında "Fotoğraflarım", Ayarlar'da avatara dokunarak değiştir.
+- Karne: "Bu rakamlar ne anlama geliyor?" kartın sağ altında gri etiket; dokununca açıklama kartın içinde açılır. Ayrı açılır kart kaldırıldı.
+- Rakiplerden: gelen mesajları ve Dil Anları gönderilerini sesli dinle (cihazın konuşma sentezi); cümleyi yer imiyle "Cümle defterim"e kaydet (Ben ekranında, sesli dinle ve sil).
+- Şema 10: profil.foto, profil.fotograflar, kayitliCumleler.
+
 ## 0.5.0 — 16.10.2026 · Misafir girişi, logo, yeni Ayarlar, hızlı yanıtlar, sade kişi sayfası
 
 - Misafir girişi: ilk açılışta "Misafir olarak devam et" (18 yaş ve kural onayı yine zorunlu); Ayarlar'da tamamlama şeridi.

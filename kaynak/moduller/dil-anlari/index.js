@@ -4,11 +4,13 @@
 // Test modunda TEST rozetli sanal kullanıcıların gönderileri. Beğeni sayıları uydurulmaz (yalnız bu cihazdaki).
 import './anlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, altGezinme, ustBaslik, durumKutusu, ikon, ikon3d, yerlestir, testEtiketi, testAvatar, goreliZaman, farkCiz, htUst, htIkon, sekmeler, dilCifti } from '../../cekirdek/arayuz.js';
+import { h, altGezinme, ustBaslik, durumKutusu, ikon, ikon3d, yerlestir, testEtiketi, testAvatar, goreliZaman, farkCiz, htUst, htIkon, sekmeler, dilCifti, benAvatar } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { kelimeFarki } from '../../cekirdek/dil/fark.js';
+import { cumleKayitli, cumleKaydetDegistir } from '../../cekirdek/cumle-defteri.js';
+import { destek, soyle } from '../../cekirdek/ses/ses-hatti.js';
 import { testModuAcik, testModuAyarla, testAnlari, anBegen, anBegenildi, anYorumlari, anYorumEkle, anDuzeltmesi, anDuzelt, anPaylas, anOtomatikYorum, testProfiliHam, testSikayet, takipte, takipDegistir, eslesme, aktiflik } from '../../cekirdek/test-modu.js';
 
 const OTOMATIK_YORUM_GECIKMESI = 1500;
@@ -26,7 +28,7 @@ function ciz(kok, b) {
   const akis = h('div', { class: 'anl-akis', 'aria-live': 'polite' });
   const paylasAlani = h('div');
 
-  const benimAvatar = (boyut) => h('span', { class: 'b-av b-av-ben', style: `width:${boyut}px;height:${boyut}px;font-size:${Math.round(boyut * 0.42)}px`, 'aria-hidden': 'true' }, (ben.ad || '?').charAt(0).toLocaleUpperCase());
+  const benimAvatar = (boyut) => benAvatar(boyut);
 
   function yazarBilgisi(an) {
     if (an.benim) return { ad: ben.ad || t('anlar.sen'), avatar: benimAvatar(44), dil: dilCifti(ben.anaDil || 'tr', ben.ogrenilenDil || 'en', ben.seviye) };
@@ -81,6 +83,8 @@ function ciz(kok, b) {
         h('button', { type: 'button', class: 'anl-eylem', 'aria-expanded': String(acik), 'aria-label': t('anlar.yorum'), onClick: () => { if (acik) acikYorum.delete(an.kimlik); else acikYorum.add(an.kimlik); yenile(); } }, ikon('sohbet', 20), yorumlar.length ? String(yorumlar.length) : ''),
         h('span', { class: 'anl-bosluk' }),
         an.benim ? null : h('button', { type: 'button', class: 'anl-eylem anl-eylem-duz', 'aria-pressed': String(duzeltilen === an.kimlik), onClick: () => { duzeltilen = duzeltilen === an.kimlik ? null : an.kimlik; yenile(); } }, ikon('onay', 20), t('anlar.duzelt')),
+        destek.sentez ? h('button', { type: 'button', class: 'anl-eylem', 'aria-label': t('defter.dinle'), onClick: () => soyle(an.metin) }, ikon('hoparlor', 20)) : null,
+        h('button', { type: 'button', class: 'anl-eylem', 'aria-pressed': String(cumleKayitli(an.metin)), 'aria-label': t('defter.kaydet'), onClick: () => { const e = cumleKaydetDegistir(an.metin, y.ad); duyur(e ? t('defter.kaydedildi') : t('defter.cikarildi'), 1800); yenile(); } }, ikon('yerImi', 20)),
         h('button', { type: 'button', class: 'anl-eylem', 'aria-label': t('ht.paylas'), onClick: () => paylasDis(an) }, ikon('paylas', 20)),
       ),
       duzeltilen === an.kimlik ? h('div', { class: 'anl-duz-alan' },

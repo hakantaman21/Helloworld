@@ -12,6 +12,9 @@ import { kelimeFarki } from '../../cekirdek/dil/fark.js';
 import { testProfili, testMesajlari, testMesajEkle, otomatikYanit, gonderimOncesiOneri, testEngelle, testSikayet, testYazarAnlari, aktiflik, yerelSaat, eslesme, takipte, takipDegistir, selamVer, selamVerildi, selamYaniti } from '../../cekirdek/test-modu.js';
 import { TEST_KONULARI } from '../../veri/test-profiller.js';
 import { hizliYanitlar } from '../../veri/hizli-yanitlar.js';
+import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
+import { cumleKayitli, cumleKaydetDegistir } from '../../cekirdek/cumle-defteri.js';
+import { destek, soyle } from '../../cekirdek/ses/ses-hatti.js';
 
 const YANIT_GECIKMESI = 1300;
 const SIKAYET_NEDENLERI = ['taciz', 'spam', 'uygunsuz', 'konuDisi'];
@@ -46,6 +49,7 @@ function ciz(kok, b) {
           farkCiz(kelimeFarki(m.duzeltme.kaynak, m.duzeltme.dogru))) : null,
         h('div', { class: 'msj-balon msj-balon-o' }, h('p', null, m.metin),
           h('span', { class: 'msj-saat' }, saat(m.zaman), ' · ', t('test.otomatikYanit'))),
+        mesajAraclari(m.metin, profil.ad),
       ),
     );
   }
@@ -179,6 +183,20 @@ async function sikayetPenceresi(ad) {
 }
 
 // Basit eylem menüsü (HelloTalk "…"): alttan açılan pencere.
+// Gelen mesajın altında: sesli dinle (cihazın konuşma sentezi) ve cümle defterine kaydet.
+function mesajAraclari(metin, kimden) {
+  const kaydet = h('button', { type: 'button', class: 'msj-arac', 'aria-pressed': String(cumleKayitli(metin)), 'aria-label': t('defter.kaydet') });
+  kaydet.append(ikon('yerImi', 16));
+  kaydet.addEventListener('click', () => {
+    const eklendi = cumleKaydetDegistir(metin, kimden);
+    kaydet.setAttribute('aria-pressed', String(eklendi));
+    duyur(eklendi ? t('defter.kaydedildi') : t('defter.cikarildi'), 1800);
+  });
+  return h('div', { class: 'msj-araclar-satir' },
+    destek.sentez ? h('button', { type: 'button', class: 'msj-arac', 'aria-label': t('defter.dinle'), onClick: () => soyle(metin) }, ikon('hoparlor', 16)) : null,
+    kaydet);
+}
+
 function eylemMenusu(secenekler) {
   const kapat = () => perde.remove();
   const perde = h('div', { class: 'b-perde', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('ht.dahaFazla'), onClick: (e) => { if (e.target === perde) kapat(); } },
@@ -233,7 +251,10 @@ function kisiCiz(kok, b) {
     yerlestir(icerik,
       h('section', { class: 'msj-kart' },
         h('h2', { class: 'msj-kart-baslik' }, t('ht.hobiler')),
-        h('div', { class: 'msj-haplar' }, ilgiler.map((i) => h('span', { class: `msj-hap${ortakMi(i) ? ' msj-hap-ortak' : ''}` }, ortakMi(i) ? `♥ ${yerel(i)}` : yerel(i)))),
+        h('div', { class: 'b-karolar' }, ilgiler.map((i) => {
+          const k = ILGI_ALANLARI.find((x) => x.kimlik === ilgiKimligi(i));
+          return h('span', { class: `b-karo${ortakMi(i) ? ' b-karo-iyi' : ''}` }, h('span', { class: 'b-karo-simge', 'aria-hidden': 'true' }, ortakMi(i) ? '♥' : (k ? k.simge : '•')), yerel(i));
+        })),
       ),
       h('section', { class: 'msj-kart msj-bilgiler' },
         bilgiSatiri('kalem', t('ht.meslek'), yerel(p.meslek)),

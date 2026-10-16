@@ -1,6 +1,7 @@
 // Ortak arayüz yardımcıları: öğe oluşturma, ikonlar, üst başlık, alt gezinme, durum kutuları.
 import { t } from './metin.js';
 import { IKON3D } from '../veri/ikon3d.js';
+import { al } from './depo.js';
 
 const SVG_AD_ALANI = 'http://www.w3.org/2000/svg';
 
@@ -72,6 +73,9 @@ const IKONLAR = {
   kilit: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   degis: '<path d="M4 8h14l-3-3M20 16H6l3 3"/>',
   arti: '<path d="M12 5v14M5 12h14"/>',
+  kamera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  hoparlor: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/>',
+  yerImi: '<path d="M6 4h12v16l-6-4-6 4z"/>',
   ara: '<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/>',
   zil: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
   suzgec: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
@@ -331,4 +335,11 @@ export function kurallarSeridi() {
     h('div', { class: 'b-kurallar-ust' }, ikon('kalkan', 16), t('kesfet.kurallarBaslik')),
     h('ul', { class: 'b-kurallar-liste' }, [1, 2, 3, 4].map((n) => h('li', null, t(`kurallarKisa.${n}`)))),
   );
+}
+
+// Kullanıcının kendi avatarı: profil fotoğrafı varsa o, yoksa adının baş harfi (altın zemin).
+export function benAvatar(boyut = 44, sinif = '') {
+  const p = al().profil;
+  if (p.foto) return h('img', { class: `b-av b-av-foto ${sinif}`, src: p.foto, alt: '', width: boyut, height: boyut, style: `width:${boyut}px;height:${boyut}px` });
+  return h('span', { class: `b-av b-av-ben ${sinif}`, style: `width:${boyut}px;height:${boyut}px;font-size:${Math.round(boyut * 0.42)}px`, 'aria-hidden': 'true' }, (p.ad || '?').charAt(0).toLocaleUpperCase());
 }

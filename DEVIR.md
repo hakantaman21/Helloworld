@@ -5,17 +5,26 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.5.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.4.1'de (16.10.2026, PR #5 ile Hakan onayıyla). Canlıya alma yine yalnız Hakan onayıyla.
+- **Sürüm:** v0.6.0 · `main` (canlı, helloworld-gules.vercel.app) ve `deneme` aynı içerikte (16.10.2026, Hakan onayıyla: "Devir notuyla birlikte canlıya al"). Canlıya alma yine yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
 - **Görünüm:** Renk ve ikonlar English Prime'dan (koyu petrol zemin, altın vurgu, 3B ikonlar `veri/ikon3d.js`); düzen ve yoğunluk HelloTalk'tan (ince üst çubuk `htUst`, metin/hap sekmeler, düz liste satırları, tam genişlik alt menü). Renk yalnız jetonlarda (Y3).
 - **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma, karne, Hata Hafızası, profil düzenleme, görünüm, TR + EN. **Test modu (10 sanal kullanıcı, TEST rozetli):** Dil Ortakları Bul (sekmeler, dil hapları, yaş/cinsiyet/hızlı yanıt süzgeci, kural tabanlı otomatik eşleşme, el sallama), zengin kişi profili (yaş, ülke, yerel saat, etkinlik, hobiler, meslek, takip), Dil Anları (Güncel / Senin için / Yardım et / Takip; beğen, yorum, düzelt, paylaş), mesajlaşma, düzeltme önerisi, partner düzeltmesi, şikâyet/engelleme (yanıtlar otomatik kalıp). Veri yalnız cihazda.
 - **Ne çalışmıyor / henüz yok:** gerçek hesap ve sunucu, gerçek kişilerle mesajlaşma, sesli mesaj (Y12 kararı bekliyor), çeviri, gerçek yapay zekâ sağlayıcısı, harf düzeyinde telaffuz.
-- **Sıradaki adım:** Hakan'ın v0.5.0'ı telefonda denemesi ve canlı onayı ve geri bildirimi → arka uç kararı (Supabase / Firebase) → Mesaj ve Bağlantı ekranlarını gerçek hesaplarla bağlamak.
+- **Sıradaki adım:** Hakan'ın canlı v0.6.0'ı telefonda denemesi ve geri bildirimi → arka uç kararı (Supabase / Firebase) → Mesaj ve Bağlantı ekranlarını gerçek hesaplarla bağlamak.
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.6.0
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan: iki sekmeli (sık kullanılan + detaylı) ve HelloTalk'tan iyi kişi süzgeci; üst süzgeçler kabartmalı platformda; ilgi alanları ve benzerleri English Prime gibi simetrik platformda; telefondan profile resim; karne açıklaması kartın sağ altında gri etiket; rakiplerin kritik özelliklerinden uyarlama; devir notuyla canlıya al.
+- **Ne:** `bilesenler.css` `.b-platform`, `.b-karolar/.b-karo`, `.b-alt-pencere*`, `.b-sekmeler` platform görünümü; `kesfet` `suzgecPenceresi()` + `suzgecUygula()` (state: hizli/yas/cinsiyet/anaDil/ogrDil/seviyeler/ulkeler/ilgiler); `cekirdek/fotograf.js` (seç → canvas ile 480px JPEG, ≤220KB, en çok 6); `arayuz.js` `benAvatar()`; `cekirdek/cumle-defteri.js`; mesaj ve Dil Anları'nda sesli dinle (`soyle`) + yer imi; Ben ekranında Fotoğraflarım, Cümle defterim, karne etiketi.
+- **Şema:** göç 10 (`profil.foto`, `profil.fotograflar`, `kayitliCumleler`), GUNCEL_SEMA 10.
+- **Gizlilik:** Fotoğraflar sunucuya gitmez; yalnız cihazda, küçültülmüş. Sesli dinleme cihazın kendi sentezi (ağ yok, kayıt yok — Y12 ile uyumlu).
+- **Durum:** Hakan'ın önceden verdiği onayla canlıya alındı (PR ile deneme → main).
 
 ## v0.5.0
 
@@ -23,7 +32,7 @@
 - **Neden:** Hakan'ın el yazısı listesi: misafir girişi · güzel logo · bağlantı/sohbetlerde kişiler arasında boşluk · kompakt topluluk kuralları · daha kapsamlı, kompakt ve sıcak Ayarlar · başlıkta hızlı yanıt önerileri · HelloTalk'tan daha sade kişi sayfası.
 - **Ne:** `karsilama` misafirGirisi() (onayIste ile 18+ ve kural onayı; varsayılan dil/seviye; `profil.misafir`); `arayuz.js` `logo()` (jeton renkli SVG) ve `kurallarSeridi()`; `genel/simge.svg` yeni logo; `.b-liste-satir` ve `.kft-satir` ayrı kart; `veri/hizli-yanitlar.js` + mesaj başlığında yapışkan öneri şeridi (eski alt konu satırı kaldırıldı); `ayarlar` baştan yazıldı (gruplar, bölümlü seçim, anahtar, açılır alanlar); `tema.js` `data-yazi`; kişi sayfası yeni düzen.
 - **Şema:** göç 9 (`profil.misafir`, `ayarlar.yaziBoyutu = 'normal'`, `ayarlar.gonderimOneri = true`), GUNCEL_SEMA 9.
-- **Durum:** `deneme` dalında; canlı (main) v0.4.1 — yeni canlıya alma yalnız Hakan onayıyla.
+- **Durum:** Canlıda (PR #6, Hakan onayı, 16.10.2026).
 
 ## v0.4.1
 
