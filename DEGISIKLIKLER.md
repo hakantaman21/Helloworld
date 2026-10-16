@@ -1,3 +1,10 @@
+## 0.11.2 — 16.10.2026 · Video notlarından kalanlar
+
+- Bağlan: "Otomatik eşleş", ilgi daveti ve TEST notu şeritleri "Güvenli pratik" slaytı gibi koyu, kendi renkleriyle ışık-koyuluk geçişli ve kabartmalı; kişi kartları da geçişli ve kabartmalı, aralarında daha çok boşluk.
+- Dokunulan kart ve kısayol ışıklanır (seçili öğe ayrıca ışıklı).
+- Pratik: hızlı oda kartı tek satır (solda konu, sağda değiştir + Şimdi katıl) — daha kompakt; oda kartları alçaldı.
+- Dil Anları: gönderiler arası boşluk ve ayırıcı çizgi daha belirgin.
+
 ## 0.11.1 — 16.10.2026 · Hakan'ın video notları
 
 - Sohbet: üst bant daraltıldı (başlık, simgeler ve "Daha fazla" arası sıkı).

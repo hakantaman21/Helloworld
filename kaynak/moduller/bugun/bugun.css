@@ -75,3 +75,15 @@
   .bgn-oda { min-height: 96px; gap: 4px; padding: 8px 10px; }
   .bgn-dongu { gap: 12px; }
 }
+
+/* v0.11.2 Hızlı oda tek satır: solda etiket + konu, sağda değiştir + Şimdi katıl (daha kompakt) */
+@layer moduller {
+  .bgn-hizli-oda { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "etiket eylem" "baslik eylem"; align-items: center; column-gap: 10px; row-gap: 2px; padding: 8px 8px 8px 12px; }
+  .bgn-hizli-etiket { grid-area: etiket; justify-self: start; padding: 2px 8px; font-size: 11px; }
+  .bgn-hizli-baslik { grid-area: baslik; font-size: 14.5px; }
+  .bgn-hizli-eylem { grid-area: eylem; gap: 6px; }
+  .bgn-hizli-degistir { width: 48px; }
+  .bgn-hizli-katil { flex: none; width: auto; padding: 0 12px; font-size: 13px; white-space: nowrap; }
+  .bgn-hizli-oda { max-width: 100%; overflow: hidden; }
+  .bgn-oda { min-height: 88px; }
+}

@@ -70,3 +70,19 @@
   .kft-etkin { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 4px 0 12px; border-radius: 14px; background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); font-size: 13px; font-weight: 700; }
   .kft-etkin-temizle { min-height: 44px; padding: 0 12px; border: 0; background: transparent; color: inherit; font: inherit; font-weight: 800; text-decoration: underline; cursor: pointer; }
 }
+
+/* v0.11.2 Hakan: "Güvenli pratik" slaytı gibi koyu, kendi rengiyle ışık-koyuluk geçişli ve kabartmalı şeritler; kişi kartları kabartmalı */
+@layer moduller {
+  .kft-eslesme-serit, .kft-ilgi-davet, .kft-uyari {
+    --renk-murekkep: var(--renk-gece-metin);
+    --renk-soluk: var(--renk-gece-soluk);
+    border: 0;
+    color: var(--renk-gece-metin);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--renk-gece-metin) 12%, transparent), inset 0 -2px 0 var(--renk-kart-alt-golge), 0 8px 18px var(--renk-golge);
+  }
+  .kft-eslesme-serit { background: radial-gradient(90% 140% at 100% 0%, color-mix(in srgb, var(--renk-sayfa-mor) 30%, transparent), transparent 62%), linear-gradient(150deg, color-mix(in srgb, var(--renk-sayfa-mor) 14%, var(--renk-bant-2)), var(--renk-bant-1) 80%); }
+  .kft-ilgi-davet { color: var(--renk-gece-metin); background: radial-gradient(90% 140% at 100% 0%, color-mix(in srgb, var(--renk-sayfa-yesil) 28%, transparent), transparent 62%), linear-gradient(150deg, color-mix(in srgb, var(--renk-sayfa-yesil) 14%, var(--renk-bant-2)), var(--renk-bant-1) 80%); }
+  .kft-uyari { color: var(--renk-gece-soluk); background: radial-gradient(90% 140% at 100% 0%, color-mix(in srgb, var(--renk-sayfa-sari) 26%, transparent), transparent 62%), linear-gradient(150deg, color-mix(in srgb, var(--renk-sayfa-sari) 12%, var(--renk-bant-2)), var(--renk-bant-1) 80%); }
+  .kft-satir { background: radial-gradient(120% 90% at 0% 0%, var(--renk-kart-parilti), transparent 58%), linear-gradient(155deg, color-mix(in srgb, var(--sayfa) 12%, var(--renk-kart-ust)), color-mix(in srgb, var(--sayfa) 6%, var(--renk-kart-alt))); box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 -2px 0 var(--renk-kart-alt-golge), inset 0 0 0 1px color-mix(in srgb, var(--sayfa) 18%, var(--renk-cizgi)), 0 8px 18px var(--renk-golge); }
+  .kft-liste { gap: 10px; }
+}
