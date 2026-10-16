@@ -65,6 +65,7 @@ function grup(kimlik, ik, baslik, ...satirlar) {
 
 function ciz(kok, b) {
   kok.classList.add('ayr-ekran');
+  let aktifGrup = null;
   const p = al().profil;
   const a = p.ayarlar;
 
@@ -111,7 +112,7 @@ function ciz(kok, b) {
   const seviyeler = SEVIYE_SIRASI.slice(0, 4);
 
   yerlestir(kok,
-    ustBaslik({ baslik: t('ayarlar.baslik'), ikon: 'ayarlar', geri: () => b.geri('/gelisim') }),
+    ustBaslik({ baslik: t('ayarlar.baslik'), ikon: 'ayarlar', geri: () => (aktifGrup ? goster(null) : b.geri('/gelisim')) }),
 
     h('section', { class: 'ayr-profil' },
       h('button', { type: 'button', class: 'ayr-foto-dugme', 'aria-label': t('foto.degistir'), onClick: async () => { const s = await fotografEkle({ profilYap: true }); if (s === 'eklendi') { duyur(t('foto.eklendi')); ciz(kok, b); } else if (s === 'hata') duyur(t('foto.hata')); } },
@@ -200,6 +201,46 @@ function ciz(kok, b) {
       h('span', { class: 'ayr-hakkinda-ic' }, h('b', null, t('uygulama.ad')), h('small', null, t('ayarlar.surum', { s: SURUM, saglayici: a.saglayici }))),
     ),
   );
+  // HelloTalk düzeni: ana sayfada renkli simgeli kategori listesi; dokununca yalnız o grup açılır (az kaydırma).
+  const gruplar = [...kok.querySelectorAll('.ayr-grup')];
+  const baslikYazi = kok.querySelector('.b-ht-baslik span');
+  const ozet = {
+    profil: `${p.ad || t('misafir.ad')} · ${p.seviye}`,
+    dil: `${(p.anaDil || 'tr').toUpperCase()} → ${(p.ogrenilenDil || 'en').toUpperCase()} · ${(a.arayuzDili || 'tr').toUpperCase()}`,
+    bildirim: `${a.sabahSaati} · ${a.aksamSaati}`,
+    koc: t(`ayarlar.duzeltmeSecenek.${a.duzeltmeYogunlugu}`),
+    gorunum: `${t(`ayarlar.temaSecenek.${a.tema}`)} · ${t(`ayarlar.yaziSecenek.${a.yaziBoyutu || 'normal'}`)}`,
+    gizlilik: t('ayarlar.gizlilikOzet'),
+    test: testModuAcik() ? t('ayarlar.acik') : t('ayarlar.kapali'),
+  };
+  const KATEGORILER = [['profil'], ['bildirim', 'gizlilik'], ['koc', 'dil'], ['gorunum'], ['test']];
+  const RENK = { profil: 1, bildirim: 4, gizlilik: 3, koc: 5, dil: 2, gorunum: 6, test: 2 };
+  const menu = h('nav', { class: 'ayr-menu', 'aria-label': t('ayarlar.baslik') },
+    KATEGORILER.map((kume) => {
+      const varolan = kume.filter((k) => gruplar.some((g) => g.id === `ayr-g-${k}`));
+      if (!varolan.length) return null;
+      return h('div', { class: 'ayr-menu-kart' }, varolan.map((k) => {
+        const g = gruplar.find((x) => x.id === `ayr-g-${k}`);
+        const simge = g.querySelector('.ayr-grup-baslik .b-ikon3d');
+        return h('button', { type: 'button', class: 'ayr-menu-satir', onClick: () => goster(k) },
+          h('span', { class: `ayr-menu-simge b-kutu-${RENK[k]}` }, simge ? Object.assign(simge.cloneNode(true), { className: 'b-ikon3d ayr-menu-ikon' }) : null),
+          h('span', { class: 'ayr-menu-metin' }, h('b', null, g.querySelector('.ayr-grup-baslik').textContent), h('small', null, ozet[k] || '')),
+          ikon('sag', 18));
+      }));
+    }));
+  const misafirSerit = kok.querySelector('.ayr-misafir');
+  (misafirSerit || kok.querySelector('.ayr-profil')).after(menu);
+  function goster(k) {
+    aktifGrup = k;
+    menu.hidden = Boolean(k);
+    kok.querySelector('.ayr-profil').hidden = Boolean(k);
+    if (misafirSerit) misafirSerit.hidden = Boolean(k);
+    kok.querySelector('.ayr-hakkinda').hidden = Boolean(k);
+    gruplar.forEach((g) => { g.hidden = g.id !== `ayr-g-${k}`; });
+    if (baslikYazi) baslikYazi.textContent = k ? gruplar.find((g) => g.id === `ayr-g-${k}`).querySelector('.ayr-grup-baslik').textContent : t('ayarlar.baslik');
+    window.scrollTo(0, 0);
+  }
+  goster(ilgiAcik ? 'profil' : (b.p.grup || null));
   if (ilgiAcik) requestAnimationFrame(() => { const hedef = kok.querySelector('#ayr-ilgi'); if (hedef) hedef.scrollIntoView({ block: 'start' }); });
   return null;
 }

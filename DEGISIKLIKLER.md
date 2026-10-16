@@ -1,3 +1,11 @@
+## 0.7.0 — 16.10.2026 · HelloTalk örnekleriyle gruplu, az kaydırmalı düzen
+
+- Ayarlar: ana sayfada renkli simgeli kategori kartları (Profilim · Bildirimler, Gizlilik · Koç ve pratik, Dil · Görünüm), her satırda güncel değer özeti; dokununca yalnız o grup açılır, geri ile listeye dönülür.
+- Kişi süzgeci: yaş ve seviye için aralık kaydırıcıları (HelloTalk Filtre ekranı gibi), canlı sonuç sayısı korunur.
+- Sohbetler: ☰ yan menü (günün önerisi afişi + Öğren / Topluluk / Hesabım grupları); hızlı erişim ızgarası platformda, "Daha fazla / Gizle" ile ikinci satır açılır.
+- Pratik: "Bugün / Konu odaları" sekmeleri; konu odaları (HelloTalk Ses odalarından esinli) ve "Seviyene uygun · Şimdi katıl" kartı. Katılınca o konuda yapay zekâ koçla konuşulur (açıkça etiketli).
+- Ben: "Profil / Gelişim" sekmeleri; Öğrenme puanları ızgarası (dakika, kelime, hata, cümle, Dil Anı, takip), Arkadaşını davet et.
+
 ## 0.6.0 — 16.10.2026 · İki sekmeli süzgeç, platformlar, profil fotoğrafı, cümle defteri
 
 - Kişi süzgeci yeniden: alttan açılan pencerede "Sık kullanılan" (tek dokunuş karoları: çevrimiçi, yeni, seviyeme yakın, ortak ilgi, hızlı yanıt, dilimi öğrenen; yaş, cinsiyet) ve "Detaylı" (ana dil, öğrendiği dil, seviye, ülke, ilgi alanları). Canlı sonuç sayısı, Sıfırla, etkin süzgeç şeridi. Tüm süzgeçler ücretsiz.

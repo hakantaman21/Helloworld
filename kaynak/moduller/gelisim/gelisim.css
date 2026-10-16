@@ -118,3 +118,16 @@
   .gls-defter-metin small { font-size: 11.5px; color: var(--renk-soluk); }
   .gls-defter-dugme { flex-shrink: 0; display: grid; place-items: center; width: 44px; min-height: 48px; border: 0; background: transparent; color: var(--renk-soluk); cursor: pointer; }
 }
+
+/* v0.7.0 Ben: puanlar ve davet */
+@layer moduller {
+  .gls-puanlar { display: flex; flex-direction: column; gap: 8px; }
+  .gls-puan { gap: 2px; min-height: 76px; }
+  .gls-puan-ikon { color: var(--renk-baslik); display: inline-flex; }
+  .gls-puan-deger { font-size: 20px; font-weight: 800; line-height: 1.1; }
+  .gls-davet { display: flex; align-items: center; gap: 12px; }
+  .gls-davet-metin { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .gls-davet-metin b { font-size: 16px; }
+  .gls-davet-metin span { font-size: 12.5px; color: var(--renk-soluk); }
+  .gls-davet-dugme { width: auto; padding: 0 16px; }
+}
