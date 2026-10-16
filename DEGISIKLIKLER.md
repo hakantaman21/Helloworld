@@ -1,3 +1,15 @@
+## 0.10.0 — 16.10.2026 · Koyu üst bant, siyah arama, Bağlan, kayan panolar, alt menü kayması düzeltmesi
+
+- Düzeltme: alt menü artık kaydırırken ya da sekme değiştirirken aşağı kayıp geri gelmiyor. Sebep: ekranı tam dolduran kaydırma alanını Android Chrome "kök kaydırıcı" sayıp adres çubuğunu gizleyip açıyordu. İçerik alanı artık alt menünün üstünde bitiyor; son öğe de menünün altında kalmıyor.
+- Sohbet: v0.6.0'dan kaybolan öğeler geri geldi — sol üstte profil fotoğrafı (dokununca yan menü), ilk satırda 5 kısayol (Dil Anları dahil); "Daha fazla" artık bandın altında küçük bir tutamak.
+- Koyu baş bandı: Sohbet, Bağlan ve Dil Anları'nda sayfanın ilk yatay bölümleri çok koyu bir şeritte; sayfa onun altından başlıyor. Renk Ayarlar › Görünüm › Üst bant rengi: Yeşil (varsayılan), Gece mavisi, Mor, Bordo, Antrasit, Sayfa rengi.
+- Arama kutularının içi her temada siyah.
+- Süzgeç (sekme) biçimi seçeneği: Klasik, Dolu, Çizgi, Çerçeve, Beyaz.
+- "Bağlantı" menü öğesi "Bağlan" oldu.
+- Bağlan'da kayan bilgi panosu: sana en uygun kişi, şu an çevrimiçi sayısı, ilgi ipucu, tanışma, güvenlik.
+- Dil Anları'nda süzgeçlerden sonra kayan pano: tanıtım, yardım bekleyen paylaşımlar, en çok paylaşan, en çok etkileşim alan, cümle defteri ipucu. Sayılar cihazdaki TEST verisinden hesaplanır, uydurulmaz.
+- Şema 12: ayarlar.bantRengi, ayarlar.suzgecBicimi.
+
 ## 0.9.2 — 16.10.2026 · Alt menü yeni görünüm
 
 - Alt menü yüzen, yuvarlak köşeli bir çubuk oldu.

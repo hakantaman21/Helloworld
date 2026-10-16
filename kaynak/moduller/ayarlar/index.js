@@ -51,6 +51,19 @@ function renkSecici(etiketId, tur, secenekler, aktif, degisti) {
     }, h('span', { class: 'ayr-renk-ornek', 'aria-hidden': 'true' }))));
 }
 
+// Süzgeç biçimi seçici: her seçenek, o biçimde çizilmiş küçük bir seçili-sekme önizlemesi gösterir.
+function suzgecSecici(etiketId, aktif, degisti) {
+  return h('div', { class: 'ayr-suzgecler', role: 'radiogroup', 'aria-labelledby': etiketId },
+    ['klasik', 'dolu', 'cizgi', 'cerceve', 'beyaz'].map((k) => h('button', {
+      type: 'button', class: 'ayr-suzgec', role: 'radio', 'aria-checked': String(k === aktif), 'data-bicim': k,
+      onClick: (e) => {
+        for (const d of e.currentTarget.parentElement.children) d.setAttribute('aria-checked', 'false');
+        e.currentTarget.setAttribute('aria-checked', 'true');
+        degisti(k);
+      },
+    }, h('span', { class: 'ayr-suzgec-ornek', 'aria-hidden': 'true' }, 'Aa'), t(`ayarlar.suzgecAd.${k}`))));
+}
+
 let satirSayac = 0;
 // Satır: solda etiket (+ isteğe bağlı açıklama), sağda denetim. altta: true ise denetim tam genişlikte alta iner.
 function satir(etiket, denetim, { aciklama, altta = false, kimlik } = {}) {
@@ -182,6 +195,8 @@ function ciz(kok, b) {
       satir(t('ayarlar.yaziBoyutu'), (id) => bolumlu(id, ['normal', 'buyuk'].map((k) => [k, t(`ayarlar.yaziSecenek.${k}`)]), a.yaziBoyutu || 'normal', (k) => ayarKaydet((pr) => { pr.ayarlar.yaziBoyutu = k; }))),
       satir(t('ayarlar.secimRengi'), (id) => renkSecici(id, 'secim', ['altin', 'mavi', 'yesil', 'mercan', 'mor', 'turkuaz'], a.secimRengi || 'altin', (k) => ayarKaydet((pr) => { pr.ayarlar.secimRengi = k; }, true)), { aciklama: t('ayarlar.secimRengiAciklama'), altta: true }),
       satir(t('ayarlar.zeminRengi'), (id) => renkSecici(id, 'zemin', ['varsayilan', 'notr', 'mavi', 'mor', 'yesil'], a.zemin || 'varsayilan', (k) => ayarKaydet((pr) => { pr.ayarlar.zemin = k; }, true)), { aciklama: t('ayarlar.zeminRengiAciklama'), altta: true }),
+      satir(t('ayarlar.bantRengi'), (id) => renkSecici(id, 'bant', ['yesil', 'gece', 'mor', 'bordo', 'antrasit', 'sayfa'], a.bantRengi || 'yesil', (k) => ayarKaydet((pr) => { pr.ayarlar.bantRengi = k; }, true)), { aciklama: t('ayarlar.bantRengiAciklama'), altta: true }),
+      satir(t('ayarlar.suzgecBicimi'), (id) => suzgecSecici(id, a.suzgecBicimi || 'klasik', (k) => ayarKaydet((pr) => { pr.ayarlar.suzgecBicimi = k; }, true)), { aciklama: t('ayarlar.suzgecBicimiAciklama'), altta: true }),
       satir(t('ayarlar.ortaDugme'), (id) => bolumlu(id, ['pratik', 'arama', 'senaryo', 'telaffuz'].map((k) => [k, t(`ayarlar.ortaSecenek.${k}`)]), a.ortaDugme || 'pratik', (k) => ayarKaydet((pr) => { pr.ayarlar.ortaDugme = k; })), { aciklama: t('ayarlar.ortaDugmeAciklama'), altta: true }),
     ),
 

@@ -20,7 +20,10 @@
      ve alttaki sabit menü sayfa geçişlerinde aşağı kayıp kaybolmaz. */
   html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   body { background: radial-gradient(70% 60% at 88% 4%, var(--renk-zemin-ust), var(--renk-zemin)) fixed; background-color: var(--renk-zemin); }
-  #uygulama { position: fixed; inset: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
+  /* v0.10.0: #uygulama ekranı TAM doldurmaz (altta 1px; alt menü varken menünün üstünde biter). Ekranı tam dolduran
+     kaydırıcıyı Android Chrome "örtük kök kaydırıcı" yapıp adres çubuğunu gizleyip açıyordu → alt menü aşağı kayıp geri geliyordu. */
+  #uygulama { position: fixed; top: 0; left: 0; right: 0; bottom: 1px; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
+  :root:has(.b-gezinme:not([hidden])) #uygulama { bottom: var(--gezinme-alan, 96px); }
   /* Üstten açılan pencere açıkken arka sayfa kaymaz (kural: perde öğesi .b-alt-pencere-perde, .b-perde ya da .b-katman taşır). */
   :root:has(.b-alt-pencere-perde, .b-katman, .b-perde) #uygulama { overflow: hidden; }
   a { color: var(--renk-vurgu-metin); }

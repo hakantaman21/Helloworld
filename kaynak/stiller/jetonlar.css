@@ -123,4 +123,42 @@
   :root[data-zemin="mavi"] { --renk-zemin: #E8EEF6; --renk-zemin-ust: #F3F7FC; }
   :root[data-zemin="mor"] { --renk-zemin: #EEEAF6; --renk-zemin-ust: #F6F3FB; }
   :root[data-zemin="yesil"] { --renk-zemin: #E6F2EC; --renk-zemin-ust: #F1F8F4; }
+
+  /* v0.10.0 Koyu baş bandı renkleri (her iki temada aynı, çok koyu) — Ayarlar › Görünüm › Üst bant rengi */
+  :root {
+    --renk-bant-yesil: #082219; --renk-bant-yesil-2: #12392C;
+    --renk-bant-gece: #0A1222; --renk-bant-gece-2: #16233F;
+    --renk-bant-mor: #170C2B; --renk-bant-mor-2: #2A1A49;
+    --renk-bant-bordo: #250911; --renk-bant-bordo-2: #3F1320;
+    --renk-bant-antrasit: #0F1114; --renk-bant-antrasit-2: #22262C;
+    --renk-bant-taban: #05070A;
+    --renk-bant-1: var(--renk-bant-yesil); --renk-bant-2: var(--renk-bant-yesil-2);
+    /* Arama kutusu her temada siyah */
+    --renk-arama-zemin: #060708; --renk-arama-metin: #F3F5F4; --renk-arama-soluk: #A4AFAB; --renk-arama-cizgi: #2A2F33;
+    /* Süzgeç biçimi "beyaz" */
+    --renk-suzgec-beyaz: #FFFFFF; --renk-suzgec-beyaz-metin: #14201F;
+  }
+  :root[data-bant="gece"] { --renk-bant-1: var(--renk-bant-gece); --renk-bant-2: var(--renk-bant-gece-2); }
+  :root[data-bant="mor"] { --renk-bant-1: var(--renk-bant-mor); --renk-bant-2: var(--renk-bant-mor-2); }
+  :root[data-bant="bordo"] { --renk-bant-1: var(--renk-bant-bordo); --renk-bant-2: var(--renk-bant-bordo-2); }
+  :root[data-bant="antrasit"] { --renk-bant-1: var(--renk-bant-antrasit); --renk-bant-2: var(--renk-bant-antrasit-2); }
+  /* "Sayfa rengi": her sayfanın kendi (Google) renginin çok koyu tonu */
+  :root[data-bant="sayfa"] .b-ekran { --renk-bant-1: color-mix(in srgb, var(--sayfa) 22%, var(--renk-bant-taban)); --renk-bant-2: color-mix(in srgb, var(--sayfa) 38%, var(--renk-bant-taban)); }
+  /* Bant içindeki her şey koyu zemine göre yeniden renklenir (yazı açık, yüzeyler saydam beyaz) */
+  .b-bas-bant {
+    color-scheme: dark;
+    --renk-murekkep: var(--renk-gece-metin);
+    --renk-soluk: var(--renk-gece-soluk);
+    --renk-baslik: var(--renk-gece-vurgu);
+    --sayfa: var(--renk-gece-vurgu);
+    --renk-yuzey: color-mix(in srgb, #FFFFFF 9%, var(--renk-bant-2));
+    --renk-yuzey-ust: color-mix(in srgb, #FFFFFF 15%, var(--renk-bant-2));
+    --renk-yuzey-ikinci: color-mix(in srgb, #000000 28%, var(--renk-bant-1));
+    --renk-cizgi: color-mix(in srgb, #FFFFFF 14%, transparent);
+    --renk-cizgi-guclu: color-mix(in srgb, #FFFFFF 26%, transparent);
+    --renk-kabartma-isik: color-mix(in srgb, #FFFFFF 12%, transparent);
+    --renk-golge: color-mix(in srgb, #000000 40%, transparent);
+    --renk-zemin: var(--renk-bant-1);
+    --renk-vurgu-metin: var(--renk-gece-vurgu);
+  }
 }

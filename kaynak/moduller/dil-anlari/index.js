@@ -4,7 +4,7 @@
 // Test modunda TEST rozetli sanal kullanıcıların gönderileri. Beğeni sayıları uydurulmaz (yalnız bu cihazdaki).
 import './anlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, altGezinme, ustBaslik, durumKutusu, ikon, ikon3d, yerlestir, testEtiketi, testAvatar, goreliZaman, farkCiz, htUst, htIkon, sekmeler, dilCifti, benAvatar } from '../../cekirdek/arayuz.js';
+import { h, altGezinme, basBant, afisKaydirici, ustBaslik, durumKutusu, ikon, ikon3d, yerlestir, testEtiketi, testAvatar, goreliZaman, farkCiz, htUst, htIkon, sekmeler, dilCifti, benAvatar } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
@@ -65,7 +65,7 @@ function ciz(kok, b) {
     const duzGirdi = h('textarea', { class: 'b-girdi anl-duz-girdi', rows: 3, 'aria-label': t('anlar.duzeltEtiket') });
     duzGirdi.value = an.metin;
     const takipVar = y.profil ? takipte(y.profil.kimlik) : false;
-    return h('article', { class: 'anl-kart', 'aria-label': `${y.ad}${an.benim ? '' : ' · ' + t('test.rozet')}` },
+    return h('article', { class: 'anl-kart', 'data-an': an.kimlik, 'aria-label': `${y.ad}${an.benim ? '' : ' · ' + t('test.rozet')}` },
       h('header', { class: 'anl-bas' },
         y.profil ? h('button', { type: 'button', class: 'anl-kim-dugme', onClick: () => b.git(`/kisi?k=${y.profil.kimlik}`), 'aria-label': t('anlar.profiliAc', { ad: y.ad }) }, y.avatar) : y.avatar,
         h('div', { class: 'anl-kim' },
@@ -164,7 +164,7 @@ function ciz(kok, b) {
 
   if (!testModuAcik()) {
     yerlestir(kok,
-      ustBaslik({ baslik: t('anlar.baslik'), alt: t('anlar.alt'), ikon: 'anlar' }),
+      basBant(ustBaslik({ baslik: t('anlar.baslik'), alt: t('anlar.alt'), ikon: 'anlar' })),
       h('section', { class: 'b-kart anl-bos' },
         h('span', { class: 'b-ust-etiket' }, t('anlar.yakinda')),
         durumKutusu('bos', t('anlar.aciklama')),
@@ -181,8 +181,32 @@ function ciz(kok, b) {
   }
 
   const kendiYorumSayisi = testAnlari().filter((a) => a.benim).reduce((n, a) => n + anYorumlari(a.kimlik).length, 0);
+
+  // v0.10.0 Pano (kayan): tanıtım, öneri, en çok paylaşan, en çok etkileşim alan, ipucu.
+  // Sayılar bu cihazdaki TEST verisinden hesaplanır (gönderi, yorum ve senin beğenin); uydurulmaz.
+  const sekmeyeGec = (id) => { const d = kok.querySelector(`.b-sekme[data-id="${id}"]`); if (d) d.click(); };
+  const tumAnlar = testAnlari();
+  const digerleri = tumAnlar.filter((a) => !a.benim);
+  const yardimSayisi = digerleri.filter((a) => a.duzeltilebilir || (ben.anaDil && a.profil.ogrenilenDil === ben.anaDil)).length;
+  const sayac = {};
+  // Katkı = gönderi + yorum (yalnız TEST yazarları; senin yorumların sayılmaz).
+  digerleri.forEach((a) => { sayac[a.yazar] = (sayac[a.yazar] || 0) + 1; });
+  tumAnlar.forEach((a) => anYorumlari(a.kimlik).forEach((y) => { if (y.yazar && y.yazar !== 'ben') sayac[y.yazar] = (sayac[y.yazar] || 0) + 1; }));
+  const enCokKimlik = Object.keys(sayac).sort((x, y) => sayac[y] - sayac[x])[0];
+  const enCok = enCokKimlik ? testProfiliHam(enCokKimlik) : null;
+  const etkilesim = (a) => anYorumlari(a.kimlik).length + (anBegenildi(a.kimlik) ? 1 : 0);
+  const hit = digerleri.slice().sort((x, y) => etkilesim(y) - etkilesim(x))[0];
+  const kisalt = (m) => (m.length > 60 ? `${m.slice(0, 58)}…` : m);
+  const pano = afisKaydirici([
+    { ikon: 'kalem', renk: 1, etiket: t('pano.paylasEtiket'), baslik: t('pano.paylasBaslik'), alt: t('pano.paylasAlt'), dugme: t('pano.paylasDugme'), git: () => { yaziyor = true; paylasCiz(); paylasGirdi.focus(); } },
+    yardimSayisi ? { test: true, ikon: 'ipucu', renk: 4, etiket: t('pano.yardimEtiket'), baslik: t('pano.yardimBaslik'), alt: t('pano.yardimAlt', { n: yardimSayisi }), dugme: t('pano.yardimDugme'), git: () => sekmeyeGec('yardim') } : null,
+    enCok && sayac[enCokKimlik] > 1 ? { test: true, renk: 5, etiket: t('pano.paylasanEtiket'), baslik: t('pano.paylasanBaslik', { ad: enCok.ad, n: sayac[enCokKimlik] }), alt: t('pano.paylasanAlt', { ulke: yerel(enCok.ulke), seviye: enCok.seviye }), gorsel: testAvatar(enCok, 76, { cevrimici: aktiflik(enCok).cevrimici }), git: () => b.git(`/kisi?k=${enCok.kimlik}`) } : null,
+    hit && etkilesim(hit) ? { test: true, ikon: 'yildiz', renk: 6, etiket: t('pano.hitEtiket'), baslik: `“${kisalt(hit.metin)}”`, alt: t('pano.hitAlt', { ad: hit.profil.ad, n: anYorumlari(hit.kimlik).length }), dugme: t('pano.hitDugme'), git: () => { sekmeyeGec('guncel'); const k = akis.querySelector(`[data-an="${hit.kimlik}"]`); if (k) k.scrollIntoView({ behavior: 'smooth', block: 'start' }); } } : null,
+    { ikon: 'kitap', renk: 3, etiket: t('pano.defterEtiket'), baslik: t('pano.defterBaslik'), alt: t('pano.defterAlt'), dugme: t('pano.defterDugme'), git: () => b.git('/gelisim?sekme=profil') },
+  ].filter(Boolean), { etiket: t('pano.anlarEtiket'), pano: true });
+
   yerlestir(kok,
-    htUst({
+    basBant(htUst({
       sol: htIkon(ikon3d('hedef', 30), t('ht.hedefim'), () => b.git('/gelisim')),
       orta: h('label', { class: 'b-ht-arama anl-arama' }, ikon('ara', 18),
         h('input', { type: 'search', placeholder: t('ht.ara'), 'aria-label': t('ht.anAra'), onInput: (e) => { arama = e.target.value.trim().toLocaleLowerCase(); yenile(); } })),
@@ -191,7 +215,8 @@ function ciz(kok, b) {
         htIkon('kalem', t('anlar.paylasBaslik'), () => { yaziyor = true; paylasCiz(); paylasGirdi.focus(); }),
       ],
     }),
-    sekmeler([['guncel', t('ht.guncel')], ['senin', t('ht.seninIcin')], ['yardim', t('ht.yardimEt')], ['takip', t('ht.takipEdilen')]], sekme, (id) => { sekme = id; yenile(); }, { etiket: t('anlar.baslik') }),
+    sekmeler([['guncel', t('ht.guncel')], ['senin', t('ht.seninIcin')], ['yardim', t('ht.yardimEt')], ['takip', t('ht.takipEdilen')]], sekme, (id) => { sekme = id; yenile(); }, { etiket: t('anlar.baslik') })),
+    pano,
     h('p', { class: 'anl-uyari' }, testEtiketi(), ' ', t('anlar.testUyari')),
     paylasAlani,
     akis,

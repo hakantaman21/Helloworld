@@ -5,10 +5,10 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.9.2 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.9.0'da (16.10.2026, PR #12). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.10.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.9.0'da (16.10.2026, PR #12). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
-- **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
+- **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
 - **Görünüm:** Renk ve ikonlar English Prime'dan (koyu petrol zemin, altın vurgu, 3B ikonlar `veri/ikon3d.js`); düzen ve yoğunluk HelloTalk'tan (ince üst çubuk `htUst`, metin/hap sekmeler, düz liste satırları, tam genişlik alt menü). Renk yalnız jetonlarda (Y3).
 - **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma, karne, Hata Hafızası, profil düzenleme, görünüm, TR + EN. **Test modu (10 sanal kullanıcı, TEST rozetli):** Dil Ortakları Bul (sekmeler, dil hapları, yaş/cinsiyet/hızlı yanıt süzgeci, kural tabanlı otomatik eşleşme, el sallama), zengin kişi profili (yaş, ülke, yerel saat, etkinlik, hobiler, meslek, takip), Dil Anları (Güncel / Senin için / Yardım et / Takip; beğen, yorum, düzelt, paylaş), mesajlaşma, düzeltme önerisi, partner düzeltmesi, şikâyet/engelleme (yanıtlar otomatik kalıp). Veri yalnız cihazda.
 - **Ne çalışmıyor / henüz yok:** gerçek hesap ve sunucu, gerçek kişilerle mesajlaşma, sesli mesaj (Y12 kararı bekliyor), çeviri, gerçek yapay zekâ sağlayıcısı, harf düzeyinde telaffuz.
@@ -16,6 +16,17 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.10.0
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan: "Sohbet sayfasında kayıp öğeler var, eskisini karşılaştır; bir şey yaparken önceki ile de karşılaştır. Alt menü yine aşağı kayıyor." Sohbet'in ilk yatay bölümü, Bağlan'ın ve Dil Anları'nın ilk iki yatay öğesi çok koyu (sayfa onların altından başlasın, "kâğıdın en üstünden başlayan dilekçe" gibi olmasın); arama kutularının içi siyah; "Bağlantı" → "Bağlan"; süzgeç renkleri için tasarım seçenekleri; Dil Anları'nda süzgeçlerden sonra kayan pano (tanıtım, öneri, en çok paylaşan, en çok etkileşim); Bağlan'da kayan bilgilendirme zemini. Pratik'e dokunulmadı.
+- **Karşılaştırma (yeni kural):** Sohbet v0.4.0 → v0.9.2 ekran ekran karşılaştırıldı (`araclar/karsilastir.py`). Kaybolanlar: sol üstteki profil fotoğrafı (v0.7.0'da ☰ ile değişmişti) ve ilk satırdaki 5. kısayol "Dil Anları" (v0.7.0'da "Daha fazla" sütunu yer kaplıyordu). İkisi geri getirildi; yeni öğeler (yan menü, genişleyen ızgara) korundu.
+- **Kök neden (alt menü):** v0.9.1'de `#uygulama { position: fixed; inset: 0 }` ekranı tam dolduran bir kaydırıcıydı; Android Chrome bunu "örtük kök kaydırıcı" yapıp kaydırırken adres/araç çubuğunu gizleyip açıyor, görüntü alanı değişince sabit menü aşağı kayıp geri geliyordu. Çözüm: `#uygulama` ekranı tam doldurmuyor — alt menü görünürken `bottom: var(--gezinme-alan)` (menü yüksekliği ResizeObserver ile ölçülür), değilken `bottom: 1px`. Yan etkisi olumlu: son liste öğesi artık menünün altında kalmıyor; `.b-ekran-gezinmeli` büyük alt boşluğu kalktı.
+- **Ne:** `arayuz.js` `basBant()` (koyu baş bandı), `afisKaydirici(..., { pano: true })` + slaytta `test: true` (TEST rozeti) ve `gorsel`; `jetonlar.css` bant renkleri (`--renk-bant-*`, `data-bant`), bant içi jeton yeniden tanımı (`.b-bas-bant`), siyah arama jetonları, beyaz süzgeç jetonları; `bilesenler.css` v0.10.0 bloğu (bant, arama, `data-suzgec` biçimleri, pano, tutamak); `tema.js` `data-bant`, `data-suzgec`; Sohbet/Bağlan/Dil Anları üst düzeni; Ayarlar › Görünüm: Üst bant rengi, Süzgeç biçimi.
+- **Şema:** 12 (ayarlar.bantRengi = 'yesil', ayarlar.suzgecBicimi = 'klasik').
+- **Kural:** Ekranı tam dolduran yeni bir kaydırıcı (`position: fixed; inset: 0; overflow: auto`) ekleme — Android Chrome kök kaydırıcı yapar. Bir ekranı değiştirince `araclar/karsilastir.py` ile önceki sürümle yan yana bak; kaybolan öğe varsa bilerek kaldırılmış olmalı ve DEVIR'de yazmalı.
+- **Durum:** `deneme` dalında; canlıya alma Hakan onayıyla.
 
 ## v0.9.2
 

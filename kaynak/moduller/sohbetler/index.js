@@ -3,7 +3,7 @@
 // Test modunda TEST rozetli sanal kullanıcıların sohbetleri ve sana uygun ilk eşleşme önerisi görünür.
 import './sohbetler.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, altGezinme, durumKutusu, yzEtiketi, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, goreliZaman, benAvatar } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, altGezinme, basBant, durumKutusu, yzEtiketi, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, goreliZaman, benAvatar } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { kisaTarih } from '../../cekirdek/zaman.js';
@@ -12,7 +12,8 @@ import { testModuAcik, testSohbetOzetleri, aktiflik, enIyiEslesmeler } from '../
 
 const SON_KONUSMA_SAYISI = 30;
 
-// İlk satır her zaman görünür; "Daha fazla" ikinci satırı açar (HelloTalk'taki genişleyen ızgara).
+// İlk satır (5 kısayol) her zaman görünür; bandın altındaki tutamak ikinci satırı açar (HelloTalk'taki genişleyen ızgara).
+// v0.10.0: v0.6.0'daki ilk satır geri geldi (Dil Anları dahil 5 kısayol); "Daha fazla" artık bir sütun yemiyor.
 const HIZLI = [
   ['senaryo', 'senaryolar', '/senaryolar', 1],
   ['hafiza', 'hafiza', '/hafiza', 3],
@@ -120,23 +121,28 @@ function ciz(kok, b) {
   }
 
   const hizliIzgara = h('nav', { class: 'b-platform shb-hizli', 'aria-label': t('ht.hizliErisim') });
+  const tutamak = h('button', { type: 'button', class: 'b-bant-tutamak', onClick: () => { hizliAcik = !hizliAcik; hizliCiz(); } });
   function hizliCiz() {
-    const gorunen = hizliAcik ? HIZLI : HIZLI.slice(0, 4);
+    const gorunen = hizliAcik ? HIZLI : HIZLI.slice(0, 5);
     yerlestir(hizliIzgara, h('div', { class: 'b-uygulamalar shb-hizli-izgara' },
       gorunen.map(([ik, anahtar, yol, renk]) => h('button', { type: 'button', class: 'b-uygulama', onClick: yol ? () => b.git(yol) : kocaGit },
-        h('span', { class: `b-uygulama-ikon b-kutu-${renk}` }, ikon3d(ik, 38)), t(`ht.hizli.${anahtar}`))),
-      h('button', { type: 'button', class: 'b-uygulama', 'aria-expanded': String(hizliAcik), onClick: () => { hizliAcik = !hizliAcik; hizliCiz(); } },
-        h('span', { class: 'b-uygulama-ikon shb-daha' }, ikon(hizliAcik ? 'yukari' : 'asagi', 22)), t(hizliAcik ? 'ht.gizle' : 'ht.dahaFazla'))));
+        h('span', { class: `b-uygulama-ikon b-kutu-${renk}` }, ikon3d(ik, 38)), t(`ht.hizli.${anahtar}`)))));
+    tutamak.setAttribute('aria-expanded', String(hizliAcik));
+    yerlestir(tutamak, ikon(hizliAcik ? 'yukari' : 'asagi', 16), t(hizliAcik ? 'ht.gizle' : 'ht.dahaFazla'));
   }
   hizliCiz();
 
   yerlestir(kok,
-    htUst({
-      sol: htIkon('menu', t('yanMenu.baslik'), () => yanMenu(b, kocaGit)),
-      baslik: t('ht.sohbetBaslik'),
-      sag: htIkon('arti', t('sohbetler.yeniKisi'), () => b.git('/kesfet')),
-    }),
-    hizliIzgara,
+    basBant(
+      htUst({
+        // Profil fotoğrafı (v0.6.0'daki gibi) sol üstte; dokununca yan menü açılır (HelloTalk).
+        sol: htIkon(benAvatar(36, 'shb-ben-av'), t('yanMenu.baslik'), () => yanMenu(b, kocaGit)),
+        baslik: t('ht.sohbetBaslik'),
+        sag: htIkon('arti', t('sohbetler.yeniKisi'), () => b.git('/kesfet')),
+      }),
+      hizliIzgara,
+      tutamak,
+    ),
     h('label', { class: 'b-ht-arama' }, ikon('ara', 18),
       h('input', { type: 'search', placeholder: t('ht.ara'), 'aria-label': t('sohbetler.ara'), onInput: (e) => { arama = e.target.value.trim().toLocaleLowerCase(); yenile(); } })),
     sekmeler([['tum', t('sohbetler.tumFiltre')], ['cevrimici', t('ht.cevrimici')], ['insan', t('sohbetler.insanFiltre')], ['yz', t('sohbetler.yzFiltre')]], filtre, (id) => { filtre = id; yenile(); }, { tur: 'hap', etiket: t('sohbetler.filtreBaslik') }),

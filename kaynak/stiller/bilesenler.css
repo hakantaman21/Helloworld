@@ -591,3 +591,43 @@
   .b-orta-ad { font-size: 10.5px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--renk-vurgu-uzerinde); }
   .b-gezinme-orta[aria-current="page"] .b-orta-ad { font-weight: 900; }
 }
+
+/* ===== v0.10.0 Koyu baş bandı, siyah arama, süzgeç biçimleri, pano afişleri, alt menü alanı ===== */
+@layer bilesenler {
+  /* İçerik alt menünün üstünde bittiği için büyük alt boşluk gerekmez */
+  .b-ekran { min-height: 100%; }
+  .b-ekran-gezinmeli { padding-bottom: var(--bosluk-4); }
+
+  /* Baş bandı: tam genişlik, çok koyu, alt köşeleri yuvarlak; sayfa bandın altından başlar */
+  .b-bas-bant { display: flex; flex-direction: column; gap: 10px; margin: 0 calc(var(--bosluk-4) * -1) 4px; padding: 0 var(--bosluk-4) 14px; border-radius: 0 0 26px 26px; background: radial-gradient(90% 120% at 85% 0%, var(--renk-bant-2), var(--renk-bant-1) 70%); color: var(--renk-murekkep); box-shadow: 0 10px 24px color-mix(in srgb, var(--renk-bant-1) 45%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--renk-gece-vurgu) 35%, transparent); }
+  .b-bas-bant .b-ht-ust { position: relative; margin: 0 calc(var(--bosluk-4) * -1); background: transparent; backdrop-filter: none; border-bottom: 0; }
+  .b-bas-bant .b-ht-baslik { color: var(--renk-gece-vurgu); }
+  .b-bas-bant .b-ht-ikon { background: var(--renk-yuzey); color: var(--renk-murekkep); box-shadow: inset 0 0 0 1px var(--renk-cizgi); }
+  .b-bas-bant .b-platform, .b-bas-bant .b-sekmeler { background: linear-gradient(170deg, var(--renk-yuzey-ust), var(--renk-yuzey)); box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 0 0 1px var(--renk-cizgi); }
+  .b-bas-bant .b-sekmeler-hap { background: var(--renk-yuzey-ikinci); }
+  .b-bas-bant .b-uygulama { color: var(--renk-murekkep); }
+  :root[data-suzgec="klasik"] .b-bas-bant .b-sekmeler-metin .b-sekme[aria-pressed="true"] { color: var(--renk-gece-vurgu); background-color: var(--renk-yuzey-ust); box-shadow: inset 0 0 0 1px var(--renk-cizgi-guclu), 0 2px 8px var(--renk-golge); }
+  .b-bas-bant .b-afis-iz { box-shadow: 0 8px 18px var(--renk-golge); }
+
+  /* Arama kutuları her temada siyah */
+  .b-ht-arama { background: var(--renk-arama-zemin); border-color: var(--renk-arama-cizgi); color: var(--renk-arama-soluk); }
+  .b-ht-arama input { color: var(--renk-arama-metin); }
+  .b-ht-arama input::placeholder { color: var(--renk-arama-soluk); }
+  .b-ht-arama:focus-within { border-color: var(--renk-vurgu); }
+
+  /* Süzgeç (sekme) biçimleri — Ayarlar › Görünüm › Süzgeç biçimi */
+  :root[data-suzgec="dolu"] .b-sekme[aria-pressed="true"] { color: var(--renk-vurgu-uzerinde); background-color: var(--renk-vurgu); background-image: linear-gradient(135deg, var(--renk-vurgu-parlak), var(--renk-vurgu)); box-shadow: 0 3px 8px var(--renk-golge); }
+  :root[data-suzgec="cizgi"] .b-sekmeler { background: transparent; box-shadow: inset 0 -1px 0 var(--renk-cizgi); border-radius: 0; }
+  :root[data-suzgec="cizgi"] .b-sekme[aria-pressed="true"] { color: var(--renk-murekkep); background-color: transparent; background-image: none; border-radius: 0; box-shadow: inset 0 -3px 0 var(--renk-vurgu); }
+  :root[data-suzgec="cerceve"] .b-sekme[aria-pressed="true"] { color: var(--renk-murekkep); background-color: transparent; background-image: none; box-shadow: inset 0 0 0 2px var(--renk-vurgu), 0 0 12px color-mix(in srgb, var(--renk-vurgu) 30%, transparent); }
+  :root[data-suzgec="beyaz"] .b-sekme[aria-pressed="true"] { color: var(--renk-suzgec-beyaz-metin); background-color: var(--renk-suzgec-beyaz); background-image: none; box-shadow: 0 3px 10px var(--renk-golge); }
+
+  /* Pano afişleri (Bağlan, Dil Anları): daha alçak, bilgi panosu gibi */
+  .b-afislar-pano .b-afis-slayt { min-height: 112px; padding: 12px 8px 12px 14px; }
+  .b-afislar-pano .b-afis-baslik { font-size: 16.5px; }
+  .b-afis-etiket .b-test { vertical-align: 1px; }
+
+  /* Sohbet: bant altındaki genişletme tutamağı */
+  .b-bant-tutamak { align-self: center; display: inline-flex; align-items: center; gap: 4px; min-height: 48px; margin: -14px 0 -16px; padding: 0 14px; border: 0; border-radius: var(--kose-tam); background: transparent; color: var(--renk-soluk); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .b-bant-tutamak:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+}
