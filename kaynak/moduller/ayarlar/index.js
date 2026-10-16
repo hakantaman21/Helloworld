@@ -51,6 +51,23 @@ function renkSecici(etiketId, tur, secenekler, aktif, degisti) {
     }, h('span', { class: 'ayr-renk-ornek', 'aria-hidden': 'true' }))));
 }
 
+// v0.12.0 Tasarım paketleri: renk geçişleriyle uyumlu hazır görünümler (bant + seçim + zemin + süzgeç birlikte).
+const TASARIM_PAKETLERI = {
+  akilli: { bantRengi: 'sayfa', secimRengi: 'altin', zemin: 'varsayilan', suzgecBicimi: 'klasik' },
+  prime: { bantRengi: 'yesil', secimRengi: 'altin', zemin: 'varsayilan', suzgecBicimi: 'klasik' },
+  gece: { bantRengi: 'gece', secimRengi: 'turkuaz', zemin: 'mavi', suzgecBicimi: 'cerceve' },
+  mor: { bantRengi: 'mor', secimRengi: 'mor', zemin: 'mor', suzgecBicimi: 'dolu' },
+  bordo: { bantRengi: 'bordo', secimRengi: 'mercan', zemin: 'notr', suzgecBicimi: 'klasik' },
+  minimal: { bantRengi: 'antrasit', secimRengi: 'mavi', zemin: 'notr', suzgecBicimi: 'cizgi' },
+};
+function paketSecici(etiketId, aktif, degisti) {
+  return h('div', { class: 'ayr-paketler', role: 'radiogroup', 'aria-labelledby': etiketId },
+    Object.keys(TASARIM_PAKETLERI).map((k) => h('button', {
+      type: 'button', class: 'ayr-paket', role: 'radio', 'aria-checked': String(k === aktif), 'data-paket': k, onClick: () => degisti(k),
+    }, h('span', { class: 'ayr-paket-ornek', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')),
+      h('b', null, t(`ayarlar.paketAd.${k}`)), h('small', null, t(`ayarlar.paketAlt.${k}`)))));
+}
+
 // Süzgeç biçimi seçici: her seçenek, o biçimde çizilmiş küçük bir seçili-sekme önizlemesi gösterir.
 function suzgecSecici(etiketId, aktif, degisti) {
   return h('div', { class: 'ayr-suzgecler', role: 'radiogroup', 'aria-labelledby': etiketId },
@@ -195,10 +212,11 @@ function ciz(kok, b) {
       satir(t('ayarlar.tema'), (id) => bolumlu(id, ['sistem', 'acik', 'koyu'].map((k) => [k, t(`ayarlar.temaSecenek.${k}`)]), a.tema, (k) => ayarKaydet((pr) => { pr.ayarlar.tema = k; })), { altta: true }),
       satir(t('ayarlar.gorunum'), (id) => bolumlu(id, ['dengeli', 'kompakt'].map((k) => [k, t(`ayarlar.gorunumSecenek.${k}`)]), a.gorunum || 'dengeli', (k) => ayarKaydet((pr) => { pr.ayarlar.gorunum = k; }))),
       satir(t('ayarlar.yaziBoyutu'), (id) => bolumlu(id, ['normal', 'buyuk'].map((k) => [k, t(`ayarlar.yaziSecenek.${k}`)]), a.yaziBoyutu || 'normal', (k) => ayarKaydet((pr) => { pr.ayarlar.yaziBoyutu = k; }))),
-      satir(t('ayarlar.secimRengi'), (id) => renkSecici(id, 'secim', ['altin', 'mavi', 'yesil', 'mercan', 'mor', 'turkuaz'], a.secimRengi || 'altin', (k) => ayarKaydet((pr) => { pr.ayarlar.secimRengi = k; }, true)), { aciklama: t('ayarlar.secimRengiAciklama'), altta: true }),
-      satir(t('ayarlar.zeminRengi'), (id) => renkSecici(id, 'zemin', ['varsayilan', 'notr', 'mavi', 'mor', 'yesil'], a.zemin || 'varsayilan', (k) => ayarKaydet((pr) => { pr.ayarlar.zemin = k; }, true)), { aciklama: t('ayarlar.zeminRengiAciklama'), altta: true }),
-      satir(t('ayarlar.bantRengi'), (id) => renkSecici(id, 'bant', ['yesil', 'gece', 'mor', 'bordo', 'antrasit', 'sayfa'], a.bantRengi || 'yesil', (k) => ayarKaydet((pr) => { pr.ayarlar.bantRengi = k; }, true)), { aciklama: t('ayarlar.bantRengiAciklama'), altta: true }),
-      satir(t('ayarlar.suzgecBicimi'), (id) => suzgecSecici(id, a.suzgecBicimi || 'klasik', (k) => ayarKaydet((pr) => { pr.ayarlar.suzgecBicimi = k; }, true)), { aciklama: t('ayarlar.suzgecBicimiAciklama'), altta: true }),
+      satir(t('ayarlar.paket'), (id) => paketSecici(id, a.tasarimPaketi || 'akilli', (k) => { const pk = TASARIM_PAKETLERI[k]; ayarKaydet((pr) => { Object.assign(pr.ayarlar, pk, { tasarimPaketi: k }); }, true); ciz(kok, b); }), { aciklama: t('ayarlar.paketAciklama'), altta: true }),
+      satir(t('ayarlar.secimRengi'), (id) => renkSecici(id, 'secim', ['altin', 'mavi', 'yesil', 'mercan', 'mor', 'turkuaz'], a.secimRengi || 'altin', (k) => ayarKaydet((pr) => { pr.ayarlar.secimRengi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true)), { aciklama: t('ayarlar.secimRengiAciklama'), altta: true }),
+      satir(t('ayarlar.zeminRengi'), (id) => renkSecici(id, 'zemin', ['varsayilan', 'notr', 'mavi', 'mor', 'yesil'], a.zemin || 'varsayilan', (k) => ayarKaydet((pr) => { pr.ayarlar.zemin = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true)), { aciklama: t('ayarlar.zeminRengiAciklama'), altta: true }),
+      satir(t('ayarlar.bantRengi'), (id) => renkSecici(id, 'bant', ['yesil', 'gece', 'mor', 'bordo', 'antrasit', 'sayfa'], a.bantRengi || 'sayfa', (k) => ayarKaydet((pr) => { pr.ayarlar.bantRengi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true)), { aciklama: t('ayarlar.bantRengiAciklama'), altta: true }),
+      satir(t('ayarlar.suzgecBicimi'), (id) => suzgecSecici(id, a.suzgecBicimi || 'klasik', (k) => ayarKaydet((pr) => { pr.ayarlar.suzgecBicimi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true)), { aciklama: t('ayarlar.suzgecBicimiAciklama'), altta: true }),
       satir(t('ayarlar.ortaDugme'), (id) => bolumlu(id, ['pratik', 'arama', 'senaryo', 'telaffuz'].map((k) => [k, t(`ayarlar.ortaSecenek.${k}`)]), a.ortaDugme || 'pratik', (k) => ayarKaydet((pr) => { pr.ayarlar.ortaDugme = k; })), { aciklama: t('ayarlar.ortaDugmeAciklama'), altta: true }),
     ),
 

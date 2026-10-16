@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.11.3 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.2'de (16.10.2026, PR #14). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.12.2 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.3'te (16.10.2026, PR #15). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -13,9 +13,37 @@
 - **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma, karne, Hata Hafızası, profil düzenleme, görünüm, TR + EN. **Test modu (10 sanal kullanıcı, TEST rozetli):** Dil Ortakları Bul (sekmeler, dil hapları, yaş/cinsiyet/hızlı yanıt süzgeci, kural tabanlı otomatik eşleşme, el sallama), zengin kişi profili (yaş, ülke, yerel saat, etkinlik, hobiler, meslek, takip), Dil Anları (Güncel / Senin için / Yardım et / Takip; beğen, yorum, düzelt, paylaş), mesajlaşma, düzeltme önerisi, partner düzeltmesi, şikâyet/engelleme (yanıtlar otomatik kalıp). Veri yalnız cihazda.
 - **Ne çalışmıyor / henüz yok:** gerçek hesap ve sunucu, gerçek kişilerle mesajlaşma, sesli mesaj (Y12 kararı bekliyor), çeviri, gerçek yapay zekâ sağlayıcısı, harf düzeyinde telaffuz.
 - **Sıradaki adım:** Hakan'ın canlı v0.9.0'ı telefonda denemesi (alt menü, orta düğme, renkler) ve geri bildirimi → arka uç kararı (Supabase / Firebase) → Mesaj ve Bağlantı ekranlarını gerçek hesaplarla bağlamak.
-- **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
+- **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.12.2
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan: "Yayına al, ismi de helloworld." Platformun kalıcı adı kararı verildi.
+- **Ne:** `metinler` `uygulama.ad` = 'helloworld' (tr + en), davet metni, `index.html` `<title>`, `genel/manifest.webmanifest` name/short_name; marka şeridi büyük harfe çevirmez (ad Hakan'ın yazdığı gibi küçük harf). Derleme çıktı dosya adı (`teslim/KonusmaKocu-v*.html`) karşılaştırma aracıyla uyum için değişmedi.
+- **Şema:** değişmedi (13). **Durum:** v0.12.0 + v0.12.1 + v0.12.2 canlıya (Hakan onayı).
+
+## v0.12.1
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan (ekran görüntüsü + HelloTalk ekran kaydı): üst barın hatları solda-sağda kayboluyor, üstten de belli olmalı; en üstte ince marka bölümü (simge + uygulama adı); Sohbet'te kişi blokları Bağlan'daki gibi geniş; videodaki kaydırılan süzgeçlerden işlevsel olup bizde eksik olanları ekle.
+- **Videodaki HelloTalk süzgeçleri:** Bağla: Tüm, Ciddi Öğrenenler, Yakında, Şehir, Cinsiyet, Ücretli Pratik · Dil Sohbetleri: Yakın Zaman Dilimi, dile göre · Dil Anları: Güncel, Senin için, Yardım et, Yakında, Selfie, Takip, Öğren, Ses, Sınıf arkadaşları. Eklenmeyenler: Şehir/Yakında (konum tutmuyoruz → Yakın saat dilimi), Ücretli pratik (ödeme yok), Ses ve Selfie (sesli/fotoğraflı gönderi verisi yok).
+- **Ne:** `test-modu.js` `saatFarki(p)`, `YAKIN_SAAT_FARKI = 3`; kesfet/sohbetler/dil-anlari süzgeçleri; `arayuz.js` `markaSeridi()` — yönlendirici `.b-ekran-gezinmeli` ekranlara ekler; `bilesenler.css` v0.12.1 (bant ayrık kart + tam çerçeve); `sohbetler` `.shb-kisi` geniş kart.
+- **Şema:** değişmedi (13). **Durum:** `deneme` dalında (v0.12.0 ile birlikte); canlıya alma Hakan onayıyla.
+
+## v0.12.0
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan: şikâyet penceresi Vazgeç dışında boş alana dokununca da kapansın; Ayarlar'da renk geçişine uyumlu hazır tasarım paketleri; English Prime'daki gibi akıllı renk eşleşmesi — her sayfa içeriğiyle bilişsel eşleşen tonlar, kullanıcı menüye bakmadan sayfayı anlasın; yapay zekâ ve farklı ortamlar için daha çok senaryo kategorisi.
+- **Ne:**
+  - `yonlendirici.js`: `.b-perde` boş alanına dokunma → `katmanKapat` (Esc, sonra `[data-vazgec]` ya da `.b-dugme-cerceve`). Vazgeç düğmelerine `data-vazgec` eklendi (mesaj, dil-anlari).
+  - Sayfa renk eşlemesi: Sohbet/mesaj = `--renk-sayfa-yesil`, Bağlan/kişi = `--renk-sayfa-mavi` (yer değişti), Pratik kırmızı, Dil Anları amber, Profil/Ayarlar mor. `bilesenler.css` v0.12.0: `.b-ekran` üstte sayfa renginde ışık; `data-bant="sayfa"` bant çizgisi ve başlık sayfa tonunda.
+  - `ayarlar/index.js` `TASARIM_PAKETLERI` + `paketSecici`; tek ayar değişince `tasarimPaketi = 'ozel'`.
+  - Senaryolar: 9 yeni dosya (`veri/senaryolar/*.js`), `alanlar.js` + teknoloji, egitim, resmi. Anayasa bölüm 2'deki "6 alan" Hakan isteğiyle 9'a çıktı (Anayasa metni sonraki turda güncellenmeli). Güvenlik düzeltmesi: geri tuşu ya da boş alana dokunma artık yalnız `[data-vazgec]` düğmesine basar; şikâyet penceresinde ilk nedeni ("Taciz") seçme riski giderildi (v0.11.x'te geri tuşu şikâyet penceresinde ilk ikincil düğmeye basabiliyordu). Onay ve mikrofon izni pencerelerinde de `data-vazgec` var.
+  - `bugun/index.js`: ODALAR tüm senaryolardan üretilir, alan hapı ile süzülür (`odalar.kategori`).
+- **Şema:** 13 (`ayarlar.tasarimPaketi = 'akilli'`; `bantRengi` 'yesil' ise 'sayfa'ya geçer).
+- **Durum:** `deneme` dalında; canlıya alma Hakan onayıyla.
 
 ## v0.11.3
 

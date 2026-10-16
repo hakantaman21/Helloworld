@@ -4,7 +4,7 @@ import { ekranAl } from './modul-kaydi.js';
 import { al } from './depo.js';
 import { yayinla } from './olay-hatti.js';
 import { t } from './metin.js';
-import { h, gezinmeGizle } from './arayuz.js';
+import { h, gezinmeGizle, markaSeridi } from './arayuz.js';
 
 let kok = null;
 let aktifTemizle = null;
@@ -50,6 +50,8 @@ function ciz() {
   gezinmeGizle();
   try {
     aktifTemizle = ekran.ciz(kap, { p: parametreler, git, geri }) || null;
+    // Ana sekmelerde (alt menülü ekranlar) en üstte ince marka şeridi.
+    if (kap.classList.contains('b-ekran-gezinmeli')) kap.prepend(markaSeridi());
     // v0.4.0: HelloTalk düzeninde her ana sekme kendi ince üst çubuğunu (htUst) çizer; ortak şerit kaldırıldı.
   } catch (hata) {
     console.error('[yonlendirici]', id, hata);
@@ -73,7 +75,7 @@ function katmanKapat(el) {
   // Esc dinlemeyen katman: varsa "vazgeç" türü ikincil düğmeye bas (bekleyen soru yanıtsız kalmasın), yoksa kaldır.
   setTimeout(() => {
     if (!el.isConnected) return;
-    const vazgec = el.querySelector('.b-dugme-cerceve');
+    const vazgec = el.querySelector('[data-vazgec]') || (el.querySelectorAll('.b-dugme-cerceve').length === 1 ? el.querySelector('.b-dugme-cerceve') : null);
     if (vazgec) vazgec.click();
     if (el.isConnected) el.remove();
   }, 0);
@@ -91,6 +93,12 @@ function katmanIzle() {
       if (history.state && history.state.katman) { yoksay += 1; history.go(-fark); }
     }
   }).observe(document.body, { childList: true, subtree: true });
+
+  // Koyu perdeli pencerelerde (şikâyet, onay…) boş alana dokununca da kapanır — "Vazgeç" gibi.
+  document.addEventListener('click', (e) => {
+    const el = e.target;
+    if (el instanceof Element && el.classList.contains('b-perde') && el.isConnected) katmanKapat(el);
+  });
 
   window.addEventListener('popstate', (e) => {
     if (yoksay > 0) { yoksay -= 1; return; }

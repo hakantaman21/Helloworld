@@ -1,6 +1,6 @@
 // English interface texts (Y16). Must contain exactly the same keys as tr.js (Y25).
 export default {
-  uygulama: { ad: 'Speaking Coach' },
+  uygulama: { ad: 'helloworld' },
   koc: { ad: 'Coach' },
 
   ortak: {
@@ -47,13 +47,13 @@ export default {
     profilAlt: 'About me, photos, points, progress', profiliGor: 'View your profile', ayarlarAlt: 'Language, reminders, appearance, privacy',
   },
   odalar: {
-    baslik: 'Topic rooms', alt: 'Join a topic at your level', hizliEtiket: 'Matches your level', hizliKatil: 'Join now', degistir: 'Suggest another room',
+    kategori: 'Topic category', baslik: 'Topic rooms', alt: 'Join a topic at your level', hizliEtiket: 'Matches your level', hizliKatil: 'Join now', degistir: 'Suggest another room',
     katil: 'Join', ilgilenen: '{n} interested', not: 'Live community voice rooms will come with the community. For now, joining a room starts a talk on that topic with the AI coach.',
     konu: { kafe: 'Ordering at a café', market: 'Shopping at the market', yol: 'Asking for directions', bilet: 'Buying a ticket' },
     etiket: { kafe: 'Daily life', market: 'Shopping', yol: 'Travel', bilet: 'Travel' },
   },
   puan: { baslik: 'Learning points', katildi: 'Day {n}', dakika: 'min spoken', kelime: 'new words', hata: 'mistakes saved', cumle: 'saved sentences', an: 'Moments', takip: 'following' },
-  davet: { baslik: 'Invite a friend', alt: 'Practising together is easier', dugme: 'Share', metin: 'I practise speaking English with Konuşma Koçu, join me:' },
+  davet: { baslik: 'Invite a friend', alt: 'Practising together is easier', dugme: 'Share', metin: 'I practise speaking English with helloworld, join me:' },
   pratik: {
     sekme: { ai: 'AI chat', gercek: 'Real chat', ogren: 'Learn' }, afisEtiket: 'Highlights',
     afis: {
@@ -79,6 +79,7 @@ export default {
     sohbetBaslik: 'Language Chats', hizliErisim: 'Quick access', ara: 'Search', cevrimici: 'Online', sen: 'You', yzPratik: 'AI practice',
     hizli: { senaryolar: 'Scenarios', hafiza: 'Mistakes', koc: 'AI Coach', partner: 'Find partner', anlar: 'Moments' , telaffuz: 'Pronunciation', defter: 'Phrasebook', karne: 'Report', odalar: 'Topic rooms' },
     uyum: '{n}% match', uyumKisa: 'match', uyumBaslik: 'Language exchange match', oneriSatir: 'Your best language partner · tap to say hi',
+    ciddi: 'Serious learners', yakinSaat: 'Nearby time zone', karsilikli: 'Mutual', kadin: 'Women', erkek: 'Men', ogren: 'Learn', sinif: 'Classmates', okunmamis: 'Awaiting reply',
     ortakBul: 'Find Language Partners', sanaUygun: 'For you', yeni: 'New', tumDiller: 'All languages', dil: 'Language', dilimiOgrenen: 'Learning {dil}',
     suzgecler: 'Filters', yas: 'Age', cinsiyet: 'Gender', cins: { tum: 'All', k: 'Female', e: 'Male' },
     yasAralik: { tum: 'All', genc: '18–25', orta: '26–35', ust: '36+' }, yalnizHizli: 'Only fast responders',
@@ -433,14 +434,17 @@ export default {
     alisveris: 'Shopping and food',
     ulasim: 'Transport and travel',
     saglik: 'Health',
-    is: 'Work and school',
+    is: 'Working life',
     sosyal: 'Social life and hobbies',
+    teknoloji: 'Technology and AI',
+    egitim: 'School and learning',
+    resmi: 'Banks and official tasks',
     gunluk: 'Daily call',
   },
 
   senaryolar: {
     baslik: 'Scenarios',
-    alt: '6 areas of daily life, from A1 to B2',
+    alt: '9 areas of life, including technology and AI,, from A1 to B2',
     seviyeEtiket: 'Level',
     oneri: 'COACH’S PICK',
     oneriAlt: '{alan} · {seviye} · 5 min · Coach: {rol}',
@@ -523,6 +527,9 @@ export default {
     ortaDugme: 'Centre button shortcut', ortaDugmeAciklama: 'What should tapping the centre Practice button do? Long-press shows all.',
     ortaSecenek: { pratik: 'Practice', arama: 'Coach call', senaryo: 'Scenario', telaffuz: 'Pronunciation' },
     renkAd: { altin: 'Gold', mavi: 'Blue', yesil: 'Green', mercan: 'Coral', mor: 'Purple', turkuaz: 'Turquoise', varsayilan: 'Default', notr: 'Neutral', gece: 'Midnight blue', bordo: 'Burgundy', antrasit: 'Anthracite', sayfa: 'Page colour' },
+    paket: 'Design pack', paketAciklama: 'Ready-made looks that match the colour gradients. Changing a single setting below makes it "Custom".',
+    paketAd: { akilli: 'Smart colour', prime: 'English Prime', gece: 'Night teal', mor: 'Purple evening', bordo: 'Burgundy classic', minimal: 'Anthracite plain' },
+    paketAlt: { akilli: 'Each page in its own colour', prime: 'Dark green, gold', gece: 'Navy, teal', mor: 'Purple tones', bordo: 'Burgundy, coral', minimal: 'Grey, blue, underline' },
     bantRengi: 'Top band colour', bantRengiAciklama: 'The dark strip at the top of pages. "Page colour" uses a deep shade of each page\'s own colour.',
     suzgecBicimi: 'Filter style', suzgecBicimiAciklama: 'How the selected tab and filters look',
     suzgecAd: { klasik: 'Classic', dolu: 'Filled', cizgi: 'Underline', cerceve: 'Outline', beyaz: 'White' },

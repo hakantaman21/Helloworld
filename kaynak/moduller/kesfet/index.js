@@ -7,7 +7,7 @@ import { h, ikon, ikon3d, altGezinme, basBant, afisKaydirici, durumKutusu, yerle
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
-import { testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler } from '../../cekirdek/test-modu.js';
+import { saatFarki, YAKIN_SAAT_FARKI, testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler } from '../../cekirdek/test-modu.js';
 import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
@@ -73,6 +73,10 @@ function suz(liste, d, f) {
   if (d.sekme === 'cevrimici') sonuc = sonuc.filter((k) => aktiflik(k).cevrimici);
   if (d.sekme === 'yeni') sonuc = sonuc.filter((k) => k.katildiGun <= 90);
   if (d.sekme === 'yakin') sonuc = sonuc.filter((k) => Math.abs(SEVIYE_SIRASI.indexOf(k.seviye) - benimSeviye) <= 1);
+  if (d.sekme === 'ciddi') sonuc = sonuc.filter((k) => (k.rozetler || []).includes('ciddi'));
+  if (d.sekme === 'saat') sonuc = sonuc.filter((k) => saatFarki(k) <= YAKIN_SAAT_FARKI);
+  if (d.sekme === 'kadin' || d.sekme === 'erkek') sonuc = sonuc.filter((k) => k.cinsiyet === (d.sekme === 'kadin' ? 'k' : 'e'));
+  if (d.sekme === 'karsilikli') sonuc = sonuc.filter((k) => ben.anaDil && k.ogrenilenDil === ben.anaDil && k.anaDil === (ben.ogrenilenDil || 'en'));
   if (d.sekme === 'uygun') return [...sonuc].sort((a, b) => eslesme(b).puan - eslesme(a).puan);
   return [...sonuc].sort((a, b) => aktiflik(a).dk - aktiflik(b).dk);
 }
@@ -272,7 +276,7 @@ function ciz(kok, b) {
       baslik: t('ht.ortakBul'),
       sag: suzgecDugmesi,
     }),
-    sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')], ['yakin', t('kesfet.suzgec.seviye')]], durum.sekme, (id) => { durum.sekme = id; yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
+    sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')], ['ciddi', t('ht.ciddi')], ['saat', t('ht.yakinSaat')], ['karsilikli', t('ht.karsilikli')], ['yakin', t('kesfet.suzgec.seviye')], ['kadin', t('ht.kadin')], ['erkek', t('ht.erkek')]], durum.sekme, (id) => { durum.sekme = id; yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
     pano,
     sekmeler([
       ['hedef', t(`diller.${ben.ogrenilenDil || 'en'}`)],

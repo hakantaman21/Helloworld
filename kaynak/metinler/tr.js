@@ -1,7 +1,7 @@
 // Türkçe arayüz metinleri (Y16). Arayüzde görünen her metin buradan gelir.
 // Koçun İngilizce cümleleri içeriktir; onlar veri/ klasöründedir.
 export default {
-  uygulama: { ad: 'Konuşma Koçu' },
+  uygulama: { ad: 'helloworld' },
   koc: { ad: 'Koç' },
 
   ortak: {
@@ -48,13 +48,13 @@ export default {
     profilAlt: 'Hakkımda, fotoğraflar, puanlar, gelişim', profiliGor: 'Profilini gör', ayarlarAlt: 'Dil, bildirim, görünüm, gizlilik',
   },
   odalar: {
-    baslik: 'Konu odaları', alt: 'Seviyene uygun bir konuya katıl', hizliEtiket: 'Seviyene uygun', hizliKatil: 'Şimdi katıl', degistir: 'Başka oda öner',
+    kategori: 'Konu kategorisi', baslik: 'Konu odaları', alt: 'Seviyene uygun bir konuya katıl', hizliEtiket: 'Seviyene uygun', hizliKatil: 'Şimdi katıl', degistir: 'Başka oda öner',
     katil: 'Katıl', ilgilenen: '{n} kişi ilgileniyor', not: 'Sesli topluluk odaları topluluk açılınca gelecek. Şimdilik odaya katılınca bu konuda yapay zekâ koçla konuşursun.',
     konu: { kafe: 'Kafede sipariş', market: 'Markette alışveriş', yol: 'Yol tarifi sorma', bilet: 'Bilet alma' },
     etiket: { kafe: 'Günlük', market: 'Alışveriş', yol: 'Seyahat', bilet: 'Seyahat' },
   },
   puan: { baslik: 'Öğrenme puanları', katildi: '{n}. gün', dakika: 'dk konuşma', kelime: 'yeni kelime', hata: 'hata kaydı', cumle: 'kayıtlı cümle', an: 'Dil Anı', takip: 'takip' },
-  davet: { baslik: 'Arkadaşını davet et', alt: 'Birlikte pratik yapmak daha kolay', dugme: 'Paylaş', metin: 'Konuşma Koçu ile İngilizce konuşma pratiği yapıyorum, sen de gel:' },
+  davet: { baslik: 'Arkadaşını davet et', alt: 'Birlikte pratik yapmak daha kolay', dugme: 'Paylaş', metin: 'helloworld ile İngilizce konuşma pratiği yapıyorum, sen de gel:' },
   pratik: {
     sekme: { ai: 'AI sohbet', gercek: 'Gerçek sohbet', ogren: 'Öğren' }, afisEtiket: 'Tanıtımlar',
     afis: {
@@ -80,6 +80,7 @@ export default {
     sohbetBaslik: 'Dil Sohbetleri', hizliErisim: 'Hızlı erişim', ara: 'Arama', cevrimici: 'Çevrimiçi', sen: 'Sen', yzPratik: 'yapay zekâ pratiği',
     hizli: { senaryolar: 'Senaryolar', hafiza: 'Hata Hafızası', koc: 'AI Koç', partner: 'Partner bul', anlar: 'Dil Anları' , telaffuz: 'Telaffuz', defter: 'Cümle defteri', karne: 'Karne', odalar: 'Konu odaları' },
     uyum: '%{n} uyum', uyumKisa: 'uyum', uyumBaslik: 'Dil değişimi uyumu', oneriSatir: 'Sana en uygun dil ortağı · selam vermek için dokun',
+    ciddi: 'Ciddi öğrenenler', yakinSaat: 'Yakın saat dilimi', karsilikli: 'Karşılıklı', kadin: 'Kadın', erkek: 'Erkek', ogren: 'Öğren', sinif: 'Sınıf arkadaşları', okunmamis: 'Sen yazmadın',
     ortakBul: 'Dil Ortakları Bul', sanaUygun: 'Sana uygun', yeni: 'Yeni', tumDiller: 'Tüm diller', dil: 'Dil', dilimiOgrenen: '{dil} öğrenenler',
     suzgecler: 'Süzgeçler', yas: 'Yaş', cinsiyet: 'Cinsiyet', cins: { tum: 'Tümü', k: 'Kadın', e: 'Erkek' },
     yasAralik: { tum: 'Tümü', genc: '18–25', orta: '26–35', ust: '36+' }, yalnizHizli: 'Yalnız hızlı yanıt verenler',
@@ -434,14 +435,17 @@ export default {
     alisveris: 'Alışveriş ve yemek',
     ulasim: 'Ulaşım ve seyahat',
     saglik: 'Sağlık',
-    is: 'İş ve okul',
+    is: 'İş hayatı',
     sosyal: 'Sosyal hayat ve hobiler',
+    teknoloji: 'Teknoloji ve yapay zekâ',
+    egitim: 'Okul ve eğitim',
+    resmi: 'Banka ve resmî işler',
     gunluk: 'Günlük arama',
   },
 
   senaryolar: {
     baslik: 'Senaryolar',
-    alt: 'Günlük yaşamın 6 alanı, A1’den B2’ye',
+    alt: 'Teknoloji ve yapay zekâ dahil 9 yaşam alanı, A1’den B2’ye',
     seviyeEtiket: 'Seviye',
     oneri: 'KOÇUN ÖNERİSİ',
     oneriAlt: '{alan} · {seviye} · 5 dk · Koç: {rol}',
@@ -524,6 +528,9 @@ export default {
     ortaDugme: 'Orta düğme kısayolu', ortaDugmeAciklama: 'Ortadaki Pratik düğmesine dokununca ne olsun? Basılı tutunca hepsi açılır.',
     ortaSecenek: { pratik: 'Pratik', arama: 'Koç araması', senaryo: 'Senaryo', telaffuz: 'Telaffuz' },
     renkAd: { altin: 'Altın', mavi: 'Mavi', yesil: 'Yeşil', mercan: 'Mercan', mor: 'Mor', turkuaz: 'Turkuaz', varsayilan: 'Varsayılan', notr: 'Nötr', gece: 'Gece mavisi', bordo: 'Bordo', antrasit: 'Antrasit', sayfa: 'Sayfa rengi' },
+    paket: 'Tasarım paketi', paketAciklama: 'Renk geçişleriyle uyumlu hazır görünümler. Aşağıdan tek tek değiştirirsen paket "Özel" olur.',
+    paketAd: { akilli: 'Akıllı renk', prime: 'English Prime', gece: 'Gece turkuaz', mor: 'Mor akşam', bordo: 'Bordo klasik', minimal: 'Antrasit sade' },
+    paketAlt: { akilli: 'Her sayfa kendi renginde', prime: 'Koyu yeşil, altın', gece: 'Lacivert, turkuaz', mor: 'Mor tonlar', bordo: 'Bordo, mercan', minimal: 'Gri, mavi, çizgi' },
     bantRengi: 'Üst bant rengi', bantRengiAciklama: 'Sayfaların en üstündeki koyu şerit. "Sayfa rengi" her sayfanın kendi renginin koyu tonunu kullanır.',
     suzgecBicimi: 'Süzgeç biçimi', suzgecBicimiAciklama: 'Seçili sekme ve süzgeçlerin görünümü',
     suzgecAd: { klasik: 'Klasik', dolu: 'Dolu', cizgi: 'Çizgi', cerceve: 'Çerçeve', beyaz: 'Beyaz' },
