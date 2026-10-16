@@ -3,7 +3,7 @@
 // Test modunda TEST rozetli sanal kullanıcıların sohbetleri ve sana uygun ilk eşleşme önerisi görünür.
 import './sohbetler.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, altGezinme, durumKutusu, yzEtiketi, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, goreliZaman } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, altGezinme, durumKutusu, yzEtiketi, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, goreliZaman, benAvatar } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { kisaTarih } from '../../cekirdek/zaman.js';
@@ -80,7 +80,7 @@ function ciz(kok, b) {
 
   yerlestir(kok,
     htUst({
-      sol: h('button', { type: 'button', class: 'b-ht-ikon shb-ben', 'aria-label': t('gezinme.profil'), onClick: () => b.git('/gelisim') }, h('span', { class: 'b-av b-av-ben shb-ben-av', 'aria-hidden': 'true' }, (v.profil.ad || '?').charAt(0).toLocaleUpperCase())),
+      sol: h('button', { type: 'button', class: 'b-ht-ikon shb-ben', 'aria-label': t('gezinme.profil'), onClick: () => b.git('/gelisim') }, benAvatar(36, 'shb-ben-av')),
       baslik: t('ht.sohbetBaslik'),
       sag: htIkon('arti', t('sohbetler.yeniKisi'), () => b.git('/kesfet')),
     }),

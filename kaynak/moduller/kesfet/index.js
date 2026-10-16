@@ -9,6 +9,7 @@ import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler } from '../../cekirdek/test-modu.js';
 import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
+import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 
 const SELAM_YANIT_GECIKMESI = 1500;
@@ -21,22 +22,118 @@ function selamla(p, yenile) {
   yenile();
 }
 
-function suz(liste, d) {
+// Hızlı süzgeçler (Sık kullanılan sekmesi): her biri tek dokunuşla açılıp kapanır.
+const HIZLI_SUZGECLER = [
+  ['cevrimici', '🟢'], ['yeni', '✨'], ['yakin', '🎯'],
+  ['ortakIlgi', '♥'], ['hizli', '⚡'], ['karsilikli', '🤝'],
+];
+
+function bosSuzgec() {
+  return { hizli: new Set(), yas: 'tum', cinsiyet: 'tum', anaDil: 'tum', ogrDil: 'tum', seviyeler: new Set(), ulkeler: new Set(), ilgiler: new Set() };
+}
+
+function etkinSayisi(f) {
+  return f.hizli.size + f.seviyeler.size + f.ulkeler.size + f.ilgiler.size
+    + ['yas', 'cinsiyet', 'anaDil', 'ogrDil'].filter((k) => f[k] !== 'tum').length;
+}
+
+const ulkeAdi = (k) => yerel(k.ulke).split(' · ')[0];
+
+function suzgecUygula(liste, f) {
   const ben = al().profil;
   const benimSeviye = SEVIYE_SIRASI.indexOf(ben.seviye);
-  let sonuc = liste;
+  return liste.filter((k) => {
+    if (f.hizli.has('cevrimici') && !aktiflik(k).cevrimici) return false;
+    if (f.hizli.has('yeni') && k.katildiGun > 90) return false;
+    if (f.hizli.has('yakin') && Math.abs(SEVIYE_SIRASI.indexOf(k.seviye) - benimSeviye) > 1) return false;
+    if (f.hizli.has('ortakIlgi') && !ortakIlgiler(k).length) return false;
+    if (f.hizli.has('hizli') && !(k.rozetler || []).includes('hizli')) return false;
+    if (f.hizli.has('karsilikli') && !(ben.anaDil && k.ogrenilenDil === ben.anaDil)) return false;
+    const [alt, ust] = YAS_ARALIKLARI[f.yas];
+    if (k.yas < alt || k.yas > ust) return false;
+    if (f.cinsiyet !== 'tum' && k.cinsiyet !== f.cinsiyet) return false;
+    if (f.anaDil !== 'tum' && k.anaDil !== f.anaDil) return false;
+    if (f.ogrDil !== 'tum' && k.ogrenilenDil !== f.ogrDil) return false;
+    if (f.seviyeler.size && !f.seviyeler.has(k.seviye)) return false;
+    if (f.ulkeler.size && !f.ulkeler.has(ulkeAdi(k))) return false;
+    if (f.ilgiler.size && !k.ilgi.some((i) => f.ilgiler.has(ilgiKimligi(i)))) return false;
+    return true;
+  });
+}
+
+function suz(liste, d, f) {
+  const ben = al().profil;
+  const benimSeviye = SEVIYE_SIRASI.indexOf(ben.seviye);
+  let sonuc = suzgecUygula(liste, f);
   if (d.dil === 'hedef') sonuc = sonuc.filter((k) => k.anaDil === (ben.ogrenilenDil || 'en'));
   if (d.dil === 'benimDilim') sonuc = sonuc.filter((k) => ben.anaDil && k.ogrenilenDil === ben.anaDil);
   if (d.sekme === 'cevrimici') sonuc = sonuc.filter((k) => aktiflik(k).cevrimici);
   if (d.sekme === 'yeni') sonuc = sonuc.filter((k) => k.katildiGun <= 90);
   if (d.sekme === 'yakin') sonuc = sonuc.filter((k) => Math.abs(SEVIYE_SIRASI.indexOf(k.seviye) - benimSeviye) <= 1);
-  const [alt, ust] = YAS_ARALIKLARI[d.yas];
-  sonuc = sonuc.filter((k) => k.yas >= alt && k.yas <= ust);
-  if (d.cinsiyet !== 'tum') sonuc = sonuc.filter((k) => k.cinsiyet === d.cinsiyet);
-  if (d.hizli) sonuc = sonuc.filter((k) => (k.rozetler || []).includes('hizli'));
-  if (d.sekme === 'uygun') sonuc = [...sonuc].sort((a, b) => eslesme(b).puan - eslesme(a).puan);
-  else sonuc = [...sonuc].sort((a, b) => aktiflik(a).dk - aktiflik(b).dk);
-  return sonuc;
+  if (d.sekme === 'uygun') return [...sonuc].sort((a, b) => eslesme(b).puan - eslesme(a).puan);
+  return [...sonuc].sort((a, b) => aktiflik(a).dk - aktiflik(b).dk);
+}
+
+// İki sekmeli süzgeç penceresi: Sık kullanılan (tek dokunuş karoları) · Detaylı (yaş, cinsiyet, diller, seviye, ülke, ilgi).
+// Değişiklikler canlı sayılır ("N kişiyi göster"); Uygula'ya kadar listeye yansımaz, Sıfırla hepsini temizler.
+function suzgecPenceresi(mevcut, uygula) {
+  const f = { ...mevcut, hizli: new Set(mevcut.hizli), seviyeler: new Set(mevcut.seviyeler), ulkeler: new Set(mevcut.ulkeler), ilgiler: new Set(mevcut.ilgiler) };
+  const tum = testProfilleri();
+  let sekme = 'sik';
+  const ic = h('div', { class: 'b-alt-pencere-ic' });
+  const gosterDugmesi = h('button', { type: 'button', class: 'b-dugme b-dugme-ana' });
+  const kapat = () => { perde.remove(); document.removeEventListener('keydown', tus); };
+  const tus = (e) => { if (e.key === 'Escape') kapat(); };
+
+  const tekli = (anahtar, secenekler, sutun = 4) => h('div', { class: `b-karolar b-karolar-${sutun}` }, secenekler.map(([deger, ad]) =>
+    h('button', { type: 'button', class: 'b-karo b-karo-kisa', 'aria-pressed': String(f[anahtar] === deger), onClick: () => { f[anahtar] = deger; ciz(); } }, ad)));
+  const coklu = (kume, secenekler, sutun = 3) => h('div', { class: `b-karolar${sutun === 3 ? '' : ` b-karolar-${sutun}`}` }, secenekler.map(([deger, ad, simge]) =>
+    h('button', { type: 'button', class: 'b-karo', 'aria-pressed': String(kume.has(deger)), onClick: () => { if (kume.has(deger)) kume.delete(deger); else kume.add(deger); ciz(); } },
+      simge ? h('span', { class: 'b-karo-simge', 'aria-hidden': 'true' }, simge) : null, ad)));
+  const grupla = (etiket, ...cocuk) => h('section', { class: 'b-platform' }, h('h3', { class: 'b-grup-etiket' }, etiket), ...cocuk);
+
+  function ciz() {
+    const sayi = suzgecUygula(tum, f).length;
+    yerlestir(gosterDugmesi, t('suzgec.goster', { n: sayi }));
+    gosterDugmesi.disabled = sayi === 0;
+    const diller = (alan) => [['tum', t('ht.cins.tum')], ...[...new Set(tum.map((k) => k[alan]))].map((d) => [d, t(`diller.${d}`)])];
+    if (sekme === 'sik') {
+      yerlestir(ic,
+        grupla(t('suzgec.sikBaslik'), coklu(f.hizli, HIZLI_SUZGECLER.map(([k, simge]) => [k, t(`suzgec.hizli.${k}`), simge]))),
+        grupla(t('ht.yas'), tekli('yas', Object.keys(YAS_ARALIKLARI).map((k) => [k, t(`ht.yasAralik.${k}`)]))),
+        grupla(t('ht.cinsiyet'), tekli('cinsiyet', [['tum', t('ht.cins.tum')], ['k', t('ht.cins.k')], ['e', t('ht.cins.e')]], 3)),
+        h('p', { class: 'b-kucuk' }, t('suzgec.ucretsiz')),
+      );
+    } else {
+      const ulkeler = [...new Map(tum.map((k) => [ulkeAdi(k), k.bayrak])).entries()];
+      const ilgiler = ILGI_ALANLARI.filter((i) => tum.some((k) => k.ilgi.some((x) => ilgiKimligi(x) === i.kimlik)));
+      yerlestir(ic,
+        grupla(t('suzgec.anaDili'), tekli('anaDil', diller('anaDil'), 3)),
+        grupla(t('suzgec.ogreniyor'), tekli('ogrDil', diller('ogrenilenDil'), 3)),
+        grupla(t('suzgec.seviye'), coklu(f.seviyeler, SEVIYE_SIRASI.map((s) => [s, s]), 5)),
+        grupla(t('suzgec.ulke'), coklu(f.ulkeler, ulkeler.map(([ad, bayrak]) => [ad, ad, bayrak]))),
+        grupla(t('ilgi.baslik'), coklu(f.ilgiler, ilgiler.map((i) => [i.kimlik, yerel(i), i.simge]))),
+      );
+    }
+  }
+
+  const perde = h('div', { class: 'b-alt-pencere-perde', onClick: (e) => { if (e.target === perde) kapat(); } },
+    h('div', { class: 'b-alt-pencere', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'kft-sz-baslik' },
+      h('div', { class: 'b-alt-pencere-tutamak', 'aria-hidden': 'true' }),
+      h('div', { class: 'b-alt-pencere-ust' },
+        h('h2', { class: 'b-alt-pencere-baslik', id: 'kft-sz-baslik' }, t('ht.suzgecler')),
+        h('button', { type: 'button', class: 'b-ht-ikon b-ht-ikon-saydam', 'aria-label': t('genel.kapat'), onClick: kapat }, ikon('kapat', 20))),
+      h('div', { class: 'kft-sz-sekme' }, sekmeler([['sik', t('suzgec.sik')], ['detay', t('suzgec.detay')]], sekme, (id) => { sekme = id; ciz(); }, { tur: 'hap', etiket: t('ht.suzgecler') })),
+      ic,
+      h('div', { class: 'b-alt-pencere-alt' },
+        h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => { Object.assign(f, bosSuzgec()); ciz(); } }, t('suzgec.sifirla')),
+        gosterDugmesi),
+    ));
+  gosterDugmesi.addEventListener('click', () => { uygula(f); kapat(); });
+  document.addEventListener('keydown', tus);
+  ciz();
+  document.body.append(perde);
+  perde.querySelector('.b-alt-pencere-ust button').focus();
 }
 
 function satir(k, b, yenile) {
@@ -110,25 +207,19 @@ function ciz(kok, b) {
   if (!testModuAcik()) { testsizCiz(kok, b); return null; }
 
   const ben = al().profil;
-  const durum = { sekme: 'tum', dil: 'hedef', yas: 'tum', cinsiyet: 'tum', hizli: false, panel: false, eslesmeSira: -1 };
+  const durum = { sekme: 'tum', dil: 'hedef', eslesmeSira: -1 };
+  let suzgec = bosSuzgec();
   const liste = h('div', { class: 'b-liste kft-liste', 'aria-live': 'polite' });
-  const panelAlani = h('div');
   const eslesmeAlani = h('div');
+  const etkinAlani = h('div');
   let suzgecDugmesi;
 
-  function panelCiz() {
-    const etkin = ['yas', 'cinsiyet'].filter((k) => durum[k] !== 'tum').length + (durum.hizli ? 1 : 0);
-    yerlestir(suzgecDugmesi, ikon('suzgec', 22), etkin ? h('span', { class: 'b-ht-rozet' }, String(etkin)) : null);
-    if (!durum.panel) { yerlestir(panelAlani); return; }
-    yerlestir(panelAlani, h('section', { class: 'b-kart kft-panel', 'aria-label': t('ht.suzgecler') },
-      h('span', { class: 'b-ust-etiket' }, t('ht.yas')),
-      sekmeler(Object.keys(YAS_ARALIKLARI).map((k) => [k, t(`ht.yasAralik.${k}`)]), durum.yas, (id) => { durum.yas = id; yenile(); }, { tur: 'hap' }),
-      h('span', { class: 'b-ust-etiket' }, t('ht.cinsiyet')),
-      sekmeler([['tum', t('ht.cins.tum')], ['k', t('ht.cins.k')], ['e', t('ht.cins.e')]], durum.cinsiyet, (id) => { durum.cinsiyet = id; yenile(); }, { tur: 'hap' }),
-      h('label', { class: 'kft-anahtar' },
-        h('input', { type: 'checkbox', checked: durum.hizli, onChange: (e) => { durum.hizli = e.currentTarget.checked; yenile(); } }),
-        h('span', null, t('ht.yalnizHizli'))),
-    ));
+  function suzgecRozeti() {
+    const n = etkinSayisi(suzgec);
+    yerlestir(suzgecDugmesi, ikon('suzgec', 22), n ? h('span', { class: 'b-ht-rozet' }, String(n)) : null);
+    yerlestir(etkinAlani, n ? h('div', { class: 'kft-etkin' },
+      h('span', null, t('suzgec.etkin', { n })),
+      h('button', { type: 'button', class: 'kft-etkin-temizle', onClick: () => { suzgec = bosSuzgec(); yenile(); } }, t('suzgec.temizle'))) : null);
   }
 
   function eslesmeCiz() {
@@ -144,12 +235,12 @@ function ciz(kok, b) {
   }
 
   function yenile() {
-    panelCiz();
-    const kisiler = suz(testProfilleri(), durum);
+    suzgecRozeti();
+    const kisiler = suz(testProfilleri(), durum, suzgec);
     yerlestir(liste, kisiler.length ? kisiler.map((k) => satir(k, b, yenile)) : durumKutusu('bos', testProfilleri().length ? t('kesfet.suzgecBos') : t('test.hepsiEngelli')));
   }
 
-  suzgecDugmesi = htIkon('suzgec', t('ht.suzgecler'), () => { durum.panel = !durum.panel; panelCiz(); });
+  suzgecDugmesi = htIkon('suzgec', t('ht.suzgecler'), () => suzgecPenceresi(suzgec, (yeni) => { suzgec = yeni; yenile(); }));
   yerlestir(kok,
     htUst({
       sol: htIkon(ikon3d('seri', 30), t('ht.eslesmeBaslik'), () => { durum.eslesmeSira = durum.eslesmeSira < 0 ? 0 : -1; eslesmeCiz(); if (durum.eslesmeSira >= 0) eslesmeAlani.scrollIntoView({ block: 'nearest' }); }),
@@ -162,7 +253,7 @@ function ciz(kok, b) {
       ['benimDilim', t('ht.dilimiOgrenen', { dil: t(`diller.${ben.anaDil || 'tr'}`) })],
       ['tum', t('ht.tumDiller')],
     ], durum.dil, (id) => { durum.dil = id; yenile(); }, { tur: 'hap', etiket: t('ht.dil') }),
-    panelAlani,
+    etkinAlani,
     durum.eslesmeSira < 0 ? h('button', { type: 'button', class: 'kft-eslesme-serit', onClick: () => { durum.eslesmeSira = 0; eslesmeCiz(); } },
       ikon3d('seri', 26), h('span', null, h('b', null, t('ht.eslesmeBaslik')), h('small', null, t('ht.eslesmeSerit'))), ikon('sag', 18)) : null,
     eslesmeAlani,

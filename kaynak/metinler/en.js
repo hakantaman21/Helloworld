@@ -22,6 +22,22 @@ export default {
   },
   hizliYanit: { etiket: 'Quick reply suggestions' },
   kisi: { katildi: 'Joined', yerelSaat: 'Local time' },
+  suzgec: {
+    sik: 'Frequently used', detay: 'Detailed', sikBaslik: 'One tap',
+    hizli: { cevrimici: 'Online', yeni: 'New members', yakin: 'Near my level', ortakIlgi: 'Shared interests', hizli: 'Fast replies', karsilikli: 'Learning my language' },
+    anaDili: 'Native language', ogreniyor: 'Learning', seviye: 'Level', ulke: 'Country',
+    goster: 'Show {n} people', sifirla: 'Reset', etkin: '{n} filters on', temizle: 'Clear',
+    ucretsiz: 'All filters are free for everyone; no paid plan needed.',
+  },
+  foto: {
+    baslik: 'My photos', ekle: 'Add', ac: 'Photo {n}', degistir: 'Change profile photo', eklendi: 'Photo added.', hata: 'This image could not be opened.',
+    sinir: 'You can add up to {n} photos.', sil: 'Delete', silindi: 'Photo deleted.', profilYap: 'Set as profile photo', profilYapildi: 'Profile photo updated.',
+    gizlilik: 'Photos are resized and stored only on this device.',
+  },
+  defter: {
+    baslik: 'My phrasebook', bos: 'Tap the bookmark next to a sentence in a chat or in Moments; it will be collected here.',
+    kaydet: 'Save to phrasebook', kaydedildi: 'Saved to your phrasebook.', cikarildi: 'Removed from your phrasebook.', dinle: 'Listen', sil: 'Delete',
+  },
   ht: {
     sohbetBaslik: 'Language Chats', hizliErisim: 'Quick access', ara: 'Search', cevrimici: 'Online', sen: 'You', yzPratik: 'AI practice',
     hizli: { senaryolar: 'Scenarios', hafiza: 'Mistakes', koc: 'AI Coach', partner: 'Find partner', anlar: 'Moments' },

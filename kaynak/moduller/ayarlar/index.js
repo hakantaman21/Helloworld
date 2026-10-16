@@ -2,7 +2,8 @@
 // her satır solda etiket, sağda denetim. Kontrol kullanıcıda (Anayasa bölüm 3): veriler indirilebilir ve silinebilir.
 import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar } from '../../cekirdek/arayuz.js';
+import { fotografEkle } from '../../cekirdek/fotograf.js';
 import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
 import { al, degistir, sifirla, disaAktarMetni } from '../../cekirdek/depo.js';
@@ -90,18 +91,18 @@ function ciz(kok, b) {
 
   // İlgi alanları: en çok ILGI_SINIRI; sessiz kayıt (bildirim yığılmasın), sayaç aria-live ile söyler.
   const ilgiSayac = h('span', { class: 'ayr-ilgi-sayac', 'aria-live': 'polite' });
-  const ilgiSecici = h('div', { class: 'ayr-ilgiler', role: 'group', 'aria-label': t('ilgi.baslik') });
+  const ilgiSecici = h('div', { class: 'b-karolar', role: 'group', 'aria-label': t('ilgi.baslik') });
   function ilgiCiz() {
     const secili = al().profil.ilgiler || [];
     ilgiSayac.textContent = t('ilgi.sayac', { n: secili.length, en: ILGI_SINIRI });
     yerlestir(ilgiSecici, ILGI_ALANLARI.map((i) => {
       const var_ = secili.includes(i.kimlik);
-      return h('button', { type: 'button', class: 'ayr-ilgi', 'aria-pressed': String(var_), onClick: () => {
+      return h('button', { type: 'button', class: 'b-karo', 'aria-pressed': String(var_), onClick: () => {
         const simdiki = al().profil.ilgiler || [];
         if (!var_ && simdiki.length >= ILGI_SINIRI) { duyur(t('ilgi.sinir', { en: ILGI_SINIRI })); return; }
         ayarKaydet((pr) => { pr.ilgiler = var_ ? simdiki.filter((k) => k !== i.kimlik) : [...simdiki, i.kimlik]; }, true);
         ilgiCiz();
-      } }, `${i.simge} ${yerel(i)}`);
+      } }, h('span', { class: 'b-karo-simge', 'aria-hidden': 'true' }, i.simge), yerel(i));
     }));
   }
   ilgiCiz();
@@ -113,7 +114,8 @@ function ciz(kok, b) {
     ustBaslik({ baslik: t('ayarlar.baslik'), ikon: 'ayarlar', geri: () => b.geri('/gelisim') }),
 
     h('section', { class: 'ayr-profil' },
-      h('span', { class: 'b-av b-av-ben ayr-profil-av', 'aria-hidden': 'true' }, (p.ad || '?').charAt(0).toLocaleUpperCase()),
+      h('button', { type: 'button', class: 'ayr-foto-dugme', 'aria-label': t('foto.degistir'), onClick: async () => { const s = await fotografEkle({ profilYap: true }); if (s === 'eklendi') { duyur(t('foto.eklendi')); ciz(kok, b); } else if (s === 'hata') duyur(t('foto.hata')); } },
+        benAvatar(64, 'ayr-profil-av'), h('span', { class: 'ayr-foto-rozet', 'aria-hidden': 'true' }, ikon('kamera', 14))),
       h('div', { class: 'ayr-profil-ic' },
         h('b', { class: 'ayr-profil-ad' }, p.ad || t('misafir.ad')),
         dilCifti(p.anaDil || 'tr', p.ogrenilenDil || 'en', p.seviye),
