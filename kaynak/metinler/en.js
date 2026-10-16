@@ -13,6 +13,15 @@ export default {
     sayac: '{n} / {en}', sinir: 'You can choose up to {en} interests.', ekle: 'Add', duzenle: 'Edit',
     davet: 'Pick your interests so we can surface partners who share them.',
   },
+  kurallarKisa: { 1: '🤝 Be kind and respectful', 2: '🔒 Do not share personal details', 3: '🚫 No harassment, spam or flirting', 4: '🛡️ Report or block if uncomfortable' },
+  misafir: {
+    dugme: 'Continue as guest', aciklama: 'No sign-up; complete your name and languages later in Settings.',
+    onayBaslik: 'Guest access', onayMetin: 'For community safety: do you confirm you are 18 or older and accept the community rules?', onayEvet: 'I confirm, continue',
+    ad: 'Guest', hosgeldin: 'Welcome! You can complete your profile anytime in Settings.',
+    serit: 'You are using a guest profile', seritAlt: 'Add your name and language profile for better matches.', tamamla: 'Complete',
+  },
+  hizliYanit: { etiket: 'Quick reply suggestions' },
+  kisi: { katildi: 'Joined', yerelSaat: 'Local time' },
   ht: {
     sohbetBaslik: 'Language Chats', hizliErisim: 'Quick access', ara: 'Search', cevrimici: 'Online', sen: 'You', yzPratik: 'AI practice',
     hizli: { senaryolar: 'Scenarios', hafiza: 'Mistakes', koc: 'AI Coach', partner: 'Find partner', anlar: 'Moments' },
@@ -455,6 +464,10 @@ export default {
   },
 
   ayarlar: {
+    grup: { profil: 'My profile', dil: 'Language', bildirim: 'Notifications and coach calls', koc: 'Coach and practice', gorunum: 'Appearance', gizlilik: 'Privacy and data' },
+    sabahAciklama: 'Start the day with a short talk', aksamAciklama: 'Review the day’s mistakes',
+    gonderimOneri: 'Suggest a fix before sending', gonderimOneriAciklama: 'If your message may contain a mistake, shows the corrected version before sending.',
+    yaziBoyutu: 'Text size', yaziSecenek: { normal: 'Normal', buyuk: 'Large' }, ilgiSayisi: '{n} interests',
     kutu: { baslik: 'Setting groups', genel: 'General', profil: 'My profile', dil: 'Language profile', saat: 'Reminders', gorunum: 'Appearance & coach', gizlilik: 'Privacy & backup' },
     dilProfili: 'My language profile', anaDil: 'Native language', ogrenilenDil: 'Language I am learning', dilSeciniz: 'Select a language', dilHedefi: 'My language goal', hedefOrnek: 'For example: Fluent everyday conversation', tanitim: 'About me', tanitimOrnek: 'Write a short introduction', profilGizlilik: 'These details are currently stored only on your device and are not shared with others.',
     gorunumBaslik: 'Appearance and customization',

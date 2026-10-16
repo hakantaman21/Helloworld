@@ -7,6 +7,7 @@ export function temaUygula() {
   const tercih = ayarlar.tema;
   const kok = document.documentElement;
   kok.setAttribute('data-gorunum', ayarlar.gorunum === 'kompakt' ? 'kompakt' : 'dengeli');
+  kok.setAttribute('data-yazi', ayarlar.yaziBoyutu === 'buyuk' ? 'buyuk' : 'normal');
   if (tercih === 'sistem') kok.removeAttribute('data-tema');
   else kok.setAttribute('data-tema', tercih);
 }

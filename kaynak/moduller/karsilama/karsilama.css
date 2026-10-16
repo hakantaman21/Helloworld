@@ -40,3 +40,8 @@
   .kar-onay { display: flex; align-items: flex-start; gap: var(--bosluk-3); min-height: var(--dokunma); padding-top: var(--bosluk-2); font-size: 14px; font-weight: 600; }
   .kar-onay input { width: 22px; height: 22px; min-height: 22px; flex-shrink: 0; margin-top: 1px; accent-color: var(--renk-vurgu); }
 }
+
+@layer moduller {
+  .kar-logo { display: grid; place-items: center; margin-bottom: 4px; filter: drop-shadow(0 8px 18px var(--renk-golge)); }
+  .kar-misafir { width: 100%; }
+}

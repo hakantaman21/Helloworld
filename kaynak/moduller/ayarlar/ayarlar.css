@@ -1,28 +1,70 @@
+/* Ayarlar v0.5.0: sıcak, sıkı, gruplu liste. Renkler jetonlardan (Y3). */
 @layer moduller {
-  .ayr-bolum { gap: var(--bosluk-4); }
-  .ayr-satir { display: flex; flex-direction: column; gap: var(--bosluk-2); }
-  .ayr-anahtar { display: flex; align-items: center; gap: var(--bosluk-3); min-height: var(--dokunma); font-size: var(--yazi-govde); }
-  .ayr-anahtar input { width: 22px; height: 22px; min-height: 22px; accent-color: var(--renk-vurgu); }
-  .ayr-surum { text-align: center; }
-}
+  .ayr-ekran { gap: 12px; }
 
-@layer moduller {
-  .ayr-test { border-style: dashed; border-color: var(--renk-orta-metin); }
-  .ayr-surum-dugme { display: block; width: 100%; min-height: var(--dokunma); border: 0; background: transparent; color: inherit; font: inherit; cursor: default; }
-}
+  .ayr-profil { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 20px; background: radial-gradient(80% 140% at 0% 0%, var(--renk-kutu-6), transparent 70%), radial-gradient(80% 140% at 100% 100%, var(--renk-kutu-1), transparent 70%), var(--renk-yuzey); border: 1px solid var(--renk-cizgi); box-shadow: 0 6px 16px var(--renk-golge); }
+  .ayr-profil-av { width: 64px; height: 64px; font-size: 26px; }
+  .ayr-profil-ic { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .ayr-profil-ad { font-family: var(--yazi-serif); font-size: 21px; }
+  .ayr-profil-alt { font-size: 12.5px; color: var(--renk-soluk); }
 
-@layer moduller {
-  .ayr-kutular { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .ayr-kutu { min-height: 84px; padding: 10px; gap: 4px; border-radius: 16px; }
-  .ayr-kutu-baslik { font-size: 13.5px; line-height: 1.2; }
-  .ayr-bolum { scroll-margin-top: 16px; }
-}
+  .ayr-misafir { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; border-radius: 16px; background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); }
+  .ayr-misafir-metin { flex: 1; display: flex; flex-direction: column; min-width: 0; font-size: 13.5px; }
+  .ayr-misafir-metin small { font-size: 12px; }
+  .ayr-misafir-dugme { min-height: 48px; padding: 0 14px; border: 0; border-block: 6px solid transparent; border-radius: var(--kose-tam); background: linear-gradient(135deg, var(--renk-vurgu-parlak), var(--renk-vurgu)) padding-box; color: var(--renk-vurgu-uzerinde); font: inherit; font-size: 13.5px; font-weight: 800; cursor: pointer; }
 
-@layer moduller {
-  .ayr-ilgi-ust { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .ayr-grup { display: flex; flex-direction: column; gap: 6px; scroll-margin-top: 64px; }
+  .ayr-grup-baslik { display: flex; align-items: center; gap: 8px; padding: 0 4px; font-size: 13px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--renk-baslik); }
+  .ayr-grup-ic { display: flex; flex-direction: column; padding: 0 14px; border-radius: 18px; background: var(--renk-yuzey); border: 1px solid var(--renk-cizgi); }
+  .ayr-grup-ic > * { border-bottom: 1px solid var(--renk-cizgi); }
+  .ayr-grup-ic > *:last-child { border-bottom: 0; }
+
+  .ayr-satir { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 52px; padding: 6px 0; }
+  .ayr-satir-altta { flex-direction: column; align-items: stretch; gap: 6px; padding: 10px 0; }
+  .ayr-satir-metin { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+  .ayr-satir-etiket { font-size: 15px; font-weight: 600; color: var(--renk-murekkep); }
+  .ayr-satir-aciklama { font-size: 12px; color: var(--renk-soluk); line-height: 1.35; }
+  .ayr-satir-dugme { width: 100%; border: 0; border-bottom: 1px solid var(--renk-cizgi); background: transparent; color: var(--renk-murekkep); font: inherit; text-align: left; cursor: pointer; }
+  .ayr-satir-dugme svg { color: var(--renk-soluk); }
+  .ayr-tehlike .ayr-satir-etiket, .ayr-tehlike svg { color: var(--renk-kotu-metin); }
+
+  .ayr-girdi { min-height: 44px; padding: 0 12px; border: 1px solid var(--renk-cizgi-guclu); border-radius: 12px; background: var(--renk-yuzey-ikinci); color: var(--renk-murekkep); font: inherit; font-size: 14.5px; max-width: 62%; }
+  .ayr-satir-altta .ayr-girdi { max-width: none; }
+  .ayr-secim { max-width: 56%; }
+  .ayr-saat { width: 112px; }
+  .ayr-tanitim { min-height: 84px; max-width: none; padding: 10px 12px; resize: vertical; width: 100%; }
+
+  .ayr-seg { display: flex; flex-wrap: wrap; gap: 4px; padding: 3px; border-radius: 14px; background: var(--renk-yuzey-ikinci); box-shadow: inset 0 0 0 1px var(--renk-cizgi); }
+  .ayr-seg-oge { flex: 1 1 auto; min-height: 44px; padding: 0 10px; border: 0; border-radius: 11px; background: transparent; color: var(--renk-soluk); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .ayr-seg-oge[aria-checked="true"] { background: linear-gradient(135deg, var(--renk-vurgu-parlak), var(--renk-vurgu)); color: var(--renk-vurgu-uzerinde); font-weight: 800; box-shadow: 0 2px 6px var(--renk-golge); }
+  .ayr-seg-oge:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 1px; }
+  .ayr-satir:not(.ayr-satir-altta) .ayr-seg { flex-wrap: nowrap; }
+
+  .ayr-kucuk-dugme { display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 12px; border: 0; border-radius: var(--kose-tam); background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+
+  /* Anahtar (switch): gerçek onay kutusu ekranda erişilebilir kalır, görsel iz yanında çizilir */
+  .ayr-anahtar { cursor: pointer; }
+  .ayr-anahtar-girdi { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .ayr-anahtar-iz { position: relative; flex-shrink: 0; width: 46px; height: 28px; border-radius: 14px; background: var(--renk-cizgi-guclu); transition: background .15s; }
+  .ayr-anahtar-iz::after { content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--renk-yuzey); box-shadow: 0 1px 3px var(--renk-golge); transition: transform .15s; }
+  .ayr-anahtar-girdi:checked + .ayr-anahtar-iz { background: var(--renk-iyi); }
+  .ayr-anahtar-girdi:checked + .ayr-anahtar-iz::after { transform: translateX(18px); }
+  .ayr-anahtar-girdi:focus-visible + .ayr-anahtar-iz { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+
+  .ayr-acilir { padding: 4px 0 10px; }
+  .ayr-acilir[open] { display: flex; flex-direction: column; gap: 8px; }
+  .ayr-acilir-baslik { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; font-size: 15px; font-weight: 600; cursor: pointer; list-style: none; }
+  .ayr-acilir-baslik::-webkit-details-marker { display: none; }
+  .ayr-acilir-baslik small, .ayr-ilgi-sayac { font-size: 12.5px; color: var(--renk-soluk); font-weight: 600; }
+  .ayr-not { font-size: 12.5px; color: var(--renk-soluk); line-height: 1.4; }
+  .ayr-not-kutu { padding: 10px 0; }
+
   .ayr-ilgiler { display: flex; flex-wrap: wrap; gap: 6px; }
-  .ayr-ilgi { min-height: 48px; padding: 0 14px; border: 0; border-block: 6px solid transparent; border-radius: var(--kose-tam); background: var(--renk-yuzey-ikinci) padding-box; box-shadow: inset 0 0 0 1px var(--renk-cizgi); color: var(--renk-murekkep); font: inherit; font-size: 13.5px; cursor: pointer; }
+  .ayr-ilgi { min-height: 44px; padding: 0 12px; border: 0; border-block: 5px solid transparent; border-radius: var(--kose-tam); background: var(--renk-yuzey-ikinci) padding-box; box-shadow: inset 0 0 0 1px var(--renk-cizgi); color: var(--renk-murekkep); font: inherit; font-size: 13px; cursor: pointer; }
   .ayr-ilgi[aria-pressed="true"] { background: var(--renk-iyi-acik) padding-box; color: var(--renk-iyi-metin); box-shadow: inset 0 0 0 1.5px var(--renk-iyi-metin); font-weight: 700; }
-  .ayr-ilgi:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 1px; }
-  #ayr-ilgi { scroll-margin-top: 64px; }
+  .ayr-ilgi:focus-visible, .ayr-acilir-baslik:focus-visible, .ayr-satir-dugme:focus-visible, .ayr-hakkinda:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+
+  .ayr-hakkinda { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 64px; margin-top: 4px; border: 0; background: transparent; color: var(--renk-murekkep); font: inherit; cursor: default; }
+  .ayr-hakkinda-ic { display: flex; flex-direction: column; text-align: left; }
+  .ayr-hakkinda-ic small { font-size: 12px; color: var(--renk-soluk); }
 }

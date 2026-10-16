@@ -7,9 +7,11 @@ import { h, ikon, ikon3d, durumKutusu, yerlestir, testEtiketi, farkCiz, onayIste
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { duyur } from '../../cekirdek/duyuru.js';
+import { al } from '../../cekirdek/depo.js';
 import { kelimeFarki } from '../../cekirdek/dil/fark.js';
 import { testProfili, testMesajlari, testMesajEkle, otomatikYanit, gonderimOncesiOneri, testEngelle, testSikayet, testYazarAnlari, aktiflik, yerelSaat, eslesme, takipte, takipDegistir, selamVer, selamVerildi, selamYaniti } from '../../cekirdek/test-modu.js';
 import { TEST_KONULARI } from '../../veri/test-profiller.js';
+import { hizliYanitlar } from '../../veri/hizli-yanitlar.js';
 
 const YANIT_GECIKMESI = 1300;
 const SIKAYET_NEDENLERI = ['taciz', 'spam', 'uygunsuz', 'konuDisi'];
@@ -48,8 +50,21 @@ function ciz(kok, b) {
     );
   }
 
+  // Başlıktaki hızlı yanıt şeridi: son gelen mesaja göre öneriler; ilk mesajda açılış cümleleri ve konular.
+  const hizliSerit = h('div', { class: 'msj-hizli', role: 'group', 'aria-label': t('hizliYanit.etiket') });
+  function hizliCiz() {
+    const mesajlar = testMesajlari(profil.kimlik);
+    const sonGelen = [...mesajlar].reverse().find((m) => m.kim === 'o');
+    const oneriler = sonGelen ? hizliYanitlar(sonGelen) : [...hizliYanitlar(null), ...TEST_KONULARI.map((k) => k.cumle)];
+    yerlestir(hizliSerit,
+      h('span', { class: 'msj-hizli-etiket', 'aria-hidden': 'true' }, ikon('ampul', 16)),
+      oneriler.map((o) => h('button', { type: 'button', class: 'msj-hizli-oge', onClick: () => { girdi.value = o; girdi.focus(); girdi.setSelectionRange(o.length, o.length); } }, o)),
+    );
+  }
+
   function yenile() {
     const mesajlar = testMesajlari(profil.kimlik);
+    hizliCiz();
     yerlestir(liste,
       h('div', { class: 'msj-uyari' }, testEtiketi(), h('span', null, t('test.sohbetUyari'))),
       mesajlar.length ? null : h('p', { class: 'b-kucuk msj-bos' }, t('test.ilkMesaj', { ad: profil.ad })),
@@ -79,7 +94,7 @@ function ciz(kok, b) {
   function gonderDene() {
     const metin = girdi.value.trim();
     if (!metin) { girdi.focus(); return; }
-    const oneri = gonderimOncesiOneri(metin);
+    const oneri = al().profil.ayarlar.gonderimOneri === false ? null : gonderimOncesiOneri(metin);
     if (!oneri) { gonder(metin, false); return; }
     yerlestir(oneriAlani, h('div', { class: 'b-kart msj-oneri', role: 'region', 'aria-label': t('test.oneriBaslik') },
       h('span', { class: 'b-ust-etiket' }, t('test.oneriBaslik')),
@@ -134,13 +149,10 @@ function ciz(kok, b) {
         [t('test.engelle'), engelle, true],
       ]) }, ikon('nokta3', 22)),
     ),
+    hizliSerit,
     liste,
     h('div', { class: 'msj-alt' },
       oneriAlani,
-      h('div', { class: 'msj-konular', role: 'group', 'aria-label': t('test.konuOnerisi') },
-        h('span', { class: 'b-kucuk msj-konu-etiket' }, ikon('ampul', 16), t('test.konuOnerisi')),
-        TEST_KONULARI.map((k) => h('button', { type: 'button', class: 'msj-konu-dugme', onClick: () => { girdi.value = k.cumle; girdi.focus(); } }, yerel(k.baslik))),
-      ),
       h('div', { class: 'msj-yaz' },
         girdi,
         h('button', { type: 'button', class: 'b-dugme b-dugme-ana b-dugme-yuvarlak', 'aria-label': t('test.gonder'), onClick: gonderDene }, ikon('gonder', 20)),
@@ -178,8 +190,8 @@ function eylemMenusu(secenekler) {
   perde.querySelector('button').focus();
 }
 
-// Kişi profili (HelloTalk profil sayfası düzeni): kapak, avatar, yaş, kullanıcı adı, etkinlik, yerel saat,
-// dil çifti, eşleşme uyumu, tanıtım, Profil / Dil Anları sekmeleri; altta Takip · Sohbet · Selam çubuğu.
+// Kişi profili (v0.5.0): HelloTalk'tan daha sade. Yumuşak kapak, ortalanmış kimlik, tek satır etkinlik,
+// ince uyum çubuğu, tanıtım kartı, ilgi hapları (ortaklar önde), simgeli bilgi satırları; altta Takip · Sohbet · Selam.
 function kisiCiz(kok, b) {
   const p = testProfili(b.p.k);
   if (!p) {
@@ -206,8 +218,8 @@ function kisiCiz(kok, b) {
     takipDugmesi.setAttribute('aria-label', var_ ? t('ht.takiptesin') : t('ht.takipEt'));
     yerlestir(takipDugmesi, ikon(var_ ? 'onay' : 'arti', 22));
   }
-  const grup = (baslik, ...cocuk) => h('section', { class: 'msj-grup' }, h('h2', { class: 'msj-grup-baslik' }, baslik), ...cocuk);
-  const haplar = (dizi) => h('div', { class: 'msj-haplar' }, dizi.map((x) => h('span', { class: 'msj-hap' }, x)));
+  const bilgiSatiri = (ik, etiket, deger) => h('div', { class: 'msj-bilgi' }, h('span', { class: 'msj-bilgi-ikon' }, ikon(ik, 18)), h('span', { class: 'msj-bilgi-etiket' }, etiket), h('span', { class: 'msj-bilgi-deger' }, deger));
+  const ortakMi = (i) => uyum.ortak.includes(i);
 
   function icerikCiz() {
     if (sekme === 'anlar') {
@@ -217,41 +229,43 @@ function kisiCiz(kok, b) {
         h('span', { class: 'b-kucuk' }, goreliZaman(an.zaman)))) : h('p', { class: 'b-kucuk' }, t('test.anYok')));
       return;
     }
+    const ilgiler = [...p.ilgi].sort((x, y) => Number(ortakMi(y)) - Number(ortakMi(x)));
     yerlestir(icerik,
-      h('div', { class: 'msj-istatistik' },
-        h('span', null, ikon('takvim', 18), t('ht.katildi', { n: p.katildiGun })),
-        h('span', null, ikon('kalem', 18), t('ht.anSayisi', { n: anlar.length })),
-        h('span', null, ikon('saat', 18), t('ht.yerelSaat', { saat: yerelSaat(p) })),
+      h('section', { class: 'msj-kart' },
+        h('h2', { class: 'msj-kart-baslik' }, t('ht.hobiler')),
+        h('div', { class: 'msj-haplar' }, ilgiler.map((i) => h('span', { class: `msj-hap${ortakMi(i) ? ' msj-hap-ortak' : ''}` }, ortakMi(i) ? `♥ ${yerel(i)}` : yerel(i)))),
       ),
-      h('section', { class: 'msj-uyum' },
-        h('span', { class: 'msj-uyum-puan' }, `%${uyum.puan}`),
-        h('div', null, h('b', null, t('ht.uyumBaslik')), h('span', { class: 'b-kucuk' }, uyum.nedenler.map((n) => t(`ht.neden.${n}`, { dil: t(`diller.${n === 'karsilikli' ? p.ogrenilenDil : p.anaDil}`), ortak: uyum.ortak.map((i) => yerel(i)).join(', ') })).join(' · '))),
+      h('section', { class: 'msj-kart msj-bilgiler' },
+        bilgiSatiri('kalem', t('ht.meslek'), yerel(p.meslek)),
+        bilgiSatiri('pusula', t('ht.gezilecek'), (p.gezilecek || []).join(' · ')),
+        bilgiSatiri('takvim', t('kisi.katildi'), t('ht.katildi', { n: p.katildiGun })),
+        bilgiSatiri('saat', t('kisi.yerelSaat'), yerelSaat(p)),
+        h('div', { class: 'msj-bilgi msj-bilgi-rozet' }, h('span', { class: 'msj-bilgi-ikon' }, ikon('sohbet', 18)), h('span', { class: 'msj-bilgi-etiket' }, t('ht.ozellikler')), h('span', { class: 'msj-bilgi-rozetler' }, rozetler(p))),
       ),
-      grup(t('ht.hobiler'), h('div', { class: 'msj-haplar' }, p.ilgi.map((i) => h('span', { class: `msj-hap${uyum.ortak.includes(i) ? ' msj-hap-ortak' : ''}` }, uyum.ortak.includes(i) ? `♥ ${yerel(i)}` : yerel(i))))),
-      grup(t('ht.meslek'), haplar([yerel(p.meslek)])),
-      grup(t('ht.gezilecek'), haplar(p.gezilecek || [])),
-      grup(t('ht.ozellikler'), rozetler(p)),
       h('button', { type: 'button', class: 'b-dugme b-dugme-metin msj-sikayet-baglanti', onClick: sikayet }, ikon('kalkan', 16), t('test.sikayetEt')),
     );
   }
 
   takipCiz();
   yerlestir(kok,
-    h('div', { class: 'msj-kapak', 'aria-hidden': 'false' },
+    h('div', { class: 'msj-kapak' },
       h('button', { type: 'button', class: 'b-ht-ikon msj-kapak-dugme', 'aria-label': t('genel.geri'), onClick: () => b.geri('/kesfet') }, ikon('sol', 22)),
-      h('span', { class: 'msj-kapak-saat' }, yerelSaat(p)),
+      testEtiketi(),
       h('button', { type: 'button', class: 'b-ht-ikon msj-kapak-dugme', 'aria-label': t('ht.dahaFazla'), onClick: () => eylemMenusu([[t('test.sikayetEt'), sikayet], [t('test.engelle'), engelle, true]]) }, ikon('nokta3', 22)),
     ),
     h('section', { class: 'msj-kimlik' },
-      h('div', { class: 'msj-kimlik-ust' },
-        h('span', { class: 'msj-av-cerceve' }, testAvatar(p, 96, { cevrimici: a.cevrimici })),
-        h('span', { class: 'msj-aktif' }, a.cevrimici ? h('i') : null, aktiflikMetni(p)),
-      ),
-      h('div', { class: 'msj-ad-satir' }, h('h1', { class: 'msj-ad-buyuk' }, p.ad), yasRozeti(p), testEtiketi()),
-      h('span', { class: 'b-kucuk' }, `@${p.kullanici} · ${yerel(p.ulke)}`),
+      h('span', { class: 'msj-av-cerceve' }, testAvatar(p, 104, { cevrimici: a.cevrimici })),
+      h('div', { class: 'msj-ad-satir' }, h('h1', { class: 'msj-ad-buyuk' }, p.ad), yasRozeti(p)),
+      h('span', { class: 'msj-kunye' }, `@${p.kullanici} · ${yerel(p.ulke)}`),
+      h('span', { class: `msj-aktif${a.cevrimici ? ' msj-aktif-var' : ''}` }, a.cevrimici ? h('i') : null, aktiflikMetni(p)),
       h('div', { class: 'msj-dil' }, dilCifti(p.anaDil, p.ogrenilenDil, p.seviye, { adlarla: true })),
-      h('p', { class: 'msj-kisi-tanitim' }, yerel(p.tanitim)),
     ),
+    h('section', { class: 'msj-uyum', 'aria-label': t('ht.uyum', { n: uyum.puan }) },
+      h('div', { class: 'msj-uyum-ust' }, h('b', null, t('ht.uyumBaslik')), h('span', { class: 'msj-uyum-puan' }, `%${uyum.puan}`)),
+      h('span', { class: 'msj-uyum-cubuk' }, h('i', { style: `width:${uyum.puan}%` })),
+      h('div', { class: 'msj-uyum-nedenler' }, uyum.nedenler.slice(0, 3).map((n) => h('span', null, ikon('onay', 12), t(`ht.neden.${n}`, { dil: t(`diller.${n === 'karsilikli' ? p.ogrenilenDil : p.anaDil}`), ortak: uyum.ortak.map((i) => yerel(i)).join(', ') })))),
+    ),
+    h('blockquote', { class: 'msj-tanitim-kart' }, yerel(p.tanitim)),
     sekmeler([['profil', t('ht.profilSekme')], ['anlar', t('ht.anlarSekme', { n: anlar.length })]], sekme, (id) => { sekme = id; icerikCiz(); }, { tur: 'hap' }),
     icerik,
     h('div', { class: 'msj-alt-cubuk' },

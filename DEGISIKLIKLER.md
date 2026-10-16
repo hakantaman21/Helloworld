@@ -1,3 +1,14 @@
+## 0.5.0 — 16.10.2026 · Misafir girişi, logo, yeni Ayarlar, hızlı yanıtlar, sade kişi sayfası
+
+- Misafir girişi: ilk açılışta "Misafir olarak devam et" (18 yaş ve kural onayı yine zorunlu); Ayarlar'da tamamlama şeridi.
+- Logo: iki konuşma balonu (yazı + altın ses dalgası); uygulama simgesi, karşılama ve Ayarlar › Hakkında.
+- Kişiler arasında boşluk: Sohbetler ve Bağlantı'da her kişi ayrı, yumuşak kart; çizgiyle bitişik liste yok.
+- Topluluk kuralları kompakt: dört kısa madde, iki sütun (Bağlantı ve Ayarlar).
+- Ayarlar yeniden: profil kartı + simgeli gruplar (Profilim, Dil, Bildirimler, Koç ve pratik, Görünüm, Gizlilik), bölümlü seçimler, anahtarlar, açılır tanıtım ve ilgi alanları. Yeni: yazı boyutu, göndermeden önce düzeltme önerisi aç/kapa.
+- Sohbet başlığında hızlı yanıt önerileri: son mesaja göre kural tabanlı İngilizce öneriler; dokununca yazı kutusuna gelir.
+- Kişi sayfası sadeleşti: yumuşak kapak, ortalanmış kimlik, ince uyum çubuğu, tanıtım kartı, simgeli bilgi satırları.
+- Şema 9: profil.misafir, ayarlar.yaziBoyutu, ayarlar.gonderimOneri (mevcut veriler korunur).
+
 ## 0.4.1 — 16.10.2026 · İlgi alanları ve ortak ilgiye göre eşleşme
 
 - Ayarlar › Dil profili: 26 ilgi alanından en çok 8'ini seç (HelloTalk "Hobiler").

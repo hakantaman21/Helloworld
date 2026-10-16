@@ -3,7 +3,7 @@
 // Test modunda TEST rozetli sanal kullanıcılar listelenir; yaş, çevrimiçi durumu ve rozetler de TEST verisidir.
 import './kesfet.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, altGezinme, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, altGezinme, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman, kurallarSeridi } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
@@ -100,10 +100,7 @@ function testsizCiz(kok, b) {
       h('p', { class: 'b-kucuk' }, t('test.davetAciklama')),
       h('button', { type: 'button', class: 'b-dugme b-dugme-ana', onClick: () => { testModuAyarla(true); duyur(t('test.acildi'), 3000); b.git('/kesfet', { degistir: true }); } }, ikon('kisi', 20), t('test.davetDugme')),
     ),
-    h('details', { class: 'b-kart kft-kural' },
-      h('summary', { class: 'b-bolum-baslik' }, t('kesfet.kurallarBaslik')),
-      h('ul', { class: 'kft-kurallar' }, [1, 2, 3, 4].map((n) => h('li', null, t(`karsilama.kurallar.${n}`)))),
-    ),
+    kurallarSeridi(),
     altGezinme('/kesfet'),
   );
 }
@@ -172,10 +169,7 @@ function ciz(kok, b) {
     (ben.ilgiler || []).length ? null : h('button', { type: 'button', class: 'kft-ilgi-davet', onClick: () => b.git('/ayarlar?bolum=ilgi') }, '♥ ', t('ilgi.davet'), ikon('sag', 16)),
     h('p', { class: 'kft-uyari' }, testEtiketi(), ' ', t('ht.testNotu')),
     liste,
-    h('details', { class: 'b-kart kft-kural' },
-      h('summary', { class: 'b-bolum-baslik' }, t('kesfet.kurallarBaslik')),
-      h('ul', { class: 'kft-kurallar' }, [1, 2, 3, 4].map((n) => h('li', null, t(`karsilama.kurallar.${n}`)))),
-    ),
+    kurallarSeridi(),
     altGezinme('/kesfet'),
   );
   yenile();

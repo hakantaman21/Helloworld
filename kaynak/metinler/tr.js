@@ -14,6 +14,15 @@ export default {
     sayac: '{n} / {en}', sinir: 'En çok {en} ilgi alanı seçebilirsin.', ekle: 'Ekle', duzenle: 'Düzenle',
     davet: 'İlgi alanlarını seç; ortak ilgisi olan dil ortaklarını öne çıkaralım.',
   },
+  kurallarKisa: { 1: '🤝 Saygılı ve nazik ol', 2: '🔒 Kişisel bilgi paylaşma', 3: '🚫 Taciz, spam ve flört yok', 4: '🛡️ Rahatsız olursan şikâyet et, engelle' },
+  misafir: {
+    dugme: 'Misafir olarak devam et', aciklama: 'Kayıt yok; adını ve dil bilgilerini sonra Ayarlar\'dan tamamlarsın.',
+    onayBaslik: 'Misafir girişi', onayMetin: 'Topluluk güvenliği için: 18 yaşında veya daha büyük olduğunu ve topluluk kurallarını kabul ettiğini onaylıyor musun?', onayEvet: 'Onaylıyorum, devam et',
+    ad: 'Misafir', hosgeldin: 'Hoş geldin! Profilini istediğin zaman Ayarlar\'dan tamamlayabilirsin.',
+    serit: 'Misafir olarak kullanıyorsun', seritAlt: 'Adını ve dil profilini tamamla; eşleşmeler daha isabetli olur.', tamamla: 'Tamamla',
+  },
+  hizliYanit: { etiket: 'Hızlı yanıt önerileri' },
+  kisi: { katildi: 'Katılım', yerelSaat: 'Yerel saat' },
   ht: {
     sohbetBaslik: 'Dil Sohbetleri', hizliErisim: 'Hızlı erişim', ara: 'Arama', cevrimici: 'Çevrimiçi', sen: 'Sen', yzPratik: 'yapay zekâ pratiği',
     hizli: { senaryolar: 'Senaryolar', hafiza: 'Hata Hafızası', koc: 'AI Koç', partner: 'Partner bul', anlar: 'Dil Anları' },
@@ -456,6 +465,10 @@ export default {
   },
 
   ayarlar: {
+    grup: { profil: 'Profilim', dil: 'Dil', bildirim: 'Bildirimler ve koç aramaları', koc: 'Koç ve pratik', gorunum: 'Görünüm', gizlilik: 'Gizlilik ve veriler' },
+    sabahAciklama: 'Güne kısa bir konuşmayla başla', aksamAciklama: 'Günün hatalarını tekrar et',
+    gonderimOneri: 'Göndermeden önce düzeltme öner', gonderimOneriAciklama: 'Mesajında olası bir hata varsa göndermeden önce düzgün hâlini gösterir.',
+    yaziBoyutu: 'Yazı boyutu', yaziSecenek: { normal: 'Normal', buyuk: 'Büyük' }, ilgiSayisi: '{n} ilgi',
     kutu: { baslik: 'Ayar grupları', genel: 'Genel', profil: 'Profilim', dil: 'Dil profili', saat: 'Hatırlatıcılar', gorunum: 'Görünüm ve koç', gizlilik: 'Gizlilik ve yedek' },
     dilProfili: 'Dil profilim', anaDil: 'Ana dilim', ogrenilenDil: 'Öğrendiğim dil', dilSeciniz: 'Dil seçiniz', dilHedefi: 'Dil öğrenme hedefim', hedefOrnek: 'Örneğin: Akıcı günlük konuşma', tanitim: 'Kendimi tanıtıyorum', tanitimOrnek: 'Kendinizden kısaca bahsedin', profilGizlilik: 'Bu bilgiler şu anda yalnızca cihazınızda tutulur; başkalarıyla paylaşılmaz.',
     gorunumBaslik: 'Görünüm ve özelleştirme',
