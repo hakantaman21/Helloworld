@@ -2,7 +2,7 @@
 // 3) mikrofon izni (gerekçeyle)  4) yapay zekâ partnerle 1 dakikalık tanışma.
 import './karsilama.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, yerlestir } from '../../cekirdek/arayuz.js';
+import { h, ikon, yerlestir, logo, onayIste } from '../../cekirdek/arayuz.js';
 import { t, dilAyarla, aktifDil, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { al, degistir } from '../../cekirdek/depo.js';
 import { mikrofonIste } from '../../cekirdek/izin.js';
@@ -35,7 +35,7 @@ function secenekGrubu(etiketId, secenekler, secili, secildi) {
     }, metin)));
 }
 
-function adim1(kok, sonraki, yenidenCiz) {
+function adim1(kok, sonraki, yenidenCiz, b) {
   const profil = al().profil;
   let rol = profil.rol || null;
   const girdi = h('input', { id: 'kar-ad', class: 'b-girdi', type: 'text', autocomplete: 'given-name', placeholder: t('karsilama.adYerTutucu'), value: profil.ad });
@@ -57,7 +57,7 @@ function adim1(kok, sonraki, yenidenCiz) {
         },
       }, d.toUpperCase()))),
     h('div', { class: 'kar-tanitim' },
-      h('div', { class: 'kar-koc', 'aria-hidden': 'true' }, ikon('sohbet', 44, 2)),
+      h('div', { class: 'kar-logo' }, logo(84)),
       h('h1', { class: 'b-baslik kar-ortali' }, t('karsilama.merhaba')),
       h('p', { class: 'b-altbaslik kar-ortali' }, t('karsilama.tanitim')),
     ),
@@ -84,7 +84,33 @@ function adim1(kok, sonraki, yenidenCiz) {
         sonraki();
       },
     }, t('genel.devam')),
+    h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve kar-misafir', onClick: () => misafirGirisi(b) }, ikon('kisi', 18), t('misafir.dugme')),
+    h('p', { class: 'b-kucuk kar-ortali' }, t('misafir.aciklama')),
   );
+}
+
+// Misafir girişi: adımları atlar, makul varsayılanlarla başlar. 18 yaş onayı yine zorunludur (topluluk güvenliği).
+// Ad, dil ve ilgi alanları sonra Ayarlar'dan tamamlanır; misafir işareti Ayarlar'da gösterilir.
+async function misafirGirisi(b) {
+  const evet = await onayIste({ baslik: t('misafir.onayBaslik'), metin: t('misafir.onayMetin'), evet: t('misafir.onayEvet'), hayir: t('genel.vazgec') });
+  if (!evet) return;
+  const dil = aktifDil();
+  degistir((v) => {
+    const p = v.profil;
+    p.misafir = true;
+    p.ad = p.ad || t('misafir.ad');
+    p.anaDil = p.anaDil || (dil === 'tr' ? 'tr' : 'en');
+    if (!p.ogrenilenDil || p.ogrenilenDil === p.anaDil) p.ogrenilenDil = p.anaDil === 'en' ? 'tr' : 'en';
+    p.rol = p.rol || 'ogrenen';
+    p.kendiniTanim = p.kendiniTanim || 'basit';
+    if (!p.tanismaYapildi) p.seviye = BASLANGIC_SEVIYESI[p.kendiniTanim];
+    p.yasOnayi = true;
+    p.ayarlar.arayuzDili = dil;
+    p.ayarlar.yaziliMod = !destek.tanima;
+    p.kurulumTamam = true;
+  });
+  duyur(t('misafir.hosgeldin'), 3500);
+  b.git('/bugun', { degistir: true });
 }
 
 function adim2(kok, sonraki) {
@@ -170,7 +196,7 @@ function adim4(kok, b) {
 
 export default {
   kimlik: 'karsilama',
-  surum: '0.2.0',
+  surum: '0.5.0',
   onek: 'kar',
   semaSurumu: 2,
   cekirdekServisleri: ['depo', 'izin', 'ses', 'metin'],
@@ -181,7 +207,7 @@ export default {
       ciz(kok, b) {
         kok.classList.add('kar-ekran');
         const goster = (n) => {
-          if (n === 1) adim1(kok, () => goster(2), () => goster(1));
+          if (n === 1) adim1(kok, () => goster(2), () => goster(1), b);
           else if (n === 2) adim2(kok, () => goster(3));
           else if (n === 3) adim3(kok, () => goster(4));
           else adim4(kok, b);

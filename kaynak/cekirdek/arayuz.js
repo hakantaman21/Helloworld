@@ -303,3 +303,32 @@ export function dilCifti(anaDil, ogrenilenDil, seviye, { adlarla = false } = {})
     h('span', { class: 'b-dil-ogr' }, h('b', null, kod(ogrenilenDil)), seviyeNoktalari(seviye), adlarla ? h('small', null, t(`diller.${ogrenilenDil}`)) : null),
   );
 }
+
+// Uygulama logosu: iki konuşma balonu (biri öğrenilen dil, biri ses dalgası). Renkler jetonlardan (Y3).
+let logoSayac = 0;
+export function logo(boyut = 64) {
+  logoSayac += 1;
+  const z = `b-lz${logoSayac}`, a = `b-la${logoSayac}`;
+  const svg = document.createElementNS(SVG_AD_ALANI, 'svg');
+  svg.setAttribute('viewBox', '0 0 64 64');
+  svg.setAttribute('width', boyut);
+  svg.setAttribute('height', boyut);
+  svg.setAttribute('class', 'b-logo');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.innerHTML = `<defs><linearGradient id="${z}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="b-logo-zemin-1"/><stop offset="1" class="b-logo-zemin-2"/></linearGradient>`
+    + `<linearGradient id="${a}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="b-logo-altin-1"/><stop offset="1" class="b-logo-altin-2"/></linearGradient></defs>`
+    + `<rect width="64" height="64" rx="16" fill="url(#${z})"/>`
+    + `<rect class="b-logo-arka" x="10" y="11" width="32" height="22" rx="9"/><path class="b-logo-arka" d="M16 30l-3 10 11-7z"/>`
+    + `<path class="b-logo-arka-cizgi" d="M17 20h18M17 25.5h11" fill="none" stroke-width="3" stroke-linecap="round"/>`
+    + `<rect x="22" y="27" width="32" height="23" rx="9" fill="url(#${a})"/><path d="M46 47l5 9-11-6z" fill="url(#${a})"/>`
+    + `<path class="b-logo-on-cizgi" d="M30.5 36v5.5M35.5 33v11.5M40.5 35v7.5M45.5 37v3.5" fill="none" stroke-width="3" stroke-linecap="round"/>`;
+  return svg;
+}
+
+// Kompakt topluluk kuralları: 4 kısa madde, iki sütun.
+export function kurallarSeridi() {
+  return h('section', { class: 'b-kurallar', 'aria-label': t('kesfet.kurallarBaslik') },
+    h('div', { class: 'b-kurallar-ust' }, ikon('kalkan', 16), t('kesfet.kurallarBaslik')),
+    h('ul', { class: 'b-kurallar-liste' }, [1, 2, 3, 4].map((n) => h('li', null, t(`kurallarKisa.${n}`)))),
+  );
+}
