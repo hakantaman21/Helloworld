@@ -43,7 +43,7 @@ export function mikrofonIste() {
             onClick: async () => { perde.remove(); coz(await tarayicidanIste()); },
           }, t('izin.ver')),
           h('button', {
-            class: 'b-dugme b-dugme-cerceve',
+            class: 'b-dugme b-dugme-cerceve', 'data-vazgec': '',
             onClick: () => { perde.remove(); coz('yazili'); },
           }, t('izin.yazili')),
         ),

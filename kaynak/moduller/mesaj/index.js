@@ -118,7 +118,7 @@ function ciz(kok, b) {
         h('div', { class: 'b-pencere' },
           h('h2', { class: 'b-bolum-baslik', id: 'msj-sikayet-baslik' }, t('test.sikayetBaslik', { ad: profil.ad })),
           h('div', { class: 'b-yigin' }, SIKAYET_NEDENLERI.map((n) => h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => kapat(n) }, t(`test.sikayetNeden.${n}`))),
-            h('button', { type: 'button', class: 'b-dugme', onClick: () => kapat(null) }, t('genel.vazgec'))),
+            h('button', { type: 'button', class: 'b-dugme', 'data-vazgec': '', onClick: () => kapat(null) }, t('genel.vazgec'))),
         ),
       );
       document.body.append(perde);
@@ -175,7 +175,7 @@ async function sikayetPenceresi(ad) {
       h('div', { class: 'b-pencere' },
         h('h2', { class: 'b-bolum-baslik', id: 'msj-ks' }, t('test.sikayetBaslik', { ad })),
         h('div', { class: 'b-yigin' }, SIKAYET_NEDENLERI.map((n) => h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => kapat(n) }, t(`test.sikayetNeden.${n}`))),
-          h('button', { type: 'button', class: 'b-dugme', onClick: () => kapat(null) }, t('genel.vazgec'))),
+          h('button', { type: 'button', class: 'b-dugme', 'data-vazgec': '', onClick: () => kapat(null) }, t('genel.vazgec'))),
       ));
     document.body.append(perde);
     perde.querySelector('button').focus();
@@ -202,7 +202,7 @@ function eylemMenusu(secenekler) {
   const perde = h('div', { class: 'b-perde', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('ht.dahaFazla'), onClick: (e) => { if (e.target === perde) kapat(); } },
     h('div', { class: 'b-pencere msj-menu-pencere' },
       secenekler.map(([ad, fn, tehlike]) => h('button', { type: 'button', class: `b-dugme ${tehlike ? 'b-dugme-tehlike' : 'b-dugme-cerceve'}`, onClick: () => { kapat(); fn(); } }, ad)),
-      h('button', { type: 'button', class: 'b-dugme', onClick: kapat }, t('genel.vazgec')),
+      h('button', { type: 'button', class: 'b-dugme', 'data-vazgec': '', onClick: kapat }, t('genel.vazgec')),
     ));
   document.body.append(perde);
   perde.querySelector('button').focus();

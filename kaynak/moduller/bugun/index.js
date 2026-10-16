@@ -58,17 +58,14 @@ function ciz(kok, b) {
   // Konu odaları (HelloTalk "Ses" odalarından esinli): her oda bir senaryoya bağlanır; katılınca yapay zekâ koçla konuşulur.
   // Test modunda ilgilenen TEST kullanıcılarının avatarları görünür; gerçek katılımcı sayısı uydurulmaz.
   const testler = testModuAcik() ? testProfilleri() : [];
-  const ODALAR = [
-    { k: 'kafe', id: 'alisveris-kafe-01', seviye: 'A2', renk: 1 },
-    { k: 'market', id: 'alisveris-market-01', seviye: 'A1', renk: 3 },
-    { k: 'yol', id: 'ulasim-yol-01', seviye: 'A1', renk: 4 },
-    { k: 'bilet', id: 'ulasim-bilet-01', seviye: 'A2', renk: 5 },
-  ];
+  // v0.12.0: konu odaları tüm senaryolardan üretilir; yaşam alanına göre süzülür (Günlük, Seyahat, İş, Sağlık, Teknoloji ve YZ…).
+  const ODALAR = tumSenaryolar.map((s, i) => ({ id: s.kimlik, alan: s.alan, seviye: s.seviye, baslik: yerel(s.baslik), renk: (i % 6) + 1 }));
+  let odaAlani = 'tum';
   const odayaGit = (o) => b.git(`/gorusme?tur=senaryo&id=${o.id}`);
   const ilgilenenler = (i) => testler.filter((_, j) => (j + i) % 3 === 0).slice(0, 4);
   const odaKarti = (o, i) => h('button', { type: 'button', class: `bgn-oda b-kutu-${o.renk}`, onClick: () => odayaGit(o) },
-    h('span', { class: 'bgn-oda-etiketler' }, h('span', { class: 'bgn-oda-hap' }, 'EN'), h('span', { class: 'bgn-oda-hap' }, `# ${t(`odalar.etiket.${o.k}`)}`), h('span', { class: 'bgn-oda-hap' }, o.seviye)),
-    h('b', { class: 'bgn-oda-baslik' }, ikon('dalgaCizgi', 16), t(`odalar.konu.${o.k}`)),
+    h('span', { class: 'bgn-oda-etiketler' }, h('span', { class: 'bgn-oda-hap' }, 'EN'), h('span', { class: 'bgn-oda-hap' }, `# ${alanAdi(o.alan)}`), h('span', { class: 'bgn-oda-hap' }, o.seviye)),
+    h('b', { class: 'bgn-oda-baslik' }, ikon('dalgaCizgi', 16), o.baslik),
     h('span', { class: 'bgn-oda-alt' },
       h('span', { class: 'bgn-oda-sunucu' }, ikon3d('yz', 26), t('koc.ad')),
       ilgilenenler(i).length ? h('span', { class: 'bgn-oda-yigin' }, ilgilenenler(i).map((p) => h('span', { class: 'bgn-oda-kisi' }, testAvatar(p, 28))), h('small', null, t('odalar.ilgilenen', { n: ilgilenenler(i).length }))) : null),
@@ -80,12 +77,15 @@ function ciz(kok, b) {
     const o = ODALAR[odaSira % ODALAR.length];
     yerlestir(hizliOda,
       h('span', { class: 'bgn-hizli-etiket' }, t('odalar.hizliEtiket')),
-      h('b', { class: 'bgn-hizli-baslik' }, t(`odalar.konu.${o.k}`), ' · ', o.seviye),
+      h('b', { class: 'bgn-hizli-baslik' }, o.baslik, ' · ', o.seviye),
       h('div', { class: 'bgn-hizli-eylem' },
         h('button', { type: 'button', class: 'bgn-hizli-degistir', 'aria-label': t('odalar.degistir'), onClick: () => { odaSira += 1; hizliOdaCiz(); } }, ikon('degis', 20)),
         h('button', { type: 'button', class: 'b-dugme b-dugme-ana bgn-hizli-katil', onClick: () => odayaGit(o) }, ikon('mikrofon', 18), t('odalar.hizliKatil'))));
   }
   hizliOdaCiz();
+  const odaListe = h('div', { class: 'bgn-oda-liste' });
+  const odaListeCiz = () => yerlestir(odaListe, ODALAR.filter((o) => odaAlani === 'tum' || o.alan === odaAlani).map((o, i) => odaKarti(o, i)));
+  odaListeCiz();
   // Üç sekme (HelloTalk Ses · Canlı · Öğren karşılığı): AI sohbet · Gerçek sohbet · Öğren.
   const pratikSekmeleri = sekmeler([['ai', t('pratik.sekme.ai')], ['gercek', t('pratik.sekme.gercek')], ['ogren', t('pratik.sekme.ogren')]], pratikSekme, (id) => { pratikSekme = id; pratikSekmeGoster(); enUsteKaydir(); }, { etiket: t('gezinme.pratik') });
 
@@ -169,7 +169,8 @@ function ciz(kok, b) {
     h('section', { class: 'bgn-odalar', 'aria-labelledby': 'bgn-oda-baslik' },
       h('div', { class: 'bgn-dongu-ust' }, h('h2', { class: 'bgn-dongu-baslik', id: 'bgn-oda-baslik' }, t('odalar.baslik')), h('span', { class: 'b-kucuk' }, t('odalar.alt'))),
       hizliOda,
-      h('div', { class: 'bgn-oda-liste' }, ODALAR.map((o, i) => odaKarti(o, i))),
+      sekmeler([['tum', t('sohbetler.tumFiltre')], ...alanlar.filter((a) => ODALAR.some((o) => o.alan === a.kimlik)).map((a) => [a.kimlik, t(a.metin)])], odaAlani, (id) => { odaAlani = id; odaListeCiz(); }, { tur: 'hap', etiket: t('odalar.kategori') }),
+      odaListe,
       h('p', { class: 'b-kucuk bgn-oda-not' }, yzEtiketi(), ' ', t('odalar.not')),
     ),
     yarim ? h('button', { class: 'bgn-satir bgn-satir-vurgu', type: 'button', onClick: () => b.git(`/gorusme?${yarim.sorgu}&devam=1`) },

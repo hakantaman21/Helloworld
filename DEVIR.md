@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.11.3 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.3'te (16.10.2026, PR #15). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.12.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.3'te (16.10.2026, PR #15). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,19 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.12.0
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan: şikâyet penceresi Vazgeç dışında boş alana dokununca da kapansın; Ayarlar'da renk geçişine uyumlu hazır tasarım paketleri; English Prime'daki gibi akıllı renk eşleşmesi — her sayfa içeriğiyle bilişsel eşleşen tonlar, kullanıcı menüye bakmadan sayfayı anlasın; yapay zekâ ve farklı ortamlar için daha çok senaryo kategorisi.
+- **Ne:**
+  - `yonlendirici.js`: `.b-perde` boş alanına dokunma → `katmanKapat` (Esc, sonra `[data-vazgec]` ya da `.b-dugme-cerceve`). Vazgeç düğmelerine `data-vazgec` eklendi (mesaj, dil-anlari).
+  - Sayfa renk eşlemesi: Sohbet/mesaj = `--renk-sayfa-yesil`, Bağlan/kişi = `--renk-sayfa-mavi` (yer değişti), Pratik kırmızı, Dil Anları amber, Profil/Ayarlar mor. `bilesenler.css` v0.12.0: `.b-ekran` üstte sayfa renginde ışık; `data-bant="sayfa"` bant çizgisi ve başlık sayfa tonunda.
+  - `ayarlar/index.js` `TASARIM_PAKETLERI` + `paketSecici`; tek ayar değişince `tasarimPaketi = 'ozel'`.
+  - Senaryolar: 9 yeni dosya (`veri/senaryolar/*.js`), `alanlar.js` + teknoloji, egitim, resmi. Anayasa bölüm 2'deki "6 alan" Hakan isteğiyle 9'a çıktı (Anayasa metni sonraki turda güncellenmeli). Güvenlik düzeltmesi: geri tuşu ya da boş alana dokunma artık yalnız `[data-vazgec]` düğmesine basar; şikâyet penceresinde ilk nedeni ("Taciz") seçme riski giderildi (v0.11.x'te geri tuşu şikâyet penceresinde ilk ikincil düğmeye basabiliyordu). Onay ve mikrofon izni pencerelerinde de `data-vazgec` var.
+  - `bugun/index.js`: ODALAR tüm senaryolardan üretilir, alan hapı ile süzülür (`odalar.kategori`).
+- **Şema:** 13 (`ayarlar.tasarimPaketi = 'akilli'`; `bantRengi` 'yesil' ise 'sayfa'ya geçer).
+- **Durum:** `deneme` dalında; canlıya alma Hakan onayıyla.
 
 ## v0.11.3
 

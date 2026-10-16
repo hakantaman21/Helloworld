@@ -1,0 +1,25 @@
+// Senaryo şablonu: Anayasa bölüm 5. Zorunlu alanlar robot tarafından denetlenir (Y17). v0.12.0'da eklendi.
+export default {
+  kimlik: "saglik-doktor-01",
+  alan: "saglik",
+  seviye: "A2",
+  baslik: {"tr": "Doktorda", "en": "At the doctor"},
+  durum: {"tr": "Birkaç gündür boğazın ağrıyor; doktora derdini anlatıyorsun.", "en": "Your throat has hurt for a few days; you explain it to the doctor."},
+  roller: { koc: {"tr": "Doktor", "en": "Doctor"}, aksan: "Amerikan" },
+  gorev: { aciklama: {"tr": "Şikâyetini, ne zamandır sürdüğünü anlat ve ilacı nasıl kullanacağını sor.", "en": "Describe the problem, how long it has lasted and ask how to take the medicine."}, kelimeler: ["throat", "fever", "days", "medicine", "headache", "cough"] },
+  hedefKaliplar: [{"kalip": "I have a ...", "anahtar": "I have"}, {"kalip": "It started ... days ago.", "anahtar": "started"}, {"kalip": "How often should I take it?", "anahtar": "How often"}],
+  anahtarKelimeler: [{"en": "sore throat", "tr": "boğaz ağrısı"}, {"en": "fever", "tr": "ateş"}, {"en": "cough", "tr": "öksürük"}, {"en": "prescription", "tr": "reçete"}, {"en": "pharmacy", "tr": "eczane"}, {"en": "allergic", "tr": "alerjik"}],
+  acilis: { koc: "Good morning. Please sit down. What seems to be the problem?", ipucu: ["I have a sore throat.", "I have a headache and a cough."], dallar: [{"kelimeler": ["throat"], "koc": "A sore throat, okay."}, {"kelimeler": ["headache", "cough"], "koc": "I see."}] },
+  adimlar: [
+    { koc: "When did it start?", ipucu: ["It started three days ago.", "Yesterday morning."], dallar: [{"kelimeler": ["days"], "koc": "Three days, alright."}, {"kelimeler": ["yesterday"], "koc": "Just yesterday, good that you came early."}] },
+    { koc: "Do you have a fever?", ipucu: ["Yes, a little.", "No, I do not."], dallar: [{"kelimeler": ["yes", "little"], "koc": "Let me check your temperature."}, {"kelimeler": ["no"], "koc": "Good."}] },
+    { koc: "Are you allergic to any medicine?", ipucu: ["No, I am not.", "Yes, I am allergic to penicillin."], dallar: [{"kelimeler": ["no"], "koc": "Okay."}, {"kelimeler": ["penicillin", "yes"], "koc": "Thank you for telling me, I will write something else."}] },
+    { koc: "Here is your prescription. Do you have any questions?", ipucu: ["How often should I take it?", "Can I drink coffee?"], dallar: [{"kelimeler": ["often"], "koc": "Twice a day, after meals."}, {"kelimeler": ["coffee"], "koc": "Yes, but drink a lot of water too."}] },
+  ],
+  ustAdim: { koc: "Your test results are a little unusual. I want you to come back next week. Which day is good for you?", ipucu: ["Tuesday is good for me.", "Can I come on Friday afternoon?"] },
+  sapmalar: [],
+  seviyeVaryasyonlari: { alt: "Doktor evet/hayır soruları sorar.", ust: "Doktor kontrol randevusu ister; kullanıcı gün ve saat ayarlar." },
+  kapanis: "Get some rest and feel better soon.",
+  karneOdagi: ["gecmis-zaman", "did-yalin", "ucuncu-tekil"],
+  kulturelNot: {"tr": "ABD'de çoğu ilaç reçeteyle eczaneden (pharmacy) alınır; sigorta kartını yanında taşı.", "en": "In the US most medicine is picked up at a pharmacy with a prescription; carry your insurance card."},
+};

@@ -358,7 +358,7 @@ export function onayIste({ baslik, metin, evet, hayir }) {
         h('p', null, metin),
         h('div', { class: 'b-yigin' },
           h('button', { class: 'b-dugme b-dugme-ana', onClick: () => kapat(true) }, evet),
-          h('button', { class: 'b-dugme b-dugme-cerceve', onClick: () => kapat(false) }, hayir),
+          h('button', { class: 'b-dugme b-dugme-cerceve', 'data-vazgec': '', onClick: () => kapat(false) }, hayir),
         ),
       ),
     );

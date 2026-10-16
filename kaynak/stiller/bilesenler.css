@@ -566,8 +566,8 @@
 
   /* ===== v0.9.0 Sayfa renkleri (Google renk anlamları): zemin hariç baskın renk, kartlarda ışık-koyuluk geçişi ===== */
   .b-ekran { --sayfa: var(--renk-baslik); }
-  .b-ekran[data-ekran="sohbetler"], .b-ekran[data-ekran="mesaj"] { --sayfa: var(--renk-sayfa-mavi); }
-  .b-ekran[data-ekran="kesfet"], .b-ekran[data-ekran="kisi"] { --sayfa: var(--renk-sayfa-yesil); }
+  .b-ekran[data-ekran="sohbetler"], .b-ekran[data-ekran="mesaj"] { --sayfa: var(--renk-sayfa-yesil); }
+  .b-ekran[data-ekran="kesfet"], .b-ekran[data-ekran="kisi"] { --sayfa: var(--renk-sayfa-mavi); }
   .b-ekran[data-ekran="bugun"], .b-ekran[data-ekran="senaryolar"], .b-ekran[data-ekran="senaryolar-alan"], .b-ekran[data-ekran="hafiza"] { --sayfa: var(--renk-sayfa-kirmizi); }
   .b-ekran[data-ekran="dil-anlari"] { --sayfa: var(--renk-sayfa-sari); }
   .b-ekran[data-ekran="gelisim"], .b-ekran[data-ekran="ayarlar"], .b-ekran[data-ekran="karne"] { --sayfa: var(--renk-sayfa-mor); }
@@ -737,4 +737,14 @@
     box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 -2px 0 var(--renk-kart-alt-golge), inset 0 0 0 1px color-mix(in srgb, var(--sayfa) 38%, var(--renk-cizgi-guclu)), 0 8px 18px var(--renk-golge);
   }
   .b-bas-bant .b-platform { box-shadow: none; }
+}
+
+/* ===== v0.12.0 Akıllı sayfa renkleri: her sayfa içeriğiyle bilişsel eşleşen bir renk tonu taşır =====
+   Sohbet = yeşil (sakin konuşma) · Bağlan = mavi (güven, insanlar) · Pratik = kırmızı-mercan (enerji, eylem)
+   Dil Anları = amber (paylaşım, sıcaklık) · Profil ve Ayarlar = mor (kimlik, gelişim).
+   Ton; üst bantta ("Sayfa rengi"), sayfanın üst ışığında, başlıkta, kart çerçevelerinde ve süzgeç tepsisinde görünür → menüye bakmadan sayfa anlaşılır. */
+@layer bilesenler {
+  .b-ekran { background: radial-gradient(140% 50% at 50% 0%, color-mix(in srgb, var(--sayfa) 14%, transparent), transparent 72%); }
+  :root[data-bant="sayfa"] .b-bas-bant { border-color: color-mix(in srgb, var(--sayfa) 55%, transparent); box-shadow: 0 10px 24px color-mix(in srgb, var(--sayfa) 22%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--sayfa) 60%, transparent); }
+  :root[data-bant="sayfa"] .b-bas-bant .b-ht-baslik { color: color-mix(in srgb, var(--sayfa) 45%, var(--renk-gece-metin)); }
 }

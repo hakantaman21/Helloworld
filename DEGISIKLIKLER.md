@@ -1,3 +1,15 @@
+## 0.12.0 — 16.10.2026 · Akıllı sayfa renkleri, tasarım paketleri, 9 yeni senaryo ve 3 yeni kategori
+
+- Akıllı renk: her sayfa içeriğiyle eşleşen bir renk tonu taşır — Sohbet yeşil (sakin konuşma), Bağlan mavi (güven, insanlar), Pratik kırmızı-mercan (enerji, eylem), Dil Anları amber (paylaşım, sıcaklık), Profil ve Ayarlar mor (kimlik, gelişim). Ton üst bantta, sayfanın üst ışığında, başlıkta, kart çerçevelerinde görünür; menüye bakmadan hangi sayfada olduğun anlaşılır.
+- Ayarlar › Görünüm › Tasarım paketi: Akıllı renk (varsayılan), English Prime, Gece turkuaz, Mor akşam, Bordo klasik, Antrasit sade. Tek tek değiştirince paket "Özel" olur.
+- Üst bant varsayılanı artık "Sayfa rengi" (her sayfanın kendi renginin çok koyu tonu).
+- Şikâyet, onay ve benzeri pencereler boş alana dokununca da kapanır ("Vazgeç" gibi).
+- Düzeltme: şikâyet penceresi açıkken telefonun geri tuşu artık yanlışlıkla bir şikâyet nedeni seçmez; yalnız Vazgeç'e basar.
+- 9 yeni yapay zekâ senaryosu: Kiralık daire, Doktorda, İş görüşmesi, Partide tanışma, Yapay zekâ aracı toplantısı, Teknik destek, Dil kursuna kayıt, Otelde giriş, Bankada hesap açma.
+- 3 yeni yaşam alanı: Teknoloji ve yapay zekâ, Okul ve eğitim, Banka ve resmî işler ("İş ve okul" artık "İş hayatı").
+- Pratik › Konu odaları tüm senaryolardan oluşur ve kategoriye göre süzülür.
+- Şema 13: ayarlar.tasarimPaketi.
+
 ## 0.11.3 — 16.10.2026 · Sohbet bandı en sıkı hâl, belirgin kart hatları
 
 - Sohbet üst bandı sıkışma yaratmadan en dar hâline getirildi (başlık, simgeler, yazılar ve "Daha fazla" arası).

@@ -111,7 +111,7 @@ function ciz(kok, b) {
         h('div', { class: 'b-pencere' },
           h('h2', { class: 'b-bolum-baslik', id: 'anl-sik' }, t('test.sikayetBaslik', { ad: y.ad })),
           h('div', { class: 'b-yigin' }, ['taciz', 'spam', 'uygunsuz', 'konuDisi'].map((k) => h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => kapat(k) }, t(`test.sikayetNeden.${k}`))),
-            h('button', { type: 'button', class: 'b-dugme', onClick: () => kapat(null) }, t('genel.vazgec'))),
+            h('button', { type: 'button', class: 'b-dugme', 'data-vazgec': '', onClick: () => kapat(null) }, t('genel.vazgec'))),
         ));
       document.body.append(perde);
       perde.querySelector('button').focus();
