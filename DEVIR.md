@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.17.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.15.0'da (17.10.2026, PR #18). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.18.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.15.0'da (17.10.2026, PR #18). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,18 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.18.0
+
+- **Yapan:** Claude (Opus 5.5), 17.10.2026
+- **Neden:** Hakan (17.10, 01:04) kuyruğu: paketler + düzenleme modu, ücretsize günde 6–8 kişi sınırı (7 seçildi, düzenlenebilir), premium kilit (PIN/desen/parmak izi/yüz; kapsam).
+- **Ne:**
+  - `veri/paketler.js` (varsayılanlar) + `cekirdek/paketler.js`: `paketTanimlari()` (v.paketTanimlari üstüne yazar), `aktifPaket()`, `ozellikVar()`, `paketEtkinlestir()` (kaynak 'test'), `yeniKisiIzni/ilkMesajKontrolu/yeniKisiSay` (test.yeniKisiGunluk yalnız bugün). OZELLIKLER yalnız çalışanlar: uygulamaKilidi, ekosistemIndirimi (v0.20'de kullanılacak).
+  - `kisi-eylemleri.yeniKisiOnayi(profil, b)`: mesaj (ilk mesaj), kişi sayfası ve Bağlan'daki el sallama bunu çağırır. El sallamaya da çevrimdışı test kişisi artık yanıt vermez.
+  - `cekirdek/kilit.js`: tuzlu SHA-256 özet, `pinTuslari`, `desenAlani` (pointer + klavye), `kilitEkrani` (tam ekran, KATMAN değil → geri tuşuyla kapanmaz), WebAuthn platform doğrulayıcı (yalnız https), `kilitIzle` (visibilitychange + süre), `acikSay` (kurulumdan hemen sonra kilit gelmez). Yönlendirici: `kilitGerekli(id)` → kilit ekranı, açılınca aynı ekran.
+  - ayarlar: `/paketler` ekranı ve "Uygulama kilidi" grubu (`moduller/ayarlar/paketler.js`); gizlilik grubunun simgesi `yedek` (kilit simgesi kilit grubunda; simgeler benzersiz).
+- **Sunucu notu:** Paket doğrulaması, günlük sınır ve ödeme sunucuda yapılmalı; istemci sınırı aşılabilir.
+- **Şema:** 17 (yeni alanlar isteğe bağlı: v.uyelik, v.paketTanimlari, profil.ayarlar.kilit, test.yeniKisiGunluk). **Durum:** `deneme`'de.
 
 ## v0.17.0
 

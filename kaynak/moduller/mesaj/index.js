@@ -6,7 +6,7 @@ import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, durumKutusu, yerlestir, testEtiketi, farkCiz, onayIste, testAvatar, goreliZaman, dilCifti, sekmeler, enAltaKaydir } from '../../cekirdek/arayuz.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 import { arkadasDurumu, favoriMi, favoriDegistir, sabitliMi, sabitleDegistir, SABIT_SINIRI, arkadasListesiGorunurluk, onunArkadaslari, mesajDurumu } from '../../cekirdek/arkadaslik.js';
-import { arkadasEylemi, arkadasEtiketi } from '../../cekirdek/kisi-eylemleri.js';
+import { arkadasEylemi, arkadasEtiketi, yeniKisiOnayi } from '../../cekirdek/kisi-eylemleri.js';
 import { TEST_PROFILLERI } from '../../veri/test-profiller.js';
 import { t, yerel, aktifDil } from '../../cekirdek/metin.js';
 import { mesajIzni, fotoIzni, iletisimBilgisiVar, iletisimIzni, ILETISIM_GUN } from '../../cekirdek/topluluk-kurallari.js';
@@ -145,11 +145,13 @@ function ciz(kok, b) {
     }, YANIT_GECIKMESI);
   }
 
-  function gonder(metin, duzeltildi) {
+  async function gonder(metin, duzeltildi) {
     const temiz = metin.trim();
     if (!temiz) return;
     const mesajlar = testMesajlari(profil.kimlik);
     if (!mesajIzni(mesajlar).izin) { yazCiz(); return; }
+    // v0.18.0 Günlük yeni kişi sınırı (ilk mesaj): önceden konuşulan kişilerde sayılmaz.
+    if (!mesajlar.some((m) => m.kim === 'ben') && !(await yeniKisiOnayi(profil, b))) return;
     // İletişim bilgisi (telefon, e-posta) belirli bir tanışıklıktan önce gönderilmez; mesaj yazma alanında kalır.
     if (iletisimBilgisiVar(temiz)) {
       const i = iletisimIzni(mesajlar, testSohbetBaslangici(profil.kimlik));
@@ -393,8 +395,12 @@ function kisiCiz(kok, b) {
     h('div', { class: 'msj-alt-cubuk' },
       takipDugmesi,
       h('button', { type: 'button', class: 'b-dugme b-dugme-ana msj-alt-sohbet', onClick: () => b.git(`/mesaj?k=${p.kimlik}`) }, ikon('sohbet', 20), t('ht.sohbet')),
-      h('button', { type: 'button', class: 'msj-alt-selam', 'aria-label': t('ht.selamVer', { ad: p.ad }), onClick: () => {
-        if (!selamVerildi(p.kimlik)) { selamVer(p.kimlik, t('ht.selamMetni')); setTimeout(() => testMesajEkle(p.kimlik, selamYaniti(p)), YANIT_GECIKMESI); }
+      h('button', { type: 'button', class: 'msj-alt-selam', 'aria-label': t('ht.selamVer', { ad: p.ad }), onClick: async () => {
+        if (!selamVerildi(p.kimlik)) {
+          if (!(await yeniKisiOnayi(p, b))) return;
+          selamVer(p.kimlik, t('ht.selamMetni'));
+          if (testYanitVerir(p)) setTimeout(() => testMesajEkle(p.kimlik, selamYaniti(p)), YANIT_GECIKMESI);
+        }
         b.git(`/mesaj?k=${p.kimlik}`);
       } }, ikon('el', 22)),
     ),
@@ -406,7 +412,7 @@ function kisiCiz(kok, b) {
 
 export default {
   kimlik: 'mesaj',
-  surum: '0.6.0',
+  surum: '0.7.0',
   onek: 'msj',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'metin', 'test-modu'],

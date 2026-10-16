@@ -5,6 +5,9 @@ import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar, enUsteKaydir, testEtiketi } from '../../cekirdek/arayuz.js';
 import { fotografEkle, medyaDisaAktar, medyaIceAktar, medyaSil } from '../../cekirdek/fotograf.js';
 import { benimGizlilik, gizlilikAyarla, GIZLILIK_SECENEKLERI, haberTercihleri, haberTercihiAyarla, HABER_TURLERI } from '../../cekirdek/arkadaslik.js';
+import { paketlerCiz, kilitGrubu } from './paketler.js';
+import { aktifPaket, yeniKisiSiniri, bugunYeniKisiler } from '../../cekirdek/paketler.js';
+import { kilitEtkin, kilitAyari } from '../../cekirdek/kilit.js';
 import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
 import { al, degistir, sifirla, disaAktarMetni, iceAktarHazirla, iceAktarUygula } from '../../cekirdek/depo.js';
@@ -267,7 +270,12 @@ function ciz(kok, b) {
       satir(t('ayarlar.ortaDugme'), (id) => bolumlu(id, ['pratik', 'arama', 'senaryo', 'telaffuz'].map((k) => [k, t(`ayarlar.ortaSecenek.${k}`)]), a.ortaDugme || 'pratik', (k) => ayarKaydet((pr) => { pr.ayarlar.ortaDugme = k; })), { aciklama: t('ayarlar.ortaDugmeAciklama'), altta: true }),
     ),
 
-    grup('gizlilik', 'kilit', t('ayarlar.grup.gizlilik'),
+    // v0.18.0 Üyelik ve paketler; uygulama kilidi (Premium).
+    grup('paket', 'hediye', t('ayarlar.grup.paket'),
+      h('p', { class: 'ayr-not' }, t('paket.ozetMetin', { ad: yerel(aktifPaket().ad), n: bugunYeniKisiler().length, s: yeniKisiSiniri() || '∞' })),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => b.git('/paketler') }, h('span', { class: 'ayr-satir-etiket' }, t('paket.paketleriGor')), ikon('sag', 18))),
+    grup('kilit', 'kilit', t('ayarlar.grup.kilit'), kilitGrubu(b, () => b.git('/ayarlar?grup=kilit', { degistir: true }))),
+    grup('gizlilik', 'yedek', t('ayarlar.grup.gizlilik'),
       h('p', { class: 'ayr-not ayr-not-kutu' }, t('ayarlar.gizlilikMetni')),
       // v0.17.0 Karşılıklı gizlilik (WhatsApp mantığı): kapattığın bilgiyi başkalarında da göremezsin.
       h('p', { class: 'ayr-not ayr-not-kutu' }, t('arkadas.karsilikliAciklama')),
@@ -334,10 +342,12 @@ function ciz(kok, b) {
     koc: t(`ayarlar.duzeltmeSecenek.${a.duzeltmeYogunlugu}`),
     gorunum: `${t(`ayarlar.temaSecenek.${a.tema}`)} · ${t(`ayarlar.yaziSecenek.${a.yaziBoyutu || 'normal'}`)}`,
     gizlilik: t('ayarlar.gizlilikOzet'),
+    paket: yerel(aktifPaket().ad),
+    kilit: kilitEtkin() ? t(`kilit.kapsamSecenek.${kilitAyari().kapsam}`) : t('ayarlar.kapali'),
     test: testModuAcik() ? t('ayarlar.acik') : t('ayarlar.kapali'),
   };
-  const KATEGORILER = [['profil'], ['bildirim', 'gizlilik'], ['koc', 'dil'], ['gorunum'], ['test']];
-  const RENK = { profil: 1, bildirim: 4, gizlilik: 3, koc: 5, dil: 2, gorunum: 6, test: 2 };
+  const KATEGORILER = [['profil'], ['paket', 'kilit'], ['bildirim', 'gizlilik'], ['koc', 'dil'], ['gorunum'], ['test']];
+  const RENK = { profil: 1, paket: 5, kilit: 3, bildirim: 4, gizlilik: 6, koc: 5, dil: 2, gorunum: 6, test: 2 };
   const menu = h('nav', { class: 'ayr-menu', 'aria-label': t('ayarlar.baslik') },
     KATEGORILER.map((kume) => {
       const varolan = kume.filter((k) => gruplar.some((g) => g.id === `ayr-g-${k}`));
@@ -370,11 +380,12 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'ayarlar',
-  surum: '0.7.0',
+  surum: '0.8.0',
   onek: 'ayr',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'zamanlayici'],
   ekranlar: {
     ayarlar: ekran({ baslikAnahtari: 'ekran.ayarlar', durumlar: DORT_DURUM, ciz }),
+    paketler: ekran({ baslikAnahtari: 'ekran.paketler', durumlar: DORT_DURUM, ciz: paketlerCiz }),
   },
 };

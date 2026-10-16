@@ -5,6 +5,7 @@ import { al } from './depo.js';
 import { yayinla } from './olay-hatti.js';
 import { t } from './metin.js';
 import { h, gezinmeGizle, markaSeridi } from './arayuz.js';
+import { kilitGerekli, kilitEkrani, kilitEkraniniKaldir, kilitIzle } from './kilit.js';
 
 let kok = null;
 let aktifTemizle = null;
@@ -35,6 +36,10 @@ function ciz() {
     git('/bugun', { degistir: true });
     return;
   }
+
+  // v0.18.0 Uygulama kilidi: kapsamdaki ekran açılmadan önce kilit ekranı gelir; açılınca aynı ekran çizilir.
+  if (kilitGerekli(id)) { kilitEkrani(() => ciz()); return; }
+  kilitEkraniniKaldir();
 
   // v0.13.0: ayrılınan sayfanın kaydırma konumu saklanır; geri dönülünce aynı yere gelinir (liste bağlamı kaybolmaz).
   if (aktifAdres) konumlar.set(aktifAdres, kok.scrollTop);
@@ -154,6 +159,7 @@ export function baslat(kokOge) {
   kok = kokOge;
   window.addEventListener('hashchange', ciz);
   katmanIzle();
+  kilitIzle(() => ciz());
   ciz();
 }
 

@@ -1,3 +1,12 @@
+## 0.18.0 — 17.10.2026 · Paketler, günlük sınır, uygulama kilidi
+
+- Paketler (Ayarlar › Üyelik ve paketler): Ücretsiz · Plus · Premium; her pakette günlük yeni kişi sınırı ve özellikler. Yalnız gerçekten çalışan özellikler listelenir.
+- Düzenleme modu: paket adı, aylık/yıllık fiyat, günlük sınır, özellikler ve açıklama satırları düzenlenir; "Varsayılana döndür".
+- Ücretsiz pakette günde en çok 7 yeni kişiye ilk mesaj (el sallama dahil). Zaten konuştuğun kişilere yazmak sayılmaz; sayaç gece yarısı sıfırlanır. Sınır dolunca nedeni ve paketler gösterilir.
+- Ödeme henüz bağlı değil: paket seçimi bu cihazda TEST olarak etkinleşir ve ücret alınmaz (ekranda yazıyor).
+- Uygulama kilidi (Premium): PIN (4–8 hane) ya da desen; isteğe bağlı parmak izi / yüz (telefonun kendi doğrulaması; canlı sitede çalışır). Kapsam: tüm uygulama, Ayarlar ya da kişiler ve sohbetler. Uygulamadan çıkınca: hemen / 1 / 5 / 15 dk. 5 yanlış denemede bekleme. PIN ve desen düz metin saklanmaz.
+- Kilit dürüstçe tanımlanır: telefonu eline alan birine karşı gizlilik perdesi; veri şifrelemesi değildir.
+
 ## 0.17.0 — 17.10.2026 · Arkadaşlık ve karşılıklı gizlilik
 
 - Bağlan'daki kişi kartlarının etrafındaki ince ışık çizgisi kalktı (Sohbet'teki gibi hafif kabartma).

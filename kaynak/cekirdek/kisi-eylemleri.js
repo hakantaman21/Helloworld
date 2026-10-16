@@ -1,10 +1,11 @@
 // v0.17.0 Kişi eylemleri: Sohbet ve Bağlan'da bir kişiye basılı tutunca (ya da "…" ile) açılan ortak alt pencere.
 // Arkadaş ekle / isteği geri al / kabul et / arkadaşlıktan çıkar · Favori · Başa sabitle · Profili gör · Mesaj.
-import { h, ikon } from './arayuz.js';
+import { h, ikon, onayIste } from './arayuz.js';
 import { t } from './metin.js';
 import { duyur } from './duyuru.js';
 import { arkadasDurumu, istekGonder, istekGeriAl, arkadasYap, istekReddet, arkadasliktanCikar, favoriMi, favoriDegistir, sabitliMi, sabitleDegistir, SABIT_SINIRI } from './arkadaslik.js';
-import { testYanitVerir } from './test-modu.js';
+import { testYanitVerir, testMesajlari } from './test-modu.js';
+import { ilkMesajKontrolu, yeniKisiSay, aktifPaketKimligi } from './paketler.js';
 
 const KABUL_GECIKMESI = 2500;
 
@@ -69,4 +70,18 @@ export function basiliTut(el, fn) {
   el.addEventListener('click', (e) => { if (tutuldu) { e.preventDefault(); e.stopImmediatePropagation(); tutuldu = false; } }, true);
   el.addEventListener('contextmenu', (e) => { e.preventDefault(); iptal(); fn(); });
   return el;
+}
+
+// v0.18.0 Günlük yeni kişi sınırı: ilk mesajdan (selam dahil) önce çağrılır. İzin varsa kişiyi bugünün listesine
+// yazar ve true döner; yoksa nedenini ve paketleri gösterir, false döner. Zaten konuşulan kişiler sınıra sayılmaz.
+export async function yeniKisiOnayi(profil, b) {
+  const izin = ilkMesajKontrolu(profil.kimlik, testMesajlari(profil.kimlik));
+  if (izin.izin) { yeniKisiSay(profil.kimlik); return true; }
+  const paketlereGit = await onayIste({
+    baslik: t('paket.sinirBaslik'),
+    metin: t('paket.sinirMetin', { n: izin.sinir, paket: t(`paket.kisaAd.${aktifPaketKimligi()}`) }),
+    evet: t('paket.paketleriGor'), hayir: t('kural.tamam'),
+  });
+  if (paketlereGit && b) b.git('/paketler');
+  return false;
 }

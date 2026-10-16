@@ -5,13 +5,13 @@ import './kesfet.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, altGezinme, basBant, afisKaydirici, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman, kurallarSeridi, aralikKaydirici } from '../../cekirdek/arayuz.js';
 import { benDugmesi } from '../../cekirdek/yan-menu.js';
-import { kisiEylemleri, basiliTut } from '../../cekirdek/kisi-eylemleri.js';
+import { kisiEylemleri, basiliTut, yeniKisiOnayi } from '../../cekirdek/kisi-eylemleri.js';
 import { arkadasMi, favoriMi, gelenIstekler } from '../../cekirdek/arkadaslik.js';
 import { arkadasPaneli } from './arkadaslar.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al, degistir } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
-import { uyumDuzeyi, saatFarki, YAKIN_SAAT_FARKI, testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler } from '../../cekirdek/test-modu.js';
+import { uyumDuzeyi, saatFarki, YAKIN_SAAT_FARKI, testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler, testYanitVerir } from '../../cekirdek/test-modu.js';
 import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
 import { TEST_PROFILLERI } from '../../veri/test-profiller.js';
@@ -35,10 +35,12 @@ function secimiYaz(d, f) {
 const YAS_MIN = 18;
 const YAS_MAX = 60;
 
-function selamla(p, yenile) {
+async function selamla(p, yenile, b) {
+  // v0.18.0: el sallamak da yeni kişiye ilk mesajdır; günlük sınıra tabidir. Çevrimdışı test kişisi yanıt vermez.
+  if (!(await yeniKisiOnayi(p, b))) return;
   selamVer(p.kimlik, t('ht.selamMetni'));
   duyur(t('ht.selamGitti', { ad: p.ad }), 3000);
-  setTimeout(() => testMesajEkle(p.kimlik, selamYaniti(p)), SELAM_YANIT_GECIKMESI);
+  if (testYanitVerir(p)) setTimeout(() => testMesajEkle(p.kimlik, selamYaniti(p)), SELAM_YANIT_GECIKMESI);
   yenile();
 }
 
@@ -205,7 +207,7 @@ function satir(k, b, yenile) {
       ),
     ),
     h('button', { type: 'button', class: `kft-el${selamlandi ? ' kft-el-tamam' : ''}`, 'aria-label': selamlandi ? t('ht.mesajGonder', { ad: k.ad }) : t('ht.selamVer', { ad: k.ad }), title: selamlandi ? t('test.mesajYaz') : t('ht.selam'),
-      onClick: () => (selamlandi ? b.git(`/mesaj?k=${k.kimlik}`) : selamla(k, yenile)) }, ikon(selamlandi ? 'sohbet' : 'el', 22)),
+      onClick: () => (selamlandi ? b.git(`/mesaj?k=${k.kimlik}`) : selamla(k, yenile, b)) }, ikon(selamlandi ? 'sohbet' : 'el', 22)),
   ), () => kisiEylemleri(k, { b, yenile }));
 }
 
@@ -230,7 +232,7 @@ function eslesmeKarti(sonuc, b, { sonraki, kapat, yenile }) {
     h('div', { class: 'kft-eslesme-eylem' },
       h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve kft-eylem-dugme', onClick: sonraki }, t('ht.sonraki')),
       h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve kft-eylem-dugme', onClick: () => b.git(`/kisi?k=${p.kimlik}`) }, t('test.profiliGor')),
-      h('button', { type: 'button', class: 'b-dugme b-dugme-ana kft-eslesme-selam kft-eylem-dugme', onClick: () => { if (!selamVerildi(p.kimlik)) selamla(p, yenile); b.git(`/mesaj?k=${p.kimlik}`); } }, ikon('el', 18), t('ht.selam')),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-ana kft-eslesme-selam kft-eylem-dugme', onClick: async () => { if (!selamVerildi(p.kimlik)) await selamla(p, yenile, b); if (selamVerildi(p.kimlik)) b.git(`/mesaj?k=${p.kimlik}`); } }, ikon('el', 18), t('ht.selam')),
     ),
     h('p', { class: 'b-kucuk' }, t('ht.eslesmeAciklama')),
   );
@@ -364,7 +366,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'kesfet',
-  surum: '0.6.0',
+  surum: '0.7.0',
   onek: 'kft',
   semaSurumu: 1,
   cekirdekServisleri: ['metin', 'depo', 'test-modu'],

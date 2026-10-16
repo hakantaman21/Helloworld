@@ -853,3 +853,39 @@
   .b-kisi-eylem { display: flex; flex-direction: column; gap: 8px; }
   .b-kisi-eylem-dugme { display: flex; align-items: center; justify-content: flex-start; gap: 10px; }
 }
+
+@layer bilesenler {
+  /* v0.18.0 Uygulama kilidi: tam ekran, tasarım paketinin zemin ve vurgu renkleriyle. */
+  .b-kilit { position: fixed; inset: 0; z-index: var(--z-bildirim); display: grid; place-items: center; padding: 24px 16px; overflow-y: auto;
+    background: radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--renk-vurgu) 22%, var(--renk-zemin)), var(--renk-zemin) 70%); color: var(--renk-murekkep); }
+  .b-kilit-ic { width: min(360px, 100%); display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+  .b-kilit-baslik { font-family: var(--yazi-serif); font-size: calc(24px * var(--yazi-olcek)); margin: 0; }
+  .b-kilit-mesaj { margin: 0; min-height: 2.6em; color: var(--renk-soluk); font-size: var(--yazi-kucuk); }
+  .b-kilit-salla { animation: b-kilit-salla .35s; }
+  @keyframes b-kilit-salla { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+  .b-kilit-pin { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
+  .b-kilit-noktalar { display: flex; gap: 12px; min-height: 16px; }
+  .b-kilit-nokta { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--renk-cizgi-guclu); }
+  .b-kilit-nokta-dolu { background: var(--renk-vurgu); box-shadow: none; }
+  .b-kilit-tuslar { display: grid; grid-template-columns: repeat(3, 72px); gap: 14px; justify-content: center; }
+  .b-kilit-tus { width: 72px; height: 72px; border: 0; border-radius: 50%; background: linear-gradient(165deg, var(--renk-yuzey-ust), var(--renk-yuzey)); color: var(--renk-murekkep); font: inherit; font-size: calc(26px * var(--yazi-olcek)); font-weight: 700; cursor: pointer;
+    box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), 0 4px 10px var(--renk-golge); display: grid; place-items: center; }
+  .b-kilit-tus:active { transform: scale(.94); }
+  .b-kilit-tus-ikincil { background: transparent; box-shadow: none; color: var(--renk-soluk); }
+  .b-kilit-tus-ana { background: linear-gradient(170deg, var(--renk-vurgu-parlak), var(--renk-vurgu)); color: var(--renk-vurgu-uzerinde); }
+  .b-kilit-tus:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 3px; }
+  .b-kilit-biyo { display: inline-flex; align-items: center; gap: 8px; }
+  .b-kilit-unuttum { font-size: var(--yazi-kucuk); color: var(--renk-soluk); }
+  .b-kilit-unuttum summary { cursor: pointer; min-height: var(--dokunma); display: flex; align-items: center; justify-content: center; }
+  .b-kilit-unuttum p { text-align: left; }
+  .b-desen-kap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .b-desen { position: relative; width: 252px; height: 252px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); place-items: center; touch-action: none; user-select: none; }
+  .b-desen-cizgi { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .b-desen-cizgi polyline { fill: none; stroke: var(--renk-vurgu); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; opacity: .75; }
+  .b-desen-nokta { position: relative; z-index: var(--z-icerik); width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
+  .b-desen-nokta::after { content: ""; width: 18px; height: 18px; border-radius: 50%; background: var(--renk-cizgi-guclu); transition: transform .12s, background .12s; }
+  .b-desen-secili::after { background: var(--renk-vurgu); transform: scale(1.35); }
+  .b-desen-nokta:focus-visible { outline: 2px solid var(--renk-vurgu); }
+  .b-desen-bitti { min-height: var(--dokunma); }
+  @media (prefers-reduced-motion: reduce) { .b-kilit-salla { animation: none; } }
+}
