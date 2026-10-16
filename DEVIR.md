@@ -24,7 +24,7 @@
 - **Ne:** `bilesenler.css` `.b-platform`, `.b-karolar/.b-karo`, `.b-alt-pencere*`, `.b-sekmeler` platform görünümü; `kesfet` `suzgecPenceresi()` + `suzgecUygula()` (state: hizli/yas/cinsiyet/anaDil/ogrDil/seviyeler/ulkeler/ilgiler); `cekirdek/fotograf.js` (seç → canvas ile 480px JPEG, ≤220KB, en çok 6); `arayuz.js` `benAvatar()`; `cekirdek/cumle-defteri.js`; mesaj ve Dil Anları'nda sesli dinle (`soyle`) + yer imi; Ben ekranında Fotoğraflarım, Cümle defterim, karne etiketi.
 - **Şema:** göç 10 (`profil.foto`, `profil.fotograflar`, `kayitliCumleler`), GUNCEL_SEMA 10.
 - **Gizlilik:** Fotoğraflar sunucuya gitmez; yalnız cihazda, küçültülmüş. Sesli dinleme cihazın kendi sentezi (ağ yok, kayıt yok — Y12 ile uyumlu).
-- **Durum:** Hakan'ın önceden verdiği onayla canlıya alındı (PR ile deneme → main).
+- **Durum:** Canlıda (PR #7, Hakan onayı, 16.10.2026).
 
 ## v0.5.0
 
