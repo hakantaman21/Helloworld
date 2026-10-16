@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.9.1 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.9.0'da (16.10.2026, PR #12). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.9.2 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.9.0'da (16.10.2026, PR #12). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,14 @@
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.9.2
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan bir alt menü örneği gösterdi (yüzen çubuk, ortada kalın siyah çerçeveli altın daire içinde ▶ BAŞLA, seçili öğe mor kutu): "Öğeyi de buna benzet."
+- **Ne:** `bilesenler.css` v0.9.2 bloğu: `.b-gezinme-ic` yüzen yuvarlak çubuk, `.b-gezinme-isik::before` seçim rengi karışımlı kutu + alt çizgi, `.b-orta-daire` 76 px altın daire (6 px koyu çerçeve), `.b-orta-oynat` CSS üçgeni; `arayuz.js` orta öğe içeriği (▶ + ad dairenin içinde).
+- **Şema:** değişmedi (11).
+- **Durum:** `deneme` dalında; canlıya alma Hakan onayıyla.
 
 ## v0.9.1
 

@@ -576,4 +576,18 @@
   .b-ekran .b-sekmeler { box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 0 0 1px color-mix(in srgb, var(--sayfa) 30%, var(--renk-cizgi)), 0 6px 14px var(--renk-golge); }
   .b-ekran .b-ht-ust { border-bottom: 2px solid color-mix(in srgb, var(--sayfa) 35%, transparent); }
   .b-ekran .b-karo:not([aria-pressed="true"]):not(.b-karo-iyi) { background: linear-gradient(170deg, color-mix(in srgb, var(--sayfa) 12%, var(--renk-yuzey-ikinci)), var(--renk-yuzey-ikinci)); }
+
+  /* ===== v0.9.2 Alt menü: yüzen çubuk, altın orta düğme (▶ + ad), seçili öğe renkli kutu ===== */
+  .b-gezinme { height: calc(var(--gezinme-yukseklik) + 22px + env(safe-area-inset-bottom)); padding: 0 10px calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(0deg, var(--renk-zemin) 55%, transparent); }
+  .b-gezinme-ic { height: var(--gezinme-yukseklik); align-items: center; padding: 4px; border-radius: 28px; border: 1px solid var(--renk-cizgi); background: linear-gradient(180deg, var(--renk-yuzey-ust), var(--renk-yuzey) 60%, var(--renk-zemin)); box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), 0 10px 26px var(--renk-golge); }
+  .b-gezinme-oge { min-height: 56px; border-radius: 20px; font-size: 11.5px; color: var(--renk-soluk); white-space: nowrap; }
+  .b-gezinme-oge[aria-current="page"] { color: var(--renk-murekkep); font-weight: 800; }
+  .b-gezinme-isik { top: 4px; bottom: 4px; left: 4px; width: calc((100% - 8px) / 5); }
+  .b-gezinme-isik::before { inset: 0 3px; border-radius: 20px; background: linear-gradient(180deg, color-mix(in srgb, var(--renk-vurgu) 34%, var(--renk-yuzey-ust)), color-mix(in srgb, var(--renk-vurgu) 20%, var(--renk-yuzey))); box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 -3px 0 color-mix(in srgb, var(--renk-vurgu-parlak) 85%, var(--renk-murekkep)), 0 0 18px color-mix(in srgb, var(--renk-vurgu) 35%, transparent); }
+  .b-gezinme-orta { align-self: center; }
+  .b-orta-daire { flex-direction: column; gap: 1px; width: 76px; height: 76px; margin: -12px 0; border: 6px solid var(--renk-gece); background: radial-gradient(75% 75% at 35% 25%, var(--renk-vurgu-parlak), var(--renk-vurgu)); color: var(--renk-vurgu-uzerinde); box-shadow: 0 0 0 1px var(--renk-cizgi-guclu), 0 8px 22px var(--renk-golge), 0 0 26px color-mix(in srgb, var(--renk-vurgu) 30%, transparent); }
+  .b-gezinme-orta[aria-current="page"] .b-orta-daire { border-color: var(--renk-vurgu-metin); box-shadow: 0 0 0 3px color-mix(in srgb, var(--renk-vurgu) 40%, transparent), 0 0 30px color-mix(in srgb, var(--renk-vurgu) 60%, transparent), 0 8px 22px var(--renk-golge); transform: none; }
+  .b-orta-oynat { width: 0; height: 0; margin-left: 4px; border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-left: 15px solid currentColor; }
+  .b-orta-ad { font-size: 10.5px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--renk-vurgu-uzerinde); }
+  .b-gezinme-orta[aria-current="page"] .b-orta-ad { font-weight: 900; }
 }

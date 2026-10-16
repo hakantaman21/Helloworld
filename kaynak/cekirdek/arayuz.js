@@ -215,8 +215,9 @@ function gezinmeKur() {
     let zamanlayici = null;
     let uzunBasildi = false;
     const oge = h('a', { class: 'b-gezinme-oge b-gezinme-orta', href: '#' + g.yol, 'data-yol': g.yol, 'aria-haspopup': 'dialog', title: t('orta.ipucu') },
-      h('span', { class: 'b-orta-daire' }, ikon3d(g.ikon, 34), h('span', { class: 'b-orta-ok', 'aria-hidden': 'true' }, ikonCiz('yukari', 12, 3))),
-      h('span', { class: 'b-orta-ad' }, t(g.anahtar)));
+      h('span', { class: 'b-orta-daire' },
+        h('span', { class: 'b-orta-oynat', 'aria-hidden': 'true' }),
+        h('span', { class: 'b-orta-ad' }, t(g.anahtar))));
     const iptal = () => { clearTimeout(zamanlayici); zamanlayici = null; };
     oge.addEventListener('pointerdown', () => { uzunBasildi = false; zamanlayici = setTimeout(() => { uzunBasildi = true; if (navigator.vibrate) navigator.vibrate(15); ortaMenuAc(); }, 480); });
     ['pointerup', 'pointerleave', 'pointercancel'].forEach((o) => oge.addEventListener(o, iptal));

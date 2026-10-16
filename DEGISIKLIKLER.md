@@ -1,3 +1,9 @@
+## 0.9.2 — 16.10.2026 · Alt menü yeni görünüm
+
+- Alt menü yüzen, yuvarlak köşeli bir çubuk oldu.
+- Orta düğme: kalın koyu çerçeveli altın daire, içinde ▶ ve "PRATİK" yazısı; seçilince çerçeve ve parıltı seçim rengini alır.
+- Seçili öğe: seçim rengine boyanmış yuvarlak kutu, altında açık renkli çizgi; sekmeler arasında kayarak gider.
+
 ## 0.9.1 — 16.10.2026 · Alt menü sayfa geçişinde artık kaybolmuyor
 
 - Düzeltme: Android Chrome'da sekme değiştirirken (özellikle ortaya, Pratik'e geçerken) alt menü bir an aşağı kayıp kayboluyor, sonra geri geliyordu. Sebep: her geçişte sayfa en üste kaydırılınca tarayıcının adres çubuğu yeniden açılıyor, ekran yüksekliği değişiyor ve tarayıcı sabit menüyü bir an aşağıda bırakıyordu. Artık belge hiç kaymıyor; kaydırma uygulamanın kendi alanında (#uygulama) oluyor. Adres çubuğu yerinde kalıyor, alt menü de.
