@@ -157,7 +157,7 @@ function ciz(kok, b) {
       ' · ', t('bugun.seviye', { s: v.profil.seviye })),
     h('nav', { class: 'b-uygulamalar bgn-uygulamalar', 'aria-label': t('bugun.yollarBaslik') },
       [['senaryo', t('ht.merkez.senaryolar'), () => b.git('/senaryolar'), 1, 0],
-        ['telaffuz', t('ht.merkez.telaffuz'), senaryoyaGit, 5, 0],
+        ['telaffuz', t('ht.merkez.telaffuz'), () => b.git('/telaffuz'), 5, 0],
         ['hafiza', t('ht.merkez.hafiza'), () => b.git('/hafiza'), 3, vadesi.length],
         ['gelisim', t('bugun.gelisimKutu.baslik'), () => b.git('/gelisim'), 4, 0],
         ['baglanti', t('ht.merkez.partner'), () => b.git('/kesfet'), 2, 0],

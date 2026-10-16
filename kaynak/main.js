@@ -6,7 +6,7 @@ import './stiller/bilesenler.css';
 import './stiller/tema-koyu.css';
 import './stiller/erisim.css';
 
-import { yukle, al, degistir } from './cekirdek/depo.js';
+import { yukle, al, degistir, bozukKayitVardi } from './cekirdek/depo.js';
 import { kaydet } from './cekirdek/modul-kaydi.js';
 import { baslat, git, aktifEkran } from './cekirdek/yonlendirici.js';
 import { temaBaslat } from './cekirdek/tema.js';
@@ -15,7 +15,8 @@ import { zamanlayiciBaslat } from './cekirdek/zamanlayici.js';
 import { duyur } from './cekirdek/duyuru.js';
 import { t, dilAyarla, tarayiciDili } from './cekirdek/metin.js';
 import { pwaBaslat } from './cekirdek/pwa.js';
-import { sekmeKaydirmaBaslat, ortaDugmeAyarla } from './cekirdek/arayuz.js';
+import { medyaHazirla } from './cekirdek/fotograf.js';
+import { sekmeKaydirmaBaslat, ortaDugmeAyarla, ortaIpucuGoster } from './cekirdek/arayuz.js';
 import { simdiAra } from './cekirdek/zamanlayici.js';
 import { siradaki } from './cekirdek/gunluk.js';
 import { oneriSenaryo } from './cekirdek/oneri.js';
@@ -31,6 +32,7 @@ import senaryolar from './moduller/senaryolar/index.js';
 import hafiza from './moduller/hafiza/index.js';
 import gelisim from './moduller/gelisim/index.js';
 import ayarlar from './moduller/ayarlar/index.js';
+import telaffuz from './moduller/telaffuz/index.js';
 import mesaj from './moduller/mesaj/index.js';
 
 // Bayrakla kapatılan modüller burada listelenir; uygulama diğerleriyle çalışmaya devam eder.
@@ -40,21 +42,33 @@ const MESGUL_EKRANLAR = ['gorusme', 'gelen-arama', 'karsilama'];
 
 function uygulamayiBaslat() {
   yukle();
+
   // Arayüz dili: kullanıcının seçimi, yoksa tarayıcının dili (desteklenmiyorsa İngilizce)
   if (!al().profil.ayarlar.arayuzDili) degistir((v) => { v.profil.ayarlar.arayuzDili = tarayiciDili(); });
   dilAyarla(al().profil.ayarlar.arayuzDili);
   temaBaslat();
-  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar, mesaj]) kaydet(m, KAPALI_MODULLER);
+  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar, mesaj, telaffuz]) kaydet(m, KAPALI_MODULLER);
 
   dinle('arama:geldi', ({ tur }) => {
     if (MESGUL_EKRANLAR.includes(aktifEkran())) return;
     git(`/gelen-arama?tur=${tur}`);
   });
 
+  // v0.13.0 Kayıt güvenliği: yazılamayan değişiklik ve okunamayan eski kayıt kullanıcıya söylenir.
+  let sonYazmaUyarisi = 0;
+  dinle('depo:yazilamadi', () => {
+    if (Date.now() - sonYazmaUyarisi < 60000) return;
+    sonYazmaUyarisi = Date.now();
+    duyur(t('depo.yazilamadi'), 8000);
+  });
+
   window.addEventListener('offline', () => duyur(t('genel.cevrimdisi'), 5000));
   window.addEventListener('online', () => duyur(t('genel.cevrimiciOldu')));
 
   baslat(document.getElementById('uygulama'));
+  if (bozukKayitVardi()) duyur(t('depo.bozukKayit'), 9000);
+  // v0.14.0: fotoğraflar IndexedDB'den arka planda belleğe alınır; ekranlar beklemez. Fotoğraf varsa açık ekran bir kez yenilenir.
+  medyaHazirla().then((yuklendi) => { if (yuklendi) git((location.hash.slice(1) || '/bugun'), {}); });
   zamanlayiciBaslat();
   sekmeKaydirmaBaslat(git);
   // Orta Pratik düğmesi: basılı tutunca hızlı işlemler; "atanabilir" olanlar dokunma kısayolu olarak seçilebilir.
@@ -63,13 +77,14 @@ function uygulamayiBaslat() {
       { kimlik: 'pratik', ikon: 'pratik', ad: t('orta.eylem.pratik'), kisa: t('gezinme.pratik'), atanabilir: true, calistir: () => git('/bugun') },
       { kimlik: 'arama', ikon: 'bildirim', ad: t('orta.eylem.arama'), kisa: t('orta.kisa.arama'), atanabilir: true, calistir: () => simdiAra(siradaki() === 'aksam' ? 'aksam' : 'sabah') },
       { kimlik: 'senaryo', ikon: 'senaryo', ad: t('orta.eylem.senaryo'), kisa: t('orta.kisa.senaryo'), atanabilir: true, calistir: () => git('/senaryolar') },
-      { kimlik: 'telaffuz', ikon: 'telaffuz', ad: t('orta.eylem.telaffuz'), kisa: t('orta.kisa.telaffuz'), atanabilir: true, calistir: () => git(`/gorusme?tur=senaryo&id=${oneriSenaryo().senaryo.kimlik}`) },
+      { kimlik: 'telaffuz', ikon: 'telaffuz', ad: t('orta.eylem.telaffuz'), kisa: t('orta.kisa.telaffuz'), atanabilir: true, calistir: () => git('/telaffuz') },
       { kimlik: 'hafiza', ikon: 'hafiza', ad: t('orta.eylem.hafiza'), calistir: () => git('/hafiza') },
       { kimlik: 'partner', ikon: 'baglanti', ad: t('orta.eylem.partner'), calistir: () => git('/kesfet') },
     ],
     atamaKaydet: (k) => { degistir((v) => { v.profil.ayarlar.ortaDugme = k; }); duyur(t('orta.kaydedildi'), 1800); },
   });
   pwaBaslat();
+  setTimeout(() => ortaIpucuGoster((al().profil.ayarlar.ortaIpucu || 0) < 2, () => degistir((v) => { v.profil.ayarlar.ortaIpucu = (v.profil.ayarlar.ortaIpucu || 0) + 1; })), 1500);
 }
 
 uygulamayiBaslat();

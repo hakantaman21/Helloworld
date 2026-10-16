@@ -2,6 +2,7 @@
 import { t } from './metin.js';
 import { IKON3D } from '../veri/ikon3d.js';
 import { al } from './depo.js';
+import { fotoAdresi } from './fotograf.js';
 
 const SVG_AD_ALANI = 'http://www.w3.org/2000/svg';
 
@@ -209,7 +210,7 @@ function gezinmeKur() {
   const ic = h('div', { class: 'b-gezinme-ic' }, isik);
   GEZINME.forEach((g) => {
     if (!g.orta) {
-      ic.append(h('a', { class: 'b-gezinme-oge', href: '#' + g.yol, 'data-yol': g.yol }, ikon3d(g.ikon, 28), t(g.anahtar)));
+      ic.append(h('a', { class: 'b-gezinme-oge', href: '#' + g.yol, 'data-yol': g.yol }, ikon3d(g.ikon, 28), h('span', { class: 'b-gezinme-ad', 'data-anahtar': g.anahtar }, t(g.anahtar))));
       return;
     }
     let zamanlayici = null;
@@ -246,15 +247,38 @@ export function markaSeridi() {
   return h('div', { class: 'b-marka-serit', role: 'banner' }, logo(18), h('span', { class: 'b-marka-ad' }, t('uygulama.ad')));
 }
 
+// v0.13.0 Basılı tutma ipucu: ilk iki açılışta orta düğmenin üstünde kısa bir balon (gizli hareketi keşfettirir).
+export function ortaIpucuGoster(goster, bitti) {
+  if (!gezinme || gezinme.hidden || !goster) return;
+  const orta = gezinme.querySelector('.b-gezinme-orta');
+  if (!orta) return;
+  const balon = h('span', { class: 'b-orta-balon', role: 'note' }, t('orta.balon'));
+  orta.append(balon);
+  setTimeout(() => { balon.remove(); bitti(); }, 5000);
+}
+
 // Koyu baş bandı: sayfanın ilk yatay bölüm(ler)i koyu bir şeritte durur; sayfa onun altından başlar
 // (kâğıdın en üstüne yazılmış dilekçe gibi görünmez). Renk Ayarlar › Görünüm › Üst bant rengi ile seçilir.
 export function basBant(...cocuklar) {
   return h('div', { class: 'b-bas-bant' }, ...cocuklar);
 }
 
+// v0.13.0 Etiketler her çizimde yenilenir: arayüz dili değişince menü de değişir; orta düğme atanan işi yazar.
+function etiketleriYenile() {
+  gezinme.setAttribute('aria-label', t('gezinme.etiket'));
+  gezinme.querySelectorAll('.b-gezinme-ad').forEach((s) => { s.textContent = t(s.dataset.anahtar); });
+  const atama = (al().profil.ayarlar.ortaDugme) || 'pratik';
+  const eylem = ortaEylemler().find((x) => x.kimlik === atama);
+  const ortaAd = gezinme.querySelector('.b-orta-ad');
+  if (ortaAd) ortaAd.textContent = atama !== 'pratik' && eylem ? (eylem.kisa || eylem.ad) : t('gezinme.pratik');
+  const orta = gezinme.querySelector('.b-gezinme-orta');
+  if (orta) orta.title = t('orta.ipucu');
+}
+
 export function altGezinme(aktifYol) {
   gezinmeKur();
   gezinme.hidden = false;
+  etiketleriYenile();
   const sira = GEZINME.findIndex((g) => g.yol === aktifYol);
   gezinme.querySelectorAll('.b-gezinme-oge').forEach((a) => {
     if (a.dataset.yol === aktifYol) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
@@ -450,7 +474,7 @@ export function kurallarSeridi() {
 // Kullanıcının kendi avatarı: profil fotoğrafı varsa o, yoksa adının baş harfi (altın zemin).
 export function benAvatar(boyut = 44, sinif = '') {
   const p = al().profil;
-  if (p.foto) return h('img', { class: `b-av b-av-foto ${sinif}`, src: p.foto, alt: '', width: boyut, height: boyut, style: `width:${boyut}px;height:${boyut}px` });
+  if (p.foto && fotoAdresi(p.foto)) return h('img', { class: `b-av b-av-foto ${sinif}`, src: fotoAdresi(p.foto), alt: '', width: boyut, height: boyut, style: `width:${boyut}px;height:${boyut}px` });
   return h('span', { class: `b-av b-av-ben ${sinif}`, style: `width:${boyut}px;height:${boyut}px;font-size:${Math.round(boyut * 0.42)}px`, 'aria-hidden': 'true' }, (p.ad || '?').charAt(0).toLocaleUpperCase());
 }
 

@@ -1,0 +1,11 @@
+@layer moduller {
+  .tlf-kart { gap: 12px; }
+  .tlf-cumle { font-size: calc(21px * var(--yazi-olcek)); font-weight: 700; line-height: 1.35; }
+  .tlf-tamam { color: var(--renk-iyi-metin); }
+  .tlf-eksik { color: var(--renk-kotu-metin); text-decoration: underline wavy; text-underline-offset: 4px; }
+  .tlf-sonuc { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 14px; background: var(--renk-yuzey-ikinci); }
+  .tlf-sonuc small { font-size: calc(11px * var(--yazi-olcek)); font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--renk-soluk); }
+  .tlf-not { color: var(--renk-soluk); }
+  .tlf-eylemler { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tlf-eylemler > button { display: inline-flex; align-items: center; gap: 6px; }
+}

@@ -129,6 +129,15 @@ export const demoSaglayici = {
         }
         const dal = (adim.dallar || []).find((d) => iceriyor(metin, d.kelimeler));
         if (dal) parcalar.push(dal.koc);
+        // v0.14.0 Sapma onarımı: kullanıcı soruya cevap vermek yerine kendisi soru sorduysa koç bunu kabul eder
+        // ve AYNI soruyu bir kez yeniden sorar (ilerlemez). Her adımda en çok bir kez. Yanlış alarm riskini düşük tutmak için
+        // konu dışı cevap tahmini yapılmaz (anahtar kelime eşleşmesi buna yetecek kadar güvenilir değil).
+        const beklenen = (adim.dallar || []).length > 0;
+        const kendiSorusu = /\?\s*$/.test(metin.trim());
+        if (!dal && !bulunan.length && beklenen && !(durum.sapma || {})[durum.i] && kendiSorusu && !parcalar.length) {
+          durum.sapma = { ...(durum.sapma || {}), [durum.i]: true };
+          return { metin: `${kendiSorusu ? kocDili.sapma.soru : kocDili.sapma.konu} ${doldur(adim.koc)}`, bitti: false, ceviriler };
+        }
         if (!bulunan.length && !dal && !parcalar.length) parcalar.push(rastgele(kocDili.genelOvgu));
 
         durum.i += 1;

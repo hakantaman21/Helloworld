@@ -8,7 +8,7 @@ import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { kisaTarih } from '../../cekirdek/zaman.js';
 import { oneriSenaryo } from '../../cekirdek/oneri.js';
-import { testModuAcik, testSohbetOzetleri, aktiflik, enIyiEslesmeler, saatFarki, YAKIN_SAAT_FARKI } from '../../cekirdek/test-modu.js';
+import { testModuAcik, testSohbetOzetleri, aktiflik, enIyiEslesmeler, saatFarki, YAKIN_SAAT_FARKI, okunmamis, uyumDuzeyi } from '../../cekirdek/test-modu.js';
 
 const SON_KONUSMA_SAYISI = 30;
 
@@ -20,7 +20,7 @@ const HIZLI = [
   ['yz', 'koc', null, 4],
   ['baglanti', 'partner', '/kesfet', 5],
   ['anlar', 'anlar', '/dil-anlari', 2],
-  ['telaffuz', 'telaffuz', null, 5],
+  ['telaffuz', 'telaffuz', '/telaffuz', 5],
   ['kitap', 'defter', '/gelisim?sekme=profil', 6],
   ['kupa', 'karne', '/gelisim?sekme=gelisim', 2],
   ['pratik', 'odalar', '/bugun', 1],
@@ -105,7 +105,8 @@ function ciz(kok, b) {
       h('span', { class: 'b-liste-alt' }, t('sohbetler.yzKartAlt')),
     ));
 
-  const gecmisSatiri = (g) => h('button', { type: 'button', class: 'b-liste-satir', onClick: kocaGit },
+  // v0.13.0: geçmiş görüşmeye dokununca yeni senaryo değil, O görüşmenin karnesi açılır.
+  const gecmisSatiri = (g) => h('button', { type: 'button', class: 'b-liste-satir', onClick: () => b.git(`/karne?i=${gecmis.indexOf(g)}`) },
     h('span', { class: 'shb-av-yz shb-av-gecmis', 'aria-hidden': 'true' }, ikon3d('senaryo', 30)),
     h('span', { class: 'b-liste-ic' },
       h('span', { class: 'b-liste-ust' }, h('b', null, yerel(g.baslik)), h('span', { class: 'b-liste-zaman' }, kisaTarih(g.tarih))),
@@ -117,7 +118,7 @@ function ciz(kok, b) {
     return h('button', { type: 'button', class: 'b-liste-satir shb-kisi', onClick: () => b.git(`/mesaj?k=${o.profil.kimlik}`) },
       testAvatar(o.profil, 64, { cevrimici: a.cevrimici }),
       h('span', { class: 'b-liste-ic shb-kisi-ic' },
-        h('span', { class: 'b-liste-ust' }, h('b', null, o.profil.ad), testEtiketi(), h('span', { class: 'b-liste-zaman' }, goreliZaman(o.son.zaman))),
+        h('span', { class: 'b-liste-ust' }, h('b', null, o.profil.ad), testEtiketi(), okunmamis(o) ? h('span', { class: 'shb-okunmamis', 'aria-label': t('ht.okunmamis') }) : null, h('span', { class: 'b-liste-zaman' }, goreliZaman(o.son.zaman))),
         h('span', { class: 'shb-kisi-dil' }, dilCifti(o.profil.anaDil, o.profil.ogrenilenDil, o.profil.seviye), a.cevrimici ? t('ht.cevrimiciSimdi') : yerel(o.profil.ulke).split(' · ')[0]),
         h('span', { class: 'b-liste-alt' }, o.son.kim === 'ben' ? `${t('ht.sen')}: ` : '', o.son.metin),
       ));
@@ -130,7 +131,7 @@ function ciz(kok, b) {
     const insanGoster = filtre === 'tum' || filtre === 'insan' || filtre === 'cevrimici' || kisiSuzgeci;
     const testler = testOzet.filter((o) => ara(o.profil.ad) && (filtre !== 'cevrimici' || aktiflik(o.profil).cevrimici)
       && (filtre !== 'saat' || saatFarki(o.profil) <= YAKIN_SAAT_FARKI)
-      && (filtre !== 'okunmamis' || o.son.kim !== 'ben')
+      && (filtre !== 'okunmamis' || okunmamis(o))
       && (!filtre.startsWith('dil-') || o.profil.anaDil === filtre.slice(4)));
     const gecmisler = yzGoster ? gecmis.filter((g) => ara(yerel(g.baslik))) : [];
     const kocVar = yzGoster && ara(t('koc.ad'));
@@ -142,7 +143,7 @@ function ciz(kok, b) {
       oneri && !testOzet.some((o) => o.profil.kimlik === oneri.profil.kimlik) ? h('button', { type: 'button', class: 'b-liste-satir shb-oneri', onClick: () => b.git(`/kisi?k=${oneri.profil.kimlik}`) },
         testAvatar(oneri.profil, 52, { cevrimici: aktiflik(oneri.profil).cevrimici }),
         h('span', { class: 'b-liste-ic' },
-          h('span', { class: 'b-liste-ust' }, h('b', null, oneri.profil.ad), testEtiketi(), h('span', { class: 'b-etiket-hap b-etiket-hap-iyi shb-uyum' }, t('ht.uyum', { n: oneri.puan }))),
+          h('span', { class: 'b-liste-ust' }, h('b', null, oneri.profil.ad), testEtiketi(), h('span', { class: 'b-etiket-hap b-etiket-hap-iyi shb-uyum' }, t(`ht.uyumDuzey.${uyumDuzeyi(oneri.puan)}`))),
           h('span', { class: 'b-liste-alt shb-oneri-alt' }, t('ht.oneriSatir')),
         )) : null,
       !kocVar && !testler.length && !gecmisler.length

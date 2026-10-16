@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.12.2 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.3'te (16.10.2026, PR #15). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.14.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.12.2'de (16.10.2026, PR #16). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +16,47 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.14.0
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan: "Dediklerine katılıyorum. Yapmadıklarını da kota bitmeden tamamla." (v0.13.0'daki "yapılmayanlar" listesi + Bağlan sadeleştirme önerim.)
+- **Ne:**
+  - Bağlan: üst sekmeler 4 (tum/uygun/cevrimici/yeni); `HIZLI_SUZGECLER` + ciddi, saat; `.kft-etkin-hap` adlı süzgeç hapları; `ayarlar.kesfetSecimi` ile kalıcı seçim (`secimiOku/secimiYaz`).
+  - `test-modu.uyumDuzeyi(puan)` → cok/iyi/olasi; yüzde gösterimi kalktı (sohbet önerisi, eşleşme kartı, pano, kişi sayfası).
+  - Yeni modül `moduller/telaffuz` (önek `tlf`): `/telaffuz`. Kaynak: senaryo ipucu cümleleri (seviye/tümü) ya da Hata Hafızası telaffuz öğeleri. Sözcük karşılaştırması sıra gözetmez ve puan değildir.
+  - `ses-hatti.ingilizceSesler()`, `ayarlar.kocSesi`; `soyle` seçili sesi ve dilini kullanır.
+  - `demo-koc`: karşı soru (`?` ile biten, dal/düzeltme yok) → `kocDili.sapma.soru` + aynı adım, adım başına bir kez. Konu dışı tahmini bilerek yok.
+  - Senaryo satırı: `~(adım+2) dk` ve `gorev.aciklama` başarı ölçütü olarak.
+  - `cekirdek/fotograf.js`: IndexedDB `helloworld-medya/foto`; profilde `mdy:<id>`; `medyaHazirla()` arka planda (ekranlar beklemez; fotoğraf yüklenince açık ekran bir kez yeniden çizilir — dosyadan açılışta IndexedDB geç yanıt verebildiği için; karşılaştırma aracı bu gecikmeyi yakaladı); `fotoAdresi(ref)`; yedekte `medya` alanı; `medyaSil()`.
+  - Yazı ölçeği: tüm `font-size: Npx` → `calc(Npx * var(--yazi-olcek))`; `data-yazi="buyuk"` → 1.12; zoom kaldırıldı. Yeni CSS'te de bu biçim kullanılmalı.
+  - Koyu tema: `tema-koyu.css` yalnız `[data-tema="koyu"]`; `tema.js` sistem temasını matchMedia ile çözer; `index.html` başında erken tema betiği.
+  - `araclar/davranis-sinama.py` (isteğe bağlı, Playwright).
+- **Hâlâ yapılmayan (arka uç/sağlayıcı kararı):** canlı yapay zekâ, gerçek hesap/mesajlaşma, sunucu tarafı engelle/şikâyet/moderasyon, çok kişili odalar.
+- **Şema:** 15. **Durum:** `deneme` dalında; canlıya alma Hakan onayıyla.
+
+## v0.13.0
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan üç dış değerlendirmeyi (ChatGPT, Gemini, Grok; v0.12.1 tek dosyası üzerinden) paylaştı: "Mimari ve vizyonumuza uyanları uyarla, yapıp yapmadıklarını listele."
+- **Yapılanlar:**
+  - Veri: `depo.sifirla` kk:veri + kk:yedek + kk:bozuk siler; `degistir` yazma başarısızsa `depo:yazilamadi` yayınlar (main.js dakikada en çok bir uyarı); `yukle` bozuk JSON'u kk:bozuk'a saklar ve duyurur; `iceAktar(metin)` doğrulamalı geri yükleme (Ayarlar › Gizlilik).
+  - Düzeltme motoru: `gecmis-zaman` present perfect / since / ever / never / already / just içeren yan cümleye dokunmaz; yeni kurallar `yas-kalibi`, `sayilamaz` (+ tekrar soruları, tr/en açıklama). `koc-dili.genelOvgu` nötr onay.
+  - Bağlan: `suzgecPenceresi(..., say)` sayıyı `suz(testProfilleri(), durum, f)` ile hesaplar; modül düzeyi `kayitli` durum/süzgeç; boş sonuçta "Süzgeçleri temizle".
+  - Yönlendirici: adres başına kaydırma konumu; geri dönüşte geri yüklenir.
+  - Sohbet: `okunduIsaretle`/`okunmamis` (test.okundu), okunmamış noktası; geçmiş görüşme → `/karne?i=N` (karne `b.p.i` destekler).
+  - Ayarlar: öğrenilen dil yalnız `en` (diğerleri disabled "yakında"); Görünüm'de `details.ayr-gelismis`, "Görünümü varsayılana döndür", `ozelIsaretle()`.
+  - Alt menü: `etiketleriYenile()` (dil değişimi + orta düğme atanan işin kısa adı); `ortaIpucuGoster` ilk iki açılış.
+  - Hata Hafızası metin araması; duyuru süresi metin uzunluğuna göre; en.js çift virgül.
+- **Yapılmayanlar ve nedeni:**
+  - Bağlan sekmelerini 4'e indirmek, cinsiyeti üstten kaldırmak, marka şeridi ya da bandı kaldırmak, renk paketlerini dondurmak (Grok/ChatGPT) — Hakan bunları bu gün açıkça istedi; Hakan'ın kararı olmadan geri alınmadı. Öneri olarak Hakan'a sunuldu.
+  - IndexedDB'ye fotoğraf taşıma, `zoom` yerine rem ölçek, koyu tema CSS tekrarını azaltma, kaydırınca küçülen üst bant — doğru ama geniş kapsamlı; ayrı sürümde.
+  - Canlı yapay zekâ, serbest konuşma/sapma dalları, bağımsız telaffuz akışı, senaryoya amaç/süre/başarı ölçütü alanları, koç ses seçimi — ürün yol haritası (arka uç + sağlayıcı kararı bekliyor).
+  - Gerçek hesap, mesajlaşma, moderasyon, sunucu tarafı engelle/şikâyet — arka uç kararı bekliyor (Supabase/Firebase).
+  - "N süzgeç etkin" şeridinde süzgeç adlarının tek tek gösterilmesi, eşleşme yüzdesini kaldırma — küçük; sonraki tur.
+  - Dört durum sözleşmesinin davranış testleri — robot genişletmesi gerekir; sonraki tur.
+- **Şema:** 14 (`ayarlar.ortaIpucu`, `test.okundu`).
+- **Durum:** `deneme` dalında; canlıya alma Hakan onayıyla.
 
 ## v0.12.2
 

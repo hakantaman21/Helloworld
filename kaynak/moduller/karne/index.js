@@ -49,7 +49,11 @@ function duzeltmeKarti(d, kaldir) {
 
 function ciz(kok, b) {
   const v = al();
-  const g = v.sonGorusme;
+  // v0.13.0: ?i=N ile geçmişteki N. görüşmenin karnesi açılır (Sohbetler'deki geçmiş satırı buraya gelir).
+  const gSira = b.p.i !== undefined && (v.gorusmeler || [])[Number(b.p.i)] ? Number(b.p.i) : -1;
+  const g = gSira >= 0 ? v.gorusmeler[gSira] : v.sonGorusme;
+  // Gösterilen görüşmenin kaydı (son görüşme ya da geçmişten seçilen); itiraz ve liste hep bunu kullanır.
+  const kayit = (x) => (gSira >= 0 ? x.gorusmeler[gSira] : x.sonGorusme);
   kok.classList.add('krn-ekran');
   if (!g) {
     yerlestir(kok, 
@@ -67,13 +71,14 @@ function ciz(kok, b) {
 
   const kaldir = (d) => {
     degistir((x) => {
-      x.sonGorusme.duzeltmeler = x.sonGorusme.duzeltmeler.filter((y) => !(y.kuralId === d.kuralId && y.kullanici === d.kullanici));
+      const k = kayit(x);
+      k.duzeltmeler = (k.duzeltmeler || []).filter((y) => !(y.kuralId === d.kuralId && y.kullanici === d.kullanici));
     });
     duzeltmeleriCiz();
   };
 
   function duzeltmeleriCiz() {
-    const liste = al().sonGorusme.duzeltmeler;
+    const liste = kayit(al()).duzeltmeler || [];
     if (!liste.length) {
       yerlestir(duzeltmeListesi, h('div', { class: 'b-kart b-kart-satir' }, h('span', { class: 'b-ikon-daire b-ikon-daire-iyi' }, ikon('onay', 18, 2.5)), t('karne.duzeltmeYok')));
       tumuDugmesi.hidden = true;

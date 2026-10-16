@@ -1,3 +1,31 @@
+## 0.14.0 — 16.10.2026 · Değerlendirmelerden kalanların tamamı
+
+- Bağlan sadeleşti: üstte yalnız Tümü · Sana uygun · Çevrimiçi · Yeni. Ciddi öğrenen, yakın saat dilimi, karşılıklı, seviye ve cinsiyet süzgeç penceresinde.
+- Etkin süzgeçler adlarıyla görünür ve tek tek × ile kaldırılır; Bağlan seçimi uygulama kapanıp açılınca da hatırlanır.
+- "%93 uyum" yerine sözlü düzey: Çok uygun / Uygun / Olası eşleşme (puan bilimsel bir olasılık değil, kural toplamı).
+- Yeni ekran: Telaffuz çalışması — dinle, yavaş dinle, söyle, tanınan sözcükleri karşılaştır (tanınmayanlar altı çizili), yeniden dene, deftere kaydet. Puan verilmez; ses tanıma telaffuz puanı değildir. Orta düğmenin "Telaffuz" kısayolu ve Pratik/Profil kısayolları buraya gider.
+- Koç sesi seçimi (Ayarlar › Koç ve pratik): cihazdaki İngilizce sesler (ABD, İngiltere, Avustralya…), seçince örnek cümle çalar.
+- Koç, kullanıcı soruya cevap yerine kendi sorusunu sorarsa bunu kabul edip aynı soruyu bir kez yeniden soruyor.
+- Senaryo satırlarında tahmini süre ve başarı ölçütü (görev).
+- Fotoğraflar artık tarayıcının IndexedDB deposunda (localStorage kota sorunu yok); eski fotoğraflar açılışta taşınır; yedek dosyası fotoğrafları da içerir; "Verileri sil" fotoğrafları da siler.
+- "Büyük yazı" artık ekranı zoom ile büyütmüyor; tüm yazı boyutları ölçeklenir (alt menü ve yapışkan başlık kaymaz).
+- Koyu tema tek blokta; "Sistem" teması sayfa açılmadan önce belirlenir (koyu cihazda açık ekran yanıp sönmez).
+- Geliştirici: araclar/davranis-sinama.py — her ekranı boş veri ve test moduyla açar, hata/boş ekran/çevrimdışı duyurusunu denetler.
+- Şema 15: ayarlar.kocSesi, ayarlar.kesfetSecimi.
+
+## 0.13.0 — 16.10.2026 · Güvenilirlik sürümü (ChatGPT, Gemini ve Grok değerlendirmelerinden)
+
+- Veri güvenliği: "Verileri sil" artık yedek kopyaları da siliyor; kayıt yazılamazsa ekran "kaydedilemedi" diyor; bozuk eski kayıt sessizce silinmiyor; indirilen yedek Ayarlar'dan geri yüklenebiliyor.
+- Doğru öğretme: "I have not seen him since yesterday" gibi doğru present perfect cümleler artık bozulmuyor; iki yeni kesin kural (yaş kalıbı "I am 20 years old", sayılamayan isimler "information/advice/homework"); kural hata bulamayınca koç övmüyor, nötr onaylıyor.
+- Bağlan: süzgeç penceresindeki "N kişiyi göster" sayısı artık listeyle aynı; sekme, dil ve süzgeç profilden dönünce korunuyor; sonuç yoksa "Süzgeçleri temizle".
+- Geri dönünce sayfa kaldığın kaydırma konumunda açılıyor.
+- Sohbet: "Okunmamış" gerçek okunma durumuna göre (sohbet açılınca okundu); okunmamışta nokta; geçmiş yapay zekâ görüşmesine dokununca o görüşmenin karnesi açılıyor.
+- Öğrendiğim dil: şimdilik yalnız İngilizce seçilebiliyor, diğerleri "yakında" (koç, sözlük ve düzeltme yalnız İngilizce).
+- Alt menü: arayüz dili değişince etiketler de değişiyor; orta düğme atanan işin adını yazıyor; ilk iki açılışta "Basılı tut: hızlı işlemler" ipucu.
+- Ayarlar › Görünüm: renkler "Gelişmiş özelleştirme" altında, "Görünümü varsayılana döndür", elle değişince "Özel görünüm" işareti ve paket seçimi kalkıyor.
+- Hata Hafızası'nda arama; uzun bildirimler okunacak kadar ekranda kalıyor; İngilizce metindeki çift virgül düzeltildi.
+- Şema 14: ayarlar.ortaIpucu, test.okundu.
+
 ## 0.12.2 — 16.10.2026 · Uygulamanın adı: helloworld
 
 - Uygulamanın görünen adı "helloworld" oldu (marka şeridi, sekme başlığı, ana ekrana ekleme adı, davet mesajı; Türkçe ve İngilizce).

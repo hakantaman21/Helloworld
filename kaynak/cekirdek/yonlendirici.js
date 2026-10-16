@@ -10,6 +10,8 @@ let kok = null;
 let aktifTemizle = null;
 let aktifEkranId = null;
 const gecmis = [];
+const konumlar = new Map();
+let aktifAdres = null;
 
 function coz() {
   const ham = location.hash.slice(1) || '/bugun';
@@ -34,9 +36,13 @@ function ciz() {
     return;
   }
 
+  // v0.13.0: ayrılınan sayfanın kaydırma konumu saklanır; geri dönülünce aynı yere gelinir (liste bağlamı kaybolmaz).
+  if (aktifAdres) konumlar.set(aktifAdres, kok.scrollTop);
   // Geçmiş: tarayıcıda geri gidildiyse son kaydı düşür, değilse ekle.
-  if (gecmis.length > 1 && gecmis[gecmis.length - 2] === adres) gecmis.pop();
+  const geriDonus = gecmis.length > 1 && gecmis[gecmis.length - 2] === adres;
+  if (geriDonus) gecmis.pop();
   else if (gecmis[gecmis.length - 1] !== adres) gecmis.push(adres);
+  aktifAdres = adres;
 
   if (aktifTemizle) {
     try { aktifTemizle(); } catch (hata) { console.error(hata); }
@@ -57,7 +63,9 @@ function ciz() {
     console.error('[yonlendirici]', id, hata);
     kap.replaceChildren(h('div', { class: 'b-durum', role: 'alert' }, t('genel.hata')));
   }
+  const konum = geriDonus ? konumlar.get(adres) : 0;
   kok.scrollTo(0, 0);
+  if (konum) requestAnimationFrame(() => kok.scrollTo(0, konum));
   kap.focus({ preventScroll: true });
   yayinla('ekran:degisti', { id, parametreler });
 }

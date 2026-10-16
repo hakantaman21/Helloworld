@@ -2,6 +2,7 @@
 // Şimdilik tarayıcının kendi ses tanıma ve seslendirme motoru kullanılır (en iyi Chrome'da).
 // Sunucu bağlanınca bu dosyanın arkasına canlı sesli AI bağlantısı takılır; ekranlar değişmez.
 import { izinDurumu } from '../izin.js';
+import { al } from '../depo.js';
 
 const TanimaSinifi = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -12,8 +13,17 @@ export const destek = {
 
 const HIZLAR = { yavas: 0.8, normal: 1, hizli: 1.15 };
 
+// v0.14.0 Koç sesi seçimi (Ayarlar › Koç ve pratik): cihazdaki İngilizce sesler (ABD, İngiltere, Avustralya…).
+export function ingilizceSesler() {
+  if (!destek.sentez) return [];
+  return window.speechSynthesis.getVoices().filter((s) => /^en/i.test(s.lang)).map((s) => ({ ad: s.name, dil: s.lang }));
+}
+
 function sesSec() {
   const sesler = window.speechSynthesis.getVoices();
+  const secilen = (((al() || {}).profil || {}).ayarlar || {}).kocSesi;
+  const tercih = secilen ? sesler.find((s) => s.name === secilen) : null;
+  if (tercih) return tercih;
   return (
     sesler.find((s) => /^en-US/i.test(s.lang) && /Google|Samantha|Natural|Aria|Jenny/i.test(s.name)) ||
     sesler.find((s) => /^en-(US|GB)/i.test(s.lang)) ||
@@ -34,7 +44,7 @@ export function soyle(metin, hiz = 'normal') {
     const soz = new SpeechSynthesisUtterance(metin);
     soz.lang = 'en-US';
     const ses = sesSec();
-    if (ses) soz.voice = ses;
+    if (ses) { soz.voice = ses; soz.lang = ses.lang; }
     soz.rate = HIZLAR[hiz] || 1;
     let bitti = false;
     const bitir = () => { if (!bitti) { bitti = true; coz(); } };

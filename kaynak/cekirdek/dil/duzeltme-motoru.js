@@ -53,6 +53,10 @@ export const KURALLAR = [
     uygula(cumle) {
       return yanCumlelerde(cumle, (c) => {
       if (!GECMIS_ISARETI.test(c)) return c;
+      // v0.13.0: "since/for … ever/never/already/just" ya da have/has + ortaç (present perfect) varsa zamana dokunma.
+      // Örnek: "I have not seen him since yesterday." doğrudur; "had" yapmak yanlış öğretir.
+      if (/\b(since|ever|never|already|yet|just)\b/i.test(c)) return c;
+      if (new RegExp(`\\b(have|has|haven${AP}t|hasn${AP}t)(\\s+not)?\\s+(been|\\w+ed|\\w+en|seen|done|gone|had|made|got|known|met|bought|left|lost|told|found|come|become|run|sent|spent|heard|said|read|written|eaten)\\b`, 'i').test(c)) return c;
       const desen = new RegExp(`(?<!\\b(?:did|do|does|didn${AP}t|can|will|would|could|should|must|might|let|to)\\s)\\b${OZNE}\\s+(\\w+)\\b`, 'gi');
       return c.replace(desen, (tum, ozne, fiil) => {
         const gecmis = GECMIS[fiil.toLowerCase()];
@@ -117,6 +121,26 @@ export const KURALLAR = [
     aciklama: 'duzeltme.moreBetter',
     uygula(c) {
       return c.replace(/\bmore (better|worse|bigger|smaller|cheaper|easier|faster|older|younger|bigger)\b/gi, '$1');
+    },
+  },
+  {
+    // v0.13.0 Türkçeden gelen "20 yaşım var" kalıbı. Yalnız "have N years old" biçimi düzeltilir (yüksek kesinlik);
+    // "I have 20 years of experience" gibi doğru cümlelere dokunulmaz.
+    id: 'yas-kalibi',
+    aciklama: 'duzeltme.yasKalibi',
+    uygula(c) {
+      return c.replace(/\b(I|you|we|they|he|she)\s+(have|has)\s+(\d{1,3})\s+years?\s+old\b/gi, (tum, ozne, _v, n) => {
+        const be = /^I$/i.test(ozne) ? 'am' : /^(he|she)$/i.test(ozne) ? 'is' : 'are';
+        return `${ozne} ${be} ${n} years old`;
+      });
+    },
+  },
+  {
+    // v0.13.0 Sayılamayan isimler: Türkçede çoğul olabilen "bilgiler, tavsiyeler, ev ödevleri" İngilizcede tekildir.
+    id: 'sayilamaz',
+    aciklama: 'duzeltme.sayilamaz',
+    uygula(c) {
+      return c.replace(/\b(informations|advices|furnitures|homeworks|knowledges|equipments)\b/gi, (k) => k.slice(0, -1));
     },
   },
   {
