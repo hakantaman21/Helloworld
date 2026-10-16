@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.14.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.12.2'de (16.10.2026, PR #16). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.14.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.14.0'da (16.10.2026, PR #17). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -33,7 +33,7 @@
   - Koyu tema: `tema-koyu.css` yalnız `[data-tema="koyu"]`; `tema.js` sistem temasını matchMedia ile çözer; `index.html` başında erken tema betiği.
   - `araclar/davranis-sinama.py` (isteğe bağlı, Playwright).
 - **Hâlâ yapılmayan (arka uç/sağlayıcı kararı):** canlı yapay zekâ, gerçek hesap/mesajlaşma, sunucu tarafı engelle/şikâyet/moderasyon, çok kişili odalar.
-- **Şema:** 15. **Durum:** `deneme` dalında; canlıya alma Hakan onayıyla.
+- **Şema:** 15. **Durum:** canlıda (PR #17, Hakan onayı, 16.10.2026).
 
 ## v0.13.0
 
