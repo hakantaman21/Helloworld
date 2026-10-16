@@ -10,6 +10,7 @@ import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { kelimeFarki } from '../../cekirdek/dil/fark.js';
 import { cumleKayitli, cumleKaydetDegistir } from '../../cekirdek/cumle-defteri.js';
+import { fotoAdresi, fotograflarEkle } from '../../cekirdek/fotograf.js';
 import { destek, soyle } from '../../cekirdek/ses/ses-hatti.js';
 import { testModuAcik, testModuAyarla, testAnlari, anBegen, anBegenildi, anYorumlari, anYorumEkle, anDuzeltmesi, anDuzelt, anPaylas, anOtomatikYorum, testProfiliHam, testSikayet, takipte, takipDegistir, eslesme, aktiflik, saatFarki, YAKIN_SAAT_FARKI } from '../../cekirdek/test-modu.js';
 
@@ -76,6 +77,7 @@ function ciz(kok, b) {
         y.profil ? h('button', { type: 'button', class: 'anl-menu', 'aria-label': t('test.sikayetEt'), title: t('test.sikayetEt'), onClick: () => sikayet(an, y) }, ikon('nokta3', 20)) : null,
       ),
       h('p', { class: 'anl-metin' }, an.etiket ? h('span', { class: 'anl-etiket' }, `#${yerel(an.etiket)} `) : null, an.metin),
+      (an.fotolar || []).length ? fotoIzgarasi(an.fotolar) : null,
       an.gorsel ? h('figure', { class: `b-gorsel b-kutu-${an.gorsel.kutu} anl-gorsel` }, ikon3d(an.gorsel.ikon, 64), h('figcaption', { class: 'b-gorsel-yazi' }, yerel(an.gorsel.yazi))) : null,
       duz ? h('div', { class: 'anl-duzeltme' }, h('span', { class: 'anl-duzeltme-baslik' }, ikon('onay', 16), t('anlar.seninDuzeltmen')), farkCiz(kelimeFarki(duz.kaynak, duz.dogru))) : null,
       h('div', { class: 'anl-eylemler', role: 'group', 'aria-label': t('anlar.eylemler') },
@@ -121,11 +123,21 @@ function ciz(kok, b) {
     duyur(t('test.sikayetAlindi'), 4000);
   }
 
+  // v0.15.0 HelloTalk gibi çoklu fotoğraf: 1 büyük, 2 yan yana, 3–4 ikişerli ızgara, 4'ten fazlası "+N" ile.
+  function fotoIzgarasi(fotolar) {
+    const gorunen = fotolar.slice(0, 4);
+    const fazla = fotolar.length - gorunen.length;
+    return h('div', { class: `anl-fotolar anl-fotolar-${Math.min(fotolar.length, 4)}` },
+      gorunen.map((f, i) => h('span', { class: 'anl-foto' }, h('img', { src: fotoAdresi(f), alt: '', loading: 'lazy' }),
+        i === 3 && fazla > 0 ? h('span', { class: 'anl-foto-fazla' }, `+${fazla}`) : null)));
+  }
+  let seciliFotolar = [];
   const paylasGirdi = h('textarea', { class: 'b-girdi anl-paylas-girdi', rows: 3, maxlength: 500, placeholder: t('anlar.paylasOrnek'), 'aria-label': t('anlar.paylasBaslik') });
   function paylas() {
     const v = paylasGirdi.value.trim();
     if (!v) { paylasGirdi.focus(); return; }
-    const kimlik = anPaylas(v);
+    const kimlik = anPaylas(v, seciliFotolar);
+    seciliFotolar = [];
     paylasGirdi.value = '';
     yaziyor = false;
     paylasCiz();
@@ -139,8 +151,13 @@ function ciz(kok, b) {
     yerlestir(paylasAlani, yaziyor
       ? h('section', { class: 'anl-paylas', 'aria-label': t('anlar.paylasBaslik') },
         paylasGirdi,
+        seciliFotolar.length ? fotoIzgarasi(seciliFotolar) : null,
+        h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve anl-foto-ekle', onClick: async () => {
+          const yeni = await fotograflarEkle(9 - seciliFotolar.length);
+          if (yeni.length) { seciliFotolar = [...seciliFotolar, ...yeni].slice(0, 9); paylasCiz(); }
+        } }, ikon('kamera', 18), seciliFotolar.length ? t('anlar.fotoSayisi', { n: seciliFotolar.length }) : t('anlar.fotoEkle')),
         h('div', { class: 'anl-paylas-eylem' },
-          h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => { yaziyor = false; paylasCiz(); } }, t('genel.vazgec')),
+          h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => { yaziyor = false; seciliFotolar = []; paylasCiz(); } }, t('genel.vazgec')),
           h('button', { type: 'button', class: 'b-dugme b-dugme-ana', onClick: paylas }, ikon('paylas', 18), t('anlar.paylas')),
         ))
       : h('button', { type: 'button', class: 'anl-paylas-kapali', onClick: () => { yaziyor = true; paylasCiz(); paylasGirdi.focus(); } },

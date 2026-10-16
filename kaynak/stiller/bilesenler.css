@@ -766,3 +766,47 @@
   .b-orta-balon::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -7px; border: 7px solid transparent; border-top-color: var(--renk-gece); }
   @keyframes b-balon-gir { from { opacity: 0; transform: translate(-50%, 6px); } to { opacity: 1; transform: translate(-50%, 0); } }
 }
+
+/* ===== v0.15.0 Marka bandı sayfa başlığına değer, logo solda; bant çizgisiz hafif kabartma; kişi kartları çizgisiz; kapak resimleri ===== */
+@layer bilesenler {
+  .b-marka-serit { justify-content: flex-start; min-height: 30px; padding: 6px var(--bosluk-4) 4px; border-bottom: 0; background: var(--renk-bant-1); color: var(--renk-gece-soluk); }
+  .b-marka-serit .b-marka-ad { color: var(--renk-gece-metin); }
+  /* Bant, marka bandının hemen altından başlar (arada boşluk yok); çevresinde çizgi yok, yalnız hafif kabartma */
+  .b-bas-bant, :root[data-bant="sayfa"] .b-bas-bant { margin-top: 0; border: 0; border-radius: 0 0 24px 24px; box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--renk-gece-metin) 8%, transparent), 0 8px 18px var(--renk-golge), 0 2px 0 color-mix(in srgb, var(--renk-gece) 35%, transparent); }
+  .b-marka-serit + .b-bas-bant, .b-marka-serit + .b-ht-ust { margin-top: 0; }
+  .b-marka-serit:has(+ .b-bas-bant) { margin-bottom: calc(var(--bosluk-3) * -1); }
+  /* Kişi kartları (Sohbet, Bağlan): renkli ışık çizgisi yok; yalnız hafif kabartma */
+  .b-ekran .b-liste-satir { box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 -2px 0 var(--renk-kart-alt-golge), 0 6px 14px var(--renk-golge); }
+
+  /* Kapak resimleri: sistem kapakları (6) — kişi kartında ve kendi profilinde */
+  .b-kapak { background-size: cover; background-position: center; }
+  .b-kapak-1 { --kapak: radial-gradient(circle, color-mix(in srgb, var(--renk-gece-metin) 16%, transparent) 1.2px, transparent 1.6px) 0 0 / 12px 12px, radial-gradient(80% 140% at 10% 0%, var(--renk-sayfa-yesil), transparent 60%), linear-gradient(140deg, var(--renk-bant-yesil-2), var(--renk-bant-yesil)); background: var(--kapak); }
+  .b-kapak-2 { --kapak: repeating-linear-gradient(115deg, color-mix(in srgb, var(--renk-gece-metin) 7%, transparent) 0 2px, transparent 2px 18px), radial-gradient(90% 140% at 90% 0%, var(--renk-sayfa-mavi), transparent 60%), linear-gradient(160deg, var(--renk-bant-gece-2), var(--renk-bant-gece)); background: var(--kapak); }
+  .b-kapak-3 { --kapak: radial-gradient(60% 120% at 20% 100%, var(--renk-sayfa-kirmizi), transparent 65%), radial-gradient(60% 120% at 85% 0%, var(--renk-sayfa-sari), transparent 60%), linear-gradient(160deg, var(--renk-bant-bordo-2), var(--renk-bant-bordo)); background: var(--kapak); }
+  .b-kapak-4 { --kapak: radial-gradient(circle at 75% 35%, color-mix(in srgb, var(--renk-gece-vurgu) 70%, transparent) 0 18px, transparent 19px), radial-gradient(90% 140% at 0% 100%, var(--renk-sayfa-mor), transparent 60%), linear-gradient(160deg, var(--renk-bant-mor-2), var(--renk-bant-mor)); background: var(--kapak); }
+  .b-kapak-5 { --kapak: repeating-radial-gradient(circle at 0% 100%, color-mix(in srgb, var(--renk-gece-metin) 8%, transparent) 0 2px, transparent 2px 22px), radial-gradient(80% 140% at 100% 0%, var(--renk-gezinme-turkuaz), transparent 60%), linear-gradient(160deg, var(--renk-bant-antrasit-2), var(--renk-bant-antrasit)); background: var(--kapak); }
+  .b-kapak-6 { --kapak: conic-gradient(from 200deg at 50% 120%, var(--renk-sayfa-yesil), var(--renk-sayfa-mavi), var(--renk-sayfa-mor), var(--renk-sayfa-kirmizi), var(--renk-sayfa-sari), var(--renk-sayfa-yesil)); background: var(--kapak); }
+  .b-kapak-foto { background: var(--renk-bant-1); }
+  .b-kapak-foto > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+}
+
+@layer bilesenler {
+  /* v0.15.0 Süzgeç penceresi: yaş/cinsiyet bantları ve Detaylı karoları daha sık; çok öğeli gruplar dokununca açılır. */
+
+  .b-alt-pencere .b-karo { min-height: 48px; padding: 5px 4px; border-radius: 12px; }
+  .b-alt-pencere .b-karo-kisa { min-height: 38px; }
+  .b-alt-pencere .b-karolar { gap: 6px; }
+  .b-alt-pencere .b-platform { padding: 8px 10px; }
+  .b-alt-pencere .b-platform-sikisik { padding: 6px 12px; }
+  .b-alt-pencere .b-platform-sikisik .b-aralik { gap: 0; }
+  .b-alt-pencere .b-platform-sikisik .b-aralik-ray { height: 34px; }
+  .b-alt-pencere .b-platform-sikisik .b-grup-etiket { margin: 0 0 4px; }
+  .b-alt-pencere .b-platform-sikisik .b-karo-kisa { min-height: 34px; }
+  .b-katla > .b-katla-ust { display: flex; align-items: center; gap: 8px; min-height: 40px; cursor: pointer; list-style: none; }
+  .b-katla > .b-katla-ust::-webkit-details-marker { display: none; }
+  .b-katla > .b-katla-ust::after { content: ""; margin-left: auto; width: 9px; height: 9px; border-right: 2px solid var(--renk-soluk); border-bottom: 2px solid var(--renk-soluk); transform: rotate(45deg); transition: transform .2s; }
+  .b-katla[open] > .b-katla-ust::after { transform: rotate(-135deg); }
+  .b-katla > .b-katla-ust .b-grup-etiket { margin: 0; }
+  .b-katla-sayi { min-width: 22px; height: 22px; padding: 0 6px; border-radius: var(--kose-tam); background: var(--renk-vurgu); color: var(--renk-vurgu-uzerinde); font-size: calc(12px * var(--yazi-olcek)); font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+  .b-katla[open] > .b-karolar { margin-top: 6px; }
+}

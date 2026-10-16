@@ -1,2 +1,2 @@
 // Y10: Her teslimde bir artar. package.json ve DEGISIKLIKLER.md ile aynı olmak zorundadır.
-export const SURUM = '0.14.0';
+export const SURUM = '0.15.0';

@@ -3,12 +3,12 @@ import './gelisim.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d, htUst, htIkon, dilCifti, benAvatar, sekmeler } from '../../cekirdek/arayuz.js';
 import { testAnlari, takipSayisi } from '../../cekirdek/test-modu.js';
-import { fotografEkle, profilFotografiYap, fotografSil, FOTO_SINIRI, fotoAdresi } from '../../cekirdek/fotograf.js';
+import { fotografEkle, profilFotografiYap, fotografSil, FOTO_SINIRI, fotoAdresi, fotograflarEkle } from '../../cekirdek/fotograf.js';
 import { cumleSil } from '../../cekirdek/cumle-defteri.js';
 import { destek, soyle } from '../../cekirdek/ses/ses-hatti.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { ILGI_ALANLARI } from '../../veri/ilgi-alanlari.js';
-import { al } from '../../cekirdek/depo.js';
+import { al, degistir } from '../../cekirdek/depo.js';
 import { donemOzeti, dondurmaHakki, seriHesapla } from '../../cekirdek/gunluk.js';
 import { tarihAnahtari, gunEkle, haftaBaslangici, kisaTarih } from '../../cekirdek/zaman.js';
 import { SEVIYE_SIRASI, oneriSenaryo } from '../../cekirdek/oneri.js';
@@ -92,6 +92,31 @@ async function paylas(ozet) {
 }
 
 // Fotoğraf görüntüleyici: profil fotoğrafı yap · sil · kapat.
+// v0.15.0 Kapak seçici (Facebook gibi): 6 sistem kapağı ya da kendi fotoğrafın. profil.kapak = 'sistem-N' | 'mdy:…'.
+const KAPAK_SAYISI = 6;
+function kapakSinifi(kapak) {
+  if (kapak && !String(kapak).startsWith('sistem-')) return 'b-kapak b-kapak-foto';
+  const n = Number(String(kapak || 'sistem-1').split('-')[1]) || 1;
+  return `b-kapak b-kapak-${((n - 1) % KAPAK_SAYISI) + 1}`;
+}
+function kapakSec(yenile) {
+  const kapat = () => perde.remove();
+  const sec = (deger) => { degistir((v) => { v.profil.kapak = deger; }); kapat(); yenile(); };
+  const perde = h('div', { class: 'b-alt-pencere-perde', onClick: (e) => { if (e.target === perde) kapat(); } },
+    h('div', { class: 'b-alt-pencere', role: 'dialog', 'aria-modal': 'true', 'aria-label': t('kapak.baslik') },
+      h('div', { class: 'b-alt-pencere-tutamak', 'aria-hidden': 'true' }),
+      h('div', { class: 'b-alt-pencere-ust' }, h('h2', { class: 'b-alt-pencere-baslik' }, t('kapak.baslik'))),
+      h('div', { class: 'b-alt-pencere-ic' },
+        h('div', { class: 'gls-kapak-secenekler' }, Array.from({ length: KAPAK_SAYISI }, (_, i) => h('button', {
+          type: 'button', class: `gls-kapak-ornek ${kapakSinifi(`sistem-${i + 1}`)}`, 'aria-label': t('kapak.sistem', { n: i + 1 }), onClick: () => sec(`sistem-${i + 1}`),
+        }))),
+        h('button', { type: 'button', class: 'b-dugme b-dugme-ana', onClick: async () => { const [ref] = await fotograflarEkle(1); if (ref) sec(ref); } }, ikon('kamera', 18), t('kapak.foto')),
+        h('p', { class: 'b-kucuk' }, t('kapak.not'))),
+    ));
+  document.body.append(perde);
+  perde.querySelector('button').focus();
+}
+
 function fotoGoster(veri, yenile) {
   const kapat = () => perde.remove();
   const perde = h('div', { class: 'b-alt-pencere-perde', onClick: (e) => { if (e.target === perde) kapat(); } },
@@ -138,6 +163,9 @@ function ciz(kok, b) {
         htIkon(ikon3d('ayarlar', 28), t('ayarlar.baslik'), () => b.git('/ayarlar')),
       ],
     }),
+    h('div', { class: `gls-kapak ${kapakSinifi(v.profil.kapak)}` },
+      v.profil.kapak && !String(v.profil.kapak).startsWith('sistem-') ? h('img', { src: fotoAdresi(v.profil.kapak), alt: '' }) : null,
+      h('button', { type: 'button', class: 'b-ht-ikon gls-kapak-dugme', 'aria-label': t('kapak.degistir'), onClick: () => kapakSec(() => ciz(kok, b)) }, ikon('kamera', 18))),
     h('button', { type: 'button', class: 'gls-ben', onClick: () => b.git('/ayarlar?grup=profil'), 'aria-label': t('gelisim.kimlik.duzenle') },
       benAvatar(76, 'gls-ben-av'),
       h('span', { class: 'gls-ben-ic' },

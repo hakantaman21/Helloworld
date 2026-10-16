@@ -154,6 +154,7 @@ export default {
   },
 
   anlar: {
+    fotoEkle: 'Fotoğraf ekle (en çok 9)', fotoSayisi: '{n} fotoğraf · daha ekle',
     sen: 'Sen',
     profiliAc: '{ad} profilini aç',
     seninDuzeltmen: 'Senin düzeltmen',
@@ -697,5 +698,6 @@ export default {
     bos: 'Bu seviyede cümle yok; "Tüm senaryolar"ı seç.', hafizaBos: 'Hata Hafızanda telaffuz öğesi yok.',
     nasil: 'Önce dinle, sonra söyle. Tanınmayan sözcükler altı çizili görünür; onları yavaş dinleyip yeniden dene.',
   },
+  kapak: { baslik: 'Kapak resmi', degistir: 'Kapak resmini değiştir', sistem: 'Sistem kapağı {n}', foto: 'Kendi fotoğrafını seç', not: 'Kapak resmi profilinde, fotoğrafının arkasında görünür. Yalnız bu cihazda saklanır.' },
   zamanOnce: { simdi: 'şimdi', dk: '{n} dk önce', saat: '{n} sa önce', gun: '{n} gün önce' },
 };
