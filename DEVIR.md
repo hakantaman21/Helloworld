@@ -5,17 +5,28 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.8.0 · `main` (canlı, helloworld-gules.vercel.app) ve `deneme` aynı içerikte (16.10.2026, PR #11 ile Hakan onayıyla: "Yayına al"). Canlıya alma yine yalnız Hakan onayıyla.
+- **Sürüm:** v0.9.0 · `main` (canlı, helloworld-gules.vercel.app) ve `deneme` aynı içerikte (16.10.2026, PR #12 ile Hakan onayıyla: "Yayına al"). Canlıya alma yine yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlantı = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
 - **Görünüm:** Renk ve ikonlar English Prime'dan (koyu petrol zemin, altın vurgu, 3B ikonlar `veri/ikon3d.js`); düzen ve yoğunluk HelloTalk'tan (ince üst çubuk `htUst`, metin/hap sekmeler, düz liste satırları, tam genişlik alt menü). Renk yalnız jetonlarda (Y3).
 - **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma, karne, Hata Hafızası, profil düzenleme, görünüm, TR + EN. **Test modu (10 sanal kullanıcı, TEST rozetli):** Dil Ortakları Bul (sekmeler, dil hapları, yaş/cinsiyet/hızlı yanıt süzgeci, kural tabanlı otomatik eşleşme, el sallama), zengin kişi profili (yaş, ülke, yerel saat, etkinlik, hobiler, meslek, takip), Dil Anları (Güncel / Senin için / Yardım et / Takip; beğen, yorum, düzelt, paylaş), mesajlaşma, düzeltme önerisi, partner düzeltmesi, şikâyet/engelleme (yanıtlar otomatik kalıp). Veri yalnız cihazda.
 - **Ne çalışmıyor / henüz yok:** gerçek hesap ve sunucu, gerçek kişilerle mesajlaşma, sesli mesaj (Y12 kararı bekliyor), çeviri, gerçek yapay zekâ sağlayıcısı, harf düzeyinde telaffuz.
-- **Sıradaki adım:** Hakan'ın canlı v0.8.0'ı telefonda denemesi (özellikle kaydırarak sekme geçişi) ve geri bildirimi → arka uç kararı (Supabase / Firebase) → Mesaj ve Bağlantı ekranlarını gerçek hesaplarla bağlamak.
+- **Sıradaki adım:** Hakan'ın canlı v0.9.0'ı telefonda denemesi (alt menü, orta düğme, renkler) ve geri bildirimi → arka uç kararı (Supabase / Firebase) → Mesaj ve Bağlantı ekranlarını gerçek hesaplarla bağlamak.
 - **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.9.0
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan: alt menüde seçili öğenin üstünde gezinen ışıklı kare; Pratik ortada büyük (Yoldaş Akıllı Asistan gibi), seçilince çerçevesi seçim rengi, basılı tutunca atama/hızlı işlem seçenekleri (AI telefon araması, senaryo, telaffuz); üstten açılan sayfalarda kaydırırken alt öğe kaymasın (kural); alt menü kaydırırken kaybolup gelmesin; sekmelere Google renk anlamları; ayarlardan zemin ve seçim rengi; profil ayarlarında geri tuşu bir adım gelsin.
+- **Ne:** `arayuz.js`: alt menü `gezinmeKur()` ile body'de tek kez kurulur (`altGezinme()` artık durumu günceller, `null` döner; yönlendirici her ekranda önce `gezinmeGizle()`), `.b-gezinme-isik` (`--i` ile konum, `gostergeKaydir/Sifirla` canlı izleme), orta düğme `b-gezinme-orta` (uzun basış 480 ms → `ortaMenuAc()`), `ortaDugmeAyarla({ eylemler, atamaKaydet })` main.js'te. Sekme sırası: sohbetler, kesfet, bugun (orta), dil-anlari, gelisim. Neden kalıcı: ekran canlandırması `transform` kullandığı için ekran içindeki `position: fixed` menü onunla birlikte kayıyordu.
+- **Kural (pencereler):** Üstten açılan her pencere `.b-alt-pencere-perde`, `.b-perde` ya da `.b-katman` sınıfını taşımalı; `:root:has(...) body { overflow: hidden }` arka sayfayı ve alt menüyü kilitler, iç kaydırma `overscroll-behavior: contain`.
+- **Renkler:** `--renk-sayfa-{mavi,yesil,kirmizi,sari,mor}` (açık/koyu), `.b-ekran[data-ekran]` → `--sayfa`; kart/platform/sekme/başlık `color-mix` ile. Seçim rengi `:root[data-secim]`, zemin `:root[data-zemin]` (jetonlar.css + tema-koyu.css, koyu tema iki seçiciyle). `tema.js` öznitelikleri yazar.
+- **Geri:** Ayarlar grupları artık `/ayarlar?grup=` geçmiş kaydıdır; başlıktaki geri ve telefonun geri tuşu bir adım geri gider.
+- **Şema:** göç 11 (`secimRengi`, `zemin`, `ortaDugme`), GUNCEL_SEMA 11.
+- **Durum:** Canlıda (PR #12, Hakan onayı, 16.10.2026).
 
 ## v0.8.0
 

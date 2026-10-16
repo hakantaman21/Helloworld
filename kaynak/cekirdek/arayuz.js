@@ -138,24 +138,114 @@ export function ustBaslik({ tabela, baslik, alt, sag, geri, ikon }) {
 }
 
 // Beş sekme (Anayasa bölüm 14): Sohbet · Bağlantı · Dil Anları · Pratik · Profil
+// Beş sekme; Pratik ortada büyük yuvarlak düğme (Yoldaş Akıllı Asistan düzeni).
 const GEZINME = [
   { yol: '/sohbetler', ikon: 'sohbet', anahtar: 'gezinme.sohbetler' },
   { yol: '/kesfet', ikon: 'baglanti', anahtar: 'gezinme.baglanti' },
+  { yol: '/bugun', ikon: 'pratik', anahtar: 'gezinme.pratik', orta: true },
   { yol: '/dil-anlari', ikon: 'anlar', anahtar: 'gezinme.dilAnlari' },
-  { yol: '/bugun', ikon: 'pratik', anahtar: 'gezinme.pratik' },
   { yol: '/gelisim', ikon: 'profil', anahtar: 'gezinme.profil' },
 ];
+const ORTA = GEZINME.findIndex((g) => g.orta);
+
+// Alt menü tek kez kurulur ve body'de kalır: sayfa geçişlerinde ve kaydırırken yerinde durur (kaybolup gelmez).
+// Seçili öğenin üstünde saydam, ışıklı bir kare gezinir; parmakla sekme kaydırırken parmağı izler.
+let gezinme = null;
+let isik = null;
+let sonSira = -1;
+let ortaEylemler = () => [];
+
+export function gezinmeGizle() { if (gezinme) gezinme.hidden = true; }
+
+function isikKonumu(sira, { gecis = true } = {}) {
+  if (!isik) return;
+  isik.style.transition = gecis ? '' : 'none';
+  isik.style.setProperty('--i', String(sira));
+  isik.classList.toggle('b-gezinme-isik-gizli', Math.round(sira) === ORTA);
+}
+
+export function gostergeKaydir(oran) {
+  if (sonSira < 0) return;
+  isikKonumu(Math.max(0, Math.min(GEZINME.length - 1, sonSira + oran)), { gecis: false });
+}
+export function gostergeSifirla() { if (sonSira >= 0) isikKonumu(sonSira); }
+
+function ortaMenuAc() {
+  const kapat = () => { perde.remove(); document.removeEventListener('keydown', tus); };
+  const tus = (e) => { if (e.key === 'Escape') kapat(); };
+  const eylemler = ortaEylemler();
+  const perde = h('div', { class: 'b-alt-pencere-perde', onClick: (e) => { if (e.target === perde) kapat(); } },
+    h('div', { class: 'b-alt-pencere b-orta-menu', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'b-orta-baslik' },
+      h('div', { class: 'b-alt-pencere-tutamak', 'aria-hidden': 'true' }),
+      h('div', { class: 'b-alt-pencere-ust' }, h('h2', { class: 'b-alt-pencere-baslik', id: 'b-orta-baslik' }, t('orta.baslik')),
+        h('button', { type: 'button', class: 'b-ht-ikon b-ht-ikon-saydam', 'aria-label': t('genel.kapat'), onClick: kapat }, ikonCiz('kapat', 20))),
+      h('div', { class: 'b-alt-pencere-ic' },
+        h('div', { class: 'b-karolar' }, eylemler.map((e) => h('button', { type: 'button', class: 'b-karo b-orta-karo', onClick: () => { kapat(); e.calistir(); } },
+          ikon3d(e.ikon, 40), e.ad))),
+        h('section', { class: 'b-platform' },
+          h('h3', { class: 'b-grup-etiket' }, t('orta.varsayilan')),
+          h('div', { class: 'b-karolar' }, eylemler.filter((e) => e.atanabilir).map((e) => h('button', {
+            type: 'button', class: 'b-karo b-karo-kisa', 'aria-pressed': String((al().profil.ayarlar.ortaDugme || 'pratik') === e.kimlik),
+            onClick: (ev) => {
+              ev.currentTarget.parentElement.querySelectorAll('.b-karo').forEach((d) => d.setAttribute('aria-pressed', 'false'));
+              ev.currentTarget.setAttribute('aria-pressed', 'true');
+              ortaAtamaKaydet(e.kimlik);
+            },
+          }, e.kisa || e.ad))),
+          h('p', { class: 'b-kucuk' }, t('orta.aciklama'))),
+      ),
+    ));
+  document.addEventListener('keydown', tus);
+  document.body.append(perde);
+  perde.querySelector('.b-orta-karo').focus();
+}
+
+let ortaAtamaKaydet = () => {};
+export function ortaDugmeAyarla({ eylemler, atamaKaydet }) { ortaEylemler = eylemler; ortaAtamaKaydet = atamaKaydet; }
+
+function gezinmeKur() {
+  if (gezinme) return;
+  isik = h('span', { class: 'b-gezinme-isik', 'aria-hidden': 'true' });
+  const ic = h('div', { class: 'b-gezinme-ic' }, isik);
+  GEZINME.forEach((g) => {
+    if (!g.orta) {
+      ic.append(h('a', { class: 'b-gezinme-oge', href: '#' + g.yol, 'data-yol': g.yol }, ikon3d(g.ikon, 28), t(g.anahtar)));
+      return;
+    }
+    let zamanlayici = null;
+    let uzunBasildi = false;
+    const oge = h('a', { class: 'b-gezinme-oge b-gezinme-orta', href: '#' + g.yol, 'data-yol': g.yol, 'aria-haspopup': 'dialog', title: t('orta.ipucu') },
+      h('span', { class: 'b-orta-daire' }, ikon3d(g.ikon, 34), h('span', { class: 'b-orta-ok', 'aria-hidden': 'true' }, ikonCiz('yukari', 12, 3))),
+      h('span', { class: 'b-orta-ad' }, t(g.anahtar)));
+    const iptal = () => { clearTimeout(zamanlayici); zamanlayici = null; };
+    oge.addEventListener('pointerdown', () => { uzunBasildi = false; zamanlayici = setTimeout(() => { uzunBasildi = true; if (navigator.vibrate) navigator.vibrate(15); ortaMenuAc(); }, 480); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach((o) => oge.addEventListener(o, iptal));
+    oge.addEventListener('contextmenu', (e) => e.preventDefault());
+    oge.addEventListener('click', (e) => {
+      if (uzunBasildi) { e.preventDefault(); uzunBasildi = false; return; }
+      const atama = al().profil.ayarlar.ortaDugme || 'pratik';
+      if (atama === 'pratik') return;
+      const eylem = ortaEylemler().find((x) => x.kimlik === atama);
+      if (eylem) { e.preventDefault(); eylem.calistir(); }
+    });
+    oge.addEventListener('keydown', (e) => { if (e.key === 'ContextMenu' || (e.key === 'Enter' && e.shiftKey)) { e.preventDefault(); ortaMenuAc(); } });
+    ic.append(oge);
+  });
+  gezinme = h('nav', { class: 'b-gezinme', 'aria-label': t('gezinme.etiket') }, ic);
+  document.body.append(gezinme);
+}
 
 export function altGezinme(aktifYol) {
-  return h('nav', { class: 'b-gezinme', 'aria-label': t('gezinme.etiket') },
-    h('div', { class: 'b-gezinme-ic' },
-      GEZINME.map((g) => h('a', {
-        class: 'b-gezinme-oge',
-        href: '#' + g.yol,
-        'aria-current': g.yol === aktifYol ? 'page' : false,
-      }, ikon3d(g.ikon, 30), t(g.anahtar))),
-    ),
-  );
+  gezinmeKur();
+  gezinme.hidden = false;
+  const sira = GEZINME.findIndex((g) => g.yol === aktifYol);
+  gezinme.querySelectorAll('.b-gezinme-oge').forEach((a) => {
+    if (a.dataset.yol === aktifYol) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
+  if (sonSira < 0) isikKonumu(sira, { gecis: false });
+  else requestAnimationFrame(() => isikKonumu(sira));
+  sonSira = sira;
+  return null;
 }
 
 // English Prime esinli: her ana ekranda tek satır profil / ayarlar, gerçek hedeflere gider.
@@ -420,18 +510,25 @@ export function sekmeKaydirmaBaslat(git) {
     const t0 = e.touches[0];
     bas = e.touches.length === 1 && !yatayAlan(e.target) ? { x: t0.clientX, y: t0.clientY, zaman: Date.now() } : null;
   }, { passive: true });
+  document.addEventListener('touchmove', (e) => {
+    if (!bas || !gezinme || gezinme.hidden) return;
+    const t1 = e.touches[0];
+    const dx = t1.clientX - bas.x, dy = t1.clientY - bas.y;
+    if (Math.abs(dx) > Math.abs(dy) * 1.5) gostergeKaydir(-dx / window.innerWidth * 1.2);
+  }, { passive: true });
+  document.addEventListener('touchcancel', () => { bas = null; gostergeSifirla(); }, { passive: true });
   document.addEventListener('touchend', (e) => {
     if (!bas) return;
     const t1 = e.changedTouches[0];
     const dx = t1.clientX - bas.x, dy = t1.clientY - bas.y;
     const hizli = Date.now() - bas.zaman < 600;
     bas = null;
-    if (!hizli || Math.abs(dx) < KAYDIRMA_ESIGI || Math.abs(dx) < Math.abs(dy) * 2) return;
+    if (!hizli || Math.abs(dx) < KAYDIRMA_ESIGI || Math.abs(dx) < Math.abs(dy) * 2) { gostergeSifirla(); return; }
     const yol = (location.hash.slice(1) || '/bugun').split('?')[0];
     const i = GEZINME.findIndex((g) => g.yol === yol);
-    if (i < 0) return;
+    if (i < 0) { gostergeSifirla(); return; }
     const hedef = GEZINME[i + (dx < 0 ? 1 : -1)];
-    if (!hedef) return;
+    if (!hedef) { gostergeSifirla(); return; }
     document.documentElement.dataset.gecis = dx < 0 ? 'sola' : 'saga';
     git(hedef.yol);
     setTimeout(() => { delete document.documentElement.dataset.gecis; }, 400);

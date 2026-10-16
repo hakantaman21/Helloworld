@@ -15,6 +15,16 @@
     --renk-vurgu-metin: #F0D080;
     --renk-vurgu-acik: #2E2814;
     --renk-vurgu-acik-metin: #F3D58A;
+    --renk-sayfa-mavi: #8AB4F8;
+    --renk-sayfa-yesil: #81C995;
+    --renk-sayfa-kirmizi: #F28B82;
+    --renk-sayfa-sari: #FDD663;
+    --renk-sayfa-mor: #D7AEFB;
+    --renk-onizleme-zemin-notr: #050607;
+    --renk-onizleme-zemin-mavi: #0B1222;
+    --renk-onizleme-zemin-mor: #150D1C;
+    --renk-onizleme-zemin-yesil: #0B140F;
+    --renk-onizleme-zemin-varsayilan: #0D1112;
     --renk-iyi: #2E9E65;
     --renk-iyi-metin: #7AD3A0;
     --renk-iyi-acik: #173A2A;
@@ -64,6 +74,16 @@
       --renk-vurgu-metin: #F0D080;
       --renk-vurgu-acik: #2E2814;
       --renk-vurgu-acik-metin: #F3D58A;
+      --renk-sayfa-mavi: #8AB4F8;
+      --renk-sayfa-yesil: #81C995;
+      --renk-sayfa-kirmizi: #F28B82;
+      --renk-sayfa-sari: #FDD663;
+      --renk-sayfa-mor: #D7AEFB;
+      --renk-onizleme-zemin-notr: #050607;
+      --renk-onizleme-zemin-mavi: #0B1222;
+      --renk-onizleme-zemin-mor: #150D1C;
+      --renk-onizleme-zemin-yesil: #0B140F;
+      --renk-onizleme-zemin-varsayilan: #0D1112;
       --renk-iyi: #2E9E65;
       --renk-iyi-metin: #7AD3A0;
       --renk-iyi-acik: #173A2A;
@@ -98,4 +118,23 @@
       --renk-perde: rgba(0, 0, 0, 0.62);
     }
   }
+  /* v0.9.0 seçim rengi ve zemin seçenekleri, koyu tema karşılıkları */
+  :root[data-tema="koyu"][data-secim="mavi"] { --renk-vurgu: #8AB4F8; --renk-vurgu-parlak: #AECBFA; --renk-vurgu-uzerinde: #0B1F3A; --renk-vurgu-metin: #AECBFA; --renk-vurgu-acik: #1A2A44; --renk-vurgu-acik-metin: #AECBFA; }
+  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-secim="mavi"] { --renk-vurgu: #8AB4F8; --renk-vurgu-parlak: #AECBFA; --renk-vurgu-uzerinde: #0B1F3A; --renk-vurgu-metin: #AECBFA; --renk-vurgu-acik: #1A2A44; --renk-vurgu-acik-metin: #AECBFA; } }
+  :root[data-tema="koyu"][data-secim="yesil"] { --renk-vurgu: #81C995; --renk-vurgu-parlak: #A8DAB5; --renk-vurgu-uzerinde: #0B2A16; --renk-vurgu-metin: #A8DAB5; --renk-vurgu-acik: #16301F; --renk-vurgu-acik-metin: #A8DAB5; }
+  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-secim="yesil"] { --renk-vurgu: #81C995; --renk-vurgu-parlak: #A8DAB5; --renk-vurgu-uzerinde: #0B2A16; --renk-vurgu-metin: #A8DAB5; --renk-vurgu-acik: #16301F; --renk-vurgu-acik-metin: #A8DAB5; } }
+  :root[data-tema="koyu"][data-secim="mercan"] { --renk-vurgu: #F28B82; --renk-vurgu-parlak: #F6AEA9; --renk-vurgu-uzerinde: #3A0F0B; --renk-vurgu-metin: #F6AEA9; --renk-vurgu-acik: #3D1C1A; --renk-vurgu-acik-metin: #F6AEA9; }
+  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-secim="mercan"] { --renk-vurgu: #F28B82; --renk-vurgu-parlak: #F6AEA9; --renk-vurgu-uzerinde: #3A0F0B; --renk-vurgu-metin: #F6AEA9; --renk-vurgu-acik: #3D1C1A; --renk-vurgu-acik-metin: #F6AEA9; } }
+  :root[data-tema="koyu"][data-secim="mor"] { --renk-vurgu: #C58AF9; --renk-vurgu-parlak: #D7AEFB; --renk-vurgu-uzerinde: #24103A; --renk-vurgu-metin: #D7AEFB; --renk-vurgu-acik: #2C1E40; --renk-vurgu-acik-metin: #D7AEFB; }
+  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-secim="mor"] { --renk-vurgu: #C58AF9; --renk-vurgu-parlak: #D7AEFB; --renk-vurgu-uzerinde: #24103A; --renk-vurgu-metin: #D7AEFB; --renk-vurgu-acik: #2C1E40; --renk-vurgu-acik-metin: #D7AEFB; } }
+  :root[data-tema="koyu"][data-secim="turkuaz"] { --renk-vurgu: #78D9EC; --renk-vurgu-parlak: #A1E4F2; --renk-vurgu-uzerinde: #06303A; --renk-vurgu-metin: #A1E4F2; --renk-vurgu-acik: #10343B; --renk-vurgu-acik-metin: #A1E4F2; }
+  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-secim="turkuaz"] { --renk-vurgu: #78D9EC; --renk-vurgu-parlak: #A1E4F2; --renk-vurgu-uzerinde: #06303A; --renk-vurgu-metin: #A1E4F2; --renk-vurgu-acik: #10343B; --renk-vurgu-acik-metin: #A1E4F2; } }
+  :root[data-tema="koyu"][data-zemin="notr"] { --renk-zemin: #050607; --renk-zemin-ust: #0B0D0F; }
+  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-zemin="notr"] { --renk-zemin: #050607; --renk-zemin-ust: #0B0D0F; } }
+  :root[data-tema="koyu"][data-zemin="mavi"] { --renk-zemin: #0B1222; --renk-zemin-ust: #111B30; }
+  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-zemin="mavi"] { --renk-zemin: #0B1222; --renk-zemin-ust: #111B30; } }
+  :root[data-tema="koyu"][data-zemin="mor"] { --renk-zemin: #150D1C; --renk-zemin-ust: #1F1428; }
+  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-zemin="mor"] { --renk-zemin: #150D1C; --renk-zemin-ust: #1F1428; } }
+  :root[data-tema="koyu"][data-zemin="yesil"] { --renk-zemin: #0B140F; --renk-zemin-ust: #122019; }
+  @media (prefers-color-scheme: dark) { :root:not([data-tema="acik"])[data-zemin="yesil"] { --renk-zemin: #0B140F; --renk-zemin-ust: #122019; } }
 }
