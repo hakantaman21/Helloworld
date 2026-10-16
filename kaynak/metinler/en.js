@@ -1,6 +1,6 @@
 // English interface texts (Y16). Must contain exactly the same keys as tr.js (Y25).
 export default {
-  uygulama: { ad: 'Speaking Coach' },
+  uygulama: { ad: 'helloworld' },
   koc: { ad: 'Coach' },
 
   ortak: {
@@ -53,7 +53,7 @@ export default {
     etiket: { kafe: 'Daily life', market: 'Shopping', yol: 'Travel', bilet: 'Travel' },
   },
   puan: { baslik: 'Learning points', katildi: 'Day {n}', dakika: 'min spoken', kelime: 'new words', hata: 'mistakes saved', cumle: 'saved sentences', an: 'Moments', takip: 'following' },
-  davet: { baslik: 'Invite a friend', alt: 'Practising together is easier', dugme: 'Share', metin: 'I practise speaking English with Konuşma Koçu, join me:' },
+  davet: { baslik: 'Invite a friend', alt: 'Practising together is easier', dugme: 'Share', metin: 'I practise speaking English with helloworld, join me:' },
   pratik: {
     sekme: { ai: 'AI chat', gercek: 'Real chat', ogren: 'Learn' }, afisEtiket: 'Highlights',
     afis: {

@@ -1,6 +1,6 @@
 {
   "name": "konusma-kocu",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "private": true,
   "type": "module",
   "description": "Konuşma Koçu — günlük yaşam İngilizcesini konuşarak öğreten koç uygulaması",

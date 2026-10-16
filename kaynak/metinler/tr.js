@@ -1,7 +1,7 @@
 // Türkçe arayüz metinleri (Y16). Arayüzde görünen her metin buradan gelir.
 // Koçun İngilizce cümleleri içeriktir; onlar veri/ klasöründedir.
 export default {
-  uygulama: { ad: 'Konuşma Koçu' },
+  uygulama: { ad: 'helloworld' },
   koc: { ad: 'Koç' },
 
   ortak: {
@@ -54,7 +54,7 @@ export default {
     etiket: { kafe: 'Günlük', market: 'Alışveriş', yol: 'Seyahat', bilet: 'Seyahat' },
   },
   puan: { baslik: 'Öğrenme puanları', katildi: '{n}. gün', dakika: 'dk konuşma', kelime: 'yeni kelime', hata: 'hata kaydı', cumle: 'kayıtlı cümle', an: 'Dil Anı', takip: 'takip' },
-  davet: { baslik: 'Arkadaşını davet et', alt: 'Birlikte pratik yapmak daha kolay', dugme: 'Paylaş', metin: 'Konuşma Koçu ile İngilizce konuşma pratiği yapıyorum, sen de gel:' },
+  davet: { baslik: 'Arkadaşını davet et', alt: 'Birlikte pratik yapmak daha kolay', dugme: 'Paylaş', metin: 'helloworld ile İngilizce konuşma pratiği yapıyorum, sen de gel:' },
   pratik: {
     sekme: { ai: 'AI sohbet', gercek: 'Gerçek sohbet', ogren: 'Öğren' }, afisEtiket: 'Tanıtımlar',
     afis: {

@@ -751,7 +751,7 @@
 
 /* ===== v0.12.1 Marka şeridi; bant her kenarı görünür bir kart; sohbet satırları Bağlan kartları kadar geniş ===== */
 @layer bilesenler {
-  .b-marka-serit { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 26px; margin: 0 calc(var(--bosluk-4) * -1); padding: 4px var(--bosluk-4) 2px; color: var(--renk-soluk); font-size: 11.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; border-bottom: 1px solid color-mix(in srgb, var(--sayfa) 30%, transparent); background: linear-gradient(180deg, color-mix(in srgb, var(--sayfa) 10%, var(--renk-zemin)), var(--renk-zemin)); }
+  .b-marka-serit { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 26px; margin: 0 calc(var(--bosluk-4) * -1); padding: 4px var(--bosluk-4) 2px; color: var(--renk-soluk); font-size: 13px; font-weight: 800; letter-spacing: .04em; border-bottom: 1px solid color-mix(in srgb, var(--sayfa) 30%, transparent); background: linear-gradient(180deg, color-mix(in srgb, var(--sayfa) 10%, var(--renk-zemin)), var(--renk-zemin)); }
   .b-marka-serit .b-logo { flex-shrink: 0; }
   .b-marka-ad { color: color-mix(in srgb, var(--sayfa) 55%, var(--renk-murekkep)); }
   /* Bant artık kenarlardan ayrık bir kart: üstte, solda, sağda ve altta hattı görünür */

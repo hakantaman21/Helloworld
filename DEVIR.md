@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.12.1 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.3'te (16.10.2026, PR #15). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.12.2 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.11.3'te (16.10.2026, PR #15). Canlıya alma yalnız Hakan onayıyla.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -13,9 +13,16 @@
 - **Ne çalışıyor:** İlk açılış, beşli gezinme, yapay zekâ demo konuşma, karne, Hata Hafızası, profil düzenleme, görünüm, TR + EN. **Test modu (10 sanal kullanıcı, TEST rozetli):** Dil Ortakları Bul (sekmeler, dil hapları, yaş/cinsiyet/hızlı yanıt süzgeci, kural tabanlı otomatik eşleşme, el sallama), zengin kişi profili (yaş, ülke, yerel saat, etkinlik, hobiler, meslek, takip), Dil Anları (Güncel / Senin için / Yardım et / Takip; beğen, yorum, düzelt, paylaş), mesajlaşma, düzeltme önerisi, partner düzeltmesi, şikâyet/engelleme (yanıtlar otomatik kalıp). Veri yalnız cihazda.
 - **Ne çalışmıyor / henüz yok:** gerçek hesap ve sunucu, gerçek kişilerle mesajlaşma, sesli mesaj (Y12 kararı bekliyor), çeviri, gerçek yapay zekâ sağlayıcısı, harf düzeyinde telaffuz.
 - **Sıradaki adım:** Hakan'ın canlı v0.9.0'ı telefonda denemesi (alt menü, orta düğme, renkler) ve geri bildirimi → arka uç kararı (Supabase / Firebase) → Mesaj ve Bağlantı ekranlarını gerçek hesaplarla bağlamak.
-- **Açık kararlar:** platformun kalıcı adı · arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
+- **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.12.2
+
+- **Yapan:** Claude (Opus 5.5), 16.10.2026
+- **Neden:** Hakan: "Yayına al, ismi de helloworld." Platformun kalıcı adı kararı verildi.
+- **Ne:** `metinler` `uygulama.ad` = 'helloworld' (tr + en), davet metni, `index.html` `<title>`, `genel/manifest.webmanifest` name/short_name; marka şeridi büyük harfe çevirmez (ad Hakan'ın yazdığı gibi küçük harf). Derleme çıktı dosya adı (`teslim/KonusmaKocu-v*.html`) karşılaştırma aracıyla uyum için değişmedi.
+- **Şema:** değişmedi (13). **Durum:** v0.12.0 + v0.12.1 + v0.12.2 canlıya (Hakan onayı).
 
 ## v0.12.1
 

@@ -1,6 +1,6 @@
 {
-  "name": "Konuşma Koçu",
-  "short_name": "Koç",
+  "name": "helloworld",
+  "short_name": "helloworld",
   "description": "Her gün birkaç dakika İngilizce konuşma pratiği",
   "lang": "tr",
   "start_url": "./#/bugun",

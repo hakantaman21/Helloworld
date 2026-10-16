@@ -1,3 +1,7 @@
+## 0.12.2 — 16.10.2026 · Uygulamanın adı: helloworld
+
+- Uygulamanın görünen adı "helloworld" oldu (marka şeridi, sekme başlığı, ana ekrana ekleme adı, davet mesajı; Türkçe ve İngilizce).
+
 ## 0.12.1 — 16.10.2026 · Marka şeridi, hatları her yerde görünen üst bant, geniş sohbet kartları, HelloTalk'taki eksik süzgeçler
 
 - Ana sekmelerin en üstünde ince marka şeridi: uygulama simgesi + "Konuşma Koçu".
