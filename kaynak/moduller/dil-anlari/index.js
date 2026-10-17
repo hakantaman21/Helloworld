@@ -5,6 +5,7 @@
 import './anlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, altGezinme, basBant, afisKaydirici, ustBaslik, durumKutusu, ikon, ikon3d, yerlestir, testEtiketi, testAvatar, goreliZaman, farkCiz, htUst, htIkon, sekmeler, dilCifti, benAvatar } from '../../cekirdek/arayuz.js';
+import { benDugmesi } from '../../cekirdek/yan-menu.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
@@ -223,16 +224,16 @@ function ciz(kok, b) {
     yardimSayisi ? { test: true, ikon: 'ipucu', renk: 4, etiket: t('pano.yardimEtiket'), baslik: t('pano.yardimBaslik'), alt: t('pano.yardimAlt', { n: yardimSayisi }), dugme: t('pano.yardimDugme'), git: () => sekmeyeGec('yardim') } : null,
     enCok && sayac[enCokKimlik] > 1 ? { test: true, renk: 5, etiket: t('pano.paylasanEtiket'), baslik: t('pano.paylasanBaslik', { ad: enCok.ad, n: sayac[enCokKimlik] }), alt: t('pano.paylasanAlt', { ulke: yerel(enCok.ulke), seviye: enCok.seviye }), gorsel: testAvatar(enCok, 76, { cevrimici: aktiflik(enCok).cevrimici }), git: () => b.git(`/kisi?k=${enCok.kimlik}`) } : null,
     hit && etkilesim(hit) ? { test: true, ikon: 'yildiz', renk: 6, etiket: t('pano.hitEtiket'), baslik: `“${kisalt(hit.metin)}”`, alt: t('pano.hitAlt', { ad: hit.profil.ad, n: anYorumlari(hit.kimlik).length }), dugme: t('pano.hitDugme'), git: () => { sekmeyeGec('guncel'); const k = akis.querySelector(`[data-an="${hit.kimlik}"]`); if (k) k.scrollIntoView({ behavior: 'smooth', block: 'start' }); } } : null,
-    { ikon: 'kitap', renk: 3, etiket: t('pano.defterEtiket'), baslik: t('pano.defterBaslik'), alt: t('pano.defterAlt'), dugme: t('pano.defterDugme'), git: () => b.git('/gelisim?sekme=profil') },
+    { ikon: 'kitap', renk: 3, etiket: t('pano.defterEtiket'), baslik: t('pano.defterBaslik'), alt: t('pano.defterAlt'), dugme: t('pano.defterDugme'), git: () => b.git('/gelisim') },
   ].filter(Boolean), { etiket: t('pano.anlarEtiket'), pano: true });
 
   yerlestir(kok,
     basBant(htUst({
-      sol: htIkon(ikon3d('hedef', 30), t('ht.hedefim'), () => b.git('/gelisim')),
+      sol: benDugmesi(b),
       orta: h('label', { class: 'b-ht-arama anl-arama' }, ikon('ara', 18),
         h('input', { type: 'search', placeholder: t('ht.ara'), 'aria-label': t('ht.anAra'), onInput: (e) => { arama = e.target.value.trim().toLocaleLowerCase(); yenile(); } })),
       sag: [
-        htIkon('zil', t('ht.bildirimler'), () => { sekme = 'takip'; yenile(); duyur(t('ht.bildirimOzet', { n: kendiYorumSayisi })); }, { rozet: kendiYorumSayisi || null }),
+        htIkon('zil', t('ht.bildirimler'), () => b.git('/kutu?kat=anlar'), { rozet: kendiYorumSayisi || null }),
         htIkon('kalem', t('anlar.paylasBaslik'), () => { yaziyor = true; paylasCiz(); paylasGirdi.focus(); }),
       ],
     }),
@@ -250,7 +251,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'dil-anlari',
-  surum: '0.4.0',
+  surum: '0.5.0',
   onek: 'anl',
   semaSurumu: 1,
   cekirdekServisleri: ['metin', 'depo', 'test-modu'],

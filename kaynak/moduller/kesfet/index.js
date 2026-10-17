@@ -1,15 +1,21 @@
 // Bağlan (HelloTalk "Dil Ortakları Bul" düzeni): metin sekmeleri, dil hapları, süzgeç paneli, otomatik eşleşme
 // ve el sallama (selam). Hesap ve sunucu olmadan gerçek kişi gösterilmez.
 // Test modunda TEST rozetli sanal kullanıcılar listelenir; yaş, çevrimiçi durumu ve rozetler de TEST verisidir.
+import { kullanildi } from '../../cekirdek/rehber.js';
 import './kesfet.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, altGezinme, basBant, afisKaydirici, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman, kurallarSeridi, aralikKaydirici } from '../../cekirdek/arayuz.js';
+import { benDugmesi } from '../../cekirdek/yan-menu.js';
+import { kisiEylemleri, basiliTut, yeniKisiOnayi } from '../../cekirdek/kisi-eylemleri.js';
+import { arkadasMi, favoriMi, gelenIstekler } from '../../cekirdek/arkadaslik.js';
+import { arkadasPaneli } from './arkadaslar.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al, degistir } from '../../cekirdek/depo.js';
 import { duyur } from '../../cekirdek/duyuru.js';
-import { uyumDuzeyi, saatFarki, YAKIN_SAAT_FARKI, testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler } from '../../cekirdek/test-modu.js';
+import { uyumDuzeyi, saatFarki, YAKIN_SAAT_FARKI, testModuAcik, testModuAyarla, testProfilleri, aktiflik, eslesme, enIyiEslesmeler, selamVer, selamVerildi, selamYaniti, testMesajEkle, ortakIlgiler, testYanitVerir } from '../../cekirdek/test-modu.js';
 import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { ILGI_ALANLARI, ilgiKimligi } from '../../veri/ilgi-alanlari.js';
+import { TEST_PROFILLERI } from '../../veri/test-profiller.js';
 import { aktiflikMetni, yasRozeti, rozetler } from '../../cekirdek/test-gorunum.js';
 
 const SELAM_YANIT_GECIKMESI = 1500;
@@ -20,7 +26,7 @@ function secimiOku() {
   if (!k || kayitli.durum) return;
   kayitli.durum = { sekme: k.sekme || 'tum', dil: k.dil || 'hedef', eslesmeSira: -1 };
   const f = bosSuzgec();
-  kayitli.suzgec = { ...f, ...k.suzgec, hizli: new Set((k.suzgec || {}).hizli || []), ulkeler: new Set((k.suzgec || {}).ulkeler || []), ilgiler: new Set((k.suzgec || {}).ilgiler || []), yas: (k.suzgec || {}).yas || f.yas, seviye: (k.suzgec || {}).seviye || f.seviye };
+  kayitli.suzgec = { ...f, ...k.suzgec, hizli: new Set(((k.suzgec || {}).hizli || []).filter((x) => HIZLI_SUZGECLER.some(([a]) => a === x))), ulkeler: new Set(((k.suzgec || {}).ulkeler || []).map(ulkeAnahtari)), ilgiler: new Set((k.suzgec || {}).ilgiler || []), yas: (k.suzgec || {}).yas || f.yas, seviye: (k.suzgec || {}).seviye || f.seviye };
 }
 function secimiYaz(d, f) {
   const yeni = { sekme: d.sekme, dil: d.dil, suzgec: { ...f, hizli: [...f.hizli], ulkeler: [...f.ulkeler], ilgiler: [...f.ilgiler] } };
@@ -30,18 +36,20 @@ function secimiYaz(d, f) {
 const YAS_MIN = 18;
 const YAS_MAX = 60;
 
-function selamla(p, yenile) {
+async function selamla(p, yenile, b) {
+  // v0.18.0: el sallamak da yeni kişiye ilk mesajdır; günlük sınıra tabidir. Çevrimdışı test kişisi yanıt vermez.
+  if (!(await yeniKisiOnayi(p, b))) return;
   selamVer(p.kimlik, t('ht.selamMetni'));
   duyur(t('ht.selamGitti', { ad: p.ad }), 3000);
-  setTimeout(() => testMesajEkle(p.kimlik, selamYaniti(p)), SELAM_YANIT_GECIKMESI);
+  if (testYanitVerir(p)) setTimeout(() => testMesajEkle(p.kimlik, selamYaniti(p)), SELAM_YANIT_GECIKMESI);
   yenile();
 }
 
 // Hızlı süzgeçler (Sık kullanılan sekmesi): her biri tek dokunuşla açılıp kapanır.
 const HIZLI_SUZGECLER = [
-  ['cevrimici', '🟢'], ['yeni', '✨'], ['yakin', '🎯'],
-  ['ortakIlgi', '♥'], ['hizli', '⚡'], ['karsilikli', '🤝'],
-  ['ciddi', '🎓'], ['saat', '🕒'],
+  // v0.16.0: "Çevrimiçi" ve "Yeni" üst sekmelerde olduğu için burada tekrarlanmaz (aynı iş iki yerde olmasın).
+  ['yakin', '🎯'], ['ortakIlgi', '♥'], ['hizli', '⚡'],
+  ['karsilikli', '🤝'], ['ciddi', '🎓'], ['saat', '🕒'],
 ];
 
 function bosSuzgec() {
@@ -56,6 +64,11 @@ function etkinSayisi(f) {
 }
 
 const ulkeAdi = (k) => yerel(k.ulke).split(' · ')[0];
+// v0.16.0: ülke süzgeci dilden bağımsız sabit anahtarla saklanır (İngilizce ülke adı); ad yalnız gösterimde çevrilir.
+const ulkeKodu = (k) => String((k.ulke && k.ulke.en) || yerel(k.ulke)).split(' · ')[0];
+const ulkeGoster = (kod) => { const k = TEST_PROFILLERI.find((p) => ulkeKodu(p) === kod); return k ? ulkeAdi(k) : kod; };
+// Eski kayıtlarda (v0.14–0.15) çevrilmiş ad saklanmıştı: herhangi bir dildeki adı anahtara çevir.
+const ulkeAnahtari = (ad) => { const k = TEST_PROFILLERI.find((p) => ulkeKodu(p) === ad || Object.values(p.ulke || {}).some((u) => String(u).split(' · ')[0] === ad)); return k ? ulkeKodu(k) : ad; };
 
 function suzgecUygula(liste, f) {
   const ben = al().profil;
@@ -66,7 +79,8 @@ function suzgecUygula(liste, f) {
     if (f.hizli.has('yakin') && Math.abs(SEVIYE_SIRASI.indexOf(k.seviye) - benimSeviye) > 1) return false;
     if (f.hizli.has('ortakIlgi') && !ortakIlgiler(k).length) return false;
     if (f.hizli.has('hizli') && !(k.rozetler || []).includes('hizli')) return false;
-    if (f.hizli.has('karsilikli') && !(ben.anaDil && k.ogrenilenDil === ben.anaDil)) return false;
+    // v0.16.0: karşılıklı = iki yönlü (o senin dilini öğreniyor VE senin öğrendiğin dil onun ana dili), sekmeyle aynı kural.
+    if (f.hizli.has('karsilikli') && !(ben.anaDil && k.ogrenilenDil === ben.anaDil && k.anaDil === (ben.ogrenilenDil || 'en'))) return false;
     if (f.hizli.has('ciddi') && !(k.rozetler || []).includes('ciddi')) return false;
     if (f.hizli.has('saat') && saatFarki(k) > YAKIN_SAAT_FARKI) return false;
     if (k.yas < f.yas[0] || (f.yas[1] < YAS_MAX && k.yas > f.yas[1])) return false;
@@ -75,7 +89,7 @@ function suzgecUygula(liste, f) {
     if (f.cinsiyet !== 'tum' && k.cinsiyet !== f.cinsiyet) return false;
     if (f.anaDil !== 'tum' && k.anaDil !== f.anaDil) return false;
     if (f.ogrDil !== 'tum' && k.ogrenilenDil !== f.ogrDil) return false;
-    if (f.ulkeler.size && !f.ulkeler.has(ulkeAdi(k))) return false;
+    if (f.ulkeler.size && !f.ulkeler.has(ulkeKodu(k))) return false;
     if (f.ilgiler.size && !k.ilgi.some((i) => f.ilgiler.has(ilgiKimligi(i)))) return false;
     return true;
   });
@@ -88,6 +102,7 @@ function suz(liste, d, f) {
   if (d.dil === 'hedef') sonuc = sonuc.filter((k) => k.anaDil === (ben.ogrenilenDil || 'en'));
   if (d.dil === 'benimDilim') sonuc = sonuc.filter((k) => ben.anaDil && k.ogrenilenDil === ben.anaDil);
   if (d.sekme === 'cevrimici') sonuc = sonuc.filter((k) => aktiflik(k).cevrimici);
+  if (d.sekme === 'arkadaslar') sonuc = sonuc.filter((k) => arkadasMi(k.kimlik));
   if (d.sekme === 'yeni') sonuc = sonuc.filter((k) => k.katildiGun <= 90);
   if (d.sekme === 'yakin') sonuc = sonuc.filter((k) => Math.abs(SEVIYE_SIRASI.indexOf(k.seviye) - benimSeviye) <= 1);
   if (d.sekme === 'ciddi') sonuc = sonuc.filter((k) => (k.rozetler || []).includes('ciddi'));
@@ -143,13 +158,13 @@ function suzgecPenceresi(mevcut, uygula, say = (f) => suzgecUygula(testProfiller
         h('p', { class: 'b-kucuk' }, t('suzgec.ucretsiz')),
       );
     } else {
-      const ulkeler = [...new Map(tum.map((k) => [ulkeAdi(k), k.bayrak])).entries()];
+      const ulkeler = [...new Map(tum.map((k) => [ulkeKodu(k), [ulkeAdi(k), k.bayrak]])).entries()];
       const ilgiler = ILGI_ALANLARI.filter((i) => tum.some((k) => k.ilgi.some((x) => ilgiKimligi(x) === i.kimlik)));
       yerlestir(ic,
         grupla(t('suzgec.anaDili'), tekli('anaDil', diller('anaDil'), 3)),
         grupla(t('suzgec.ogreniyor'), tekli('ogrDil', diller('ogrenilenDil'), 3)),
         h('section', { class: 'b-platform' }, aralikKaydirici({ min: 0, max: SEVIYE_SIRASI.length - 1, deger: f.seviye, etiket: t('suzgec.seviye'), noktalar: true, bicim: (v) => (v === null ? `${SEVIYE_SIRASI[0]} – ${SEVIYE_SIRASI[SEVIYE_SIRASI.length - 1]}` : SEVIYE_SIRASI[v]), degisti: (d) => { f.seviye = d; sayiGuncelle(); } })),
-        katla('ulke', t('suzgec.ulke'), f.ulkeler, coklu(f.ulkeler, ulkeler.map(([ad, bayrak]) => [ad, ad, bayrak]))),
+        katla('ulke', t('suzgec.ulke'), f.ulkeler, coklu(f.ulkeler, ulkeler.map(([kod, [ad, bayrak]]) => [kod, ad, bayrak]))),
         katla('ilgi', t('ilgi.baslik'), f.ilgiler, coklu(f.ilgiler, ilgiler.map((i) => [i.kimlik, yerel(i), i.simge]))),
       );
     }
@@ -177,11 +192,14 @@ function suzgecPenceresi(mevcut, uygula, say = (f) => suzgecUygula(testProfiller
 function satir(k, b, yenile) {
   const a = aktiflik(k);
   const selamlandi = selamVerildi(k.kimlik);
-  return h('div', { class: 'kft-satir' },
+  // v0.17.0: basılı tut → kişi eylemleri (arkadaş ekle, favori…).
+  return basiliTut(h('div', { class: 'kft-satir' },
     h('button', { type: 'button', class: 'kft-satir-ana', onClick: () => b.git(`/kisi?k=${k.kimlik}`), 'aria-label': `${k.ad} · ${t('test.rozet')} · ${t('test.profiliGor')}` },
-      h('span', { class: 'kft-av-sutun' }, testAvatar(k, 60, { cevrimici: a.cevrimici }), a.cevrimici ? null : h('span', { class: 'b-aktiflik kft-aktiflik' }, aktiflikMetni(k))),
+      h('span', { class: 'kft-av-sutun' }, testAvatar(k, 60, { cevrimici: a.cevrimici }), a.cevrimici || a.gizli ? null : h('span', { class: 'b-aktiflik kft-aktiflik' }, aktiflikMetni(k))),
       h('span', { class: 'b-liste-ic' },
-        h('span', { class: 'b-liste-ust' }, h('b', null, k.ad), yasRozeti(k), testEtiketi()),
+        h('span', { class: 'b-liste-ust' }, h('b', null, k.ad), yasRozeti(k), testEtiketi(),
+          favoriMi(k.kimlik) ? h('span', { class: 'kft-isaret', 'aria-label': t('arkadas.favori') }, ikon('yildiz', 14)) : null,
+          arkadasMi(k.kimlik) ? h('span', { class: 'b-etiket-hap b-etiket-hap-iyi kft-ark-hap' }, t('arkadas.arkadas')) : null),
         dilCifti(k.anaDil, k.ogrenilenDil, k.seviye),
         h('span', { class: 'kft-tanitim b-iki-satir' }, yerel(k.tanitim)),
         h('span', { class: 'b-etiketler' },
@@ -190,8 +208,8 @@ function satir(k, b, yenile) {
       ),
     ),
     h('button', { type: 'button', class: `kft-el${selamlandi ? ' kft-el-tamam' : ''}`, 'aria-label': selamlandi ? t('ht.mesajGonder', { ad: k.ad }) : t('ht.selamVer', { ad: k.ad }), title: selamlandi ? t('test.mesajYaz') : t('ht.selam'),
-      onClick: () => (selamlandi ? b.git(`/mesaj?k=${k.kimlik}`) : selamla(k, yenile)) }, ikon(selamlandi ? 'sohbet' : 'el', 22)),
-  );
+      onClick: () => (selamlandi ? b.git(`/mesaj?k=${k.kimlik}`) : selamla(k, yenile, b)) }, ikon(selamlandi ? 'sohbet' : 'el', 22)),
+  ), () => kisiEylemleri(k, { b, yenile }));
 }
 
 function eslesmeKarti(sonuc, b, { sonraki, kapat, yenile }) {
@@ -207,7 +225,7 @@ function eslesmeKarti(sonuc, b, { sonraki, kapat, yenile }) {
       h('div', { class: 'b-liste-ic' },
         h('span', { class: 'b-liste-ust' }, h('b', null, p.ad), yasRozeti(p), testEtiketi()),
         dilCifti(p.anaDil, p.ogrenilenDil, p.seviye),
-        h('span', { class: 'b-kucuk' }, `${yerel(p.ulke)} · ${aktiflikMetni(p)}`),
+        h('span', { class: 'b-kucuk' }, [yerel(p.ulke), aktiflikMetni(p)].filter(Boolean).join(' · ')),
       ),
       h('span', { class: 'kft-puan', style: `--kft-puan:${sonuc.puan}%`, 'aria-label': t(`ht.uyumDuzey.${uyumDuzeyi(sonuc.puan)}`) }, h('b', { class: 'kft-puan-duzey' }, t(`ht.uyumDuzey.${uyumDuzeyi(sonuc.puan)}`))),
     ),
@@ -215,7 +233,7 @@ function eslesmeKarti(sonuc, b, { sonraki, kapat, yenile }) {
     h('div', { class: 'kft-eslesme-eylem' },
       h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve kft-eylem-dugme', onClick: sonraki }, t('ht.sonraki')),
       h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve kft-eylem-dugme', onClick: () => b.git(`/kisi?k=${p.kimlik}`) }, t('test.profiliGor')),
-      h('button', { type: 'button', class: 'b-dugme b-dugme-ana kft-eslesme-selam kft-eylem-dugme', onClick: () => { if (!selamVerildi(p.kimlik)) selamla(p, yenile); b.git(`/mesaj?k=${p.kimlik}`); } }, ikon('el', 18), t('ht.selam')),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-ana kft-eslesme-selam kft-eylem-dugme', onClick: async () => { if (!selamVerildi(p.kimlik)) await selamla(p, yenile, b); if (selamVerildi(p.kimlik)) b.git(`/mesaj?k=${p.kimlik}`); } }, ikon('el', 18), t('ht.selam')),
     ),
     h('p', { class: 'b-kucuk' }, t('ht.eslesmeAciklama')),
   );
@@ -254,7 +272,10 @@ function ciz(kok, b) {
   const durum = kayitli.durum || { sekme: 'tum', dil: 'hedef', eslesmeSira: -1 };
   durum.eslesmeSira = -1;
   // v0.14.0: üst sekmeler 4'e indi (Tümü · Sana uygun · Çevrimiçi · Yeni); diğer ölçütler süzgeç penceresinde.
-  if (!['tum', 'uygun', 'cevrimici', 'yeni'].includes(durum.sekme)) durum.sekme = 'tum';
+  // v0.19.0: "Arkadaşlar" sekmesi de geçerli (önceden profilden dönünce Tümü'ne sıfırlanıyordu); adresle de açılır.
+  const SEKMELER = ['tum', 'uygun', 'cevrimici', 'yeni', 'arkadaslar'];
+  if (SEKMELER.includes(b.p.sekme)) durum.sekme = b.p.sekme;
+  if (!SEKMELER.includes(durum.sekme)) durum.sekme = 'tum';
   let suzgec = kayitli.suzgec || bosSuzgec();
   const liste = h('div', { class: 'b-liste kft-liste', 'aria-live': 'polite' });
   const eslesmeAlani = h('div');
@@ -271,9 +292,9 @@ function ciz(kok, b) {
     if (suzgec.cinsiyet !== 'tum') ekle(t(`ht.cins.${suzgec.cinsiyet}`), () => { suzgec.cinsiyet = 'tum'; });
     if (suzgec.anaDil !== 'tum') ekle(`${t('suzgec.anaDili')}: ${t(`diller.${suzgec.anaDil}`)}`, () => { suzgec.anaDil = 'tum'; });
     if (suzgec.ogrDil !== 'tum') ekle(`${t('suzgec.ogreniyor')}: ${t(`diller.${suzgec.ogrDil}`)}`, () => { suzgec.ogrDil = 'tum'; });
-    if (suzgec.yas[0] !== YAS_MIN || suzgec.yas[1] !== YAS_MAX) ekle(`${suzgec.yas[0]}–${suzgec.yas[1]}`, () => { suzgec.yas = [YAS_MIN, YAS_MAX]; });
+    if (suzgec.yas[0] !== YAS_MIN || suzgec.yas[1] !== YAS_MAX) ekle(`${suzgec.yas[0]}–${suzgec.yas[1] >= YAS_MAX ? `${YAS_MAX}+` : suzgec.yas[1]}`, () => { suzgec.yas = [YAS_MIN, YAS_MAX]; });
     if (suzgec.seviye[0] !== 0 || suzgec.seviye[1] !== SEVIYE_SIRASI.length - 1) ekle(`${SEVIYE_SIRASI[suzgec.seviye[0]]}–${SEVIYE_SIRASI[suzgec.seviye[1]]}`, () => { suzgec.seviye = [0, SEVIYE_SIRASI.length - 1]; });
-    suzgec.ulkeler.forEach((u) => ekle(u, () => suzgec.ulkeler.delete(u)));
+    suzgec.ulkeler.forEach((u) => ekle(ulkeGoster(u), () => suzgec.ulkeler.delete(u)));
     suzgec.ilgiler.forEach((i) => ekle(yerel(ILGI_ALANLARI.find((x) => x.kimlik === i) || { tr: i, en: i }), () => suzgec.ilgiler.delete(i)));
     yerlestir(etkinAlani, n ? h('div', { class: 'kft-etkin' },
       h('div', { class: 'kft-etkin-haplar' }, haplar),
@@ -296,6 +317,7 @@ function ciz(kok, b) {
     kayitli.durum = durum; kayitli.suzgec = suzgec;
     secimiYaz(durum, suzgec);
     suzgecRozeti();
+    if (durum.sekme === 'arkadaslar') { yerlestir(liste, arkadasPaneli(b, yenile, (k) => satir(k, b, yenile))); return; }
     const kisiler = suz(testProfilleri(), durum, suzgec);
     const temizle = () => { durum.sekme = 'tum'; durum.dil = 'tum'; kayitli.durum = durum; kayitli.suzgec = bosSuzgec(); b.git('/kesfet', { degistir: true }); };
     yerlestir(liste, kisiler.length ? kisiler.map((k) => satir(k, b, yenile)) : durumKutusu('bos', testProfilleri().length ? t('kesfet.suzgecBos') : t('test.hepsiEngelli'), testProfilleri().length ? { metin: t('kesfet.suzgecGevset'), fn: temizle } : undefined));
@@ -319,11 +341,12 @@ function ciz(kok, b) {
 
   yerlestir(kok,
     basBant(htUst({
-      sol: htIkon(ikon3d('seri', 30), t('ht.eslesmeBaslik'), () => { durum.eslesmeSira = durum.eslesmeSira < 0 ? 0 : -1; eslesmeCiz(); if (durum.eslesmeSira >= 0) eslesmeAlani.scrollIntoView({ block: 'nearest' }); }),
+      // v0.16.0: solda profil fotoğrafı (yan menü); otomatik eşleşme düğmesi sağa, süzgecin yanına taşındı.
+      sol: benDugmesi(b),
       baslik: t('ht.ortakBul'),
-      sag: suzgecDugmesi,
+      sag: [htIkon(ikon3d('seri', 30), t('ht.eslesmeBaslik'), () => { durum.eslesmeSira = durum.eslesmeSira < 0 ? 0 : -1; eslesmeCiz(); if (durum.eslesmeSira >= 0) eslesmeAlani.scrollIntoView({ block: 'nearest' }); }), suzgecDugmesi],
     }),
-    sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')]], durum.sekme, (id) => { durum.sekme = id; yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
+    sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')], ['arkadaslar', gelenIstekler().length ? `${t('arkadas.arkadaslar')} · ${gelenIstekler().length}` : t('arkadas.arkadaslar')]], durum.sekme, (id) => { durum.sekme = id; kullanildi(`kesfet:${id}`); yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
     pano,
     sekmeler([
       ['hedef', t(`diller.${ben.ogrenilenDil || 'en'}`)],
@@ -347,7 +370,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'kesfet',
-  surum: '0.4.0',
+  surum: '0.7.0',
   onek: 'kft',
   semaSurumu: 1,
   cekirdekServisleri: ['metin', 'depo', 'test-modu'],

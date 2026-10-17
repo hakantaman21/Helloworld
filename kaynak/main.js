@@ -34,6 +34,14 @@ import gelisim from './moduller/gelisim/index.js';
 import ayarlar from './moduller/ayarlar/index.js';
 import telaffuz from './moduller/telaffuz/index.js';
 import mesaj from './moduller/mesaj/index.js';
+import rehberModulu from './moduller/rehber/index.js';
+import ekosistemModulu from './moduller/ekosistem/index.js';
+import { ikonBaslat } from './cekirdek/ikon.js';
+import { ekosistemBaslat } from './cekirdek/ekosistem.js';
+import { rehberBaslat } from './cekirdek/rehber.js';
+import { rehberArayuzBaslat } from './cekirdek/rehber-arayuz.js';
+// v0.19.0–v0.21.0 ortak bileşen stilleri: modül stillerinden sonra gelsin diye modüllerden sonra yüklenir.
+import './stiller/bilesenler-rehber.css';
 
 // Bayrakla kapatılan modüller burada listelenir; uygulama diğerleriyle çalışmaya devam eder.
 const KAPALI_MODULLER = [];
@@ -47,7 +55,13 @@ function uygulamayiBaslat() {
   if (!al().profil.ayarlar.arayuzDili) degistir((v) => { v.profil.ayarlar.arayuzDili = tarayiciDili(); });
   dilAyarla(al().profil.ayarlar.arayuzDili);
   temaBaslat();
-  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar, mesaj, telaffuz]) kaydet(m, KAPALI_MODULLER);
+  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar, mesaj, telaffuz, rehberModulu, ekosistemModulu]) kaydet(m, KAPALI_MODULLER);
+  // v0.20.0 İkon paketi ve benzersiz ikonlar; uygulama ailesi üyelik paylaşımı.
+  ikonBaslat();
+  ekosistemBaslat();
+  // v0.19.0 Rehberlik: ilk ekran çizilmeden önce dinlemeye başlar (ilk ekran da kullanım sayılır, tur/yenilikler açılabilir).
+  rehberBaslat();
+  rehberArayuzBaslat();
 
   dinle('arama:geldi', ({ tur }) => {
     if (MESGUL_EKRANLAR.includes(aktifEkran())) return;
@@ -68,7 +82,17 @@ function uygulamayiBaslat() {
   baslat(document.getElementById('uygulama'));
   if (bozukKayitVardi()) duyur(t('depo.bozukKayit'), 9000);
   // v0.14.0: fotoğraflar IndexedDB'den arka planda belleğe alınır; ekranlar beklemez. Fotoğraf varsa açık ekran bir kez yenilenir.
-  medyaHazirla().then((yuklendi) => { if (yuklendi) git((location.hash.slice(1) || '/bugun'), {}); });
+  // v0.16.0: fotoğraflar geç yüklenince ekran yeniden çizilir — ama kullanıcı o an yazı yazıyorsa taslağı gitmesin diye
+  // yazı alanından çıkana kadar beklenir.
+  const yaziyor = () => { const a = document.activeElement; return !!a && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && !['button', 'checkbox', 'radio', 'range', 'file'].includes(a.type)) || a.isContentEditable); };
+  medyaHazirla().then((yuklendi) => {
+    if (!yuklendi) return;
+    const adres = location.hash;
+    const yenile = () => { if (location.hash === adres) git((location.hash.slice(1) || '/bugun'), {}); };
+    if (!yaziyor()) { yenile(); return; }
+    const bekle = () => { setTimeout(() => { if (yaziyor()) return; document.removeEventListener('focusout', bekle); yenile(); }, 0); };
+    document.addEventListener('focusout', bekle);
+  });
   zamanlayiciBaslat();
   sekmeKaydirmaBaslat(git);
   // Orta Pratik düğmesi: basılı tutunca hızlı işlemler; "atanabilir" olanlar dokunma kısayolu olarak seçilebilir.

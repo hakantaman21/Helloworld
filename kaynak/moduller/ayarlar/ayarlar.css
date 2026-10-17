@@ -173,3 +173,53 @@
   .ayr-gelismis > .ayr-satir { margin-top: 6px; }
   .ayr-ozel-isaret { color: var(--renk-vurgu-metin); font-weight: 800; }
 }
+
+@layer moduller {
+  /* v0.16.0 Engellenenler listesi */
+  .ayr-engel-liste { display: flex; flex-direction: column; gap: 4px; padding: 4px 0; }
+  .ayr-engel-dugme { min-height: var(--dokunma); padding: 0 14px; flex: none; }
+}
+
+@layer moduller {
+  /* v0.18.0 Paketler ve uygulama kilidi */
+  .ayr-pkt { display: flex; flex-direction: column; gap: 10px; padding: 14px; }
+  .ayr-pkt-aktif { box-shadow: inset 0 0 0 2px var(--renk-vurgu), 0 6px 16px var(--renk-golge); }
+  .ayr-pkt-ust { display: flex; align-items: center; gap: 12px; }
+  .ayr-pkt-ikon { flex: none; width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; }
+  .ayr-pkt-ad { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .ayr-pkt-ad h2 { margin: 0; font-family: var(--yazi-serif); font-size: calc(21px * var(--yazi-olcek)); }
+  .ayr-pkt-fiyat { display: flex; flex-direction: column; align-items: flex-end; }
+  .ayr-pkt-fiyat b { font-size: calc(19px * var(--yazi-olcek)); }
+  .ayr-pkt-fiyat small { color: var(--renk-soluk); font-size: calc(11.5px * var(--yazi-olcek)); }
+  .ayr-pkt-satirlar, .ayr-pkt-ozellikler { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .ayr-pkt-satirlar li { display: flex; align-items: center; gap: 8px; }
+  .ayr-pkt-satirlar svg { color: var(--renk-iyi-metin); flex: none; }
+  .ayr-pkt-ozellikler { padding-top: 8px; border-top: 1px solid var(--renk-cizgi); font-size: var(--yazi-kucuk); }
+  .ayr-pkt-ozellikler li { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .ayr-pkt-yok { color: var(--renk-soluk); }
+  .ayr-pkt-kullanim { display: flex; flex-direction: column; gap: 4px; }
+  .ayr-pkt-duzenle { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 14px; background: var(--renk-yuzey-ikinci); }
+  .ayr-pkt-alan { display: flex; flex-direction: column; gap: 4px; font-size: var(--yazi-kucuk); font-weight: 700; }
+  .ayr-pkt-oz { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: var(--yazi-kucuk); }
+  .ayr-pkt-oz legend { font-weight: 700; margin-bottom: 4px; }
+  .ayr-pkt-oz-satir { display: flex; align-items: center; gap: 8px; min-height: var(--dokunma); }
+  .ayr-kilit { display: flex; flex-direction: column; gap: 10px; }
+  .ayr-kilit-ayarlar { display: flex; flex-direction: column; gap: 8px; }
+  .ayr-kilit-kurulum { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+}
+
+/* v0.20.0 İkon paketi seçici; başka uygulamamızın üyesine indirimli fiyat. */
+@layer moduller {
+  .ayr-ikonlar { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 8px; }
+  .ayr-ikon-paket { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-height: 92px; padding: 10px; border: 0; border-radius: 14px; background: var(--renk-yuzey-ikinci); box-shadow: inset 0 0 0 1px var(--renk-cizgi); color: var(--renk-murekkep); font: inherit; text-align: left; cursor: pointer; }
+  .ayr-ikon-paket[aria-checked="true"] { box-shadow: inset 0 0 0 2px var(--renk-vurgu); background: var(--renk-vurgu-acik); }
+  .ayr-ikon-paket:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+  .ayr-ikon-ornek { display: flex; gap: 4px; }
+  .ayr-ikon-paket b { font-size: calc(13.5px * var(--yazi-olcek)); }
+  .ayr-ikon-paket small { font-size: calc(11.5px * var(--yazi-olcek)); color: var(--renk-soluk); }
+  .ayr-pkt-fiyat s { color: var(--renk-soluk); font-weight: 600; font-size: .85em; margin-right: 4px; }
+  .ayr-pkt-indirim { display: inline-block; margin-top: 2px; padding: 1px 6px; border-radius: 6px; background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); font-size: calc(11px * var(--yazi-olcek)); font-weight: 800; }
+  .ayr-indirim-serit { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 64px; padding: 10px 12px; border: 0; border-radius: 18px; background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); font: inherit; text-align: left; cursor: pointer; }
+  .ayr-indirim-serit > span { flex: 1; display: flex; flex-direction: column; }
+  .ayr-indirim-serit:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+}

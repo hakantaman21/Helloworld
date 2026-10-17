@@ -1,8 +1,10 @@
 // Gelişim: haftalık/aylık Büyüme Karnesi (paylaşılabilir kart), seviye yolu, haftanın günleri ve seri.
 import './gelisim.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d, htUst, htIkon, dilCifti, benAvatar, sekmeler } from '../../cekirdek/arayuz.js';
-import { testAnlari, takipSayisi } from '../../cekirdek/test-modu.js';
+import { h, altGezinme, durumKutusu, ikon, yerlestir, ikon3d, htUst, htIkon, dilCifti, benAvatar, testAvatar } from '../../cekirdek/arayuz.js';
+import { benDugmesi } from '../../cekirdek/yan-menu.js';
+import { arkadaslarim, benimGizlilik } from '../../cekirdek/arkadaslik.js';
+import { testAnlari, takipSayisi, testProfili } from '../../cekirdek/test-modu.js';
 import { fotografEkle, profilFotografiYap, fotografSil, FOTO_SINIRI, fotoAdresi, fotograflarEkle } from '../../cekirdek/fotograf.js';
 import { cumleSil } from '../../cekirdek/cumle-defteri.js';
 import { destek, soyle } from '../../cekirdek/ses/ses-hatti.js';
@@ -17,7 +19,6 @@ import { jeton } from '../../cekirdek/tema.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 
 let donem = 'hafta';
-let benSekme = 'profil';
 
 function ortalama(dizi) {
   return dizi.length ? dizi.reduce((a, b) => a + b, 0) / dizi.length : null;
@@ -138,7 +139,7 @@ function ciz(kok, b) {
   const ozet = donemHesapla();
   const hicVeriYok = Object.keys(v.gunluk).length === 0;
   const seviye = SEVIYE_SIRASI.indexOf(v.profil.seviye);
-  const yol = SEVIYE_SIRASI.slice(0, 4);
+  const yol = SEVIYE_SIRASI;
   const bugun = tarihAnahtari();
   const hafta = haftaBaslangici(bugun);
   const tekrarSayisi = vadesiGelenler().length;
@@ -150,86 +151,27 @@ function ciz(kok, b) {
   const kelimeSayisi = new Set(gunKayitlari.flatMap((g) => g.yeniKelime || [])).size;
   const ilkGun = Object.keys(v.gunluk || {}).sort()[0];
   const katilimGunu = ilkGun ? Math.max(1, Math.round((Date.now() - new Date(ilkGun).getTime()) / 86400000) + 1) : 1;
-  // İki sekme (az kaydırma): Profil = kimlik, puanlar, fotoğraflar, defter, araçlar · Gelişim = karne, seviye yolu, hafta.
-  if (b.p.sekme === 'profil' || b.p.sekme === 'gelisim') benSekme = b.p.sekme;
-  const sekmeAlani = sekmeler([['profil', t('gelisim.sekme.profil')], ['gelisim', t('gelisim.sekme.gelisim')]], benSekme, (id) => { benSekme = id; sekmeGoster(); }, { tur: 'hap', etiket: t('gezinme.profil') });
+  // v0.16.0: eski "?sekme=profil" adresleri kimlik sayfasına gider (Profil artık profil fotoğrafının arkasında).
+  if (b.p.sekme === 'profil') { b.git('/profil', { degistir: true }); return null; }
 
-  yerlestir(kok, 
+  yerlestir(kok,
     htUst({
-      sol: h('span', { class: 'gls-seri-hap', title: t('ht.gunlukSeri') }, ikon3d('seri', 22), String(seri)),
-      baslik: t('gezinme.profil'),
-      sag: [
-        htIkon('paylas', t('gelisim.paylas'), () => paylas(ozet)),
-        htIkon(ikon3d('ayarlar', 28), t('ayarlar.baslik'), () => b.git('/ayarlar')),
-      ],
+      sol: benDugmesi(b),
+      baslik: t('gezinme.gelisim'),
+      sag: htIkon('paylas', t('gelisim.paylas'), () => paylas(ozet)),
     }),
-    h('div', { class: `gls-kapak ${kapakSinifi(v.profil.kapak)}` },
-      v.profil.kapak && !String(v.profil.kapak).startsWith('sistem-') ? h('img', { src: fotoAdresi(v.profil.kapak), alt: '' }) : null,
-      h('button', { type: 'button', class: 'b-ht-ikon gls-kapak-dugme', 'aria-label': t('kapak.degistir'), onClick: () => kapakSec(() => ciz(kok, b)) }, ikon('kamera', 18))),
-    h('button', { type: 'button', class: 'gls-ben', onClick: () => b.git('/ayarlar?grup=profil'), 'aria-label': t('gelisim.kimlik.duzenle') },
-      benAvatar(76, 'gls-ben-av'),
-      h('span', { class: 'gls-ben-ic' },
-        h('span', { class: 'gls-ben-ad' }, h('b', null, v.profil.ad || '?'), h('span', { class: 'b-etiket-hap' }, v.profil.seviye)),
-        dilCifti(v.profil.anaDil || 'tr', v.profil.ogrenilenDil || 'en', v.profil.seviye),
-        h('span', { class: 'gls-ben-sayilar' }, h('b', null, String(takipSayisi())), ` ${t('ht.takipEdilenSayi')}`, h('b', null, ' 0'), ` ${t('ht.takipci')}`),
-      ),
-      ikon('sag', 20),
-    ),
     h('div', { class: 'gls-istat' },
       h('button', { type: 'button', class: 'gls-istat-kutu', onClick: () => b.git('/bugun') },
         h('span', { class: 'gls-istat-deger' }, ikon3d('seri', 26), String(seri)), h('span', null, t('ht.gunlukSeri'))),
       h('button', { type: 'button', class: 'gls-istat-kutu', onClick: () => b.git('/hafiza') },
         h('span', { class: 'gls-istat-deger' }, ikon3d('hafiza', 26), String(tekrarSayisi)), h('span', null, t('ht.tekrarBekleyen'))),
     ),
-    sekmeAlani,
     h('section', { class: 'b-platform gls-puanlar', 'aria-labelledby': 'gls-puan-baslik' },
       h('h2', { class: 'b-grup-etiket', id: 'gls-puan-baslik' }, h('span', null, t('puan.baslik')), h('span', null, t('puan.katildi', { n: katilimGunu }))),
       h('div', { class: 'b-karolar' }, [
         ['saat', toplamDakika, t('puan.dakika')], ['kitap', kelimeSayisi, t('puan.kelime')], ['onay', (v.hafiza || []).length, t('puan.hata')],
         ['yerImi', (v.kayitliCumleler || []).length, t('puan.cumle')], ['kalem', benimAnSayisi, t('puan.an')], ['kisi', takipSayisi(), t('puan.takip')],
       ].map(([ik, deger, ad]) => h('span', { class: 'b-karo gls-puan' }, h('span', { class: 'gls-puan-ikon', 'aria-hidden': 'true' }, ikon(ik, 20)), h('b', { class: 'gls-puan-deger' }, String(deger)), ad))),
-    ),
-    h('button', { type: 'button', class: 'gls-satir', onClick: () => b.git('/dil-anlari') },
-      ikon3d('anlar', 28), h('b', null, t('anlar.baslik')), h('span', { class: 'gls-satir-sayi' }, String(benimAnSayisi)), ikon('sag', 18)),
-    h('button', { type: 'button', class: 'gls-ilgi', onClick: () => b.git('/ayarlar?bolum=ilgi') },
-      h('span', { class: 'gls-ilgi-ust' }, h('b', null, t('ilgi.baslik')), h('span', { class: 'b-kucuk' }, (v.profil.ilgiler || []).length ? t('ilgi.duzenle') : t('ilgi.ekle')), ikon('sag', 18)),
-      (v.profil.ilgiler || []).length
-        ? h('span', { class: 'b-karolar gls-ilgi-karolar' }, ILGI_ALANLARI.filter((i) => v.profil.ilgiler.includes(i.kimlik)).map((i) => h('span', { class: 'b-karo' }, h('span', { class: 'b-karo-simge', 'aria-hidden': 'true' }, i.simge), yerel(i))))
-        : h('span', { class: 'b-kucuk' }, t('ilgi.davet')),
-    ),
-    h('section', { class: 'b-platform gls-fotolar', 'aria-labelledby': 'gls-foto-baslik' },
-      h('h2', { class: 'b-grup-etiket', id: 'gls-foto-baslik' }, h('span', null, t('foto.baslik')), h('span', null, `${(v.profil.fotograflar || []).length} / ${FOTO_SINIRI}`)),
-      h('div', { class: 'b-karolar gls-foto-izgara' },
-        (v.profil.fotograflar || []).map((f, i) => h('button', { type: 'button', class: `gls-foto${f === v.profil.foto ? ' gls-foto-profil' : ''}`, 'aria-label': t('foto.ac', { n: i + 1 }), onClick: () => fotoGoster(f, () => ciz(kok, b)) }, h('img', { src: fotoAdresi(f), alt: '' }))),
-        (v.profil.fotograflar || []).length < FOTO_SINIRI ? h('button', { type: 'button', class: 'b-karo gls-foto-ekle', onClick: async () => {
-          const s = await fotografEkle();
-          if (s === 'eklendi') { duyur(t('foto.eklendi')); ciz(kok, b); } else if (s === 'hata') duyur(t('foto.hata')); else if (s === 'sinir') duyur(t('foto.sinir', { n: FOTO_SINIRI }));
-        } }, h('span', { class: 'b-karo-simge', 'aria-hidden': 'true' }, ikon('kamera', 22)), t('foto.ekle')) : null,
-      ),
-      h('p', { class: 'b-kucuk' }, t('foto.gizlilik')),
-    ),
-    h('section', { class: 'b-platform gls-defter', 'aria-labelledby': 'gls-defter-baslik' },
-      h('h2', { class: 'b-grup-etiket', id: 'gls-defter-baslik' }, h('span', null, t('defter.baslik')), h('span', null, String((v.kayitliCumleler || []).length))),
-      (v.kayitliCumleler || []).length
-        ? h('ul', { class: 'gls-defter-liste' }, v.kayitliCumleler.slice(0, 8).map((c) => h('li', { class: 'gls-defter-satir' },
-          h('span', { class: 'gls-defter-metin' }, c.metin, c.kimden ? h('small', null, c.kimden) : null),
-          destek.sentez ? h('button', { type: 'button', class: 'gls-defter-dugme', 'aria-label': t('defter.dinle'), onClick: () => soyle(c.metin) }, ikon('hoparlor', 18)) : null,
-          h('button', { type: 'button', class: 'gls-defter-dugme', 'aria-label': t('defter.sil'), onClick: () => { cumleSil(c.metin); ciz(kok, b); } }, ikon('kapat', 16)))))
-        : h('p', { class: 'b-kucuk' }, t('defter.bos')),
-    ),
-    h('section', { class: 'b-platform gls-merkez', 'aria-labelledby': 'gls-merkez-baslik' },
-      h('h2', { class: 'gls-merkez-baslik', id: 'gls-merkez-baslik' }, t('ht.ogrenmeMerkezi')),
-      h('div', { class: 'b-uygulamalar gls-uygulamalar' },
-        [['senaryo', 'senaryolar', '/senaryolar', 1], ['telaffuz', 'telaffuz', '/telaffuz', 5], ['hafiza', 'hafiza', '/hafiza', 3], ['kupa', 'karne', '/karne', 2], ['baglanti', 'partner', '/kesfet', 4]].map(([ik, ad, yol, renk]) =>
-          h('button', { type: 'button', class: 'b-uygulama', onClick: () => b.git(yol) }, h('span', { class: `b-uygulama-ikon b-kutu-${renk}` }, ikon3d(ik, 38)), t(`ht.merkez.${ad}`))),
-      ),
-    ),
-    h('section', { class: 'b-platform gls-davet' },
-      h('div', { class: 'gls-davet-metin' }, h('b', null, t('davet.baslik')), h('span', null, t('davet.alt'))),
-      h('button', { type: 'button', class: 'b-dugme b-dugme-ana gls-davet-dugme', onClick: async () => {
-        const veri = { title: t('uygulama.ad'), text: t('davet.metin'), url: location.href.split('#')[0] };
-        try { if (navigator.share) await navigator.share(veri); else { await navigator.clipboard.writeText(`${veri.text} ${veri.url}`); duyur(t('ht.kopyalandi')); } } catch { /* vazgeçildi */ }
-      } }, ikon('paylas', 18), t('davet.dugme')),
     ),
     h('section', { class: 'b-kart gls-siradaki', 'aria-labelledby': 'gls-sonraki-adim' },
       h('span', { class: 'b-ust-etiket' }, t('gelisim.siradakiEtiket')),
@@ -286,24 +228,96 @@ function ciz(kok, b) {
         }),
       ),
     ),
+    h('section', { class: 'b-platform gls-defter', 'aria-labelledby': 'gls-defter-baslik' },
+      h('h2', { class: 'b-grup-etiket', id: 'gls-defter-baslik' }, h('span', null, t('defter.baslik')), h('span', null, String((v.kayitliCumleler || []).length))),
+      (v.kayitliCumleler || []).length
+        ? h('ul', { class: 'gls-defter-liste' }, v.kayitliCumleler.slice(0, 8).map((c) => h('li', { class: 'gls-defter-satir' },
+          h('span', { class: 'gls-defter-metin' }, c.metin, c.kimden ? h('small', null, c.kimden) : null),
+          destek.sentez ? h('button', { type: 'button', class: 'gls-defter-dugme', 'aria-label': t('defter.dinle'), onClick: () => soyle(c.metin) }, ikon('hoparlor', 18)) : null,
+          h('button', { type: 'button', class: 'gls-defter-dugme', 'aria-label': t('defter.sil'), onClick: () => { cumleSil(c.metin); ciz(kok, b); } }, ikon('kapat', 16)))))
+        : h('p', { class: 'b-kucuk' }, t('defter.bos')),
+    ),
+    h('section', { class: 'b-platform gls-merkez', 'aria-labelledby': 'gls-merkez-baslik' },
+      h('h2', { class: 'gls-merkez-baslik', id: 'gls-merkez-baslik' }, t('ht.ogrenmeMerkezi')),
+      h('div', { class: 'b-uygulamalar gls-uygulamalar' },
+        [['senaryo', 'senaryolar', '/senaryolar', 1], ['telaffuz', 'telaffuz', '/telaffuz', 5], ['hafiza', 'hafiza', '/hafiza', 3], ['kupa', 'karne', '/karne', 2], ['baglanti', 'partner', '/kesfet', 4]].map(([ik, ad, yol, renk]) =>
+          h('button', { type: 'button', class: 'b-uygulama', onClick: () => b.git(yol) }, h('span', { class: `b-uygulama-ikon b-kutu-${renk}` }, ikon3d(ik, 38)), t(`ht.merkez.${ad}`))),
+      ),
+    ),
     altGezinme('/gelisim'),
   );
-  const cocuklar = [...kok.children];
-  const bas = cocuklar.indexOf(sekmeAlani);
-  const ayrim = cocuklar.findIndex((c) => c.classList.contains('gls-siradaki'));
-  cocuklar.forEach((c, i) => { if (i > bas && i < cocuklar.length - 1) c.dataset.sekme = i < ayrim ? 'profil' : 'gelisim'; });
-  function sekmeGoster() { kok.querySelectorAll('[data-sekme]').forEach((c) => { c.hidden = c.dataset.sekme !== benSekme; }); }
-  sekmeGoster();
+  return null;
+}
+
+// v0.16.0 Kimlik sayfası (/profil): kapak, fotoğraf, ad, dil çifti, ilgi alanları, fotoğraflar, Dil Anları, davet.
+// Üst banttaki profil fotoğrafından → yan menü → "Profilini gör" ile açılır; düzenleme Ayarlar › Kişisel bilgiler.
+function profilCiz(kok, b) {
+  const v = al();
+  const benimAnSayisi = testAnlari().filter((a) => a.benim).length;
+  kok.classList.add('gls-profil-ekran');
+  yerlestir(kok,
+    htUst({
+      sol: htIkon('sol', t('genel.geri'), () => b.geri('/gelisim')),
+      baslik: t('ekran.profil'),
+      sag: htIkon(ikon3d('ayarlar', 28), t('ayarlar.baslik'), () => b.git('/ayarlar')),
+    }),
+    h('div', { class: `gls-kapak ${kapakSinifi(v.profil.kapak)}` },
+      v.profil.kapak && !String(v.profil.kapak).startsWith('sistem-') ? h('img', { src: fotoAdresi(v.profil.kapak), alt: '' }) : null,
+      h('button', { type: 'button', class: 'b-ht-ikon gls-kapak-dugme', 'aria-label': t('kapak.degistir'), onClick: () => kapakSec(() => profilCiz(kok, b)) }, ikon('kamera', 18))),
+    h('button', { type: 'button', class: 'gls-ben', onClick: () => b.git('/ayarlar?grup=profil'), 'aria-label': t('gelisim.kimlik.duzenle') },
+      benAvatar(76, 'gls-ben-av'),
+      h('span', { class: 'gls-ben-ic' },
+        h('span', { class: 'gls-ben-ad' }, h('b', null, v.profil.ad || '?'), h('span', { class: 'b-etiket-hap' }, v.profil.seviye)),
+        dilCifti(v.profil.anaDil || 'tr', v.profil.ogrenilenDil || 'en', v.profil.seviye),
+        h('span', { class: 'gls-ben-sayilar' }, h('b', null, String(takipSayisi())), ` ${t('ht.takipEdilenSayi')}`, h('b', null, ' 0'), ` ${t('ht.takipci')}`),
+      ),
+      ikon('sag', 20),
+    ),
+    h('button', { type: 'button', class: 'gls-satir', onClick: () => b.git('/dil-anlari') },
+      ikon3d('anlar', 28), h('b', null, t('anlar.baslik')), h('span', { class: 'gls-satir-sayi' }, String(benimAnSayisi)), ikon('sag', 18)),
+    h('button', { type: 'button', class: 'gls-ilgi', onClick: () => b.git('/ayarlar?bolum=ilgi') },
+      h('span', { class: 'gls-ilgi-ust' }, h('b', null, t('ilgi.baslik')), h('span', { class: 'b-kucuk' }, (v.profil.ilgiler || []).length ? t('ilgi.duzenle') : t('ilgi.ekle')), ikon('sag', 18)),
+      (v.profil.ilgiler || []).length
+        ? h('span', { class: 'b-karolar gls-ilgi-karolar' }, ILGI_ALANLARI.filter((i) => v.profil.ilgiler.includes(i.kimlik)).map((i) => h('span', { class: 'b-karo' }, h('span', { class: 'b-karo-simge', 'aria-hidden': 'true' }, i.simge), yerel(i))))
+        : h('span', { class: 'b-kucuk' }, t('ilgi.davet')),
+    ),
+    h('section', { class: 'b-platform gls-fotolar', 'aria-labelledby': 'gls-foto-baslik' },
+      h('h2', { class: 'b-grup-etiket', id: 'gls-foto-baslik' }, h('span', null, t('foto.baslik')), h('span', null, `${(v.profil.fotograflar || []).length} / ${FOTO_SINIRI}`)),
+      h('div', { class: 'b-karolar gls-foto-izgara' },
+        (v.profil.fotograflar || []).map((f, i) => h('button', { type: 'button', class: `gls-foto${f === v.profil.foto ? ' gls-foto-profil' : ''}`, 'aria-label': t('foto.ac', { n: i + 1 }), onClick: () => fotoGoster(f, () => profilCiz(kok, b)) }, h('img', { src: fotoAdresi(f), alt: '' }))),
+        (v.profil.fotograflar || []).length < FOTO_SINIRI ? h('button', { type: 'button', class: 'b-karo gls-foto-ekle', onClick: async () => {
+          const s = await fotografEkle();
+          if (s === 'eklendi') { duyur(t('foto.eklendi')); profilCiz(kok, b); } else if (s === 'hata') duyur(t('foto.hata')); else if (s === 'sinir') duyur(t('foto.sinir', { n: FOTO_SINIRI }));
+        } }, h('span', { class: 'b-karo-simge', 'aria-hidden': 'true' }, ikon('kamera', 22)), t('foto.ekle')) : null,
+      ),
+      h('p', { class: 'b-kucuk' }, t('foto.gizlilik')),
+    ),
+    // v0.17.0 Arkadaşlarım (yalnız sen ve gizlilik ayarının izin verdikleri görür).
+    h('section', { class: 'b-platform gls-arkadaslar', 'aria-labelledby': 'gls-ark-baslik' },
+      h('h2', { class: 'b-grup-etiket', id: 'gls-ark-baslik' }, h('span', null, t('arkadas.arkadaslarim')), h('span', null, String(arkadaslarim().length))),
+      arkadaslarim().length ? h('div', { class: 'gls-ark-liste', 'data-yatay': '' }, arkadaslarim().map((k) => testProfili(k)).filter(Boolean).map((p) =>
+        h('button', { type: 'button', class: 'gls-ark', onClick: () => b.git(`/kisi?k=${p.kimlik}`) }, testAvatar(p, 48), h('span', null, p.ad))))
+        : h('p', { class: 'b-kucuk' }, t('arkadas.arkadasYok')),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-metin', onClick: () => b.git('/ayarlar?grup=gizlilik') }, `${t('arkadas.gizlilik.arkadasListesi')}: ${t(`arkadas.secenek.${benimGizlilik().arkadasListesi}`)}`)),
+    h('section', { class: 'b-platform gls-davet' },
+      h('div', { class: 'gls-davet-metin' }, h('b', null, t('davet.baslik')), h('span', null, t('davet.alt'))),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-ana gls-davet-dugme', onClick: async () => {
+        const veri = { title: t('uygulama.ad'), text: t('davet.metin'), url: location.href.split('#')[0] };
+        try { if (navigator.share) await navigator.share(veri); else { await navigator.clipboard.writeText(`${veri.text} ${veri.url}`); duyur(t('ht.kopyalandi')); } } catch { /* vazgeçildi */ }
+      } }, ikon('paylas', 18), t('davet.dugme')),
+    ),
+  );
   return null;
 }
 
 export default {
   kimlik: 'gelisim',
-  surum: '0.4.0',
+  surum: '0.6.0',
   onek: 'gls',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'gunluk'],
   ekranlar: {
     gelisim: ekran({ baslikAnahtari: 'ekran.gelisim', durumlar: DORT_DURUM, ciz }),
+    profil: ekran({ baslikAnahtari: 'ekran.profil', durumlar: DORT_DURUM, ciz: profilCiz }),
   },
 };

@@ -2,7 +2,7 @@
 // 3) mikrofon izni (gerekçeyle)  4) yapay zekâ partnerle 1 dakikalık tanışma.
 import './karsilama.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, yerlestir, logo, onayIste } from '../../cekirdek/arayuz.js';
+import { h, ikon, yerlestir, logo } from '../../cekirdek/arayuz.js';
 import { t, dilAyarla, aktifDil, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { al, degistir } from '../../cekirdek/depo.js';
 import { mikrofonIste } from '../../cekirdek/izin.js';
@@ -91,17 +91,41 @@ function adim1(kok, sonraki, yenidenCiz, b) {
 
 // Misafir girişi: adımları atlar, makul varsayılanlarla başlar. 18 yaş onayı yine zorunludur (topluluk güvenliği).
 // Ad, dil ve ilgi alanları sonra Ayarlar'dan tamamlanır; misafir işareti Ayarlar'da gösterilir.
+// v0.16.0: arayüz dili ana dil değildir. Türkçe arayüzde ana dil Türkçe varsayılır (onaylanabilir); başka arayüz
+// dillerinde misafirden ana dili seçmesi istenir. Öğrenilen dil şimdilik her zaman İngilizce (koç yalnız İngilizce);
+// ana dili İngilizce olan misafir "İngilizce öğrenenlere yardımcı" rolüyle girer.
+function misafirPenceresi() {
+  return new Promise((coz) => {
+    const dil = aktifDil();
+    const sec = h('select', { class: 'b-girdi', id: 'kar-m-anadil', 'aria-label': t('karsilama.anaDilSoru') },
+      h('option', { value: '' }, '—'),
+      ANA_DILLER.map((d) => h('option', { value: d, selected: dil === 'tr' && d === 'tr' }, t(`diller.${d}`))));
+    const kapat = (sonuc) => { perde.remove(); coz(sonuc); };
+    const perde = h('div', { class: 'b-perde', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'kar-m-baslik' },
+      h('div', { class: 'b-pencere' },
+        h('h2', { class: 'b-bolum-baslik', id: 'kar-m-baslik' }, t('misafir.onayBaslik')),
+        h('label', { class: 'b-etiket', for: 'kar-m-anadil' }, t('karsilama.anaDilSoru')), sec,
+        h('p', null, t('misafir.onayMetin')),
+        h('div', { class: 'b-yigin' },
+          h('button', { class: 'b-dugme b-dugme-ana', onClick: () => { if (!sec.value) { duyur(t('karsilama.anaDilEksik')); sec.focus(); return; } kapat(sec.value); } }, t('misafir.onayEvet')),
+          h('button', { class: 'b-dugme b-dugme-cerceve', 'data-vazgec': '', onClick: () => kapat(null) }, t('genel.vazgec'))),
+      ));
+    document.body.append(perde);
+    sec.focus();
+  });
+}
+
 async function misafirGirisi(b) {
-  const evet = await onayIste({ baslik: t('misafir.onayBaslik'), metin: t('misafir.onayMetin'), evet: t('misafir.onayEvet'), hayir: t('genel.vazgec') });
-  if (!evet) return;
+  const anaDil = await misafirPenceresi();
+  if (!anaDil) return;
   const dil = aktifDil();
   degistir((v) => {
     const p = v.profil;
     p.misafir = true;
     p.ad = p.ad || t('misafir.ad');
-    p.anaDil = p.anaDil || (dil === 'tr' ? 'tr' : 'en');
-    if (!p.ogrenilenDil || p.ogrenilenDil === p.anaDil) p.ogrenilenDil = p.anaDil === 'en' ? 'tr' : 'en';
-    p.rol = p.rol || 'ogrenen';
+    p.anaDil = anaDil;
+    p.ogrenilenDil = 'en';
+    p.rol = p.rol || (anaDil === 'en' ? 'yardimci' : 'ogrenen');
     p.kendiniTanim = p.kendiniTanim || 'basit';
     if (!p.tanismaYapildi) p.seviye = BASLANGIC_SEVIYESI[p.kendiniTanim];
     p.yasOnayi = true;
@@ -196,7 +220,7 @@ function adim4(kok, b) {
 
 export default {
   kimlik: 'karsilama',
-  surum: '0.5.0',
+  surum: '0.6.0',
   onek: 'kar',
   semaSurumu: 2,
   cekirdekServisleri: ['depo', 'izin', 'ses', 'metin'],

@@ -163,3 +163,24 @@
   .msj-hobi { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: var(--kose-tam); background: var(--renk-yuzey-ikinci); font-size: calc(13px * var(--yazi-olcek)); font-weight: 600; white-space: nowrap; box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), 0 2px 4px var(--renk-golge); }
   .msj-hobi-ortak { color: var(--renk-iyi-metin); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--renk-iyi-metin) 45%, transparent); }
 }
+
+@layer moduller {
+  /* v0.16.0 Topluluk kuralları: kalan mesaj notu, yanıt bekleme kartı, fotoğraf düğmesi ve fotoğraf mesajı. */
+  .msj-yaz-alani { display: flex; flex-direction: column; gap: 6px; }
+  .msj-kural { margin: 0; padding: 0 4px; color: var(--renk-soluk); }
+  .msj-kilit { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; }
+  .msj-kilit p { margin: 0; }
+  .msj-foto-dugme { flex: none; align-self: center; }
+  .msj-foto { display: block; max-width: 220px; width: 100%; border-radius: 12px; margin-bottom: 4px; }
+}
+
+@layer moduller {
+  /* v0.17.0 Mesaj durumu tikleri ve kişinin arkadaş listesi */
+  .msj-tik { margin-left: 4px; font-weight: 800; letter-spacing: -2px; color: var(--renk-soluk); }
+  .msj-tik-okundu { color: var(--renk-gezinme-turkuaz); }
+  .msj-ark-liste { display: flex; gap: 12px; overflow-x: auto; padding: 4px 2px; }
+  .msj-ark { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 64px; border: 0; background: transparent; color: var(--renk-murekkep); font: inherit; font-size: calc(12px * var(--yazi-olcek)); cursor: pointer; }
+  .msj-ark-ben { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--kose-tam); background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); font-weight: 800; }
+  .msj-alt-takip[data-durum="arkadas"] { color: var(--renk-iyi-metin); }
+  .msj-alt-takip[data-durum="gonderildi"] { color: var(--renk-soluk); }
+}

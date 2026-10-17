@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 16;
+export const GUNCEL_SEMA = 19;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -155,4 +155,45 @@ export const gocler = {
     profil: { ...eski.profil, kapak: eski.profil.kapak || null },
     test: eski.test ? { ...eski.test, anlar: (eski.test.anlar || []).map((a) => ({ ...a, fotolar: Array.isArray(a.fotolar) ? a.fotolar : [] })) } : eski.test,
   }),
+  // 16 → 17: görüşme kayıtlarına kalıcı kimlik (karne adresi sıra numarasına bağlı kalmasın).
+  17: (eski) => {
+    const gorusmeler = (eski.gorusmeler || []).map((g, i) => (g && !g.kimlik ? { ...g, kimlik: `g-eski${i}${Math.random().toString(36).slice(2, 6)}` } : g));
+    const son = eski.sonGorusme && !eski.sonGorusme.kimlik && gorusmeler[0] && gorusmeler[0].tarih === eski.sonGorusme.tarih ? { ...eski.sonGorusme, kimlik: gorusmeler[0].kimlik } : eski.sonGorusme;
+    return { ...eski, gorusmeler, sonGorusme: son };
+  },
+  // 17 → 18 (v0.19.0): rehberlik durumu — bildirim kutusu, kullanım sayaçları (cihazda), "Yeni" etiketleri, tur, ipucu ayarları.
+  // Kurulumu tamamlamış kullanıcı güncelleme yapmıştır: önceki sürüm 0.18.0 sayılır (yenilikler gösterilir, tur kendiliğinden açılmaz).
+  // İlk kurulumda sonSurum boş kalır; açılışta güncel sürüm yazılır ve hiçbir şey "Yeni" sayılmaz.
+  18: (eski) => {
+    const kurulu = Boolean(eski && eski.profil && eski.profil.kurulumTamam);
+    return {
+      ...eski,
+      rehber: eski.rehber || {
+        kurulum: Date.now(), sonSurum: kurulu ? '0.18.0' : null, yeniler: {}, yenilikBekliyor: null, kutu: [], durum: {}, kullanim: {},
+        gorulenIpucu: [], tur: { tamam: kurulu }, ayar: { ipucu: true, hatirlatma: true, bilgi: true, oneri: true }, plan: {}, sonAramalar: [],
+      },
+    };
+  },
+  // 18 → 19 (v0.21.0): senaryo başına kalıcı kullanım özeti (v.senaryoIst). Eski görüşmelerden ve tamamlanan
+  // senaryolardan doldurulur. Alanlar cekirdek/senaryo-istatistik.js ile aynıdır (göç depodan önce çalıştığı için
+  // o modülü çağıramaz): d deneme · t tamam · i ilk · s son (ms) · sn süre · c cümle · dz düzeltme.
+  19: (eski) => {
+    if (eski.senaryoIst) return eski;
+    const ist = {};
+    const zamani = (tarih) => { const z = Date.parse(`${tarih}T12:00:00`); return Number.isFinite(z) ? z : Date.now(); };
+    [...(eski.gorusmeler || [])].reverse().forEach((g) => {
+      if (!g || g.tur !== 'senaryo' || !g.senaryoId || !(g.cumleler || []).length) return;
+      const k = ist[g.senaryoId] || { d: 0, t: 0, i: 0, s: 0, sn: 0, c: 0, dz: 0 };
+      const z = zamani(g.tarih);
+      k.d += 1; if (g.gorevTamam) k.t += 1; k.i = k.i || z; k.s = Math.max(k.s, z);
+      k.sn += Math.round(Number(g.sureSn) || 0); k.c += (g.cumleler || []).length; k.dz += (g.duzeltmeler || []).length;
+      ist[g.senaryoId] = k;
+    });
+    Object.entries(eski.tamamlananSenaryolar || {}).forEach(([id, tarih]) => {
+      if (ist[id]) return;
+      const z = zamani(tarih);
+      ist[id] = { d: 1, t: 1, i: z, s: z, sn: 0, c: 0, dz: 0 };
+    });
+    return { ...eski, senaryoIst: ist };
+  },
 };

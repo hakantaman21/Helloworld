@@ -1,3 +1,66 @@
+## 0.22.0 — 17.10.2026 · v0.19–v0.21 depoya aktarıldı, yasa uyumu
+
+- v0.19.0, v0.20.0 ve v0.21.0 Hakan'a dosya olarak teslim edilmişti; bu sürümde kaynak ağacına (`kaynak/`) aktarıldı ve robotun bütün yasalarına uyduruldu.
+- Dokunma alanları en az 48 px (kutu, arama, kılavuz, tur, ipucu şeridi, "Genişlet" düğmeleri).
+- İkon paketlerinin bütün renkleri jetonlarda (`--renk-ikon-*`, `--renk-glif-*`); glif zemini `::before` + ton döndürme.
+- Uygulama turu kendi katman jetonunda (`--z-tur`); ortak bileşen stilleri `stiller/bilesenler-rehber.css` ("b-" önekiyle). Modüller birbirinin sınıfını kullanmıyor (ekosistem kendi anahtar/satır stillerini taşıyor).
+
+## 0.21.0 — 17.10.2026 · Konu odaları ve senaryo raporu
+
+- Pratik › Konu odaları: "Tümü"nde her kategori bir yatay şerit; ekranda iki kare kart, kaydırarak seçilir. "Genişlet": Tümü'ndeyken kategori tam sayfa açılır (seviyeye göre gruplu geniş sohbet kartları); tek kategori seçiliyken senaryolar alta geniş kartlar olarak açılır, "Daralt" ile kapanır. Seçim, açık kategoriler ve şerit kaydırması geri dönünce korunur.
+- Denenen senaryolar işaretli: "Tamamlandı" / "Denendi" (Pratik, Öğren, Senaryolar).
+- Geniş kartta son kullanım, deneme sayısı ve başarı oranı; basılı tutunca (ya da "Rapor") kullanım raporu: başarı oranı, son kullanım, ilk deneme, deneme/tamamlama, toplam süre, cümle, düzeltme/cümle, son görüşmeler (karneye gider).
+- Senaryo başına kalıcı özet (şema 19); eski görüşmelerden ve tamamlananlardan geriye dönük doldurulur.
+
+## 0.20.0 — 17.10.2026 · İkon paketleri, uygulama ailesi, B1
+
+- 4 ikon paketi (Klasik 3B, Buz cam, Neon, Yumuşak kil; Otomatik = tasarım paketine uyar). 3B görsel yalnız anlamı birebir tutan yerde; diğerleri paketin vurgusunu taşıyan glif rozeti. Aynı ekranda tekrar eden kart ikonları kendiliğinden ayrışır.
+- Uygulama ailemiz: English Prime ve Yoldaş tanıtımı; ücretli üyeye diğerlerinde indirim teklifi, diğer uygulamada üyeye helloworld paketlerinde indirimli fiyat (ödeme bağlanana kadar yalnız gösterim). Adresler ve indirim oranı düzenleme modunda.
+- 5 yeni B1 senaryosu: ürün iadesi, eczane, gürültülü komşu, hafta sonu planı, ödev için ek süre.
+
+## 0.19.0 — 17.10.2026 · Rehberlik
+
+- Bildirim ve mesaj kutusu: 6 kategori, toplu seç/sil/okundu, kategori temizleme; arkadaşlık isteği kutudan kabul/ret. Okunmamış sayısı profil fotoğrafında ve zilde.
+- İlk girişte uygulama turu (gerçek öğeler üstünde); güncellemeden sonra yenilikler penceresi ve "Yeni" etiketleri.
+- Eksik (zorunlu olmayan) profil bilgisi hatırlatmaları, bilgilendirme mesajları, az kullanılan bölümler için öneriler (yalnız cihazda; günde en çok bir sistem mesajı).
+- Uygulamada arama (40 özellik), ipuçları ve kılavuz, uygulama haritası, ekran ipucu şeridi; Ayarlar › Rehber ve ipuçları.
+- Düzeltme: Bağlan "Arkadaşlar" sekmesi geri dönünce sıfırlanıyordu. Kilit kapsamı ekran tanımında bildirilebiliyor (kutu = kişiler ve sohbetler).
+
+## 0.18.0 — 17.10.2026 · Paketler, günlük sınır, uygulama kilidi
+
+- Paketler (Ayarlar › Üyelik ve paketler): Ücretsiz · Plus · Premium; her pakette günlük yeni kişi sınırı ve özellikler. Yalnız gerçekten çalışan özellikler listelenir.
+- Düzenleme modu: paket adı, aylık/yıllık fiyat, günlük sınır, özellikler ve açıklama satırları düzenlenir; "Varsayılana döndür".
+- Ücretsiz pakette günde en çok 7 yeni kişiye ilk mesaj (el sallama dahil). Zaten konuştuğun kişilere yazmak sayılmaz; sayaç gece yarısı sıfırlanır. Sınır dolunca nedeni ve paketler gösterilir.
+- Ödeme henüz bağlı değil: paket seçimi bu cihazda TEST olarak etkinleşir ve ücret alınmaz (ekranda yazıyor).
+- Uygulama kilidi (Premium): PIN (4–8 hane) ya da desen; isteğe bağlı parmak izi / yüz (telefonun kendi doğrulaması; canlı sitede çalışır). Kapsam: tüm uygulama, Ayarlar ya da kişiler ve sohbetler. Uygulamadan çıkınca: hemen / 1 / 5 / 15 dk. 5 yanlış denemede bekleme. PIN ve desen düz metin saklanmaz.
+- Kilit dürüstçe tanımlanır: telefonu eline alan birine karşı gizlilik perdesi; veri şifrelemesi değildir.
+
+## 0.17.0 — 17.10.2026 · Arkadaşlık ve karşılıklı gizlilik
+
+- Bağlan'daki kişi kartlarının etrafındaki ince ışık çizgisi kalktı (Sohbet'teki gibi hafif kabartma).
+- Arkadaşlık: kişi profilindeki + ile istek gönder; kabul edilince arkadaşsınız. Gelen istekleri kabul et ya da reddet. Bağlan'da yeni "Arkadaşlar" sekmesi: gelen istekler, arkadaş haberleri, arkadaşlarım, gönderdiğin istekler.
+- Arkadaş haberleri: yeni Dil Anı, seviye atlama, seri rekoru, fotoğraf güncelleme, yeni ilgi alanı, yardım/düzeltme isteği. Hangi haberleri göreceğin Ayarlar › Gizlilik › Arkadaş haberleri'nden seçilir.
+- Favori ve başa sabitleme: Sohbet ya da Bağlan'da bir kişiye basılı tut (ya da kişi/sohbet "…" menüsü). En çok 3 sohbet sabitlenir; sabitliler en üstte. Sohbet'te "Favoriler" ve "Arkadaşlar" süzgeçleri.
+- Karşılıklı gizlilik (WhatsApp mantığı), Ayarlar › Gizlilik: "Arkadaş listemi kim görebilir" ve "Son görülme ve çevrimiçi" (Herkes / Arkadaşlarım / Kimse), "Okundu bilgisi" (açık/kapalı). Kapattığın bilgiyi başkalarında da göremezsin; görünmüyorsa nedeni yazılır.
+- Mesaj durumu: ✓ gönderildi · ✓✓ iletildi · turkuaz ✓✓ okundu (okundu iki taraf da açıksa).
+- Kişi profilinde "Arkadaşları" bölümü; kendi Profil sayfanda "Arkadaşlarım". Takip etme kişi "…" menüsüne taşındı.
+
+## 0.16.0 — 17.10.2026 · Güvenilirlik, topluluk kuralları, C1, yeni menü
+
+- Yeni menü düzeni: beş ana sayfanın üst bandında solda profil fotoğrafın; dokununca yan menü açılır (Profilini gör, kısa yollar, Gelişim, Ayarlar). Sağ alttaki sekme artık "Gelişim" (seri, puanlar, karne, Cümle Defteri, seviye yolu). Kimlik bilgileri (kapak, fotoğraflar, ilgi alanları) ayrı "Profil" sayfasında.
+- Topluluk kuralları (sohbet): karşı taraf yanıt vermeden en çok 5 mesaj; yanıt gelmezse haftada bir mesaj. Fotoğraf göndermek iki taraf da en az 5 mesaj yazınca açılır. Telefon numarası ve e-posta, sohbet 7 gün sürüp iki taraf da 10 mesaj yazınca paylaşılabilir. Engellenen kişi artık doğrudan adresle de açılmaz; engel Ayarlar › Gizlilik › Engellenenler'den kaldırılır.
+- Sohbette fotoğraf gönderme; yazılan mesaj taslağı sohbetten çıkınca kaybolmuyor; eski mesajları okurken ekran zorla en alta inmiyor. Çevrimdışı test kişileri otomatik yanıt vermiyor (sınır gerçekçi sınanabilsin diye).
+- Yedekten geri yükleme: eksik ya da bozuk yedek reddediliyor (mevcut veri değişmez); fotoğraflar yalnız yedek kabul edilirse yazılıyor. Yedeğe kapak, gönderi ve mesaj fotoğrafları da giriyor; kullanılmayan fotoğraflar depodan temizleniyor. Fotoğraflar geç yüklenince yazmakta olduğun metin kaybolmuyor.
+- Düzeltme: "although/though/while/if" yan cümleleri ayrı değerlendiriliyor ("I work today although I was sick yesterday" artık bozulmuyor). Yeni kesin edat kalıpları: good at, married to (him/her), depend on, interested in, listen to, discuss (edatsız), explain to me how…, arrive at, on Monday, in 1995. Her derlemede 23 doğru cümle ve 10 hatalı cümleyle sınanıyor.
+- Koç: çok kısa ve beklenen yanıtı karşılamayan cevapta soruyu bir kez daha soruyor.
+- Hata Hafızası: "öğrenildi" için başarılar en az iki farklı günde olmalı. "Yeni kelime" sayacı dürüst adıyla: "hedef kelime".
+- Telaffuz: sözcükler sırayla hizalanıyor; eksik, farklı duyulan ve fazladan sözcükler ayrı gösteriliyor ("happy am I" artık doğru sayılmıyor). "Kaçanı yavaş dinle" ve isteğe bağlı "Hafızaya ekle". Ekrandan çıkınca ya da cümle değişince dinleme duruyor. Seçilen koç sesinin aksanı ses tanımada da kullanılıyor.
+- C1: seviye seçilebiliyor; 4 B2 ve 5 C1 senaryo (toplantıda itiraz, ev sahibiyle tamir, uzaktan çalışma tartışması, iptal edilen uçuş, sunum sonrası zor sorular, fatura şikâyeti, yapay zekâ politikası, akademik eleştiri, maaş pazarlığı). Bir alanda seçilen seviyede senaryo yoksa en yakın seviyeden öneri.
+- Bağlan: ülke süzgeci dil değişince bozulmuyor; yaş hapı "60+"; "Karşılıklı" iki yönlü; Çevrimiçi/Yeni artık yalnız üst sekmede.
+- Misafir girişinde ana dil soruluyor (arayüz dili ana dil sayılmıyor); öğrenilen dil İngilizce.
+- Karnedeki kelimeler ve kültür notu tek dokunuşla Cümle Defteri'ne. "Çok büyük" yazı boyutu. Açılan pencerelerde klavye odağı pencere içinde kalıyor, kapanınca açan düğmeye dönüyor.
+- Şema 17: görüşmelere kalıcı kimlik (karne adresi sıra numarasına bağlı değil).
+
 ## 0.15.0 — 17.10.2026 · Üst bant, kartlar, kapak görseli, çoklu fotoğraf
 
 - Marka şeridi (logo + helloworld) sola dayalı ve sayfa adının yazdığı banda değiyor.

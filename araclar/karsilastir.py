@@ -15,7 +15,7 @@ from playwright.async_api import async_playwright
 from PIL import Image
 
 KOK = pathlib.Path(__file__).resolve().parent.parent
-EKRANLAR = ['sohbetler', 'kesfet', 'bugun', 'dil-anlari', 'gelisim', 'ayarlar']
+EKRANLAR = ['sohbetler', 'kesfet', 'bugun', 'dil-anlari', 'gelisim', 'profil', 'ayarlar']
 
 VERI = """(tema) => { const n = Date.now(); const gun = new Date().toLocaleDateString('sv');
 const d = { semaSurumu: 7, test: { acik: true, anlar: [], sohbetler: {}, engelli: [], sikayetler: [] },

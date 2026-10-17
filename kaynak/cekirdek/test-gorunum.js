@@ -7,6 +7,7 @@ import { aktiflik } from './test-modu.js';
 
 export function aktiflikMetni(p) {
   const a = aktiflik(p);
+  if (a.gizli) return '';
   return a.cevrimici ? t('ht.cevrimiciSimdi') : t('ht.aktifOnce', { zaman: goreliZaman(Date.now() - a.dk * 60000) });
 }
 

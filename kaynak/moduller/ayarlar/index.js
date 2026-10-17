@@ -2,18 +2,25 @@
 // her satır solda etiket, sağda denetim. Kontrol kullanıcıda (Anayasa bölüm 3): veriler indirilebilir ve silinebilir.
 import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar, enUsteKaydir } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar, enUsteKaydir, testEtiketi } from '../../cekirdek/arayuz.js';
 import { fotografEkle, medyaDisaAktar, medyaIceAktar, medyaSil } from '../../cekirdek/fotograf.js';
+import { benimGizlilik, gizlilikAyarla, GIZLILIK_SECENEKLERI, haberTercihleri, haberTercihiAyarla, HABER_TURLERI } from '../../cekirdek/arkadaslik.js';
+import { paketlerCiz, kilitGrubu } from './paketler.js';
+import { aktifPaket, yeniKisiSiniri, bugunYeniKisiler } from '../../cekirdek/paketler.js';
+import { kilitEtkin, kilitAyari } from '../../cekirdek/kilit.js';
+import { rehberAyari, rehberAyarla, kullanimiSil, ipuclariniSifirla, okunmamisSayisi } from '../../cekirdek/rehber.js';
+import { turBaslat, yolYeniEtiketi } from '../../cekirdek/rehber-arayuz.js';
+import { IKON_PAKETLERI, TASARIM_IKON, ikonOgesi, ikonPaketiSecimi, aktifIkonPaketi } from '../../cekirdek/ikon.js';
 import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
-import { al, degistir, sifirla, disaAktarMetni, iceAktar } from '../../cekirdek/depo.js';
+import { al, degistir, sifirla, disaAktarMetni, iceAktarHazirla, iceAktarUygula } from '../../cekirdek/depo.js';
 import { siradaki } from '../../cekirdek/gunluk.js';
 import { simdiAra } from '../../cekirdek/zamanlayici.js';
 import { SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import { SURUM } from '../../cekirdek/surum.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { destek, soyle, ingilizceSesler } from '../../cekirdek/ses/ses-hatti.js';
-import { testModuAcik, testModuAyarla, testVerileriniSil } from '../../cekirdek/test-modu.js';
+import { testModuAcik, testModuAyarla, testVerileriniSil, engellenenler, testEngelKaldir } from '../../cekirdek/test-modu.js';
 
 const DILLER = ['tr', 'en', 'es', 'ar', 'de', 'fr', 'ru', 'pt', 'fa', 'ko', 'ja', 'diger'];
 
@@ -68,6 +75,17 @@ function paketSecici(etiketId, aktif, degisti) {
       h('b', null, t(`ayarlar.paketAd.${k}`)), h('small', null, t(`ayarlar.paketAlt.${k}`)))));
 }
 
+// v0.20.0 İkon paketi seçici: her seçenek o paketle çizilmiş üç örnek ikon gösterir. Otomatik: tasarım paketini izler.
+function ikonPaketSecici(etiketId, aktif, degisti) {
+  const ornek = (pk) => h('span', { class: 'ayr-ikon-ornek', 'aria-hidden': 'true' }, ['kitap', 'sohbet', 'kupa'].map((ad) => ikonOgesi(ad, 28, { paket: pk })));
+  const otoPaket = TASARIM_IKON[al().profil.ayarlar.tasarimPaketi] || 'klasik';
+  return h('div', { class: 'ayr-ikonlar', role: 'radiogroup', 'aria-labelledby': etiketId },
+    ['otomatik', ...IKON_PAKETLERI].map((k) => h('button', {
+      type: 'button', class: 'ayr-ikon-paket', role: 'radio', 'aria-checked': String(k === aktif), onClick: () => degisti(k),
+    }, ornek(k === 'otomatik' ? otoPaket : k), h('b', null, t(`ikonPaketi.ad.${k}`)),
+    k === 'otomatik' ? h('small', null, t('ikonPaketi.simdi', { ad: t(`ikonPaketi.ad.${otoPaket}`) })) : null)));
+}
+
 // Süzgeç biçimi seçici: her seçenek, o biçimde çizilmiş küçük bir seçili-sekme önizlemesi gösterir.
 function suzgecSecici(etiketId, aktif, degisti) {
   return h('div', { class: 'ayr-suzgecler', role: 'radiogroup', 'aria-labelledby': etiketId },
@@ -104,6 +122,21 @@ function grup(kimlik, ik, baslik, ...satirlar) {
   return h('section', { class: 'ayr-grup', id: `ayr-g-${kimlik}`, 'aria-labelledby': `ayr-g-${kimlik}-b` },
     h('h2', { class: 'ayr-grup-baslik', id: `ayr-g-${kimlik}-b` }, ikon3d(ik, 26), baslik),
     h('div', { class: 'ayr-grup-ic' }, ...satirlar));
+}
+
+function engelListesi() {
+  const liste = h('div', { class: 'ayr-engel-liste' });
+  const ciz = () => {
+    const kisiler = engellenenler();
+    yerlestir(liste, kisiler.length ? kisiler.map((p) => h('div', { class: 'ayr-satir' },
+      h('span', { class: 'ayr-satir-etiket' }, p.ad, ' ', testEtiketi()),
+      h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve ayr-engel-dugme', onClick: () => { testEngelKaldir(p.kimlik); duyur(t('kural.engelKalkti', { ad: p.ad })); ciz(); } }, t('kural.engelKaldir'))))
+      : h('p', { class: 'ayr-not' }, t('kural.engellenenYok')));
+  };
+  ciz();
+  return h('details', { class: 'ayr-acilir' },
+    h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('kural.engellenenler')), ikon('sag', 16)),
+    liste);
 }
 
 function ciz(kok, b) {
@@ -164,7 +197,7 @@ function ciz(kok, b) {
   ilgiCiz();
 
   const ilgiAcik = b.p.bolum === 'ilgi';
-  const seviyeler = SEVIYE_SIRASI.slice(0, 4);
+  const seviyeler = SEVIYE_SIRASI;
 
   yerlestir(kok,
     ustBaslik({ baslik: t('ayarlar.baslik'), ikon: 'ayarlar', geri: () => (aktifGrup ? b.geri('/ayarlar') : b.geri('/gelisim')) }),
@@ -177,7 +210,7 @@ function ciz(kok, b) {
         dilCifti(p.anaDil || 'tr', p.ogrenilenDil || 'en', p.seviye),
         h('span', { class: 'ayr-profil-alt' }, `${p.seviye} · ${t(`gelisim.rol.${p.rol || 'ogrenen'}`)}${(p.ilgiler || []).length ? ` · ${t('ayarlar.ilgiSayisi', { n: p.ilgiler.length })}` : ''}`),
         // Ayarlar profili DÜZENLER; görüntülemek tek yerde: alt menüdeki Profil sekmesi (v0.11.0 tutarlılık).
-        h('button', { type: 'button', class: 'ayr-profil-git', onClick: () => b.git('/gelisim?sekme=profil') }, t('yanMenu.profiliGor'), ikon('sag', 14)),
+        h('button', { type: 'button', class: 'ayr-profil-git', onClick: () => b.git('/profil') }, t('yanMenu.profiliGor'), ikon('sag', 14)),
       ),
     ),
     p.misafir ? h('div', { class: 'ayr-misafir', role: 'note' },
@@ -235,8 +268,9 @@ function ciz(kok, b) {
     grup('gorunum', 'gorunum', t('ayarlar.grup.gorunum'),
       satir(t('ayarlar.tema'), (id) => bolumlu(id, ['sistem', 'acik', 'koyu'].map((k) => [k, t(`ayarlar.temaSecenek.${k}`)]), a.tema, (k) => ayarKaydet((pr) => { pr.ayarlar.tema = k; })), { altta: true }),
       satir(t('ayarlar.gorunum'), (id) => bolumlu(id, ['dengeli', 'kompakt'].map((k) => [k, t(`ayarlar.gorunumSecenek.${k}`)]), a.gorunum || 'dengeli', (k) => ayarKaydet((pr) => { pr.ayarlar.gorunum = k; }))),
-      satir(t('ayarlar.yaziBoyutu'), (id) => bolumlu(id, ['normal', 'buyuk'].map((k) => [k, t(`ayarlar.yaziSecenek.${k}`)]), a.yaziBoyutu || 'normal', (k) => ayarKaydet((pr) => { pr.ayarlar.yaziBoyutu = k; }))),
+      satir(t('ayarlar.yaziBoyutu'), (id) => bolumlu(id, ['normal', 'buyuk', 'cokbuyuk'].map((k) => [k, t(`ayarlar.yaziSecenek.${k}`)]), a.yaziBoyutu || 'normal', (k) => ayarKaydet((pr) => { pr.ayarlar.yaziBoyutu = k; }))),
       satir(t('ayarlar.paket'), (id) => paketSecici(id, a.tasarimPaketi || 'akilli', (k) => { const pk = TASARIM_PAKETLERI[k]; ayarKaydet((pr) => { Object.assign(pr.ayarlar, pk, { tasarimPaketi: k }); }, true); ciz(kok, b); }), { aciklama: t('ayarlar.paketAciklama'), altta: true }),
+      satir(t('ikonPaketi.baslik'), (id) => ikonPaketSecici(id, ikonPaketiSecimi(), (k) => { ayarKaydet((pr) => { pr.ayarlar.ikonPaketi = k; }); b.git('/ayarlar?grup=gorunum', { degistir: true }); }), { aciklama: t('ikonPaketi.aciklama'), altta: true }),
       h('details', { class: 'ayr-acilir ayr-gelismis', open: a.tasarimPaketi === 'ozel' },
         h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('ayarlar.gelismis')), h('small', { class: 'ayr-ozel-isaret' }, a.tasarimPaketi === 'ozel' ? t('ayarlar.ozelGorunum') : '')),
       satir(t('ayarlar.secimRengi'), (id) => renkSecici(id, 'secim', ['altin', 'mavi', 'yesil', 'mercan', 'mor', 'turkuaz'], a.secimRengi || 'altin', (k) => { ayarKaydet((pr) => { pr.ayarlar.secimRengi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.secimRengiAciklama'), altta: true }),
@@ -245,14 +279,40 @@ function ciz(kok, b) {
       satir(t('ayarlar.suzgecBicimi'), (id) => suzgecSecici(id, a.suzgecBicimi || 'klasik', (k) => { ayarKaydet((pr) => { pr.ayarlar.suzgecBicimi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.suzgecBicimiAciklama'), altta: true }),
       ),
       h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => {
-        ayarKaydet((pr) => { Object.assign(pr.ayarlar, TASARIM_PAKETLERI.akilli, { tasarimPaketi: 'akilli', gorunum: 'dengeli', yaziBoyutu: 'normal' }); });
+        ayarKaydet((pr) => { Object.assign(pr.ayarlar, TASARIM_PAKETLERI.akilli, { tasarimPaketi: 'akilli', gorunum: 'dengeli', yaziBoyutu: 'normal', ikonPaketi: 'otomatik' }); });
         ciz(kok, b);
       } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.varsayilanaDon')), ikon('degis', 18)),
       satir(t('ayarlar.ortaDugme'), (id) => bolumlu(id, ['pratik', 'arama', 'senaryo', 'telaffuz'].map((k) => [k, t(`ayarlar.ortaSecenek.${k}`)]), a.ortaDugme || 'pratik', (k) => ayarKaydet((pr) => { pr.ayarlar.ortaDugme = k; })), { aciklama: t('ayarlar.ortaDugmeAciklama'), altta: true }),
     ),
 
-    grup('gizlilik', 'kilit', t('ayarlar.grup.gizlilik'),
+    // v0.18.0 Üyelik ve paketler; uygulama kilidi (Premium).
+    grup('paket', 'hediye', t('ayarlar.grup.paket'),
+      h('p', { class: 'ayr-not' }, t('paket.ozetMetin', { ad: yerel(aktifPaket().ad), n: bugunYeniKisiler().length, s: yeniKisiSiniri() || '∞' })),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => b.git('/paketler') }, h('span', { class: 'ayr-satir-etiket' }, t('paket.paketleriGor')), ikon('sag', 18))),
+    grup('kilit', 'kilit', t('ayarlar.grup.kilit'), kilitGrubu(b, () => b.git('/ayarlar?grup=kilit', { degistir: true }))),
+    // v0.19.0 Rehber: ipucu, hatırlatma, bilgilendirme ve öneri anahtarları; tur; cihazdaki kullanım bilgisini silme.
+    grup('rehber', 'ipucu', t('ayarlar.grup.rehber'),
+      h('p', { class: 'ayr-not ayr-not-kutu' }, t('rehber.ayar.aciklama')),
+      ...['ipucu', 'hatirlatma', 'bilgi', 'oneri'].map((k) => anahtar(t(`rehber.ayar.${k}`), rehberAyari()[k], (v) => { rehberAyarla(k, v); duyur(t('ayarlar.kaydedildi'), 1500); }, t(`rehber.ayar.${k}Aciklama`))),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => b.git('/kutu') }, h('span', { class: 'ayr-satir-etiket' }, t('rehber.kutu.baslik')), ikon('sag', 18)),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => b.git('/kilavuz') }, h('span', { class: 'ayr-satir-etiket' }, t('rehber.kilavuz.baslik')), ikon('sag', 18)),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => turBaslat(b.git) }, h('span', { class: 'ayr-satir-etiket' }, t('rehber.ayar.turBaslat')), ikon('oynat', 18)),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => { ipuclariniSifirla(); duyur(t('rehber.ayar.ipuclariSifirlandi')); } }, h('span', { class: 'ayr-satir-etiket' }, t('rehber.ayar.ipuclariniSifirla')), ikon('degis', 18)),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme ayr-tehlike', onClick: async () => {
+        if (!(await onayIste({ metin: t('rehber.ayar.kullanimSilOnay'), evet: t('rehber.ayar.kullanimSil'), hayir: t('genel.vazgec') }))) return;
+        kullanimiSil(); duyur(t('rehber.ayar.kullanimSilindi'));
+      } }, h('span', { class: 'ayr-satir-etiket' }, t('rehber.ayar.kullanimSil')), ikon('kapat', 18)),
+    ),
+    grup('gizlilik', 'yedek', t('ayarlar.grup.gizlilik'),
       h('p', { class: 'ayr-not ayr-not-kutu' }, t('ayarlar.gizlilikMetni')),
+      // v0.17.0 Karşılıklı gizlilik (WhatsApp mantığı): kapattığın bilgiyi başkalarında da göremezsin.
+      h('p', { class: 'ayr-not ayr-not-kutu' }, t('arkadas.karsilikliAciklama')),
+      ...['arkadasListesi', 'sonGorulme'].map((anahtarAd) => satir(t(`arkadas.gizlilik.${anahtarAd}`), (id) => bolumlu(id, GIZLILIK_SECENEKLERI.map((k) => [k, t(`arkadas.secenek.${k}`)]), benimGizlilik()[anahtarAd], (k) => { gizlilikAyarla(anahtarAd, k); duyur(t('arkadas.gizlilikKaydedildi'), 1800); }), { aciklama: t(`arkadas.gizlilikAciklama.${anahtarAd}`), altta: true })),
+      anahtar(t('arkadas.gizlilik.okundu'), benimGizlilik().okundu !== false, (v) => { gizlilikAyarla('okundu', v); duyur(t('arkadas.gizlilikKaydedildi'), 1800); }, t('arkadas.gizlilikAciklama.okundu')),
+      h('details', { class: 'ayr-acilir' },
+        h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('arkadas.haberTercihBaslik')), ikon('sag', 16)),
+        h('p', { class: 'ayr-not' }, t('arkadas.haberTercihAciklama')),
+        HABER_TURLERI.map((tur) => anahtar(t(`arkadas.haberTercih.${tur}`), haberTercihleri()[tur], (v) => haberTercihiAyarla(tur, v)))),
       h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => {
         const blob = new Blob([JSON.stringify({ ...JSON.parse(disaAktarMetni()), medya: medyaDisaAktar() }, null, 2)], { type: 'application/json' });
         const baglanti = h('a', { href: URL.createObjectURL(blob), download: 'helloworld-verilerim.json' });
@@ -266,14 +326,18 @@ function ciz(kok, b) {
           const evet = await onayIste({ metin: t('ayarlar.geriYukleOnay'), evet: t('ayarlar.geriYukleEvet'), hayir: t('genel.vazgec') });
           if (!evet) { e.target.value = ''; return; }
           const metin = await dosya.text();
-          try { await medyaIceAktar(JSON.parse(metin).medya); } catch { /* JSON hatasını iceAktar bildirir */ }
-          const sonuc = iceAktar(metin);
+          // v0.16.0: önce doğrula; fotoğraflar yalnız yedek kabul edilirse yazılır.
+          const hazir = iceAktarHazirla(metin);
+          if (hazir.tamam) await medyaIceAktar(hazir.medya);
+          const sonuc = iceAktarUygula(hazir);
           duyur(sonuc.tamam ? t('ayarlar.geriYuklendi') : t(`ayarlar.geriYukleHata.${sonuc.neden}`), 6000);
           if (sonuc.tamam) b.git('/bugun', { degistir: true });
         } })),
       h('details', { class: 'ayr-acilir' },
         h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('kesfet.kurallarBaslik')), ikon('sag', 16)),
         kurallarSeridi()),
+      // v0.16.0 Engellenenler: engel yalnız buradan kaldırılır (engellenen kişi başka hiçbir yerde görünmez).
+      testModuAcik() ? engelListesi() : null,
       h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme ayr-tehlike', onClick: async () => {
         const evet = await onayIste({ metin: t('ayarlar.silOnay'), evet: t('ayarlar.silEvet'), hayir: t('genel.vazgec') });
         if (!evet) return;
@@ -298,18 +362,21 @@ function ciz(kok, b) {
   );
   // HelloTalk düzeni: ana sayfada renkli simgeli kategori listesi; dokununca yalnız o grup açılır (az kaydırma).
   const gruplar = [...kok.querySelectorAll('.ayr-grup')];
-  const baslikYazi = kok.querySelector('.b-ht-baslik span');
+  const baslikYazi = kok.querySelector('.b-ht-baslik > span:not(.b-ikon3d)');
   const ozet = {
     profil: `${p.ad || t('misafir.ad')} · ${p.seviye}`,
     dil: `${(p.anaDil || 'tr').toUpperCase()} → ${(p.ogrenilenDil || 'en').toUpperCase()} · ${(a.arayuzDili || 'tr').toUpperCase()}`,
     bildirim: `${a.sabahSaati} · ${a.aksamSaati}`,
     koc: t(`ayarlar.duzeltmeSecenek.${a.duzeltmeYogunlugu}`),
-    gorunum: `${t(`ayarlar.temaSecenek.${a.tema}`)} · ${t(`ayarlar.yaziSecenek.${a.yaziBoyutu || 'normal'}`)}`,
+    gorunum: `${t(`ayarlar.temaSecenek.${a.tema}`)} · ${t(`ayarlar.yaziSecenek.${a.yaziBoyutu || 'normal'}`)} · ${t(`ikonPaketi.ad.${aktifIkonPaketi()}`)}`,
     gizlilik: t('ayarlar.gizlilikOzet'),
+    paket: yerel(aktifPaket().ad),
+    kilit: kilitEtkin() ? t(`kilit.kapsamSecenek.${kilitAyari().kapsam}`) : t('ayarlar.kapali'),
     test: testModuAcik() ? t('ayarlar.acik') : t('ayarlar.kapali'),
+    rehber: okunmamisSayisi() ? t('rehber.ayar.ozet', { n: okunmamisSayisi() }) : t('rehber.ayar.ozetBos'),
   };
-  const KATEGORILER = [['profil'], ['bildirim', 'gizlilik'], ['koc', 'dil'], ['gorunum'], ['test']];
-  const RENK = { profil: 1, bildirim: 4, gizlilik: 3, koc: 5, dil: 2, gorunum: 6, test: 2 };
+  const KATEGORILER = [['profil'], ['paket', 'kilit'], ['bildirim', 'gizlilik'], ['koc', 'dil'], ['gorunum', 'rehber'], ['test']];
+  const RENK = { profil: 1, paket: 5, kilit: 3, bildirim: 4, gizlilik: 6, koc: 5, dil: 2, gorunum: 6, rehber: 3, test: 2 };
   const menu = h('nav', { class: 'ayr-menu', 'aria-label': t('ayarlar.baslik') },
     KATEGORILER.map((kume) => {
       const varolan = kume.filter((k) => gruplar.some((g) => g.id === `ayr-g-${k}`));
@@ -318,8 +385,8 @@ function ciz(kok, b) {
         const g = gruplar.find((x) => x.id === `ayr-g-${k}`);
         const simge = g.querySelector('.ayr-grup-baslik .b-ikon3d');
         return h('button', { type: 'button', class: 'ayr-menu-satir', onClick: () => b.git(`/ayarlar?grup=${k}`) },
-          h('span', { class: `ayr-menu-simge b-kutu-${RENK[k]}` }, simge ? Object.assign(simge.cloneNode(true), { className: 'b-ikon3d ayr-menu-ikon' }) : null),
-          h('span', { class: 'ayr-menu-metin' }, h('b', null, g.querySelector('.ayr-grup-baslik').textContent), h('small', null, ozet[k] || '')),
+          h('span', { class: `ayr-menu-simge b-kutu-${RENK[k]}` }, simge ? (() => { const c = simge.cloneNode(true); c.classList.add('ayr-menu-ikon'); return c; })() : null),
+          h('span', { class: 'ayr-menu-metin' }, h('b', null, g.querySelector('.ayr-grup-baslik').textContent, yolYeniEtiketi(`/ayarlar?grup=${k}`)), h('small', null, ozet[k] || '')),
           ikon('sag', 18));
       }));
     }));
@@ -342,11 +409,12 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'ayarlar',
-  surum: '0.5.0',
+  surum: '0.8.0',
   onek: 'ayr',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'zamanlayici'],
   ekranlar: {
     ayarlar: ekran({ baslikAnahtari: 'ekran.ayarlar', durumlar: DORT_DURUM, ciz }),
+    paketler: ekran({ baslikAnahtari: 'ekran.paketler', durumlar: DORT_DURUM, ciz: paketlerCiz }),
   },
 };

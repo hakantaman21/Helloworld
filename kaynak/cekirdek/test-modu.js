@@ -6,6 +6,7 @@ import { TEST_PROFILLERI, TEST_ANLARI, TEST_YORUM_KALIPLARI, TEST_HAZIR_YORUMLAR
 import { SEVIYE_SIRASI } from './oneri.js';
 import { aktifDil } from './metin.js';
 import { ilgiKimligi } from '../veri/ilgi-alanlari.js';
+import { sonGorulmeGorunurluk } from './arkadaslik.js';
 import { duzeltmeleriBul, tumunuDuzelt } from './dil/duzeltme-motoru.js';
 
 const MESAJ_SINIRI = 200;
@@ -31,8 +32,32 @@ export function testProfilleri() {
   return testModuAcik() ? TEST_PROFILLERI.filter((p) => !engelli.includes(p.kimlik)) : [];
 }
 
+// v0.16.0 Gerçek engelleme: engellenen kişi yalnız listeden değil, doğrudan adresle de açılmaz (profil, mesaj, selam).
 export function testProfili(kimlik) {
-  return testModuAcik() ? TEST_PROFILLERI.find((p) => p.kimlik === kimlik) || null : null;
+  if (!testModuAcik() || (test().engelli || []).includes(kimlik)) return null;
+  return TEST_PROFILLERI.find((p) => p.kimlik === kimlik) || null;
+}
+
+// Ayarlar › Engellenenler için (engeli kaldırma listesi).
+export function engellenenler() {
+  const engelli = test().engelli || [];
+  return TEST_PROFILLERI.filter((p) => engelli.includes(p.kimlik));
+}
+
+export function testEngelKaldir(kimlik) {
+  degistir((v) => { const t = { ...test() }; t.engelli = (t.engelli || []).filter((k) => k !== kimlik); v.test = t; });
+}
+
+// Sohbetin ilk mesaj zamanı (iletişim bilgisi kuralı için; eski mesajlar listeden düşse de korunur).
+export function testSohbetBaslangici(kimlik) {
+  const s = (test().sohbetler || {})[kimlik];
+  return s ? s.baslangic || (s.mesajlar[0] && s.mesajlar[0].zaman) || null : null;
+}
+
+// Test kişisi yanıt verir mi: son 30 dakikada etkin olanlar otomatik yanıt verir, diğerleri vermez
+// (yanıtsız mesaj sınırı gerçekçi biçimde sınanabilsin diye).
+export function testYanitVerir(profil) {
+  return (profil.sonAktifDk || 0) <= 30;
 }
 
 export function testMesajlari(kimlik) {
@@ -54,6 +79,7 @@ export function testMesajEkle(kimlik, mesaj) {
     const t = { ...test() };
     t.sohbetler = { ...(t.sohbetler || {}) };
     const s = t.sohbetler[kimlik] ? { ...t.sohbetler[kimlik] } : { mesajlar: [] };
+    s.baslangic = s.baslangic || (s.mesajlar[0] && s.mesajlar[0].zaman) || Date.now();
     s.mesajlar = [...s.mesajlar, { ...mesaj, zaman: Date.now() }].slice(-MESAJ_SINIRI);
     t.sohbetler[kimlik] = s;
     v.test = t;
@@ -160,7 +186,9 @@ export function selamVer(kimlik, metin) {
 }
 
 // ---- Etkinlik (TEST verisi: profillerdeki sonAktifDk alanından; gerçek kişi durumu değildir) ----
+// v0.17.0: son görülme/çevrimiçi bilgisi karşılıklı gizliliğe tabidir; görünmüyorsa "gizli" döner (sıralamada sona).
 export function aktiflik(p) {
+  if (!sonGorulmeGorunurluk(p.kimlik).gorunur) return { cevrimici: false, dk: 1e9, gizli: true };
   const dk = Number(p.sonAktifDk || 0);
   if (dk <= 0) return { cevrimici: true, dk: 0 };
   return { cevrimici: false, dk };

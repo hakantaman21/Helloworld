@@ -3,6 +3,7 @@ import { al, degistir } from './depo.js';
 import { gunuGuncelle } from './gunluk.js';
 import { kayitOlustur, hafizayaEkle, tekrarSonucu } from './hafiza.js';
 import { tarihAnahtari } from './zaman.js';
+import { isle as senaryoOzetiIsle } from './senaryo-istatistik.js';
 
 const SAKLANAN_GORUSME = 30;
 const TELAFFUZ_ESIGI = 60;
@@ -47,7 +48,9 @@ export function sonucuIsle(ozet) {
       v.profil.tanismaYapildi = true;
     }
     if (ozet.tur === 'senaryo' && ozet.gorevTamam) v.tamamlananSenaryolar[ozet.senaryoId] = tarihAnahtari();
-    const kayit = { ...ozet, tarih: tarihAnahtari(), eklenenHafiza: eklenen };
+    // v0.21.0: senaryo başına kalıcı özet (rapor, işaret, başarı oranı)
+    if (ozet.tur === 'senaryo' && konustu) senaryoOzetiIsle(v, ozet);
+    const kayit = { ...ozet, kimlik: `g-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`, tarih: tarihAnahtari(), eklenenHafiza: eklenen };
     v.sonGorusme = kayit;
     v.gorusmeler.unshift(kayit);
     v.gorusmeler = v.gorusmeler.slice(0, SAKLANAN_GORUSME);

@@ -145,3 +145,9 @@
   .gls-kapak-ornek { min-height: 64px; border: 0; border-radius: 14px; background: var(--kapak); cursor: pointer; box-shadow: inset 0 0 0 1px var(--renk-cizgi-guclu); }
   .gls-kapak-ornek:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
 }
+
+@layer moduller {
+  /* v0.17.0 Profil › Arkadaşlarım */
+  .gls-ark-liste { display: flex; gap: 12px; overflow-x: auto; padding: 4px 2px; }
+  .gls-ark { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 64px; border: 0; background: transparent; color: var(--renk-murekkep); font: inherit; font-size: calc(12px * var(--yazi-olcek)); cursor: pointer; }
+}

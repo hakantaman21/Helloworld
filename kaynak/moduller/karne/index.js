@@ -9,6 +9,7 @@ import { siradaki } from '../../cekirdek/gunluk.js';
 import { oneriSenaryo } from '../../cekirdek/oneri.js';
 import { soyle, destek } from '../../cekirdek/ses/ses-hatti.js';
 import { duyur } from '../../cekirdek/duyuru.js';
+import { cumleKayitli, cumleKaydetDegistir } from '../../cekirdek/cumle-defteri.js';
 
 const YOGUNLUK = { az: 1, orta: 3, cok: Infinity };
 
@@ -47,13 +48,30 @@ function duzeltmeKarti(d, kaldir) {
   return kart;
 }
 
+// Cümle Defteri'ne ekle/çıkar düğmesi (karnedeki kelimeler ve kültür notu için).
+function defterDugmesi(metin, kimden, etiket) {
+  const d = h('button', { type: 'button', class: 'b-cip krn-defter', 'aria-pressed': String(cumleKayitli(metin)) }, ikon('yerImi', 14), etiket);
+  d.addEventListener('click', () => {
+    const eklendi = cumleKaydetDegistir(metin, kimden);
+    d.setAttribute('aria-pressed', String(eklendi));
+    duyur(eklendi ? t('defter.kaydedildi') : t('defter.cikarildi'), 1800);
+  });
+  return d;
+}
+
 function ciz(kok, b) {
   const v = al();
   // v0.13.0: ?i=N ile geçmişteki N. görüşmenin karnesi açılır (Sohbetler'deki geçmiş satırı buraya gelir).
-  const gSira = b.p.i !== undefined && (v.gorusmeler || [])[Number(b.p.i)] ? Number(b.p.i) : -1;
-  const g = gSira >= 0 ? v.gorusmeler[gSira] : v.sonGorusme;
+  // v0.16.0: ?g=<kimlik> kalıcı kimlikle açar (liste değişse de aynı görüşme); eski ?i=N adresleri yedek olarak çalışır.
+  const bul = (x) => {
+    if (b.p.g) return (x.gorusmeler || []).find((k) => k.kimlik === b.p.g) || null;
+    if (b.p.i !== undefined) return (x.gorusmeler || [])[Number(b.p.i)] || null;
+    return null;
+  };
+  const secili = !!bul(v);
+  const g = secili ? bul(v) : v.sonGorusme;
   // Gösterilen görüşmenin kaydı (son görüşme ya da geçmişten seçilen); itiraz ve liste hep bunu kullanır.
-  const kayit = (x) => (gSira >= 0 ? x.gorusmeler[gSira] : x.sonGorusme);
+  const kayit = (x) => (secili ? bul(x) : x.sonGorusme);
   kok.classList.add('krn-ekran');
   if (!g) {
     yerlestir(kok, 
@@ -145,7 +163,8 @@ function ciz(kok, b) {
       tumuDugmesi,
       g.ceviriler.length ? h('div', { class: 'b-kart' },
         h('span', { class: 'b-ust-etiket' }, t('karne.ceviriBaslik')),
-        h('div', { class: 'b-cipler' }, g.ceviriler.map((c) => h('span', { class: 'b-cip' }, t('gorusme.ipucuCeviri', { tr: c.tr, en: c.en })))),
+        // v0.16.0 (Gemini önerisi): her kelime tek dokunuşla Cümle Defteri'ne eklenir.
+        h('div', { class: 'b-cipler' }, g.ceviriler.map((c) => defterDugmesi(c.en, t('karne.ceviriKaynak', { tr: c.tr }), t('gorusme.ipucuCeviri', { tr: c.tr, en: c.en })))),
       ) : null,
     ),
     h('section', { class: 'b-yigin', 'aria-labelledby': 'krn-tel' },
@@ -154,7 +173,8 @@ function ciz(kok, b) {
     ),
     h('div', { class: g.eklenenHafiza ? 'b-kart krn-hafiza' : 'b-kart' },
       g.eklenenHafiza ? t('karne.hafizaEklendi', { n: g.eklenenHafiza }) : t('karne.hafizaYok')),
-    g.kulturelNot ? h('div', { class: 'b-kart' }, h('span', { class: 'b-ust-etiket' }, t('karne.kulturelNot')), h('p', null, yerel(g.kulturelNot))) : null,
+    g.kulturelNot ? h('div', { class: 'b-kart' }, h('span', { class: 'b-ust-etiket' }, t('karne.kulturelNot')), h('p', null, yerel(g.kulturelNot)),
+      g.kulturelNot.en ? defterDugmesi(g.kulturelNot.en, t('karne.kulturelNot'), t('karne.notuKaydet')) : null) : null,
     h('div', { class: 'b-yigin krn-son' },
       h('p', { class: 'b-kucuk krn-ortali' }, siraMetni),
       h('button', { class: 'b-dugme b-dugme-ana', onClick: () => b.git('/bugun') }, t('karne.bugunDon')),
@@ -165,7 +185,7 @@ function ciz(kok, b) {
 
 export default {
   kimlik: 'karne',
-  surum: '0.2.0',
+  surum: '0.3.0',
   onek: 'krn',
   semaSurumu: 1,
   cekirdekServisleri: ['depo', 'hafiza', 'ses'],

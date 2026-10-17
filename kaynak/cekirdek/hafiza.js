@@ -5,6 +5,7 @@ import { tarihAnahtari, gunEkle } from './zaman.js';
 export const KAYIT_SEMA_SURUMU = 1;
 export const TEKRAR_ARALIKLARI = [1, 3, 7, 14];
 export const OGRENILDI_SERISI = 4;
+export const OGRENILDI_GUN = 2;
 
 function yeniKimlik() {
   return 'h' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
@@ -63,7 +64,10 @@ export function tekrarSonucu(id, basarili) {
     k.sonGorulme = bugun;
     if (basarili) {
       k.seri += 1;
-      if (k.seri >= OGRENILDI_SERISI) k.durum = 'ogrenildi';
+      // v0.16.0: "öğrenildi" için art arda başarı yetmez; başarılar en az iki FARKLI günde olmalı (aynı gün dört doğru
+      // kalıcılık göstermez).
+      k.basariGunleri = [...new Set([...(k.basariGunleri || []), bugun])].slice(-8);
+      if (k.seri >= OGRENILDI_SERISI && k.basariGunleri.length >= OGRENILDI_GUN) k.durum = 'ogrenildi';
       else k.sonrakiTekrar = gunEkle(bugun, TEKRAR_ARALIKLARI[Math.min(k.seri, TEKRAR_ARALIKLARI.length - 1)]);
     } else {
       k.seri = 0;

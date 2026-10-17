@@ -87,3 +87,18 @@
   .bgn-hizli-oda { max-width: 100%; overflow: hidden; }
   .bgn-oda { min-height: 88px; }
 }
+
+/* v0.21.0 Konu odaları: kategori başına yatay şerit (ekranda iki kare kart), "Genişlet", alta açılan geniş kartlar. */
+@layer moduller {
+  .bgn-raflar { display: flex; flex-direction: column; gap: 14px; }
+  .bgn-raf { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .bgn-raf-ust { display: flex; align-items: center; gap: 8px; }
+  .bgn-raf-ust h3 { margin: 0; font-size: calc(15px * var(--yazi-olcek)); }
+  .bgn-raf-ust small { flex: 1; min-width: 0; font-size: calc(12px * var(--yazi-olcek)); color: var(--renk-soluk); }
+  .bgn-genislet { display: inline-flex; align-items: center; gap: 2px; min-height: 48px; padding: 0 6px 0 12px; border: 0; border-radius: var(--kose-tam); background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); font: inherit; font-size: calc(13px * var(--yazi-olcek)); font-weight: 800; cursor: pointer; flex: none; }
+  .bgn-genislet:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+  .bgn-serit { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 10px) / 2); gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; padding: 2px 2px 8px; scrollbar-width: thin; }
+  .bgn-serit-oge { scroll-snap-align: start; display: flex; }
+  .bgn-genis-liste { display: flex; flex-direction: column; gap: 10px; }
+  .bgn-seviye-baslik { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; font-size: calc(13px * var(--yazi-olcek)); font-weight: 800; letter-spacing: .04em; color: var(--renk-baslik); }
+}

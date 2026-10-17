@@ -5,7 +5,8 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.15.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.14.0'da (16.10.2026, PR #17). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.22.0 · `deneme` dalında (v0.16.0–v0.22.0 Hakan onayı bekliyor). `main` (canlı, helloworld-gules.vercel.app) v0.15.0'da (17.10.2026, PR #18). Canlıya alma yalnız Hakan onayıyla.
+- **v0.19–v0.21 notu:** Bu üç sürüm Hakan'a önce tek dosya olarak teslim edildi (ikinci Claude hesabı, depo erişimi yokken); v0.22.0'da kaynak ağacına aktarıldı. Ayrıntılı devir: aşağıdaki kayıtlar ve issue #1.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +17,92 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.22.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026
+- **Neden:** Hakan (17.10, 12:29): GitHub'a bağlan, canlıya alma ve düzeltme; devir notu ve issue'da planlama/işbölümü.
+- **Ne:** v0.19–v0.21 dosya teslimlerinin kaynak ağacına aktarımı (derlenmiş tek dosyadan modül modül geri çevrildi; `derle(deneme v0.18.0)` = teslim edilen v0.18.0 dosyası birebir doğrulandı, aktarım bu eşitlik üstüne satır farkıyla yapıldı). Yasa uyumu: Y1 (`!important` yok; turda hedefsiz adım JS ile ortalanır), Y3 (ikon renkleri jetonlarda, glif zemini `::before` + `hue-rotate`), Y4 (ortak sınıflar `b-`; `rhb-`, `eko-`, `bgn-`, `ayr-` modül önekleri; modüller birbirinin sınıfını kullanmaz), Y5 (`--z-tur`, `--z-icerik`), Y13 (48 px), Y16 (önerilen aramalar `veri/rehber-dizini.js`'te).
+- **Şema:** 19. **Durum:** `deneme`'de.
+
+## v0.21.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026 (dosya teslimi; depoya v0.22.0 ile)
+- **Neden:** Hakan (17.10, 12:29): Pratik'teki senaryo kartları sayfayı uzatıyor ve çok yoğun; kategori başına yatay şerit (ekranda 2 kare), "Genişlet" ile tam sayfa / alta açılan geniş sohbet kartları; geri dönünce aynı yer; denenen senaryoya işaret; tam görünümde kullanım ve başarı bilgisi; basılı tutunca rapor.
+- **Ne:**
+  - `cekirdek/senaryo-istatistik.js`: `v.senaryoIst[id] = { d, t, i, s, sn, c, dz }` (deneme, tamam, ilk, son, süre, cümle, düzeltme); `isle(v, ozet)` `gorusme-sonucu.sonucuIsle` içinden; `istatistik(id)` başarı oranı ve durum (tamam/denendi). Göç 19 eski görüşmelerden ve `tamamlananSenaryolar`'dan doldurur.
+  - `cekirdek/senaryo-kart.js`: `kareKart`, `genisKart`, `senaryoIsareti`, `raporAc` (alt pencere). Pratik (Konu odaları, Öğren) ve Senaryolar ekranı aynı bileşeni kullanır.
+  - bugun: `odaDurumu` (modül düzeyi: seçili kategori, alta açılanlar, şerit kaydırmaları) · yeni ekran `/odalar?alan=…` (tam sayfa, seviyeye göre gruplu).
+- **Şema:** 19.
+
+## v0.20.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026 (dosya teslimi; depoya v0.22.0 ile)
+- **Neden:** Hakan kuyruğu (v0.17 kaydı): 4 ikon paketi + her kartta benzersiz ikon + tasarım paketiyle uyum; English Prime ve Yoldaş'a yönlendirme, birinde ücretli olana diğerlerinde indirim; B1 içerik.
+- **Ne:**
+  - `cekirdek/ikon.js` + `veri/ikon-paketleri.js` (English Prime paketlerinden 3×12 çekirdek 3B görsel ve 69 glif): `ikonOgesi(ad, boyut)` = `arayuz.ikon3d`; paket `profil.ayarlar.ikonPaketi` (otomatik → `TASARIM_IKON[tasarimPaketi]`). `benzersizlestir()` MutationObserver ile ekran/yan menü/alt pencerede ≥30 px kart ikonlarını tekilleştirir (başlık, gezinme ve grup başlıkları hariç).
+  - `veri/ekosistem.js` + `cekirdek/ekosistem.js` + `/uygulamalar`: üyelik paylaşımı `localStorage['ekosistem:uyelikler']` (`{ uygulama: { paket, zaman } }`), indirim oranı ve adresler `profil.ayarlar.ekosistem`. Paketler ekranında indirimli fiyat.
+  - 5 B1 senaryosu (`veri/senaryolar/*-b1-01.js`).
+- **Açık:** English Prime ve Yoldaş canlı adresleri (düzenleme modundan girilecek); çapraz indirimin sunucuda doğrulanması; diğer uygulamaların aynı anahtara üyelik yazması.
+
+## v0.19.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026 (dosya teslimi; depoya v0.22.0 ile)
+- **Neden:** Hakan kuyruğu: kategorili bildirim ve mesaj kutusu, toplu silme; ilk girişte tur; güncellemede "Yeni" etiketi ve yenilikler; eksik bilgi hatırlatması ve bilgilendirme; kullanım takibi ve öneriler; arama dizini, ipucu, kılavuz, uygulama haritası.
+- **Ne:**
+  - `veri/rehber-dizini.js`: tek özellik dizini (OZELLIKLER, HARITA_GRUPLARI, YENILIKLER, TUR_ADIMLARI, ONERILEN_ARAMALAR). Yeni özellik = buraya bir satır.
+  - `cekirdek/rehber.js`: kutu (saklanan öğeler + `kutuKaynagiEkle(kat, fn)` canlı kaynaklar: okunmamış mesaj, istek, arkadaş haberi, paylaşım yorumu, tekrar), kullanım sayacı (cihazda), Yeni etiketleri (14 gün), planlayıcı (hatırlatma 2 günde bir, öneri 3 günde bir, bilgi; günde en çok bir sistem mesajı), arama (`katla()` Türkçe karakter katlama).
+  - `cekirdek/rehber-arayuz.js`: tur, yenilikler penceresi, ipucu şeridi, rozetler (`data-kutu-rozet`), `kutuDugmesi`.
+  - `moduller/rehber`: `/kutu`, `/ara`, `/kilavuz`, `/harita`. Ayarlar › Rehber ve ipuçları.
+  - Kilit: `ekran({ kilitKapsami })` (kutu = kisiler). Bağlan "Arkadaşlar" sekmesi korunur ve `?sekme=arkadaslar` ile açılır.
+- **Şema:** 18 (`v.rehber`).
+
+## v0.18.0
+
+- **Yapan:** Claude (Opus 5.5), 17.10.2026
+- **Neden:** Hakan (17.10, 01:04) kuyruğu: paketler + düzenleme modu, ücretsize günde 6–8 kişi sınırı (7 seçildi, düzenlenebilir), premium kilit (PIN/desen/parmak izi/yüz; kapsam).
+- **Ne:**
+  - `veri/paketler.js` (varsayılanlar) + `cekirdek/paketler.js`: `paketTanimlari()` (v.paketTanimlari üstüne yazar), `aktifPaket()`, `ozellikVar()`, `paketEtkinlestir()` (kaynak 'test'), `yeniKisiIzni/ilkMesajKontrolu/yeniKisiSay` (test.yeniKisiGunluk yalnız bugün). OZELLIKLER yalnız çalışanlar: uygulamaKilidi, ekosistemIndirimi (v0.20'de kullanılacak).
+  - `kisi-eylemleri.yeniKisiOnayi(profil, b)`: mesaj (ilk mesaj), kişi sayfası ve Bağlan'daki el sallama bunu çağırır. El sallamaya da çevrimdışı test kişisi artık yanıt vermez.
+  - `cekirdek/kilit.js`: tuzlu SHA-256 özet, `pinTuslari`, `desenAlani` (pointer + klavye), `kilitEkrani` (tam ekran, KATMAN değil → geri tuşuyla kapanmaz), WebAuthn platform doğrulayıcı (yalnız https), `kilitIzle` (visibilitychange + süre), `acikSay` (kurulumdan hemen sonra kilit gelmez). Yönlendirici: `kilitGerekli(id)` → kilit ekranı, açılınca aynı ekran.
+  - ayarlar: `/paketler` ekranı ve "Uygulama kilidi" grubu (`moduller/ayarlar/paketler.js`); gizlilik grubunun simgesi `yedek` (kilit simgesi kilit grubunda; simgeler benzersiz).
+- **Sunucu notu:** Paket doğrulaması, günlük sınır ve ödeme sunucuda yapılmalı; istemci sınırı aşılabilir.
+- **Şema:** 17 (yeni alanlar isteğe bağlı: v.uyelik, v.paketTanimlari, profil.ayarlar.kilit, test.yeniKisiGunluk). **Durum:** `deneme`'de.
+
+## v0.17.0
+
+- **Yapan:** Claude (Opus 5.5), 17.10.2026
+- **Neden:** Hakan (17.10, 01:04): Bağlan kart ışığı; favori, başa sabitleme, arkadaş ekleme, arkadaş güncellemeleri; arkadaş listesini kimin göreceği ve WhatsApp gibi karşılıklılık. Aynı mesajdaki diğer istekler kuyrukta: v0.18 paketler + günlük sınır + kilit, v0.19 bildirim kutusu/tur/yenilikler/hatırlatmalar/arama-ipucu-kılavuz-harita, v0.20 ikon paketleri + ekosistem + B1.
+- **Ne:**
+  - `cekirdek/arkadaslik.js`: durum (arkadas/gonderildi/gelen/yok), istek, kabul, ret, çıkar; favori; sabitleme (SABIT_SINIRI 3); `karsilikli()` = iki yönde izin (önce karşı taraf → neden 'o', sonra sen → 'benKimse'/'benArkadas'); `okunduGorunur`; `arkadasHaberleri()` (tercihlere göre); `mesajDurumu()`.
+  - `veri/test-profiller.js` → `TEST_SOSYAL` (gizlilik, arkadaşlar, istekGonderir, haberler). Priya ve Yuna sana istek gönderir.
+  - `test-modu.aktiflik()` son görülme gizliyse `{ gizli: true }` döner (çevrimiçi sekmesine de girmez); `aktiflikMetni` boş döner.
+  - `cekirdek/kisi-eylemleri.js`: `kisiEylemleri()` alt penceresi, `basiliTut()`, `arkadaslikIstegi()` (etkin test kişisi 2,5 sn sonra kabul eder).
+  - kesfet: "Arkadaşlar" sekmesi (`moduller/kesfet/arkadaslar.js`); sohbetler: favori/arkadaş süzgeci, sabitliler üstte; mesaj: ✓ tikleri, kişi alt çubuğunda arkadaşlık düğmesi, "Arkadaşları"; ayarlar: gizlilik ve haber tercihleri; gelisim/profil: Arkadaşlarım.
+  - Ayarlar: `profil.ayarlar.gizlilik`, `profil.ayarlar.arkadasHaberleri` (yoksa varsayılan; göç gerekmedi). Test verisi: `test.arkadaslar, istekler, reddedilenIstekler, favoriler, sabitli, arkadaslikZamani`.
+- **Sunucu notu:** Karşılıklılık ve görünürlük kuralları sunucuda da uygulanmalı (istemci kuralı tek başına gizlilik güvencesi değildir).
+- **Şema:** 17. **Durum:** `deneme`'de.
+
+## v0.16.0
+
+- **Yapan:** Claude (Opus 5.5), 17.10.2026
+- **Neden:** Hakan (17.10, 00:36): değerlendirmelerden (Gemini/Grok/ChatGPT) mimariye uyanlar + C1 içerik + topluluk kuralları (yanıtsız mesaj sınırı, karşılıklılıkla fotoğraf, gerçek engelleme, gecikmeli numara paylaşımı) + h–i önerisi ("gerisi sana katılıyorum").
+- **Ne:**
+  - `cekirdek/topluluk-kurallari.js` (saf işlevler; sunucuda da aynısı uygulanmalı): `mesajIzni` (YANITSIZ_SINIR 5, 7 gün), `fotoIzni` (karşılıklı 5), `iletisimIzni` (7 gün + karşılıklı 10), `iletisimBilgisiVar` (telefon ≥7 rakam, e-posta). mesaj ekranı bunları kullanır; `testYanitVerir` (sonAktifDk ≤ 30).
+  - `test-modu`: `testProfili` engellileri süzer; `engellenenler`, `testEngelKaldir`, `testSohbetBaslangici` (sohbet `baslangic` alanı).
+  - `depo`: `iceAktarHazirla` / `iceAktarUygula` (şablona göre doğrulama, `goc(ham, yedekle=false)`); ayarlar fotoğrafları yalnız hazırlık başarılıysa yazar.
+  - `fotograf`: `tumBasvurular()` (verinin tamamında `mdy:`), yetim silme, tam medya yedeği. `main.js`: yazı alanı odaktayken yeniden çizim ertelenir.
+  - `cekirdek/yan-menu.js`: `yanMenuAc(b)`, `benDugmesi(b)`; CSS `b-ymenu-*` bilesenler.css'te. Gezinme: `/gelisim` = "Gelişim" (ikon kupa). gelisim modülünde iki ekran: `gelisim` (ilerleme) ve `profil` (kimlik). Eski `?sekme=profil` → `/profil`.
+  - `yonlendirici`: ortak odak tuzağı ve odağı geri verme.
+  - Düzeltme: `AYIRAC` + although/though/whereas/while/unless/if; yeni kural `edat-kalibi`; `araclar/duzeltme-sinama.mjs` derlemede çalışır.
+  - `hafiza`: `OGRENILDI_GUN = 2`, `basariGunleri`.
+  - Telaffuz: düzenleme uzaklığıyla hizalama (tamam/eksik/farkli/fazla), `dinlemeyiDurdur`, Hafızaya ekle. `ses-hatti.tanimaDili()`.
+  - 9 yeni senaryo (B2 ×4, C1 ×5); seviye seçicileri A1–C1.
+  - kesfet: `ulkeKodu` (İngilizce ülke adı, eski kayıtlar `ulkeAnahtari` ile çevrilir), 60+, iki yönlü karşılıklı, Çevrimiçi/Yeni hızlı süzgeçten çıktı.
+  - karsilama: misafir penceresinde ana dil seçimi; `ogrenilenDil = 'en'`, ana dil İngilizce ise rol `yardimci`.
+  - `data-yazi="cokbuyuk"` (1.25).
+- **Bilerek yapılmayanlar / kalanlar:** gerçek sunucu tarafı kural uygulaması (istemci kuralı aşılabilir), canlı yapay zekâ, gerçek hesap/mesajlaşma, moderasyon, çok kişili odalar; B1 içeriği hâlâ 2 senaryo; genel artikel kuralı (yanlış düzeltme riski); kaydırınca küçülen üst bant.
+- **Şema:** 17. **Durum:** `deneme`'de; canlıya alma Hakan onayıyla.
 
 ## v0.15.0
 
@@ -28,7 +115,16 @@
   - mesaj: `.msj-kapak` (sistem kapağı kişinin renginden), `.msj-hobiler` yatay şerit, ortak hobi vurgusu. gelisim: `.gls-kapak` + `kapakSec()` (6 sistem kapağı ya da kendi fotoğrafı; `profil.kapak`).
   - kesfet `suzgecPenceresi`: `katla(anahtar, …)` ülke ve ilgi grupları için; açık gruplar yeniden çizimde korunur.
 - **Bekleyen (Hakan onayı):** h–i önerisi — profil fotoğrafı tüm ana sayfaların üst bandında solda, dokununca yan menü (Profilini gör, kısayollar, Ayarlar); sağ alt sekme "Gelişim" (Profil modülü ikiye bölünür: kimlik fotoğrafın arkasında, gelişim sekmede).
-- **Şema:** 16. **Durum:** `deneme`'de, canlıya alınmadı.
+- **Şema:** 16. **Durum:** canlıda (PR #18, Hakan onayı: "Önceki sürümü de yayınla", 17.10.2026).
+- **Değerlendirme (17.10, Gemini/Grok/ChatGPT 0.12.1 ve 0.14.0 raporları) — kodda doğrulanan açıklar, v0.16.0 adayı:**
+  - `depo.iceAktar` yalnız `profil` nesnesine bakıyor: `{"semaSurumu":15,"profil":{}}` kabul edilir (ayarlar yok → ekranlar bozulur). Ayarlar'da `medyaIceAktar` doğrulamadan ÖNCE çalışıyor.
+  - `test-modu.testProfili(kimlik)` engellileri süzmüyor (doğrudan `/kisi?k=` ve mesaj açılır).
+  - Telaffuz `karsilastir` sözcük kümesi (sıra/tekrar/ek sözcük yok); `sus()` yalnız sentezi durdurur, tanıma ekrandan çıkışta sürer.
+  - Düzeltme: "I work today although I was sick yesterday." → "worked" (yan cümle ayrımı yok).
+  - `demo-koc` `sapma.konu` ölü dal (koşul hep `kendiSorusu`).
+  - Bağlan: ülke süzgeci çevrilmiş adla saklanıyor (dil değişince kayboluyor); etkin yaş hapında "60+" yerine "60"; hızlı `karsilikli` tek yönlü (sekme iki yönlü).
+  - Misafir girişinde İngilizce arayüz → anaDil 'en', öğrenilen 'tr' (Ayarlar'daki yalnız-İngilizce kuralıyla çelişir).
+  - Karne adresi `?i=<sıra>`; kalıcı kimlik yok.
 
 ## v0.14.0
 

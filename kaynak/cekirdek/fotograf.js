@@ -73,15 +73,37 @@ export async function medyaHazirla() {
       if (harita.has(v.profil.foto)) v.profil.foto = harita.get(v.profil.foto);
     });
   })(), bekle]);
-  const p = al().profil;
-  return [p.foto, ...(p.fotograflar || [])].some((f) => f && String(f).startsWith(ONEK) && onbellek.has(String(f).slice(ONEK.length)));
+  // v0.16.0: hiçbir kayıtta geçmeyen (silinmiş gönderi, değiştirilen kapak…) resimler depodan da silinir.
+  await yetimleriSil();
+  return [...tumBasvurular()].some((k) => onbellek.has(k));
+}
+
+// v0.16.0 Verinin tamamında (profil, kapak, Dil Anları gönderileri, mesajlar) geçen "mdy:" başvurularının kimlikleri.
+export function tumBasvurular(kok = al()) {
+  const kume = new Set();
+  const gez = (x) => {
+    if (typeof x === 'string') { if (x.startsWith(ONEK)) kume.add(x.slice(ONEK.length)); return; }
+    if (Array.isArray(x)) { x.forEach(gez); return; }
+    if (x && typeof x === 'object') Object.values(x).forEach(gez);
+  };
+  gez(kok);
+  return kume;
+}
+
+async function yetimleriSil() {
+  if (!db) return;
+  const kullanilan = tumBasvurular();
+  for (const kimlik of [...onbellek.keys()]) {
+    if (kullanilan.has(kimlik)) continue;
+    if (await islem('readwrite', (d) => d.delete(kimlik))) onbellek.delete(kimlik);
+  }
 }
 
 // Yedek için: başvuruların resimleri { kimlik: veri } olarak.
 export function medyaDisaAktar() {
-  const p = al().profil;
+  // v0.16.0: yalnız profil değil, kapak, gönderi ve mesaj fotoğrafları da yedeğe girer.
   const sonuc = {};
-  for (const f of [...(p.fotograflar || []), p.foto]) if (f && String(f).startsWith(ONEK)) sonuc[String(f).slice(ONEK.length)] = fotoAdresi(f);
+  for (const kimlik of tumBasvurular()) if (onbellek.has(kimlik)) sonuc[kimlik] = onbellek.get(kimlik);
   return sonuc;
 }
 export async function medyaIceAktar(medya) {

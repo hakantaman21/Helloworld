@@ -10,7 +10,7 @@ import asyncio, json, pathlib, sys
 from playwright.async_api import async_playwright
 
 KOK = pathlib.Path(__file__).resolve().parent.parent
-EKRANLAR = ['sohbetler', 'kesfet', 'bugun', 'dil-anlari', 'gelisim', 'ayarlar', 'hafiza', 'senaryolar', 'karne', 'telaffuz']
+EKRANLAR = ['sohbetler', 'kesfet', 'bugun', 'dil-anlari', 'gelisim', 'ayarlar', 'hafiza', 'senaryolar', 'karne', 'telaffuz', 'profil', 'mesaj?k=test-lucia']
 
 def veri(test_acik):
     return {"semaSurumu": 7, "test": {"acik": test_acik, "anlar": [], "sohbetler": {}, "engelli": [], "sikayetler": []},

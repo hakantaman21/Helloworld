@@ -19,6 +19,14 @@ export function ingilizceSesler() {
   return window.speechSynthesis.getVoices().filter((s) => /^en/i.test(s.lang)).map((s) => ({ ad: s.name, dil: s.lang }));
 }
 
+function tanimaDili() {
+  try {
+    const secilen = (((al() || {}).profil || {}).ayarlar || {}).kocSesi;
+    const ses = secilen && destek.sentez ? window.speechSynthesis.getVoices().find((x) => x.name === secilen) : null;
+    return ses && /^en-[A-Z]{2}$/i.test(ses.lang.replace('_', '-')) ? ses.lang.replace('_', '-') : 'en-US';
+  } catch { return 'en-US'; }
+}
+
 function sesSec() {
   const sesler = window.speechSynthesis.getVoices();
   const secilen = (((al() || {}).profil || {}).ayarlar || {}).kocSesi;
@@ -67,7 +75,8 @@ export function dinle({ onBasladi, onAra, onSonuc, onSessizlik, onHata, sessizli
   if (izinDurumu() !== 'verildi') throw new Error('izin-yok');
 
   const tanima = new TanimaSinifi();
-  tanima.lang = 'en-US';
+  // v0.16.0: koç sesi İngiltere/Avustralya… seçildiyse tanıma da o aksanın dilini kullanır (yoksa en-US).
+  tanima.lang = tanimaDili();
   tanima.interimResults = true;
   tanima.continuous = false;
   tanima.maxAlternatives = 1;
