@@ -558,7 +558,19 @@ export function afisKaydirici(slaytlar, { etiket, pano = false } = {}) {
 const KAYDIRMA_ESIGI = 70;
 export function sekmeKaydirmaBaslat(git) {
   let bas = null;
-  const yatayAlan = (el) => el.closest('[data-yatay], .b-sekmeler, .b-uygulamalar, .b-aralik, input, textarea, select, .b-alt-pencere-perde, .shb-menu-perde, .b-perde');
+  // v0.25.1: sınıf listesi tek başına yetmiyordu (yeni eklenen yatay şeritler listede yoktu → şeridi kaydırırken sekme
+  // değişiyordu). Artık dokunulan yerden yukarı doğru GERÇEKTEN yatay kayabilen bir kap aranır (taşan içerik + overflow-x
+  // auto/scroll). Böylece ileride eklenen her yatay şerit kendiliğinden korunur. Liste, yazı alanları ve katmanlar için kalır.
+  const yatayKayar = (el) => {
+    for (let n = el; n && n !== document.body && n.nodeType === 1; n = n.parentElement) {
+      if (n.scrollWidth > n.clientWidth + 1) {
+        const o = getComputedStyle(n).overflowX;
+        if (o === 'auto' || o === 'scroll') return true;
+      }
+    }
+    return false;
+  };
+  const yatayAlan = (el) => !(el instanceof Element) || el.closest('[data-yatay], .b-sekmeler, .b-uygulamalar, .b-aralik, input, textarea, select, .b-alt-pencere-perde, .shb-menu-perde, .b-perde') || yatayKayar(el);
   document.addEventListener('touchstart', (e) => {
     const t0 = e.touches[0];
     bas = e.touches.length === 1 && !yatayAlan(e.target) ? { x: t0.clientX, y: t0.clientY, zaman: Date.now() } : null;

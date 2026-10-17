@@ -1,3 +1,8 @@
+## 0.25.1 — 17.10.2026 · Yatay şerit kaydırması sekme değiştiriyordu; karnede taşan değer
+
+- **Kaydırma çakışması (Hakan, 17:22):** Konu odalarının yatay şeridini kaydırırken alt menü sekmesi değişiyordu. Kök neden: sekme kaydırma hareketi yatay alanları elle tutulan bir sınıf listesinden tanıyordu; v0.21'de eklenen şerit listede yoktu. Artık dokunulan yerden yukarı doğru gerçekten yatay kayabilen bir kap (taşan içerik + `overflow-x: auto/scroll`) aranıyor; bundan sonra eklenecek her yatay şerit de kendiliğinden korunuyor.
+- **Karne:** "Ölçülmedi" gibi sözcük değerler büyük sayı yazısıyla kutudan taşıyordu; sözcük değerler daha küçük yazılıyor ve kutuya sığacak biçimde bölünüyor. Gelişim ekranındaki değer kutularına da aynı taşma koruması eklendi.
+
 ## 0.25.0 — 17.10.2026 · Pratik sadeleşti, Karne'den hafızaya ekleme, görünüm ayarları
 
 Hakan'ın v0.24 kararları (17.10, 17:06): 2) Bugün sadeleştirmesi önizlemeyle gösterilsin, 3) Karne düğmesi Claude'un kararına, 4) daha iyi ve kullanıcı dostuysa görünüm ayarları.

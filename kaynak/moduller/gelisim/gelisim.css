@@ -14,7 +14,7 @@
   }
   .gls-karne-baslik { font-size: var(--yazi-kucuk); font-weight: 700; letter-spacing: 0.04em; color: var(--renk-gece-soluk); }
   .gls-olcu { display: flex; flex-direction: column; gap: 2px; }
-  .gls-deger { font-size: calc(26px * var(--yazi-olcek)); font-weight: 700; }
+  .gls-deger { font-size: calc(26px * var(--yazi-olcek)); font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
   .gls-deger-vurgu { color: var(--renk-gece-vurgu); }
   .gls-etiket { font-size: var(--yazi-kucuk); color: var(--renk-gece-soluk); }
 
@@ -124,7 +124,7 @@
   .gls-puanlar { display: flex; flex-direction: column; gap: 8px; }
   .gls-puan { gap: 2px; min-height: 76px; }
   .gls-puan-ikon { color: var(--renk-baslik); display: inline-flex; }
-  .gls-puan-deger { font-size: calc(20px * var(--yazi-olcek)); font-weight: 800; line-height: 1.1; }
+  .gls-puan-deger { font-size: calc(20px * var(--yazi-olcek)); font-weight: 800; line-height: 1.1; min-width: 0; overflow-wrap: anywhere; }
   .gls-davet { display: flex; align-items: center; gap: 12px; }
   .gls-davet-metin { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .gls-davet-metin b { font-size: calc(16px * var(--yazi-olcek)); }

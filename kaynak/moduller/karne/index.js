@@ -20,9 +20,13 @@ function telaffuzSeviyesi(puan) {
   return { sinif: 'krn-isaret-kotu', ikon: 'dalgaCizgi', etiket: t('karne.seviye.kotu') };
 }
 
+// v0.25.1: değer sayı değil de sözcükse ("Ölçülmedi", "Not measured") büyük sayı yazısıyla kutudan taşıyordu;
+// sözcük değerler daha küçük ve satıra sığacak biçimde yazılır (kutu ne kadar dar olursa olsun).
+const SAYISAL = /^[\d\s.,:%+\-–/]+(dk|sn|min|s|%)?$/i;
 function olcu(deger, etiket, not) {
+  const metin = !SAYISAL.test(String(deger).trim());
   return h('div', { class: 'b-kart krn-olcu' },
-    h('span', { class: 'krn-olcu-deger' }, deger),
+    h('span', { class: `krn-olcu-deger${metin ? ' krn-olcu-deger-metin' : ''}` }, deger),
     h('span', { class: 'b-kucuk' }, etiket),
     not ? h('span', { class: 'krn-olcu-not' }, not) : null,
   );

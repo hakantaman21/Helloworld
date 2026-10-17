@@ -1,7 +1,9 @@
 @layer moduller {
   .krn-ekran { gap: var(--bosluk-5); }
   .krn-olcu { gap: 2px; padding: var(--bosluk-3); }
-  .krn-olcu-deger { font-size: calc(22px * var(--yazi-olcek)); font-weight: 700; }
+  .krn-olcu { min-width: 0; }
+  .krn-olcu-deger { font-size: calc(22px * var(--yazi-olcek)); font-weight: 700; min-width: 0; overflow-wrap: anywhere; line-height: 1.15; }
+  .krn-olcu-deger-metin { font-size: calc(16px * var(--yazi-olcek)); hyphens: auto; }
   .krn-olcu-not { font-size: calc(11px * var(--yazi-olcek)); color: var(--renk-soluk); }
   .krn-duzeltme { gap: var(--bosluk-3); }
   .krn-tumu { align-self: flex-start; }
