@@ -123,4 +123,23 @@
     .b-tur-delik, .b-tur-noktalar i { transition: none; }
     .b-ipucu-serit { animation: none; }
   }
+  /* v0.26.0 Hesap askıda şeridi */
+  .b-aski-serit { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%; min-height: 56px; margin-bottom: 8px; padding: 10px 14px; border: 0; border-radius: 16px; background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); font: inherit; text-align: left; cursor: pointer; box-shadow: inset 0 0 0 1px var(--renk-vurgu); }
+  .b-aski-serit span { font-size: calc(13px * var(--yazi-olcek)); }
+  /* v0.26.0 Ortak süzgeç satırı */
+  .b-suzgec-satir { display: flex; flex-direction: column; gap: 8px; }
+  .b-suzgec-ust { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .b-suzgec-ust > :first-child { flex: 1; min-width: 0; }
+  .b-suzgec-gelismis-dugme { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 12px; border: 0; border-radius: 999px; background: var(--renk-yuzey); color: var(--renk-baslik); font: inherit; font-size: calc(13px * var(--yazi-olcek)); font-weight: 700; cursor: pointer; box-shadow: inset 0 0 0 1px var(--renk-cizgi); }
+  .b-suzgec-gelismis-dugme[aria-expanded="true"] { box-shadow: inset 0 0 0 2px var(--renk-vurgu); }
+  .b-suzgec-sayi { display: grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: var(--renk-vurgu); color: var(--renk-vurgu-uzerinde); font-size: calc(11px * var(--yazi-olcek)); }
+  .b-suzgec-gelismis { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px; border-radius: 16px; background: var(--renk-yuzey-ikinci); }
+  .b-suzgec-gelismis[hidden] { display: none; }
+  .b-suzgec-hap { min-height: 48px; padding: 0 14px; border: 0; border-radius: 999px; background: var(--renk-yuzey); color: var(--renk-murekkep); font: inherit; font-size: calc(13px * var(--yazi-olcek)); cursor: pointer; box-shadow: inset 0 0 0 1px var(--renk-cizgi); }
+  .b-suzgec-hap[aria-pressed="true"] { background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); box-shadow: inset 0 0 0 2px var(--renk-vurgu); }
+  .b-suzgec-secim { min-height: 48px; max-width: 100%; }
+  .b-arama-satir { display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 14px; border-radius: 999px; background: var(--renk-yuzey); box-shadow: inset 0 0 0 1px var(--renk-cizgi); }
+  .b-arama-satir input { flex: 1; min-width: 0; min-height: 44px; border: 0; background: transparent; color: var(--renk-murekkep); font: inherit; }
+  .b-arama-satir input:focus { outline: none; }
+  .b-arama-satir:focus-within { box-shadow: inset 0 0 0 2px var(--renk-vurgu); }
 }

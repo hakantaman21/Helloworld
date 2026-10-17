@@ -4,7 +4,8 @@
 // Test modunda TEST rozetli sanal kullanıcıların gönderileri. Beğeni sayıları uydurulmaz (yalnız bu cihazdaki).
 import './anlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, altGezinme, basBant, afisKaydirici, ustBaslik, durumKutusu, ikon, ikon3d, yerlestir, testEtiketi, testAvatar, goreliZaman, farkCiz, htUst, htIkon, sekmeler, dilCifti, benAvatar } from '../../cekirdek/arayuz.js';
+import { h, altGezinme, basBant, afisKaydirici, ustBaslik, durumKutusu, ikon, ikon3d, yerlestir, testEtiketi, testAvatar, goreliZaman, farkCiz, htUst, htIkon, sekmeler, dilCifti, benAvatar, suzgecSatiri, acKapaHap } from '../../cekirdek/arayuz.js';
+import { arkadasMi } from '../../cekirdek/arkadaslik.js';
 import { benDugmesi } from '../../cekirdek/yan-menu.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
@@ -13,7 +14,8 @@ import { kelimeFarki } from '../../cekirdek/dil/fark.js';
 import { cumleKayitli, cumleKaydetDegistir } from '../../cekirdek/cumle-defteri.js';
 import { fotoAdresi, fotograflarEkle } from '../../cekirdek/fotograf.js';
 import { destek, soyle } from '../../cekirdek/ses/ses-hatti.js';
-import { testModuAcik, testModuAyarla, testAnlari, anBegen, anBegenildi, anYorumlari, anYorumEkle, anDuzeltmesi, anDuzelt, anPaylas, anOtomatikYorum, testProfiliHam, testSikayet, takipte, takipDegistir, eslesme, aktiflik, saatFarki, YAKIN_SAAT_FARKI } from '../../cekirdek/test-modu.js';
+import { sikayetEt } from '../../cekirdek/kisi-eylemleri.js';
+import { testModuAcik, testModuAyarla, testAnlari, anBegen, anBegenildi, anYorumlari, anYorumEkle, anDuzeltmesi, anDuzelt, anPaylas, anOtomatikYorum, testProfiliHam, takipte, takipDegistir, eslesme, aktiflik, saatFarki, YAKIN_SAAT_FARKI } from '../../cekirdek/test-modu.js';
 
 const OTOMATIK_YORUM_GECIKMESI = 1500;
 const ONIZLEME_YORUM = 2;
@@ -27,6 +29,10 @@ function ciz(kok, b) {
   let sekme = 'guncel';
   let arama = '';
   let yaziyor = false;
+  // v0.26.0 Süzgeç: temel (beğendiklerim, yorumladıklarım, arkadaşlarım) + gelişmiş (fotoğraflı, zaman, yazarın dili).
+  let suzgec = 'tum';
+  const gelismis = { foto: false, zaman: 'tum', dil: '' };
+  const gelismisDurum = { acik: false };
   const akis = h('div', { class: 'anl-akis', 'aria-live': 'polite' });
   const paylasAlani = h('div');
 
@@ -107,22 +113,7 @@ function ciz(kok, b) {
     );
   }
 
-  async function sikayet(an, y) {
-    const n = await new Promise((coz) => {
-      const kapat = (d) => { perde.remove(); coz(d); };
-      const perde = h('div', { class: 'b-perde', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'anl-sik' },
-        h('div', { class: 'b-pencere' },
-          h('h2', { class: 'b-bolum-baslik', id: 'anl-sik' }, t('test.sikayetBaslik', { ad: y.ad })),
-          h('div', { class: 'b-yigin' }, ['taciz', 'spam', 'uygunsuz', 'konuDisi'].map((k) => h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => kapat(k) }, t(`test.sikayetNeden.${k}`))),
-            h('button', { type: 'button', class: 'b-dugme', 'data-vazgec': '', onClick: () => kapat(null) }, t('genel.vazgec'))),
-        ));
-      document.body.append(perde);
-      perde.querySelector('button').focus();
-    });
-    if (!n) return;
-    testSikayet(an.yazar, n);
-    duyur(t('test.sikayetAlindi'), 4000);
-  }
+  const sikayet = (an, y) => sikayetEt({ kimlik: an.yazar, ad: y.ad, tur: 'an', anKimligi: an.kimlik });
 
   // v0.15.0 HelloTalk gibi çoklu fotoğraf: 1 büyük, 2 yan yana, 3–4 ikişerli ızgara, 4'ten fazlası "+N" ile.
   function fotoIzgarasi(fotolar) {
@@ -175,12 +166,20 @@ function ciz(kok, b) {
     if (sekme === 'yakin') s = s.filter((a) => !a.benim && saatFarki(a.profil) <= YAKIN_SAAT_FARKI);
     if (sekme === 'ogren') s = s.filter((a) => !a.benim && a.profil.anaDil === (ben.ogrenilenDil || 'en'));
     if (sekme === 'sinif') s = s.filter((a) => !a.benim && a.profil.seviye === ben.seviye);
+    if (suzgec === 'begendiklerim') s = s.filter((a) => anBegenildi(a.kimlik));
+    if (suzgec === 'yorumladiklarim') s = s.filter((a) => anYorumlari(a.kimlik).some((y) => y.yazar === 'ben'));
+    if (suzgec === 'arkadaslarim') s = s.filter((a) => !a.benim && arkadasMi(a.yazar));
+    if (suzgec === 'benim') s = s.filter((a) => a.benim);
+    if (gelismis.foto) s = s.filter((a) => (a.fotolar || []).length || a.gorsel);
+    if (gelismis.zaman !== 'tum') { const sinir = Date.now() - (gelismis.zaman === '24s' ? 1 : 7) * 86400000; s = s.filter((a) => a.zaman >= sinir); }
+    if (gelismis.dil) s = s.filter((a) => a.profil && a.profil.anaDil === gelismis.dil);
     return s;
   }
 
   function yenile() {
     const liste = suz(testAnlari());
-    const bosMetin = sekme === 'takip' ? t('ht.takipBos') : t('anlar.akisBos');
+    const suzgecli = suzgec !== 'tum' || gelismis.foto || gelismis.zaman !== 'tum' || gelismis.dil;
+    const bosMetin = suzgecli ? t('suzgec.bos') : sekme === 'takip' ? t('ht.takipBos') : t('anlar.akisBos');
     yerlestir(akis, liste.length ? liste.map(kart) : durumKutusu('bos', bosMetin));
   }
 
@@ -239,6 +238,18 @@ function ciz(kok, b) {
     }),
     sekmeler([['guncel', t('ht.guncel')], ['senin', t('ht.seninIcin')], ['yardim', t('ht.yardimEt')], ['takip', t('ht.takipEdilen')], ['ogren', t('ht.ogren')], ['yakin', t('ht.yakinSaat')], ['sinif', t('ht.sinif')]], sekme, (id) => { sekme = id; yenile(); }, { etiket: t('anlar.baslik') })),
     pano,
+    suzgecSatiri({
+      secenekler: [['tum', t('suzgec.an.tum')], ['begendiklerim', t('suzgec.an.begendiklerim')], ['yorumladiklarim', t('suzgec.an.yorumladiklarim')], ['arkadaslarim', t('suzgec.an.arkadaslarim')], ['benim', t('suzgec.an.benim')]],
+      aktif: suzgec, degisti: (id) => { suzgec = id; yenile(); }, etiket: t('suzgec.etiket'), durum: gelismisDurum,
+      gelismisSayi: [gelismis.foto, gelismis.zaman !== 'tum', gelismis.dil].filter(Boolean).length,
+      gelismis: [
+        acKapaHap(t('suzgec.an.fotografli'), gelismis.foto, (v) => { gelismis.foto = v; yenile(); }),
+        sekmeler([['tum', t('suzgec.zaman.tum')], ['24s', t('suzgec.zaman.24s')], ['7g', t('suzgec.zaman.7g')]], gelismis.zaman, (id) => { gelismis.zaman = id; yenile(); }, { tur: 'hap', etiket: t('suzgec.zaman.etiket') }),
+        h('select', { class: 'b-girdi b-suzgec-secim', 'aria-label': t('suzgec.an.dil'), onChange: (e) => { gelismis.dil = e.currentTarget.value; yenile(); } },
+          h('option', { value: '' }, t('suzgec.an.dilHepsi')),
+          [...new Set(testAnlari().filter((a) => a.profil).map((a) => a.profil.anaDil))].map((d) => h('option', { value: d, selected: d === gelismis.dil }, t(`diller.${d}`)))),
+      ],
+    }),
     h('p', { class: 'anl-uyari' }, testEtiketi(), ' ', t('anlar.testUyari')),
     paylasAlani,
     akis,

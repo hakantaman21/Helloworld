@@ -24,6 +24,42 @@ const HARITA_GRUPLARI = [
 ];
 
 const OZELLIKLER = [
+  // ---- v0.26.0 ----
+  { kimlik: 'destek', grup: 'yardim', ikon: 'kalem', yol: '/destek', iz: 'destek', surum: '0.26.0',
+    ad: { tr: 'Destek ve geri bildirim', en: 'Support and feedback' },
+    aciklama: { tr: 'Şikâyet, hata, öneri ve görüş gönder; geçmişini gör, şikâyetini geri al; yönetimin yanıtı burada ve bildirimlerde.', en: 'Send reports, bugs, ideas and feedback; see your history, withdraw a report; replies arrive here and in notifications.' },
+    ipucu: { tr: 'Bir kişiyi şikâyet etmek için profilindeki "…" menüsünü kullan; kim olduğu otomatik eklenir.', en: 'To report a person use the "…" menu on their profile; who it is gets added automatically.' },
+    anahtar: { tr: ['destek', 'şikâyet', 'şikayet', 'hata', 'öneri', 'görüş', 'geri bildirim', 'yönetici', 'admin'], en: ['support', 'report', 'bug', 'idea', 'feedback', 'admin', 'complaint'] } },
+  { kimlik: 'bildirim-saatleri', grup: 'hesap', ikon: 'takvim', yol: '/ayarlar?grup=bildirim&bolum=saatler', iz: 'ayarlar:bildirim', surum: '0.26.0',
+    ad: { tr: 'Bildirim saatleri', en: 'Notification hours' },
+    aciklama: { tr: 'Uygulama bildirimleri ve arkadaş mesajları için ayrı saat ve günler. Dışında yazan kişiye mesajının ne zaman iletileceği söylenir.', en: 'Separate hours and days for app notifications and friends\' messages. People writing outside them are told when their message will arrive.' },
+    ipucu: { tr: 'Bir kişiye yazarken onun saati ve mesaj aldığı saatler sohbetin üstünde görünür.', en: 'When you write to someone, their local time and message hours show above the chat.' },
+    anahtar: { tr: ['saat', 'sessiz', 'rahatsız etme', 'gece', 'gün', 'bildirim saati'], en: ['hours', 'quiet', 'do not disturb', 'night', 'days'] } },
+  { kimlik: 'kisi-tercih', grup: 'sohbet', ikon: 'aile', yol: '/kesfet?sekme=arkadaslar', iz: 'kesfet:arkadaslar', surum: '0.26.0', test: true,
+    ad: { tr: 'Arkadaşa özel tercihler ve askıya alma', en: 'Per-friend preferences and pausing' },
+    aciklama: { tr: 'Bir arkadaşından hangi haber ve bildirimleri alacağını seç; arkadaşlığı 1 gün, 1 hafta ya da 1 ay askıya al.', en: 'Choose which updates and notifications you get from a friend; pause a friendship for a day, a week or a month.' },
+    ipucu: { tr: 'Arkadaşının profilinde "…" menüsü › "Hangi haberleri göreyim?" ya da "Arkadaşlığı askıya al".', en: 'On a friend\'s profile: "…" › "Which updates?" or "Pause friendship".' },
+    anahtar: { tr: ['askıya al', 'sessize al', 'arkadaş bildirimi', 'tercih', 'arkadaşlıktan çıkar'], en: ['pause', 'mute', 'friend notifications', 'preferences', 'unfriend'] } },
+  { kimlik: 'guvende', grup: 'hesap', ikon: 'aile', yol: '/ayarlar?grup=profil', iz: 'ayarlar:profil', surum: '0.26.0',
+    ad: { tr: 'Güvendeyim (afet)', en: 'I\'m safe (disaster)' },
+    aciklama: { tr: 'Deprem ya da afet sonrası arkadaşlarına 72 saat boyunca güvende olduğunu göster.', en: 'After an earthquake or disaster, show your friends you\'re safe for 72 hours.' },
+    anahtar: { tr: ['güvende', 'deprem', 'afet', 'iyiyim'], en: ['safe', 'earthquake', 'disaster', 'i am ok'] } },
+  { kimlik: 'dogum-gunu', grup: 'hesap', ikon: 'hediye', yol: '/ayarlar?grup=profil', iz: 'ayarlar:profil', surum: '0.26.0',
+    ad: { tr: 'Doğum günü ve yıldönümü', en: 'Birthday and anniversary' },
+    aciklama: { tr: 'Doğum gününde ve üyelik yıldönümünde küçük bir tebrik; arkadaşlarının doğum günü haberlerde.', en: 'A small greeting on your birthday and membership anniversary; friends\' birthdays in your news.' },
+    anahtar: { tr: ['doğum günü', 'yıldönümü', 'tebrik', 'kutlama'], en: ['birthday', 'anniversary', 'greeting'] } },
+  { kimlik: 'hesap-aski', grup: 'hesap', ikon: 'yedek', yol: '/ayarlar?grup=gizlilik', iz: 'ayarlar:gizlilik', surum: '0.26.0',
+    ad: { tr: 'Hesabı askıya al ya da sil', en: 'Suspend or delete account' },
+    aciklama: { tr: 'Bir süre ara ver: profilin görünmez, mesajlaşma ve bildirimler durur; istediğin an geri aç. Ya da hesabını ve verilerini sil.', en: 'Take a break: your profile is hidden, messaging and notifications stop; reopen any time. Or delete your account and data.' },
+    anahtar: { tr: ['askıya al', 'hesap', 'sil', 'ara ver', 'dondur'], en: ['suspend', 'account', 'delete', 'deactivate', 'break'] } },
+  { kimlik: 'davet', grup: 'sohbet', ikon: 'aile', yol: '/kesfet?sekme=arkadaslar', iz: 'kesfet:arkadaslar', surum: '0.26.0',
+    ad: { tr: 'Arkadaşlarını davet et', en: 'Invite your friends' },
+    aciklama: { tr: 'Rehberinden birden çok kişi seçip tek SMS ile davet et ya da bağlantıyı paylaş.', en: 'Pick several contacts and invite them with one SMS, or share the link.' },
+    anahtar: { tr: ['davet', 'rehber', 'kişiler', 'paylaş', 'sms'], en: ['invite', 'contacts', 'share', 'sms'] } },
+  { kimlik: 'anlar-suzgec', grup: 'topluluk', ikon: 'anlar', yol: '/dil-anlari', iz: 'dil-anlari', surum: '0.26.0', test: true,
+    ad: { tr: 'Arama ve süzgeçler', en: 'Search and filters' },
+    aciklama: { tr: 'Dil Anları\'nda beğendiklerin, yorum yaptıkların, arkadaşlarının gönderileri; gelişmişte fotoğraflı, zaman ve dil. Bağlan\'da ad/ülke/hobi araması; Sohbet\'te mesaj içinde arama.', en: 'In Moments: liked, commented, friends\' posts; advanced: photos, time, language. Search people in Connect; search inside messages in Chats.' },
+    anahtar: { tr: ['süzgeç', 'filtre', 'beğendiklerim', 'yorumlarım', 'ara'], en: ['filter', 'liked', 'my comments', 'search'] } },
   // ---- Sohbet ve kişiler ----
   { kimlik: 'sohbetler', grup: 'sohbet', ikon: 'sohbet', yol: '/sohbetler', iz: 'sohbetler', surum: '0.4.0', ekranIpucu: true,
     ad: { tr: 'Sohbetler', en: 'Chats' },
@@ -242,6 +278,12 @@ const OZELLIKLER = [
 
 // Güncellemeden sonra bir kez gösterilen "Yenilikler" (en yeni başta). Yalnız kullanıcının önceki sürümünden yeni olanlar gösterilir.
 const YENILIKLER = [
+  { surum: '0.26.0', maddeler: [
+    { ozellik: 'destek', metin: { tr: 'Destek merkezi: şikâyet, hata, öneri ve görüş; geçmişin, geri alma ve yönetim yanıtları.', en: 'Support centre: reports, bugs, ideas and feedback; your history, withdrawing and replies.' } },
+    { ozellik: 'bildirim-saatleri', metin: { tr: 'Bildirim saatleri: uygulama ve arkadaşlar için ayrı saat/gün; yazan kişi mesajın ne zaman iletileceğini görür.', en: 'Notification hours for the app and friends; senders see when their message will arrive.' } },
+    { ozellik: 'kisi-tercih', metin: { tr: 'Arkadaşa özel haber/bildirim seçimi ve arkadaşlığı askıya alma; kapakta kişinin yerel saati.', en: 'Per-friend update choices and pausing a friendship; the person\'s local time on their cover.' } },
+    { ozellik: 'anlar-suzgec', metin: { tr: 'Dil Anları, Bağlan ve Sohbet\'te arama ve süzgeçler; rehberden toplu davet.', en: 'Search and filters in Moments, Connect and Chats; invite contacts in bulk.' } },
+  ] },
   { surum: '0.25.0', maddeler: [
     { ozellik: 'bugun', metin: { tr: 'Pratik sadeleşti: günün planı en üstte tek kartta; sıradaki adım tek dokunuşla başlıyor.', en: 'Practice is simpler: today\'s plan sits on one card at the top; the next step starts with one tap.' } },
     { ozellik: 'karne', metin: { tr: 'Karnedeki her düzeltmeyi "Hata Hafızama ekle" ile tekrar listene alabilirsin.', en: 'Add any report-card correction to your Error Memory with one tap.' } },

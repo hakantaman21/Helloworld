@@ -9,10 +9,14 @@
 import { al, degistir } from './depo.js';
 import { TEST_PROFILLERI, TEST_SOSYAL } from '../veri/test-profiller.js';
 import { kisiErisilebilir, erisilebilirler } from './test-erisim.js';
+import { t } from './metin.js';
 
 export const SABIT_SINIRI = 3;
 export const GIZLILIK_SECENEKLERI = ['herkes', 'arkadaslar', 'kimse'];
-export const HABER_TURLERI = ['an', 'seviye', 'seri', 'foto', 'ilgi', 'yardim'];
+export const HABER_TURLERI = ['an', 'seviye', 'seri', 'foto', 'ilgi', 'yardim', 'dogumgunu', 'guvende'];
+// v0.26.0 Arkadaş başına tercih: haber türleri + mesaj bildirimi. Varsayılan: hepsi açık.
+export const KISI_TERCIH_TURLERI = ['mesaj', ...HABER_TURLERI];
+export const ASKI_SURELERI = [1, 7, 30]; // gün
 const VARSAYILAN_GIZLILIK = { arkadasListesi: 'arkadaslar', sonGorulme: 'herkes', okundu: true };
 
 const tst = () => al().test || {};
@@ -66,6 +70,32 @@ export function arkadasliktanCikar(kimlik) {
   });
 }
 
+// ---- v0.26.0 Arkadaş başına tercihler ve arkadaşlığı askıya alma ----
+// Tercih: bu kişiden hangi haberleri ve mesaj bildirimlerini alayım (varsayılan hepsi). Askı: arkadaşlık sürer ama
+// süre bitene kadar o kişiden haber ve bildirim gelmez, sohbet listesinde sessizdir; süre bitince kendiliğinden kalkar.
+export function kisiTercihleri(kimlik) {
+  const k = ((tst().kisiTercih || {})[kimlik]) || {};
+  return Object.fromEntries(KISI_TERCIH_TURLERI.map((t) => [t, k[t] !== false]));
+}
+export function kisiTercihAyarla(kimlik, tur, acik) {
+  guncelle((t) => { t.kisiTercih = { ...(t.kisiTercih || {}), [kimlik]: { ...kisiTercihleri(kimlik), [tur]: acik } }; });
+}
+export function askiBitisi(kimlik, simdi = Date.now()) {
+  const b = (tst().askida || {})[kimlik];
+  return b && b > simdi ? b : null;
+}
+export function askidaMi(kimlik) { return Boolean(askiBitisi(kimlik)); }
+export function arkadasligiAskiyaAl(kimlik, gun) {
+  guncelle((t) => { t.askida = { ...(t.askida || {}), [kimlik]: Date.now() + gun * 86400000 }; });
+}
+export function askiyiKaldir(kimlik) { guncelle((t) => { const a = { ...(t.askida || {}) }; delete a[kimlik]; t.askida = a; }); }
+// Bu kişiden şu türde bildirim/haber gelsin mi (genel tercih + kişi tercihi + askı).
+export function kisidenAl(kimlik, tur) {
+  if (askidaMi(kimlik)) return false;
+  if (tur !== 'mesaj' && !haberTercihleri()[tur]) return false;
+  return kisiTercihleri(kimlik)[tur] !== false;
+}
+
 // ---- Favori ve başa sabitleme (sohbet listesinde en çok SABIT_SINIRI kişi) ----
 export function favoriMi(kimlik) { return (tst().favoriler || []).includes(kimlik); }
 export function favoriDegistir(kimlik) {
@@ -110,19 +140,42 @@ export function onunArkadaslari(kimlik) {
 
 // ---- Arkadaş haberleri (yalnız arkadaşların; tercihlere göre süzülür; en yeni üstte) ----
 export function arkadasHaberleri() {
-  const tercih = haberTercihleri();
   const simdi = Date.now();
+  const bugun = ayGun(new Date());
   return arkadaslarim()
-    .flatMap((k) => ((TEST_SOSYAL[k] || {}).haberler || []).map((hb, i) => ({ ...hb, kimlik: `${k}-${i}`, kisi: TEST_PROFILLERI.find((p) => p.kimlik === k), zaman: simdi - hb.saatOnce * 3600000 })))
-    .filter((hb) => hb.kisi && tercih[hb.tur])
+    .flatMap((k) => {
+      const sos = TEST_SOSYAL[k] || {};
+      const kisi = TEST_PROFILLERI.find((p) => p.kimlik === k);
+      const liste = (sos.haberler || []).map((hb, i) => ({ ...hb, kimlik: `${k}-${i}`, kisi, zaman: simdi - hb.saatOnce * 3600000 }));
+      // v0.26.0 Doğum günü (bugünse) ve "Güvendeyim" bildirimi de arkadaş haberidir.
+      if (sos.dogumGunu && sos.dogumGunu === bugun) liste.push({ tur: 'dogumgunu', kimlik: `${k}-dg`, kisi, zaman: simdi - 3600000, metin: t('arkadas.haber.dogumgunu', { ad: kisi ? kisi.ad : '' }) });
+      const g = guvendeDurumu(sos.guvende, simdi);
+      if (g) liste.push({ tur: 'guvende', kimlik: `${k}-gv`, kisi, zaman: g.zaman, metin: t('arkadas.haber.guvende', { ad: kisi ? kisi.ad : '' }) });
+      return liste.filter((hb) => kisidenAl(k, hb.tur));
+    })
+    .filter((hb) => hb.kisi)
     .sort((a, b) => b.zaman - a.zaman);
 }
+
+// ---- v0.26.0 "Güvendeyim" (deprem, afet): GUVENDE_SAAT boyunca görünür. Benim için profil.guvende = zaman.
+export const GUVENDE_SAAT = 72;
+export function ayGun(tarih) { return `${String(tarih.getMonth() + 1).padStart(2, '0')}-${String(tarih.getDate()).padStart(2, '0')}`; }
+export function guvendeDurumu(kayit, simdi = Date.now()) {
+  if (!kayit) return null;
+  const zaman = typeof kayit === 'number' ? kayit : simdi - (kayit.saatOnce || 0) * 3600000;
+  return simdi - zaman < GUVENDE_SAAT * 3600000 ? { zaman, bitis: zaman + GUVENDE_SAAT * 3600000 } : null;
+}
+export function benGuvendeyim() { return guvendeDurumu(al().profil.guvende); }
+export function guvendeAyarla(acik) { degistir((v) => { v.profil.guvende = acik ? Date.now() : null; }); }
+export function kisiGuvende(kimlik) { return guvendeDurumu((TEST_SOSYAL[kimlik] || {}).guvende); }
 
 // ---- Mesaj durumu (✓ gönderildi · ✓✓ iletildi · okundu) ----
 // Test kişisi: son 2 saatte etkinse mesaj iletilmiş sayılır; ondan sonra yanıt yazdıysa okunmuştur.
 export function mesajDurumu(mesajlar, i, profil) {
   const m = mesajlar[i];
   if (!m || m.kim !== 'ben') return null;
+  // v0.26.0: karşı tarafın iletişim saati dışında yazılan mesaj, o saat gelene kadar "bekliyor".
+  if (m.teslim && m.teslim > Date.now()) return 'bekliyor';
   const sonraYanit = mesajlar.slice(i + 1).some((x) => x.kim === 'o');
   if (sonraYanit) return okunduGorunur(profil.kimlik) ? 'okundu' : 'iletildi';
   return (profil.sonAktifDk || 0) <= 120 ? 'iletildi' : 'gonderildi';

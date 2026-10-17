@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 19;
+export const GUNCEL_SEMA = 20;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -195,5 +195,15 @@ export const gocler = {
       ist[id] = { d: 1, t: 1, i: z, s: z, sn: 0, c: 0, dz: 0 };
     });
     return { ...eski, senaryoIst: ist };
+  },
+  // 19 → 20 (v0.26.0): Destek merkezi (v.destek). Önceki test şikâyetleri geçmişe "alındı" olarak taşınır;
+  // alanlar cekirdek/destek.js ile aynıdır (göç depodan önce çalıştığı için o modülü çağıramaz).
+  20: (eski) => {
+    if (eski.destek) return eski;
+    const eskiler = ((eski.test && eski.test.sikayetler) || []).filter((x) => x && typeof x === 'object').map((x, i) => ({
+      kimlik: `d-eski${i}`, tur: 'sikayet', kategori: x.neden || null, metin: '', hedef: x.kimlik ? { kimlik: x.kimlik, tur: 'kisi' } : null,
+      zaman: Number(x.zaman) || Date.now(), durum: 'alindi', onem: 'normal', yol: 'yonetici', nedenler: [], yanitlar: [],
+    }));
+    return { ...eski, destek: { kayitlar: eskiler } };
   },
 };

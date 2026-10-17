@@ -11,7 +11,7 @@ import { t, yerel } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { kisaTarih } from '../../cekirdek/zaman.js';
 import { oneriSenaryo } from '../../cekirdek/oneri.js';
-import { testModuAcik, testSohbetOzetleri, aktiflik, enIyiEslesmeler, saatFarki, YAKIN_SAAT_FARKI, okunmamis, uyumDuzeyi } from '../../cekirdek/test-modu.js';
+import { testModuAcik, testSohbetOzetleri, aktiflik, enIyiEslesmeler, saatFarki, YAKIN_SAAT_FARKI, okunmamis, uyumDuzeyi, testMesajlari } from '../../cekirdek/test-modu.js';
 
 const SON_KONUSMA_SAYISI = 30;
 
@@ -75,7 +75,8 @@ function ciz(kok, b) {
     const yzGoster = filtre === 'tum' || filtre === 'yz';
     const kisiSuzgeci = ['saat', 'okunmamis', 'favori', 'arkadas'].includes(filtre) || filtre.startsWith('dil-');
     const insanGoster = filtre === 'tum' || filtre === 'insan' || filtre === 'cevrimici' || kisiSuzgeci;
-    const testler = testOzet.filter((o) => ara(o.profil.ad) && (filtre !== 'cevrimici' || aktiflik(o.profil).cevrimici)
+    // v0.26.0: arama yalnız adda değil, sohbetin mesajlarında da yapılır.
+    const testler = testOzet.filter((o) => (ara(o.profil.ad) || (arama && testMesajlari(o.profil.kimlik).some((m) => ara(m.metin || '')))) && (filtre !== 'cevrimici' || aktiflik(o.profil).cevrimici)
       && (filtre !== 'saat' || saatFarki(o.profil) <= YAKIN_SAAT_FARKI)
       && (filtre !== 'okunmamis' || okunmamis(o))
       && (filtre !== 'favori' || favoriMi(o.profil.kimlik))

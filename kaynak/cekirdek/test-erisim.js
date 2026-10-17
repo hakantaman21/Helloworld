@@ -12,6 +12,8 @@ export function engelliMi(kimlik) { return (tst().engelli || []).includes(kimlik
 // 'ben' (kullanıcının kendisi) her zaman erişilebilirdir.
 export function kisiErisilebilir(kimlik) {
   if (kimlik === 'ben') return true;
+  // v0.26.0: hesap askıdayken kimseyle iletişim yoktur (profil görünmez, kimse yazamaz, kimse görünmez).
+  if (al().profil.hesapAskida) return false;
   return testAcik() && !engelliMi(kimlik);
 }
 

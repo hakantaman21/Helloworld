@@ -21,6 +21,8 @@ import { SURUM } from '../../cekirdek/surum.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { destek, soyle, ingilizceSesler } from '../../cekirdek/ses/ses-hatti.js';
 import { testModuAcik, testModuAyarla, testVerileriniSil, engellenenler, testEngelKaldir } from '../../cekirdek/test-modu.js';
+import { benimSaatlerim, saatleriAyarla, saatleriSifirla, SAAT_TURLERI } from '../../cekirdek/iletisim-saatleri.js';
+import { benGuvendeyim, guvendeAyarla } from '../../cekirdek/arkadaslik.js';
 
 const DILLER = ['tr', 'en', 'es', 'ar', 'de', 'fr', 'ru', 'pt', 'fa', 'ko', 'ja', 'diger'];
 
@@ -116,6 +118,49 @@ function gorunumOnizleme() {
 }
 const GORUNUM_ALANLARI = ['tema', 'gorunum', 'yaziBoyutu', 'tasarimPaketi', 'ikonPaketi', 'secimRengi', 'zemin', 'bantRengi', 'suzgecBicimi'];
 let oncekiGorunum = null; // "Varsayılana dön"den önceki görünüm (tek adım geri alma)
+
+// v0.26.0 Doğum günü seçici: gün + ay (isteğe bağlı). Kayıt biçimi 'AA-GG'.
+function dogumGunuSecici(p, yenile) {
+  const [ay, gun] = (p.dogumGunu || '-').split('-');
+  const kaydet = () => {
+    const a = ayS.value; const g = gunS.value;
+    degistir((v) => { v.profil.dogumGunu = a && g ? `${a}-${g}` : null; });
+    if (a && g) duyur(t('dogumGunu.kaydedildi'), 1800);
+  };
+  const ayS = h('select', { class: 'b-girdi ayr-dogum', 'aria-label': t('dogumGunu.ay'), onChange: kaydet },
+    h('option', { value: '' }, t('dogumGunu.ay')),
+    Array.from({ length: 12 }, (_, i) => { const d = String(i + 1).padStart(2, '0'); return h('option', { value: d, selected: d === ay }, new Date(2024, i, 1).toLocaleDateString(aktifDilKodu(), { month: 'long' })); }));
+  const gunS = h('select', { class: 'b-girdi ayr-dogum', 'aria-label': t('dogumGunu.gun'), onChange: kaydet },
+    h('option', { value: '' }, t('dogumGunu.gun')),
+    Array.from({ length: 31 }, (_, i) => { const d = String(i + 1).padStart(2, '0'); return h('option', { value: d, selected: d === gun }, String(i + 1)); }));
+  return h('div', { class: 'ayr-dogum-satir' }, gunS, ayS,
+    p.dogumGunu ? h('button', { type: 'button', class: 'ayr-kucuk-dugme', onClick: () => { degistir((v) => { v.profil.dogumGunu = null; }); yenile(); } }, t('dogumGunu.kaldir')) : null);
+}
+
+// v0.26.0 İletişim saatleri seçici: başlangıç–bitiş saati ve günler (Pazartesi'den başlayarak). Her değişiklik anında kaydedilir.
+const GUN_SIRASI = [1, 2, 3, 4, 5, 6, 0];
+const aktifDilKodu = () => ((al().profil.ayarlar.arayuzDili || 'tr') === 'tr' ? 'tr-TR' : 'en-GB');
+function saatAraligiSecici(tur, yenile) {
+  const a = benimSaatlerim()[tur];
+  const saat = (alan) => {
+    const g = h('input', { class: 'ayr-girdi ayr-saat', type: 'time', value: a[alan], 'aria-label': t(`saatler.${alan}`) });
+    g.addEventListener('change', () => { if (g.value) { saatleriAyarla(tur, { [alan]: g.value }); duyur(t('saatler.kaydedildi'), 1500); } });
+    return g;
+  };
+  return h('div', { class: 'ayr-saat-araligi' },
+    h('h4', { class: 'ayr-saat-baslik' }, t(`saatler.tur.${tur}`)),
+    h('p', { class: 'ayr-not' }, t(`saatler.turAciklama.${tur}`)),
+    h('div', { class: 'ayr-saat-satir' }, h('label', { class: 'ayr-saat-alan' }, h('span', null, t('saatler.bas')), saat('bas')), h('label', { class: 'ayr-saat-alan' }, h('span', null, t('saatler.bit')), saat('bit'))),
+    h('div', { class: 'ayr-gunler', role: 'group', 'aria-label': t('saatler.gunler') }, GUN_SIRASI.map((g) => h('button', {
+      type: 'button', class: 'ayr-gun', 'aria-pressed': String(a.gunler.includes(g)),
+      onClick: () => {
+        const su = benimSaatlerim()[tur].gunler;
+        const yeni = su.includes(g) ? su.filter((x) => x !== g) : [...su, g];
+        if (!yeni.length) { duyur(t('saatler.enAzBirGun')); return; }
+        saatleriAyarla(tur, { gunler: yeni }); yenile();
+      },
+    }, t(`saatler.gunKisa.${g}`)))));
+}
 
 let satirSayac = 0;
 // Satır: solda etiket (+ isteğe bağlı açıklama), sağda denetim. altta: true ise denetim tam genişlikte alta iner.
@@ -245,6 +290,9 @@ function ciz(kok, b) {
         h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('ayarlar.tanitim')), h('small', null, p.tanitimMetni ? t('ilgi.duzenle') : t('ilgi.ekle'))),
         tanitimGirdisi,
         h('p', { class: 'ayr-not' }, t('ayarlar.profilGizlilik'))),
+      // v0.26.0 Doğum günü (isteğe bağlı; yalnız gün ve ay, yaş tutulmaz) ve afet anında "Güvendeyim".
+      satir(t('dogumGunu.etiket'), () => dogumGunuSecici(p, () => ciz(kok, b)), { aciklama: t('dogumGunu.aciklama'), altta: true }),
+      anahtar(t('guvende.ayar'), Boolean(benGuvendeyim()), (acik) => { guvendeAyarla(acik); duyur(t(acik ? 'guvende.acildi' : 'guvende.kapandi'), 4000); }, t('guvende.aciklama')),
       h('details', { class: 'ayr-acilir', id: 'ayr-ilgi', open: ilgiAcik },
         h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('ilgi.baslik')), ilgiSayac),
         h('p', { class: 'ayr-not' }, t('ilgi.aciklama')),
@@ -262,6 +310,13 @@ function ciz(kok, b) {
       satir(t('ayarlar.sabah'), saatGirdisi('sabahSaati'), { aciklama: t('ayarlar.sabahAciklama') }),
       satir(t('ayarlar.aksam'), saatGirdisi('aksamSaati'), { aciklama: t('ayarlar.aksamAciklama') }),
       satir(t('ayarlar.deneme'), h('button', { type: 'button', class: 'ayr-kucuk-dugme', onClick: () => { const s = siradaki(); simdiAra(s === 'aksam' ? 'aksam' : 'sabah'); } }, ikon('oynat', 16), t('ayarlar.demoArama'))),
+      // v0.26.0 Gelişmiş: uygulama ve arkadaş bildirimleri için ayrı saat ve günler.
+      h('details', { class: 'ayr-acilir', open: b.p.bolum === 'saatler' },
+        h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('saatler.baslik')), h('small', null, t('saatler.ozet', { u: `${benimSaatlerim().uygulama.bas}–${benimSaatlerim().uygulama.bit}`, a: `${benimSaatlerim().arkadas.bas}–${benimSaatlerim().arkadas.bit}` }))),
+        h('p', { class: 'ayr-not' }, t('saatler.aciklama')),
+        SAAT_TURLERI.map((tur) => saatAraligiSecici(tur, () => b.git('/ayarlar?grup=bildirim&bolum=saatler', { degistir: true }))),
+        h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => { saatleriSifirla(); duyur(t('saatler.sifirlandi')); b.git('/ayarlar?grup=bildirim&bolum=saatler', { degistir: true }); } },
+          h('span', { class: 'ayr-satir-etiket' }, t('saatler.sifirla')), ikon('degis', 18))),
     ),
 
     grup('koc', 'yz', t('ayarlar.grup.koc'),
@@ -372,6 +427,12 @@ function ciz(kok, b) {
         if (!evet) return;
         await medyaSil(); sifirla(); duyur(t('ayarlar.silindi')); b.git('/karsilama', { degistir: true });
       } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.sil')), ikon('kapat', 18)),
+      // v0.26.0 Hesabı askıya al: profilin görünmez, kimse yazamaz, bildirimler durur; istediğin an geri açarsın.
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: async () => {
+        if (p.hesapAskida) { degistir((v) => { v.profil.hesapAskida = null; }); duyur(t('hesap.acildi')); ciz(kok, b); return; }
+        if (!(await onayIste({ baslik: t('hesap.askiBaslik'), metin: t('hesap.askiMetin'), evet: t('hesap.askiyaAl'), hayir: t('genel.vazgec') }))) return;
+        degistir((v) => { v.profil.hesapAskida = Date.now(); }); duyur(t('hesap.askiyaAlindi'), 5000); ciz(kok, b);
+      } }, h('span', { class: 'ayr-satir-etiket' }, t(p.hesapAskida ? 'hesap.yenidenAc' : 'hesap.askiyaAl')), ikon(p.hesapAskida ? 'oynat' : 'saat', 18)),
     ),
 
     testModuAcik() || surumDokunma >= 5 ? grup('test', 'kupa', t('test.ayarBaslik'),

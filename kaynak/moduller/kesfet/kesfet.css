@@ -131,4 +131,11 @@
   .kft-ark-istek { flex-wrap: wrap; }
   .kft-ark-istek > .kft-ark-kisi { flex: 1 1 100%; }
   .kft-ark-istek > .kft-ark-dugme { flex: 1 1 0; width: auto; }
+  /* v0.26.0 Arkadaş daveti ve arama */
+  .kft-davet-dugmeler { display: flex; flex-wrap: wrap; gap: 8px; }
+  .kft-davet-dugmeler > * { flex: 1 1 160px; }
+  .kft-davet-sonuc { display: flex; flex-direction: column; gap: 8px; }
+  .kft-davet-sonuc:empty { display: none; }
+  .kft-davet-not { color: var(--renk-soluk); }
+  .kft-ara { margin: 4px 0; }
 }

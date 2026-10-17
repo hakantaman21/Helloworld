@@ -230,4 +230,15 @@
   .ayr-indirim-serit { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 64px; padding: 10px 12px; border: 0; border-radius: 18px; background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); font: inherit; text-align: left; cursor: pointer; }
   .ayr-indirim-serit > span { flex: 1; display: flex; flex-direction: column; }
   .ayr-indirim-serit:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+  /* v0.26.0 İletişim saatleri ve doğum günü */
+  .ayr-saat-araligi { display: flex; flex-direction: column; gap: 8px; padding: 12px 0; border-top: 1px solid var(--renk-cizgi); }
+  .ayr-saat-baslik { margin: 0; font-size: calc(15px * var(--yazi-olcek)); }
+  .ayr-saat-satir { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .ayr-saat-alan { display: flex; flex-direction: column; gap: 4px; font-size: calc(12.5px * var(--yazi-olcek)); color: var(--renk-soluk); }
+  .ayr-saat-alan .ayr-saat { width: 100%; }
+  .ayr-gunler { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+  .ayr-gun { min-height: 48px; padding: 0; border: 0; border-radius: 12px; background: var(--renk-yuzey-ikinci); color: var(--renk-soluk); font: inherit; font-size: calc(12.5px * var(--yazi-olcek)); font-weight: 700; cursor: pointer; box-shadow: inset 0 0 0 1px var(--renk-cizgi); }
+  .ayr-gun[aria-pressed="true"] { background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); box-shadow: inset 0 0 0 2px var(--renk-vurgu); }
+  .ayr-dogum-satir { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .ayr-dogum { flex: 1; min-width: 110px; }
 }

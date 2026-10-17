@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.25.1 · **canlıda** (`main`, PR #22, Hakan onayı 17.10 17:22; Vercel üretim derlemesi başarılı). `deneme` = `main`. Adres: helloworld-gules.vercel.app. Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.26.0 · `deneme`'de (Hakan onayı bekliyor). Canlıda v0.25.1 (PR #22). Adres: helloworld-gules.vercel.app. Canlıya alma yalnız Hakan onayıyla.
 - **v0.19–v0.21 notu:** Bu üç sürüm Hakan'a önce tek dosya olarak teslim edildi (ikinci Claude hesabı, depo erişimi yokken); v0.22.0'da kaynak ağacına aktarıldı. Ayrıntılı devir: aşağıdaki kayıtlar ve issue #1.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
@@ -17,6 +17,15 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.26.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026
+- **Neden:** Hakan'ın 17.10 15:44–16:23 istek listesi (ekte yeniden gönderildi, 17:28); var olanlar ayıklandı, eksikler yapıldı.
+- **Ne:** yeni çekirdek `iletisim-saatleri.js`, `destek.js`, `kutlamalar.js`, `davet.js`; veri `destek-kurallari.js`; modül `moduller/destek` (önek `dst`); `arkadaslik.js` kişi tercihleri, askı, güvende, doğum günü haberi; `kisi-eylemleri.js › sikayetEt` (üç kopya şikâyet penceresi teke indi); `arayuz.js › suzgecSatiri, acKapaHap`; `test-erisim.js` hesap askısı; `rehber.js` uygulama bildirimlerini saat penceresine bağladı, "destek" kutu kategorisi, doğum günü hatırlatması. Şema 20: `v.destek` (eski test şikâyetleri geçmişe taşındı).
+- **Sunucu gerektirenler (yapılmadı, plan issue #1'de):** gerçek sesli oda, rehberde uygulamayı kullananlar, uygulama kapalıyken bildirim, yönetici paneli (ayrı uygulama, aynı sunucu; kullanıcı uygulamasında yönetici kodu olmamalı), gerçek hesap silme.
+- **Sıradaki (v0.27):** planlanmış mesaj/sesli sohbet/arama + hatırlatma; sesli oda arayüzü ve arkadaşı odaya davet (test kişileriyle).
+- **Şema:** 20. **Durum:** `deneme`'de.
 
 ## v0.25.1
 

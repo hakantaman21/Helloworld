@@ -1,3 +1,16 @@
+## 0.26.0 — 17.10.2026 · Destek merkezi, iletişim saatleri, arkadaşa özel tercihler, arama ve davet
+
+Hakan'ın 17.10 (15:44–16:23) istek listesinden eksik kalanlar. Şema 20.
+
+- **Destek merkezi** (`/destek`, yan menü › Rehber): şikâyet · hata · öneri · görüş; geçmiş, sonuçlanmamış kaydı geri alma, yönetim yanıtı kaydın altında ve kutuda yeni "Destek" kategorisinde. Bütün kişi/Dil Anı şikâyetleri tek ortak akıştan (`kisi-eylemleri.js › sikayetEt`) geçer ve geçmişe yazılır; yeni nedenler: güvenlik riski, 18 yaş altı olabilir. Ön ayıklama `destek.js › onemSiniflandir` (kurallar `veri/destek-kurallari.js`): acil → yöneticiye en üstte, açık spam → otomatik süzgeç; saf işlev, sunucuda aynen kullanılır. TEST modunda yönetici yanıtı benzetimi ("TEST ·").
+- **İletişim saatleri** (`iletisim-saatleri.js`; Ayarlar › Bildirimler › Gelişmiş): uygulama ve arkadaşlar için ayrı saat/gün. Uygulamanın önerileri, hatırlatmaları ve tebrikleri bu saat dışında üretilmez. Karşı tarafın saati dışında yazılan mesaj "bekliyor" olur; gönderen sohbetin üstünde kişinin saatini ve mesajın ne zaman iletileceğini görür.
+- **Arkadaşa özel** (kişi profili › "…"): hangi haber ve bildirimleri alacağın (varsayılan hepsi); arkadaşlığı 1 gün/1 hafta/1 ay askıya alma (karşı tarafa bildirilmez, kendiliğinden kalkar).
+- **Kişi kapağında yerel saat**; **Güvendeyim** (afet, 72 saat) profilde ve arkadaş haberlerinde.
+- **Doğum günü** (isteğe bağlı, yalnız gün-ay) ve **üyelik yıldönümü/1. ve 6. ay** tebrikleri, ilk gün hoş geldin; arkadaşların doğum günü haberlerde. Doğum günü eksikse nazik hatırlatma.
+- **Hesabı askıya al / yeniden aç** (Ayarlar › Gizlilik ve veriler); askıdayken ana sekmelerin üstünde şerit, kimseyle iletişim yok.
+- **Arama ve süzgeç:** ortak `suzgecSatiri` bileşeni. Dil Anları: beğendiklerim, yorum yaptıklarım, arkadaşlarım, benimkiler + gelişmiş (fotoğraflı, zaman, yazarın dili). Bağlan: ad/ülke/meslek/hobi araması (Türkçe karakter duyarsız). Sohbet: mesaj içeriğinde arama.
+- **Rehberden toplu davet** (Bağlan › Arkadaşlar): kişi seçici destekleniyorsa çoklu seçim → tek SMS; yoksa paylaşım/kopyala. Rehber cihazdan çıkmaz.
+
 ## 0.25.1 — 17.10.2026 · Yatay şerit kaydırması sekme değiştiriyordu; karnede taşan değer
 
 - **Kaydırma çakışması (Hakan, 17:22):** Konu odalarının yatay şeridini kaydırırken alt menü sekmesi değişiyordu. Kök neden: sekme kaydırma hareketi yatay alanları elle tutulan bir sınıf listesinden tanıyordu; v0.21'de eklenen şerit listede yoktu. Artık dokunulan yerden yukarı doğru gerçekten yatay kayabilen bir kap (taşan içerik + `overflow-x: auto/scroll`) aranıyor; bundan sonra eklenecek her yatay şerit de kendiliğinden korunuyor.

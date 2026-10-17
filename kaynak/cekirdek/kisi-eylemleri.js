@@ -6,10 +6,33 @@ import { h, ikon, onayIste } from './arayuz.js';
 import { t } from './metin.js';
 import { duyur } from './duyuru.js';
 import { arkadasDurumu, istekGonder, istekGeriAl, arkadasYap, istekReddet, arkadasliktanCikar, favoriMi, favoriDegistir, sabitliMi, sabitleDegistir, SABIT_SINIRI } from './arkadaslik.js';
-import { testYanitVerir, testMesajlari } from './test-modu.js';
+import { testYanitVerir, testMesajlari, testSikayet } from './test-modu.js';
+import { destekGonder } from './destek.js';
+import { SIKAYET_NEDENLERI } from '../veri/destek-kurallari.js';
 import { ilkMesajKontrolu, yeniKisiSay, aktifPaketKimligi } from './paketler.js';
 
 const KABUL_GECIKMESI = 2500;
+
+// v0.26.0 Ortak şikâyet akışı (mesaj, kişi profili, Dil Anı): neden seçilir; kişiye uygulanan yerel kural (test) ve
+// Destek merkezi geçmişine kayıt tek yerden yapılır. Döner: seçilen neden ya da null (vazgeçti).
+export async function sikayetEt({ kimlik, ad, tur = 'kisi', anKimligi = null }) {
+  const neden = await new Promise((coz) => {
+    const kapat = (d) => { perde.remove(); coz(d); };
+    const perde = h('div', { class: 'b-perde', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'b-sikayet-baslik' },
+      h('div', { class: 'b-pencere' },
+        h('h2', { class: 'b-bolum-baslik', id: 'b-sikayet-baslik' }, t('test.sikayetBaslik', { ad })),
+        h('div', { class: 'b-yigin' }, SIKAYET_NEDENLERI.map((n) => h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: () => kapat(n) }, t(`test.sikayetNeden.${n}`))),
+          h('button', { type: 'button', class: 'b-dugme', 'data-vazgec': '', onClick: () => kapat(null) }, t('genel.vazgec'))),
+        h('p', { class: 'b-kucuk' }, t('destek.sikayetGecmisNotu'))));
+    document.body.append(perde);
+    perde.querySelector('button').focus();
+  });
+  if (!neden) return null;
+  testSikayet(kimlik, neden);
+  destekGonder({ tur: 'sikayet', kategori: neden, hedef: { kimlik, ad, tur, an: anKimligi } });
+  duyur(t('test.sikayetAlindi'), 4000);
+  return neden;
+}
 
 // Arkadaşlık isteği gönder (test: etkin kişi kısa süre sonra kabul eder; çevrimdışı kişi beklemede kalır).
 export function arkadaslikIstegi(profil, sonra) {
