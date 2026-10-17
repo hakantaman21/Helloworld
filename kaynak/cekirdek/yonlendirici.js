@@ -6,6 +6,7 @@ import { yayinla } from './olay-hatti.js';
 import { t } from './metin.js';
 import { h, gezinmeGizle, markaSeridi } from './arayuz.js';
 import { kilitGerekli, kilitEkrani, kilitEkraniniKaldir, kilitIzle } from './kilit.js';
+import { adresOku, bellekModu, bellegeYaz } from './adres.js';
 
 let kok = null;
 let aktifTemizle = null;
@@ -15,7 +16,7 @@ const konumlar = new Map();
 let aktifAdres = null;
 
 function coz() {
-  const ham = location.hash.slice(1) || '/bugun';
+  const ham = adresOku();
   const [yol, sorgu] = ham.split('?');
   const id = yol.replace(/^\//, '').replace(/\//g, '-') || 'bugun';
   const parametreler = Object.fromEntries(new URLSearchParams(sorgu || ''));
@@ -125,12 +126,13 @@ function katmanIzle() {
     const n = aciklar().length;
     if (n < katmanDerinligi) setTimeout(odagiGeriVer, 0);
     if (n > katmanDerinligi) {
-      while (katmanDerinligi < n) { katmanDerinligi += 1; history.pushState({ katman: katmanDerinligi }, ''); }
+      // Geçmiş API'si kapalıysa (korumalı çerçeve) katmanlar geri tuşuna bağlanmaz; kendi düğmeleriyle kapanır.
+      while (katmanDerinligi < n) { katmanDerinligi += 1; if (!bellekModu()) { try { history.pushState({ katman: katmanDerinligi }, ''); } catch { /* izin yok */ } } }
     } else if (n < katmanDerinligi) {
       const fark = katmanDerinligi - n;
       katmanDerinligi = n;
       // Kapanırken başka sayfaya gidildiyse (kayıt bizim değilse) geri alma; ölü kayıt popstate'te atlanır.
-      if (history.state && history.state.katman) { yoksay += 1; history.go(-fark); }
+      if (!bellekModu() && history.state && history.state.katman) { try { yoksay += 1; history.go(-fark); } catch { yoksay -= 1; } }
     }
   }).observe(document.body, { childList: true, subtree: true });
 
@@ -150,34 +152,60 @@ function katmanIzle() {
     } else if (hedef > 0 && acik.length === 0) {
       // Katman kapatılıp başka sayfaya gidilmişti: arta kalan kaydı atla.
       katmanDerinligi = 0;
-      history.back();
+      try { history.back(); } catch { /* izin yok */ }
     }
   });
 }
 
 export function baslat(kokOge) {
   kok = kokOge;
-  window.addEventListener('hashchange', ciz);
+  window.addEventListener('hashchange', () => {
+    // Bellek kipinde adres çubuğu değişirse (ör. bağlantıya dokunuldu) bellekteki adres de onu izler.
+    if (bellekModu()) { try { bellegeYaz(location.hash.slice(1) || '/bugun'); } catch { /* okunamıyor */ } }
+    ciz();
+  });
+  // Bellek kipinde "#/…" bağlantıları adres çubuğuna gitmez; yönlendiriciden geçer.
+  document.addEventListener('click', (e) => {
+    if (!bellekModu() || e.defaultPrevented) return;
+    const a = e.target instanceof Element ? e.target.closest('a[href^="#/"]') : null;
+    if (!a) return;
+    e.preventDefault();
+    git(a.getAttribute('href').slice(1));
+  });
   katmanIzle();
   kilitIzle(() => ciz());
   ciz();
 }
 
+// v0.23.0: geçmiş API'si izin vermezse (SecurityError) yönlendirici bellek kipine geçer: adres bellekte tutulur,
+// geri gitme kendi geçmiş listesinden yapılır. Böylece uygulama korumalı önizlemelerde de boş ekranda kalmaz.
+function bellekteGit(yol, degistir) {
+  if (degistir && gecmis.length) gecmis.pop();
+  bellegeYaz(yol);
+  ciz();
+}
+
 export function git(yol, secenek = {}) {
-  if (secenek.degistir) {
-    history.replaceState(null, '', '#' + yol);
-    if (gecmis.length) gecmis.pop();
-    ciz();
-  } else if (location.hash === '#' + yol) {
-    ciz();
-  } else {
-    location.hash = yol;
+  if (bellekModu()) { bellekteGit(yol, secenek.degistir); return; }
+  try {
+    if (secenek.degistir) {
+      history.replaceState(null, '', '#' + yol);
+      if (gecmis.length) gecmis.pop();
+      ciz();
+    } else if (location.hash === '#' + yol) {
+      ciz();
+    } else {
+      location.hash = yol;
+    }
+  } catch {
+    bellekteGit(yol, secenek.degistir);
   }
 }
 
 export function geri(yedekYol = '/bugun') {
-  if (gecmis.length > 1) history.back();
-  else git(yedekYol, { degistir: true });
+  if (bellekModu()) { bellekteGit(gecmis.length > 1 ? gecmis[gecmis.length - 2] : yedekYol, gecmis.length <= 1); return; }
+  if (gecmis.length > 1) { try { history.back(); return; } catch { /* izin yok */ } }
+  git(yedekYol, { degistir: true });
 }
 
 export function aktifEkran() {

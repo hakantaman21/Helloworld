@@ -9,6 +9,7 @@ import './stiller/erisim.css';
 import { yukle, al, degistir, bozukKayitVardi } from './cekirdek/depo.js';
 import { kaydet } from './cekirdek/modul-kaydi.js';
 import { baslat, git, aktifEkran } from './cekirdek/yonlendirici.js';
+import { adresOku } from './cekirdek/adres.js';
 import { temaBaslat } from './cekirdek/tema.js';
 import { dinle } from './cekirdek/olay-hatti.js';
 import { zamanlayiciBaslat } from './cekirdek/zamanlayici.js';
@@ -87,8 +88,8 @@ function uygulamayiBaslat() {
   const yaziyor = () => { const a = document.activeElement; return !!a && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && !['button', 'checkbox', 'radio', 'range', 'file'].includes(a.type)) || a.isContentEditable); };
   medyaHazirla().then((yuklendi) => {
     if (!yuklendi) return;
-    const adres = location.hash;
-    const yenile = () => { if (location.hash === adres) git((location.hash.slice(1) || '/bugun'), {}); };
+    const adres = adresOku();
+    const yenile = () => { if (adresOku() === adres) git(adres, {}); };
     if (!yaziyor()) { yenile(); return; }
     const bekle = () => { setTimeout(() => { if (yaziyor()) return; document.removeEventListener('focusout', bekle); yenile(); }, 0); };
     document.addEventListener('focusout', bekle);

@@ -1,3 +1,8 @@
+## 0.23.0 — 17.10.2026 · Önizlemede boş ekran düzeltmesi
+
+- Uygulama, tarayıcı geçmişinin yasak olduğu korumalı önizlemelerde (ör. Claude uygulamasındaki dosya önizlemesi) boş ekranda kalıp kırmızı `SecurityError` veriyordu. Yönlendirici artık bu durumda adresi bellekte tutar; gezinme, menü ve geri düğmesi çalışır. Böyle önizlemelerde kayıt yapılamaz; uygulama bunu bildirir.
+- Bağlan ekranında (test modu kapalı) üst çubuğa menü/profil düğmesi eklendi.
+
 ## 0.22.0 — 17.10.2026 · v0.19–v0.21 depoya aktarıldı, yasa uyumu
 
 - v0.19.0, v0.20.0 ve v0.21.0 Hakan'a dosya olarak teslim edilmişti; bu sürümde kaynak ağacına (`kaynak/`) aktarıldı ve robotun bütün yasalarına uyduruldu.

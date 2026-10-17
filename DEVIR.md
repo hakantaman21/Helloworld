@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.22.0 · **canlıda** (`main`, helloworld-gules.vercel.app; PR #19, Hakan onayı 17.10.2026 13:19, Vercel üretim derlemesi başarılı). `deneme` = `main`. Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.23.0 · `deneme`'de (Hakan onayı bekliyor). Canlıda v0.22.0 (`main`, helloworld-gules.vercel.app; PR #19, Hakan onayı 17.10.2026 13:19, Vercel üretim derlemesi başarılı). `deneme` = `main`. Canlıya alma yalnız Hakan onayıyla.
 - **v0.19–v0.21 notu:** Bu üç sürüm Hakan'a önce tek dosya olarak teslim edildi (ikinci Claude hesabı, depo erişimi yokken); v0.22.0'da kaynak ağacına aktarıldı. Ayrıntılı devir: aşağıdaki kayıtlar ve issue #1.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
@@ -17,6 +17,13 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.23.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026
+- **Neden:** Hakan (17.10): dosya Claude uygulamasının önizlemesinde boş ekran ve altta kırmızı hata (`SecurityError … replaceState`).
+- **Ne:** Korumalı çerçevede (sandbox iframe, köken `null`) geçmiş API'si yasak; yönlendirici çöküyordu. Yeni `cekirdek/adres.js`: adres okuma tek yerden; geçmiş API'si hata verirse yönlendirici **bellek kipine** geçer (adres bellekte, geri kendi listesinden, `#/…` bağlantıları yakalanır). `arayuz.js` (kaydırma gezinmesi), `main.js` (fotoğraf yenileme), `pwa.js` (service worker kaydı try/catch) aynı yoldan geçirildi. Bağlan ekranında test modu kapalıyken üst çubukta menü/profil düğmesi eksikti (`kesfet testsizCiz`), eklendi. Canlı sitede davranış değişmez.
+- **Şema:** 19 (değişmedi). **Durum:** `deneme`'de.
 
 ## v0.22.0
 

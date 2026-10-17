@@ -1,5 +1,6 @@
 // Ortak arayüz yardımcıları: öğe oluşturma, ikonlar, üst başlık, alt gezinme, durum kutuları.
 import { t } from './metin.js';
+import { adresOku } from './adres.js';
 import { IKON3D } from '../veri/ikon3d.js';
 import { al } from './depo.js';
 import { fotoAdresi } from './fotograf.js';
@@ -576,7 +577,7 @@ export function sekmeKaydirmaBaslat(git) {
     const hizli = Date.now() - bas.zaman < 600;
     bas = null;
     if (!hizli || Math.abs(dx) < KAYDIRMA_ESIGI || Math.abs(dx) < Math.abs(dy) * 2) { gostergeSifirla(); return; }
-    const yol = (location.hash.slice(1) || '/bugun').split('?')[0];
+    const yol = adresOku().split('?')[0];
     const i = GEZINME.findIndex((g) => g.yol === yol);
     if (i < 0) { gostergeSifirla(); return; }
     const hedef = GEZINME[i + (dx < 0 ? 1 : -1)];
