@@ -24,4 +24,11 @@ import c6 from './teknoloji-etik-c1-01.js';
 import c7 from './egitim-seminer-c1-01.js';
 import c8 from './is-maas-c1-01.js';
 
-export default [market, kafe, yol, bilet, s0, s1, s2, s3, s4, s5, s6, s7, s8, c0, c1, c2, c3, c4, c5, c6, c7, c8];
+// v0.20.0: B1 senaryoları (önceden yalnız 2 vardı).
+import b0 from './alisveris-iade-b1-01.js';
+import b1 from './saglik-eczane-b1-01.js';
+import b2 from './ev-komsu-b1-01.js';
+import b3 from './sosyal-plan-b1-01.js';
+import b4 from './egitim-odev-b1-01.js';
+
+export default [market, kafe, yol, bilet, s0, s1, s2, s3, s4, s5, s6, s7, s8, b0, b1, b2, b3, b4, c0, c1, c2, c3, c4, c5, c6, c7, c8];

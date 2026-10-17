@@ -1,5 +1,7 @@
 // v0.17.0 Kişi eylemleri: Sohbet ve Bağlan'da bir kişiye basılı tutunca (ya da "…" ile) açılan ortak alt pencere.
 // Arkadaş ekle / isteği geri al / kabul et / arkadaşlıktan çıkar · Favori · Başa sabitle · Profili gör · Mesaj.
+import { kutuyaEkle } from './rehber.js';
+import { tarihAnahtari as rehberTarih } from './zaman.js';
 import { h, ikon, onayIste } from './arayuz.js';
 import { t } from './metin.js';
 import { duyur } from './duyuru.js';
@@ -77,6 +79,7 @@ export function basiliTut(el, fn) {
 export async function yeniKisiOnayi(profil, b) {
   const izin = ilkMesajKontrolu(profil.kimlik, testMesajlari(profil.kimlik));
   if (izin.izin) { yeniKisiSay(profil.kimlik); return true; }
+  kutuyaEkle({ kaynak: `sinir:${rehberTarih()}`, kat: 'hesap', ikon: 'hediye', baslik: { m: 'rehber.sinir.baslik' }, metin: { m: 'rehber.sinir.metin', d: { n: izin.sinir } }, yol: '/paketler' });
   const paketlereGit = await onayIste({
     baslik: t('paket.sinirBaslik'),
     metin: t('paket.sinirMetin', { n: izin.sinir, paket: t(`paket.kisaAd.${aktifPaketKimligi()}`) }),

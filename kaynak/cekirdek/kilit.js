@@ -25,10 +25,12 @@ export function kilitAyari() { return { acik: false, kapsam: 'uygulama', yontem:
 function kilitYaz(fn) { degistir((v) => { const k = kilitAyari(); fn(k); v.profil.ayarlar.kilit = k; }); }
 
 export function kilitEtkin() { const k = kilitAyari(); return k.acik && ozellikVar('uygulamaKilidi') && Boolean(k.pinOzet || k.desenOzet); }
-export function kilitGerekli(ekranId) {
+// v0.19.0: yeni ekranlar kapsamını kendi tanımında bildirir (ekran({ kilitKapsami: 'kisiler' })); listeye eklemeyi unutmak
+// bir ekranı kilitsiz bırakmasın diye karar ekranın kendi beyanı + bu liste birlikte verilir.
+export function kilitGerekli(ekranId, ekranKapsami = null) {
   if (!kilitEtkin() || acikZaman || SERBEST.includes(ekranId)) return false;
   const k = kilitAyari();
-  return k.kapsam === 'uygulama' || (KAPSAM_EKRANLARI[k.kapsam] || []).includes(ekranId);
+  return k.kapsam === 'uygulama' || ekranKapsami === k.kapsam || (KAPSAM_EKRANLARI[k.kapsam] || []).includes(ekranId);
 }
 export function kilitle() { acikZaman = 0; }
 // Kilidi yeni kuran kişi o an doğrulanmış sayılır (kurar kurmaz kilit ekranı gelmez).

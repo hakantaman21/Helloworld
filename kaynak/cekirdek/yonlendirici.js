@@ -38,7 +38,7 @@ function ciz() {
   }
 
   // v0.18.0 Uygulama kilidi: kapsamdaki ekran açılmadan önce kilit ekranı gelir; açılınca aynı ekran çizilir.
-  if (kilitGerekli(id)) { kilitEkrani(() => ciz()); return; }
+  if (kilitGerekli(id, ekran.kilitKapsami)) { kilitEkrani(() => ciz()); return; }
   kilitEkraniniKaldir();
 
   // v0.13.0: ayrılınan sayfanın kaydırma konumu saklanır; geri dönülünce aynı yere gelinir (liste bağlamı kaybolmaz).

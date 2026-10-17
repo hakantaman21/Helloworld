@@ -1,7 +1,8 @@
 // Bugün: günün döngüsü, sıradaki adım (tabela), Hata Hafızası kısayolu ve tek dokunuşla "Konuş".
+import { kutuDugmesi } from '../../cekirdek/rehber-arayuz.js';
 import './bugun.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d, htUst, testAvatar, sekmeler, afisKaydirici, testEtiketi, enUsteKaydir } from '../../cekirdek/arayuz.js';
+import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d, htUst, testAvatar, sekmeler, afisKaydirici, testEtiketi, enUsteKaydir, ustBaslik } from '../../cekirdek/arayuz.js';
 import { benDugmesi } from '../../cekirdek/yan-menu.js';
 import { testModuAcik, testModuAyarla, testProfilleri, aktiflik } from '../../cekirdek/test-modu.js';
 import tumSenaryolar from '../../veri/senaryolar/index.js';
@@ -12,8 +13,15 @@ import { vadesiGelenler } from '../../cekirdek/hafiza.js';
 import { yarimKalan } from '../../cekirdek/gorusme-sonucu.js';
 import { gunBolumu } from '../../cekirdek/zaman.js';
 import { simdiAra } from '../../cekirdek/zamanlayici.js';
-import { oneriSenaryo } from '../../cekirdek/oneri.js';
+import { oneriSenaryo, SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import alanlar from '../../veri/alanlar.js';
+import { kareKart, genisKart, senaryoIsareti, raporAc, ALAN_IKON } from '../../cekirdek/senaryo-kart.js';
+import { istatistik } from '../../cekirdek/senaryo-istatistik.js';
+import { basiliTut } from '../../cekirdek/kisi-eylemleri.js';
+
+// v0.21.0 Konu odaları seçimi ekranlar arasında korunur: tam sayfadan geri dönünce aynı kategori, alta açılmış
+// kategoriler ve her şeridin yatay kaydırma konumu yerinde durur.
+const odaDurumu = { alan: 'tum', acik: new Set(), kaydirma: {} };
 
 function alanAdi(kimlik) {
   const alan = alanlar.find((a) => a.kimlik === kimlik);
@@ -61,16 +69,7 @@ function ciz(kok, b) {
   const testler = testModuAcik() ? testProfilleri() : [];
   // v0.12.0: konu odaları tüm senaryolardan üretilir; yaşam alanına göre süzülür (Günlük, Seyahat, İş, Sağlık, Teknoloji ve YZ…).
   const ODALAR = tumSenaryolar.map((s, i) => ({ id: s.kimlik, alan: s.alan, seviye: s.seviye, baslik: yerel(s.baslik), renk: (i % 6) + 1 }));
-  let odaAlani = 'tum';
   const odayaGit = (o) => b.git(`/gorusme?tur=senaryo&id=${o.id}`);
-  const ilgilenenler = (i) => testler.filter((_, j) => (j + i) % 3 === 0).slice(0, 4);
-  const odaKarti = (o, i) => h('button', { type: 'button', class: `bgn-oda b-kutu-${o.renk}`, onClick: () => odayaGit(o) },
-    h('span', { class: 'bgn-oda-etiketler' }, h('span', { class: 'bgn-oda-hap' }, 'EN'), h('span', { class: 'bgn-oda-hap' }, `# ${alanAdi(o.alan)}`), h('span', { class: 'bgn-oda-hap' }, o.seviye)),
-    h('b', { class: 'bgn-oda-baslik' }, ikon('dalgaCizgi', 16), o.baslik),
-    h('span', { class: 'bgn-oda-alt' },
-      h('span', { class: 'bgn-oda-sunucu' }, ikon3d('yz', 26), t('koc.ad')),
-      ilgilenenler(i).length ? h('span', { class: 'bgn-oda-yigin' }, ilgilenenler(i).map((p) => h('span', { class: 'bgn-oda-kisi' }, testAvatar(p, 28))), h('small', null, t('odalar.ilgilenen', { n: ilgilenenler(i).length }))) : null),
-  );
   let odaSira = ODALAR.findIndex((o) => o.seviye === v.profil.seviye);
   if (odaSira < 0) odaSira = 0;
   const hizliOda = h('div', { class: 'bgn-hizli-oda' });
@@ -84,8 +83,35 @@ function ciz(kok, b) {
         h('button', { type: 'button', class: 'b-dugme b-dugme-ana bgn-hizli-katil', onClick: () => odayaGit(o) }, ikon('mikrofon', 18), t('odalar.hizliKatil'))));
   }
   hizliOdaCiz();
-  const odaListe = h('div', { class: 'bgn-oda-liste' });
-  const odaListeCiz = () => yerlestir(odaListe, ODALAR.filter((o) => odaAlani === 'tum' || o.alan === odaAlani).map((o, i) => odaKarti(o, i)));
+  // v0.21.0: "Tümü"nde her kategori bir yatay şerit (ekranda iki kare kart; kaydırarak seç). "Genişlet":
+  //   Tümü seçiliyken → kategori tam sayfa açılır (/odalar?alan=…), geniş sohbet kartlarıyla;
+  //   tek kategori seçiliyken → senaryolar şeridin yerine alta geniş kartlar olarak açılır ("Daralt" ile kapanır).
+  const seviyeUzakligi = (sn) => Math.abs(SEVIYE_SIRASI.indexOf(sn.seviye) - Math.max(0, SEVIYE_SIRASI.indexOf(v.profil.seviye)));
+  const alandakiler = (k) => tumSenaryolar.filter((sn) => sn.alan === k).sort((x, y) => seviyeUzakligi(x) - seviyeUzakligi(y) || SEVIYE_SIRASI.indexOf(x.seviye) - SEVIYE_SIRASI.indexOf(y.seviye));
+  const ODA_ALANLARI = alanlar.filter((a) => tumSenaryolar.some((sn) => sn.alan === a.kimlik));
+  const odaListe = h('div', { class: 'bgn-raflar' });
+  const raf = (a, ri) => {
+    const liste = alandakiler(a.kimlik);
+    const tum = odaDurumu.alan === 'tum';
+    const acik = !tum && odaDurumu.acik.has(a.kimlik);
+    const denenen = liste.filter((sn) => istatistik(sn.kimlik).durum).length;
+    const serit = h('div', { class: 'bgn-serit', role: 'list', 'aria-label': t(a.metin), onScroll: (e) => { odaDurumu.kaydirma[a.kimlik] = e.currentTarget.scrollLeft; } },
+      liste.map((sn, i) => h('div', { class: 'bgn-serit-oge', role: 'listitem' }, kareKart(sn, { git: b.git, renk: ((ri + i) % 6) + 1 }))));
+    if (odaDurumu.kaydirma[a.kimlik]) requestAnimationFrame(() => { serit.scrollLeft = odaDurumu.kaydirma[a.kimlik]; });
+    return h('section', { class: 'bgn-raf', 'aria-labelledby': `bgn-raf-${a.kimlik}` },
+      h('div', { class: 'bgn-raf-ust' },
+        h('h3', { id: `bgn-raf-${a.kimlik}` }, t(a.metin)),
+        h('small', null, t('snk.rafOzet', { n: liste.length, y: denenen })),
+        h('button', { type: 'button', class: 'bgn-genislet', 'aria-expanded': tum ? null : String(acik), onClick: () => {
+          if (tum) { b.git(`/odalar?alan=${a.kimlik}`); return; }
+          if (acik) odaDurumu.acik.delete(a.kimlik); else odaDurumu.acik.add(a.kimlik);
+          odaListeCiz();
+        } }, tum || !acik ? t('snk.genislet') : t('snk.daralt'), ikon(tum ? 'sag' : acik ? 'yukari' : 'asagi', 16))),
+      acik ? h('div', { class: 'bgn-genis-liste' }, liste.map((sn) => genisKart(sn, { git: b.git }))) : serit);
+  };
+  const odaListeCiz = () => yerlestir(odaListe,
+    (odaDurumu.alan === 'tum' ? ODA_ALANLARI : ODA_ALANLARI.filter((a) => a.kimlik === odaDurumu.alan)).map(raf),
+    h('p', { class: 'b-kucuk' }, t('snk.ipucuBasili')));
   odaListeCiz();
   // Üç sekme (HelloTalk Ses · Canlı · Öğren karşılığı): AI sohbet · Gerçek sohbet · Öğren.
   const pratikSekmeleri = sekmeler([['ai', t('pratik.sekme.ai')], ['gercek', t('pratik.sekme.gercek')], ['ogren', t('pratik.sekme.ogren')]], pratikSekme, (id) => { pratikSekme = id; pratikSekmeGoster(); enUsteKaydir(); }, { etiket: t('gezinme.pratik') });
@@ -121,16 +147,18 @@ function ciz(kok, b) {
   const SENARYO_SIMGE = { alisveris: 'hediye', ulasim: 'senaryo' };
   const ogrenBolumu = h('section', { class: 'bgn-ogren', 'aria-label': t('pratik.sekme.ogren') },
     h('h2', { class: 'bgn-dongu-baslik' }, t('pratik.onerilen')),
-    h('div', { class: 'b-kart-sirasi', 'data-yatay': '' }, tumSenaryolar.map((s, i) => h('button', { type: 'button', class: 'bgn-ogren-kart', onClick: () => b.git(`/gorusme?tur=senaryo&id=${s.kimlik}`) },
-      h('span', { class: `bgn-ogren-gorsel b-kutu-${(i % 6) + 1}` }, ikon3d(SENARYO_SIMGE[s.alan] || 'senaryo', 64), tamam[s.kimlik] ? h('span', { class: 'bgn-ogren-rozet' }, ikon('onay', 14)) : null),
+    h('div', { class: 'b-kart-sirasi', 'data-yatay': '' }, tumSenaryolar.map((s, i) => basiliTut(h('button', { type: 'button', class: 'bgn-ogren-kart', onClick: () => b.git(`/gorusme?tur=senaryo&id=${s.kimlik}`) },
+      h('span', { class: `bgn-ogren-gorsel b-kutu-${(i % 6) + 1}` }, ikon3d(ALAN_IKON[s.alan] || SENARYO_SIMGE[s.alan] || 'senaryo', 64), senaryoIsareti(s.kimlik, { kisa: true, kose: true })),
       h('b', null, yerel(s.baslik)),
-      h('small', null, `${s.seviye} · ${alanAdi(s.alan)}`)))),
+      h('small', null, `${s.seviye} · ${alanAdi(s.alan)}`)), () => raporAc(s, { git: b.git })))),
     h('h2', { class: 'bgn-dongu-baslik' }, t('pratik.araclar')),
     h('div', { class: 'b-kart-sirasi', 'data-yatay': '' }, [
       ['hafiza', t('ht.merkez.hafiza'), t('pratik.tekrarSayisi', { n: vadesi.length }), () => b.git('/hafiza'), 3],
       ['kitap', t('defter.baslik'), t('pratik.cumleSayisi', { n: (v.kayitliCumleler || []).length }), () => b.git('/gelisim'), 6],
       ['kupa', t('ht.merkez.karne'), t('pratik.karneAlt'), () => b.git('/gelisim'), 2],
       ['senaryo', t('ht.merkez.senaryolar'), t('yanMenu.senaryoAlt'), () => b.git('/senaryolar'), 1],
+      // v0.20.0: kelime ve gramer için kardeş uygulama
+      ['ekosistem', t('eko.kartBaslik'), t('eko.kartAlt'), () => b.git('/uygulamalar?u=english-prime'), 4],
     ].map(([ik, ad, alt, fn, renk]) => h('button', { type: 'button', class: 'bgn-ogren-kart', onClick: fn },
       h('span', { class: `bgn-ogren-gorsel b-kutu-${renk}` }, ikon3d(ik, 64)), h('b', null, ad), h('small', null, alt)))),
   );
@@ -148,7 +176,7 @@ function ciz(kok, b) {
     htUst({
       sol: benDugmesi(b),
       baslik: t('gezinme.pratik'),
-      sag: h('span', { class: 'bgn-seri', title: t('bugun.seri', { n: seri }) }, ikon3d('seri', 22), String(seri)),
+      sag: [h('span', { class: 'bgn-seri', title: t('bugun.seri', { n: seri }) }, ikon3d('seri', 22), String(seri)), kutuDugmesi(b.git)],
     }),
     pratikSekmeleri,
     afisler,
@@ -170,7 +198,7 @@ function ciz(kok, b) {
     h('section', { class: 'bgn-odalar', 'aria-labelledby': 'bgn-oda-baslik' },
       h('div', { class: 'bgn-dongu-ust' }, h('h2', { class: 'bgn-dongu-baslik', id: 'bgn-oda-baslik' }, t('odalar.baslik')), h('span', { class: 'b-kucuk' }, t('odalar.alt'))),
       hizliOda,
-      sekmeler([['tum', t('sohbetler.tumFiltre')], ...alanlar.filter((a) => ODALAR.some((o) => o.alan === a.kimlik)).map((a) => [a.kimlik, t(a.metin)])], odaAlani, (id) => { odaAlani = id; odaListeCiz(); }, { tur: 'hap', etiket: t('odalar.kategori') }),
+      sekmeler([['tum', t('sohbetler.tumFiltre')], ...alanlar.filter((a) => ODALAR.some((o) => o.alan === a.kimlik)).map((a) => [a.kimlik, t(a.metin)])], odaDurumu.alan, (id) => { odaDurumu.alan = id; odaListeCiz(); }, { tur: 'hap', etiket: t('odalar.kategori') }),
       odaListe,
       h('p', { class: 'b-kucuk bgn-oda-not' }, yzEtiketi(), ' ', t('odalar.not')),
     ),
@@ -215,6 +243,23 @@ function ciz(kok, b) {
   pratikSekmeGoster();
 }
 
+// v0.21.0 Konu odaları › bir kategori tam sayfa: seviyeye göre gruplu geniş sohbet kartları. Geri: Pratik'e (seçim korunur).
+function odalarEkrani(kok, b) {
+  const alan = alanlar.find((a) => a.kimlik === b.p.alan);
+  if (!alan) { b.git('/bugun', { degistir: true }); return null; }
+  const v = al();
+  const liste = tumSenaryolar.filter((sn) => sn.alan === alan.kimlik);
+  const denenen = liste.filter((sn) => istatistik(sn.kimlik).durum).length;
+  yerlestir(kok,
+    ustBaslik({ baslik: t(alan.metin), ikon: ALAN_IKON[alan.kimlik] || 'senaryo', geri: () => b.geri('/bugun'), alt: t('snk.tamAlt', { n: liste.length, y: denenen }) }),
+    h('p', { class: 'b-kucuk' }, t('snk.ipucuBasili')),
+    SEVIYE_SIRASI.filter((sv) => liste.some((sn) => sn.seviye === sv)).map((sv) => [
+      h('h2', { class: 'bgn-seviye-baslik' }, sv, sv === v.profil.seviye ? h('span', { class: 'b-etiket-hap' }, t('snk.seninSeviyen')) : null),
+      h('div', { class: 'bgn-genis-liste' }, liste.filter((sn) => sn.seviye === sv).map((sn) => genisKart(sn, { git: b.git }))),
+    ]));
+  return null;
+}
+
 export default {
   kimlik: 'bugun',
   surum: '0.5.0',
@@ -223,5 +268,6 @@ export default {
   cekirdekServisleri: ['depo', 'gunluk', 'hafiza', 'zamanlayici'],
   ekranlar: {
     bugun: ekran({ baslikAnahtari: 'ekran.bugun', durumlar: DORT_DURUM, ciz }),
+    odalar: ekran({ baslikAnahtari: 'ekran.odalar', durumlar: DORT_DURUM, ciz: odalarEkrani }),
   },
 };

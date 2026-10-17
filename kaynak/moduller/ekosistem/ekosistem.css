@@ -1,0 +1,36 @@
+/* v0.20.0 Uygulama ailesi (English Prime, Yoldaş) ve çapraz indirim. */
+@layer moduller {
+  .eko-ekran { gap: 12px; }
+  .eko-serit { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 64px; padding: 10px 12px; border: 0; border-radius: 18px; background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); font: inherit; text-align: left; cursor: pointer; }
+  .eko-serit > span { flex: 1; display: flex; flex-direction: column; }
+  .eko-kart { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 20px; box-shadow: inset 0 0 0 1px var(--renk-cizgi); scroll-margin-top: 70px; }
+  .eko-kart p { margin: 0; font-size: calc(13.5px * var(--yazi-olcek)); line-height: 1.45; }
+  .eko-kart-ust { display: flex; align-items: center; gap: 12px; }
+  .eko-simge { display: grid; place-items: center; width: 60px; height: 60px; border-radius: 18px; background: var(--renk-yuzey); flex: none; }
+  .eko-kart-ad { display: flex; flex-direction: column; }
+  .eko-kart-ad h2 { margin: 0; font-family: var(--yazi-serif); font-size: calc(19px * var(--yazi-olcek)); }
+  .eko-kart-ad small { font-size: calc(12.5px * var(--yazi-olcek)); color: var(--renk-soluk); }
+  .eko-neden, .eko-teklif { display: flex; gap: 6px; align-items: flex-start; padding: 8px 10px; border-radius: 12px; background: var(--renk-yuzey); }
+  .eko-neden svg, .eko-teklif svg { flex: none; margin-top: 2px; }
+  .eko-teklif { background: var(--renk-vurgu-acik); color: var(--renk-vurgu-acik-metin); font-weight: 600; }
+  .eko-teklif-iyi { background: var(--renk-iyi-acik); color: var(--renk-iyi-metin); }
+  .eko-ac { align-self: flex-start; width: auto; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+  .eko-duzenle { display: flex; flex-direction: column; gap: 6px; padding-top: 6px; border-top: 1px dashed var(--renk-cizgi-guclu); }
+  .eko-not { font-size: calc(12.5px * var(--yazi-olcek)); color: var(--renk-soluk); line-height: 1.4; }
+  .eko-not-kutu { padding: 10px 0; }
+  .eko-pkt-alan { display: flex; flex-direction: column; gap: 4px; font-size: var(--yazi-kucuk); font-weight: 700; }
+  /* Anahtar (switch): gerçek onay kutusu erişilebilir kalır, görsel iz yanında çizilir */
+  .eko-satir { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 52px; padding: 6px 0; }
+  .eko-satir-metin { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+  .eko-satir-etiket { font-size: calc(15px * var(--yazi-olcek)); font-weight: 600; color: var(--renk-murekkep); }
+  .eko-satir-aciklama { font-size: calc(12px * var(--yazi-olcek)); color: var(--renk-soluk); line-height: 1.35; }
+  .eko-anahtar { cursor: pointer; }
+  .eko-anahtar-girdi { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .eko-anahtar-iz { position: relative; flex-shrink: 0; width: 46px; height: 28px; border-radius: 14px; background: var(--renk-cizgi-guclu); transition: background .15s; }
+  .eko-anahtar-iz::after { content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--renk-yuzey); box-shadow: 0 1px 3px var(--renk-golge); transition: transform .15s; }
+  .eko-anahtar-girdi:checked + .eko-anahtar-iz { background: var(--renk-iyi); }
+  .eko-anahtar-girdi:checked + .eko-anahtar-iz::after { transform: translateX(18px); }
+  .eko-anahtar-girdi:focus-visible + .eko-anahtar-iz { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+  .eko-pkt-duzen { padding: 6px 12px; border-radius: 14px; background: var(--renk-yuzey); }
+  .eko-serit:focus-visible, .eko-ac:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+}

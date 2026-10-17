@@ -1,6 +1,7 @@
 // Bağlan (HelloTalk "Dil Ortakları Bul" düzeni): metin sekmeleri, dil hapları, süzgeç paneli, otomatik eşleşme
 // ve el sallama (selam). Hesap ve sunucu olmadan gerçek kişi gösterilmez.
 // Test modunda TEST rozetli sanal kullanıcılar listelenir; yaş, çevrimiçi durumu ve rozetler de TEST verisidir.
+import { kullanildi } from '../../cekirdek/rehber.js';
 import './kesfet.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, ikon3d, altGezinme, basBant, afisKaydirici, durumKutusu, yerlestir, testEtiketi, testAvatar, htUst, htIkon, sekmeler, dilCifti, goreliZaman, kurallarSeridi, aralikKaydirici } from '../../cekirdek/arayuz.js';
@@ -271,7 +272,10 @@ function ciz(kok, b) {
   const durum = kayitli.durum || { sekme: 'tum', dil: 'hedef', eslesmeSira: -1 };
   durum.eslesmeSira = -1;
   // v0.14.0: üst sekmeler 4'e indi (Tümü · Sana uygun · Çevrimiçi · Yeni); diğer ölçütler süzgeç penceresinde.
-  if (!['tum', 'uygun', 'cevrimici', 'yeni'].includes(durum.sekme)) durum.sekme = 'tum';
+  // v0.19.0: "Arkadaşlar" sekmesi de geçerli (önceden profilden dönünce Tümü'ne sıfırlanıyordu); adresle de açılır.
+  const SEKMELER = ['tum', 'uygun', 'cevrimici', 'yeni', 'arkadaslar'];
+  if (SEKMELER.includes(b.p.sekme)) durum.sekme = b.p.sekme;
+  if (!SEKMELER.includes(durum.sekme)) durum.sekme = 'tum';
   let suzgec = kayitli.suzgec || bosSuzgec();
   const liste = h('div', { class: 'b-liste kft-liste', 'aria-live': 'polite' });
   const eslesmeAlani = h('div');
@@ -342,7 +346,7 @@ function ciz(kok, b) {
       baslik: t('ht.ortakBul'),
       sag: [htIkon(ikon3d('seri', 30), t('ht.eslesmeBaslik'), () => { durum.eslesmeSira = durum.eslesmeSira < 0 ? 0 : -1; eslesmeCiz(); if (durum.eslesmeSira >= 0) eslesmeAlani.scrollIntoView({ block: 'nearest' }); }), suzgecDugmesi],
     }),
-    sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')], ['arkadaslar', gelenIstekler().length ? `${t('arkadas.arkadaslar')} · ${gelenIstekler().length}` : t('arkadas.arkadaslar')]], durum.sekme, (id) => { durum.sekme = id; yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
+    sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')], ['arkadaslar', gelenIstekler().length ? `${t('arkadas.arkadaslar')} · ${gelenIstekler().length}` : t('arkadas.arkadaslar')]], durum.sekme, (id) => { durum.sekme = id; kullanildi(`kesfet:${id}`); yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
     pano,
     sekmeler([
       ['hedef', t(`diller.${ben.ogrenilenDil || 'en'}`)],

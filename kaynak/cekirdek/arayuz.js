@@ -3,6 +3,7 @@ import { t } from './metin.js';
 import { IKON3D } from '../veri/ikon3d.js';
 import { al } from './depo.js';
 import { fotoAdresi } from './fotograf.js';
+import { ikonOgesi } from './ikon.js';
 
 const SVG_AD_ALANI = 'http://www.w3.org/2000/svg';
 
@@ -108,8 +109,9 @@ export function ikon(ad, boyut = 22, kalinlik = 2) {
 }
 
 // English Prime 3B ikonu (görsel). Süs amaçlıdır: ekran okuyucudan gizli, yanında her zaman metin vardır.
+// v0.20.0: seçili ikon paketine göre 3B görsel ya da glif rozeti (cekirdek/ikon.js); ekranda tekrar edenler orada ayrışır.
 export function ikon3d(ad, boyut = 40) {
-  return h('img', { class: 'b-ikon3d', src: IKON3D[ad] || IKON3D.yildiz, width: boyut, height: boyut, alt: '', 'aria-hidden': 'true', loading: 'lazy', decoding: 'async' });
+  return ikonOgesi(ad, boyut);
 }
 
 // Üst başlık: tabela (nerede olduğun), başlık, alt başlık, sağda isteğe bağlı içerik.
@@ -424,6 +426,13 @@ export function sekmeler(secenekler, aktif, degisti, { tur = 'metin', etiket } =
       kap.querySelector(`[data-id="${id}"]`).setAttribute('aria-pressed', 'true');
       degisti(id);
     }, 'data-id': id }, ad));
+  });
+  // v0.19.0: sayfa kaydırılmadan yalnız şerit kaydırılır.
+  requestAnimationFrame(() => {
+    const secili = kap.querySelector('[aria-pressed="true"]');
+    if (!secili || kap.scrollWidth <= kap.clientWidth) return;
+    const k = kap.getBoundingClientRect(); const s = secili.getBoundingClientRect();
+    if (s.right > k.right || s.left < k.left) kap.scrollLeft += s.left - k.left - 16;
   });
   return kap;
 }

@@ -7,6 +7,7 @@ import { duyur } from '../../cekirdek/duyuru.js';
 import { PAKET_SIRASI, OZELLIKLER, paketTanimlari, paketTanimiDegistir, paketleriVarsayilanaDondur, aktifPaketKimligi, paketEtkinlestir, bugunYeniKisiler, yeniKisiSiniri, ozellikVar } from '../../cekirdek/paketler.js';
 import { kilitAyari, kilitEtkin, KAPSAMLAR, SURELER, sifreKaydet, kilidiKapat, pinTuslari, desenAlani, biyometriDestekli, biyometriKaydet, biyometriKapat, kilitEkrani, acikSay } from '../../cekirdek/kilit.js';
 import { degistir } from '../../cekirdek/depo.js';
+import * as eko from '../../cekirdek/ekosistem.js';
 
 let duzenleModu = false;
 const fiyat = (n) => (n ? new Intl.NumberFormat(aktifDil(), { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 }).format(n) : t('paket.bedava'));
@@ -25,7 +26,10 @@ export function paketlerCiz(kok, b) {
       h('div', { class: 'ayr-pkt-ust' },
         h('span', { class: `ayr-pkt-ikon b-kutu-${p.renk}` }, ikon3d(k === 'premium' ? 'kupa' : k === 'plus' ? 'yildiz' : 'hediye', 34)),
         h('div', { class: 'ayr-pkt-ad' }, h('h2', { id: `ayr-pkt-${k}` }, yerel(p.ad)), benim ? h('span', { class: 'b-etiket-hap b-etiket-hap-iyi' }, t('paket.seninPaketin')) : null),
-        p.aylik ? h('div', { class: 'ayr-pkt-fiyat' }, h('b', null, fiyat(p.aylik)), p.aylik ? h('small', null, t('paket.ayda')) : null, p.yillik ? h('small', null, t('paket.yillik', { f: fiyat(p.yillik) })) : null) : null),
+        // v0.20.0: başka uygulamamızda üyeysen indirimli fiyat (eski fiyat üstü çizili).
+        p.aylik ? (eko.buradaIndirimVar()
+          ? h('div', { class: 'ayr-pkt-fiyat' }, h('b', null, h('s', null, fiyat(p.aylik)), fiyat(eko.indirimliFiyat(p.aylik))), h('small', null, t('paket.ayda')), p.yillik ? h('small', null, t('paket.yillik', { f: fiyat(eko.indirimliFiyat(p.yillik)) })) : null, h('span', { class: 'ayr-pkt-indirim' }, `−%${eko.indirimOrani()}`))
+          : h('div', { class: 'ayr-pkt-fiyat' }, h('b', null, fiyat(p.aylik)), p.aylik ? h('small', null, t('paket.ayda')) : null, p.yillik ? h('small', null, t('paket.yillik', { f: fiyat(p.yillik) })) : null)) : null),
       h('ul', { class: 'ayr-pkt-satirlar' }, (p.satirlar[aktifDil()] || p.satirlar.tr).map((s) => h('li', null, ikon('onay', 14), s))),
       h('ul', { class: 'ayr-pkt-ozellikler' },
         h('li', null, h('span', null, t('paket.gunlukYeniKisi')), h('b', null, p.gunlukYeniKisi ? String(p.gunlukYeniKisi) : t('paket.sinirsiz'))),
@@ -44,8 +48,11 @@ export function paketlerCiz(kok, b) {
       h('span', { class: 'b-ust-etiket' }, t('paket.bugun')),
       h('b', null, sinir ? t('paket.kullanim', { n: bugunYeniKisiler().length, s: sinir }) : t('paket.kullanimSinirsiz', { n: bugunYeniKisiler().length })),
       h('p', { class: 'b-kucuk' }, t('paket.kullanimAciklama'))),
+    eko.buradaIndirimVar() ? h('button', { type: 'button', class: 'ayr-indirim-serit', onClick: () => b.git('/uygulamalar') },
+      ikon3d('hediye', 34), h('span', null, h('b', null, t('eko.buradaBaslik', { n: eko.indirimOrani() })), h('small', null, t('eko.buradaAlt', { ad: eko.digerUyelikler().map((d) => d.uygulama.ad).join(', ') }))), ikon('sag', 16)) : null,
     PAKET_SIRASI.map(kart),
     h('p', { class: 'ayr-not ayr-not-kutu' }, t('paket.odemeNotu')),
+    h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => b.git('/uygulamalar') }, h('span', { class: 'ayr-satir-etiket' }, t('eko.baslik')), ikon('sag', 18)),
     h('label', { class: 'ayr-satir ayr-anahtar ayr-pkt-duzen' },
       h('span', { class: 'ayr-satir-metin' }, h('span', { class: 'ayr-satir-etiket' }, t('paket.duzenleModu')), h('span', { class: 'ayr-satir-aciklama' }, t('paket.duzenleAciklama'))),
       h('input', { type: 'checkbox', class: 'ayr-anahtar-girdi', checked: duzenleModu, onChange: (e) => { duzenleModu = e.currentTarget.checked; yenile(); } }),

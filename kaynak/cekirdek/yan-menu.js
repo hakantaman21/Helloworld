@@ -5,6 +5,8 @@ import { h, ikon, ikon3d, benAvatar, htIkon } from './arayuz.js';
 import { t } from './metin.js';
 import { al } from './depo.js';
 import { oneriSenaryo } from './oneri.js';
+import { yolYeniEtiketi, kutuRozeti, turBaslat } from './rehber-arayuz.js';
+import { okunmamisSayisi } from './rehber.js';
 
 const KAPAMA_ESIGI = 70;
 
@@ -12,8 +14,10 @@ export function yanMenuAc(b) {
   const kapat = () => { perde.remove(); document.removeEventListener('keydown', tus); };
   const tus = (e) => { if (e.key === 'Escape') kapat(); };
   const git = (yol) => () => { kapat(); b.git(typeof yol === 'function' ? yol() : yol); };
-  const satir = (ik, ad, alt, yol) => h('button', { type: 'button', class: 'b-ymenu-satir', onClick: git(yol) },
-    ikon3d(ik, 30), h('span', { class: 'b-ymenu-metin' }, h('b', null, ad), alt ? h('small', null, alt) : null), ikon('sag', 16));
+  // v0.19.0: satır, gittiği adreste yeni bir özellik varsa "Yeni" etiketi taşır; ek (sayı rozeti gibi) sağa eklenir.
+  const satir = (ik, ad, alt, yol, ek = null, eylem = null) => h('button', { type: 'button', class: 'b-ymenu-satir', onClick: eylem ? () => { kapat(); eylem(); } : git(yol) },
+    ikon3d(ik, 30), h('span', { class: 'b-ymenu-metin' }, h('b', null, ad, typeof yol === 'string' ? yolYeniEtiketi(yol) : null), alt ? h('small', null, alt) : null), ek, ikon('sag', 16));
+  const okunmamis = okunmamisSayisi();
   const grup = (baslik, ...satirlar) => h('section', { class: 'b-ymenu-grup' }, h('h3', { class: 'b-ymenu-grup-baslik' }, baslik), h('div', { class: 'b-ymenu-kart' }, ...satirlar));
   const v = al();
   const perde = h('div', { class: 'b-ymenu-perde b-katman', onClick: (e) => { if (e.target === perde) kapat(); } },
@@ -23,6 +27,7 @@ export function yanMenuAc(b) {
           benAvatar(48),
           h('span', { class: 'b-ymenu-kim' }, h('b', null, v.profil.ad || t('misafir.ad')), h('small', null, t('yanMenu.profiliGor')))),
         h('button', { type: 'button', class: 'b-ht-ikon b-ht-ikon-saydam', 'aria-label': t('genel.kapat'), onClick: kapat }, ikon('kapat', 20))),
+      h('button', { type: 'button', class: 'b-ymenu-ara', onClick: git('/ara') }, ikon('ara', 18), h('span', null, t('yanMenu.ara'))),
       h('button', { type: 'button', class: 'b-ymenu-afis', onClick: git(() => `/gorusme?tur=senaryo&id=${oneriSenaryo().senaryo.kimlik}`) },
         h('span', { class: 'b-ymenu-afis-metin' }, h('small', null, t('yanMenu.afisEtiket')), h('b', null, t('yanMenu.afisBaslik')), h('span', null, t('yanMenu.afisAlt'))),
         ikon3d('telaffuz', 56)),
@@ -34,6 +39,13 @@ export function yanMenuAc(b) {
       grup(t('yanMenu.topluluk'),
         satir('baglanti', t('ht.ortakBul'), t('yanMenu.ortakAlt'), '/kesfet'),
         satir('anlar', t('anlar.baslik'), t('yanMenu.anlarAlt'), '/dil-anlari')),
+      grup(t('yanMenu.yardim'),
+        satir('mektup', t('rehber.kutu.baslik'), t('rehber.kutu.menuAlt'), '/kutu', h('span', { class: 'b-ymenu-sayi', 'data-kutu-rozet': '', hidden: !okunmamis }, okunmamis > 99 ? '99+' : String(okunmamis))),
+        satir('kitap', t('rehber.kilavuz.baslik'), t('yanMenu.kilavuzAlt'), '/kilavuz'),
+        satir('hedef', t('rehber.harita.baslik'), t('yanMenu.haritaAlt'), '/harita'),
+        satir('ipucu', t('rehber.tur.baslik'), t('yanMenu.turAlt'), null, null, () => turBaslat(b.git))),
+      grup(t('eko.baslik'),
+        satir('ekosistem', t('eko.baslik'), t('eko.menuAlt'), '/uygulamalar')),
       grup(t('yanMenu.hesap'),
         satir('profil', t('yanMenu.profiliGor'), t('yanMenu.profilAlt'), '/profil'),
         satir('kupa', t('gezinme.gelisim'), t('yanMenu.gelisimAlt'), '/gelisim'),
@@ -68,6 +80,11 @@ export function yanMenuAc(b) {
 }
 
 // Üst bandın solundaki profil fotoğrafı (tek giriş noktası; ayrı ☰ yok).
+// v0.19.0: fotoğrafın köşesinde okunmamış bildirim sayısı (kutu değişince yerinde güncellenir); tur bu düğmeyi gösterir.
 export function benDugmesi(b) {
-  return htIkon(benAvatar(36, 'b-ben-av'), t('yanMenu.baslik'), () => yanMenuAc(b));
+  const d = htIkon(benAvatar(36, 'b-ben-av'), t('yanMenu.baslik'), () => yanMenuAc(b));
+  d.classList.add('b-ben-dugme');
+  d.dataset.kutuEtiket = t('yanMenu.baslik');
+  d.append(kutuRozeti());
+  return d;
 }

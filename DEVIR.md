@@ -5,7 +5,8 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.18.0 · `deneme` dalında. `main` (canlı, helloworld-gules.vercel.app) v0.15.0'da (17.10.2026, PR #18). Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.22.0 · `deneme` dalında (v0.16.0–v0.22.0 Hakan onayı bekliyor). `main` (canlı, helloworld-gules.vercel.app) v0.15.0'da (17.10.2026, PR #18). Canlıya alma yalnız Hakan onayıyla.
+- **v0.19–v0.21 notu:** Bu üç sürüm Hakan'a önce tek dosya olarak teslim edildi (ikinci Claude hesabı, depo erişimi yokken); v0.22.0'da kaynak ağacına aktarıldı. Ayrıntılı devir: aşağıdaki kayıtlar ve issue #1.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
 - **Ürün yapısı (beşli menü):** Sohbet = geçmiş konuşmalar · Bağlan = yalnız gerçek insan keşfi (+ test modunda TEST profilleri) · Dil Anları = topluluk (dürüst boş durum) · Pratik = AI ya da gerçek insan, açık etiketli · Profil = dil kimliği ve gelişim.
@@ -16,6 +17,45 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.22.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026
+- **Neden:** Hakan (17.10, 12:29): GitHub'a bağlan, canlıya alma ve düzeltme; devir notu ve issue'da planlama/işbölümü.
+- **Ne:** v0.19–v0.21 dosya teslimlerinin kaynak ağacına aktarımı (derlenmiş tek dosyadan modül modül geri çevrildi; `derle(deneme v0.18.0)` = teslim edilen v0.18.0 dosyası birebir doğrulandı, aktarım bu eşitlik üstüne satır farkıyla yapıldı). Yasa uyumu: Y1 (`!important` yok; turda hedefsiz adım JS ile ortalanır), Y3 (ikon renkleri jetonlarda, glif zemini `::before` + `hue-rotate`), Y4 (ortak sınıflar `b-`; `rhb-`, `eko-`, `bgn-`, `ayr-` modül önekleri; modüller birbirinin sınıfını kullanmaz), Y5 (`--z-tur`, `--z-icerik`), Y13 (48 px), Y16 (önerilen aramalar `veri/rehber-dizini.js`'te).
+- **Şema:** 19. **Durum:** `deneme`'de.
+
+## v0.21.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026 (dosya teslimi; depoya v0.22.0 ile)
+- **Neden:** Hakan (17.10, 12:29): Pratik'teki senaryo kartları sayfayı uzatıyor ve çok yoğun; kategori başına yatay şerit (ekranda 2 kare), "Genişlet" ile tam sayfa / alta açılan geniş sohbet kartları; geri dönünce aynı yer; denenen senaryoya işaret; tam görünümde kullanım ve başarı bilgisi; basılı tutunca rapor.
+- **Ne:**
+  - `cekirdek/senaryo-istatistik.js`: `v.senaryoIst[id] = { d, t, i, s, sn, c, dz }` (deneme, tamam, ilk, son, süre, cümle, düzeltme); `isle(v, ozet)` `gorusme-sonucu.sonucuIsle` içinden; `istatistik(id)` başarı oranı ve durum (tamam/denendi). Göç 19 eski görüşmelerden ve `tamamlananSenaryolar`'dan doldurur.
+  - `cekirdek/senaryo-kart.js`: `kareKart`, `genisKart`, `senaryoIsareti`, `raporAc` (alt pencere). Pratik (Konu odaları, Öğren) ve Senaryolar ekranı aynı bileşeni kullanır.
+  - bugun: `odaDurumu` (modül düzeyi: seçili kategori, alta açılanlar, şerit kaydırmaları) · yeni ekran `/odalar?alan=…` (tam sayfa, seviyeye göre gruplu).
+- **Şema:** 19.
+
+## v0.20.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026 (dosya teslimi; depoya v0.22.0 ile)
+- **Neden:** Hakan kuyruğu (v0.17 kaydı): 4 ikon paketi + her kartta benzersiz ikon + tasarım paketiyle uyum; English Prime ve Yoldaş'a yönlendirme, birinde ücretli olana diğerlerinde indirim; B1 içerik.
+- **Ne:**
+  - `cekirdek/ikon.js` + `veri/ikon-paketleri.js` (English Prime paketlerinden 3×12 çekirdek 3B görsel ve 69 glif): `ikonOgesi(ad, boyut)` = `arayuz.ikon3d`; paket `profil.ayarlar.ikonPaketi` (otomatik → `TASARIM_IKON[tasarimPaketi]`). `benzersizlestir()` MutationObserver ile ekran/yan menü/alt pencerede ≥30 px kart ikonlarını tekilleştirir (başlık, gezinme ve grup başlıkları hariç).
+  - `veri/ekosistem.js` + `cekirdek/ekosistem.js` + `/uygulamalar`: üyelik paylaşımı `localStorage['ekosistem:uyelikler']` (`{ uygulama: { paket, zaman } }`), indirim oranı ve adresler `profil.ayarlar.ekosistem`. Paketler ekranında indirimli fiyat.
+  - 5 B1 senaryosu (`veri/senaryolar/*-b1-01.js`).
+- **Açık:** English Prime ve Yoldaş canlı adresleri (düzenleme modundan girilecek); çapraz indirimin sunucuda doğrulanması; diğer uygulamaların aynı anahtara üyelik yazması.
+
+## v0.19.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026 (dosya teslimi; depoya v0.22.0 ile)
+- **Neden:** Hakan kuyruğu: kategorili bildirim ve mesaj kutusu, toplu silme; ilk girişte tur; güncellemede "Yeni" etiketi ve yenilikler; eksik bilgi hatırlatması ve bilgilendirme; kullanım takibi ve öneriler; arama dizini, ipucu, kılavuz, uygulama haritası.
+- **Ne:**
+  - `veri/rehber-dizini.js`: tek özellik dizini (OZELLIKLER, HARITA_GRUPLARI, YENILIKLER, TUR_ADIMLARI, ONERILEN_ARAMALAR). Yeni özellik = buraya bir satır.
+  - `cekirdek/rehber.js`: kutu (saklanan öğeler + `kutuKaynagiEkle(kat, fn)` canlı kaynaklar: okunmamış mesaj, istek, arkadaş haberi, paylaşım yorumu, tekrar), kullanım sayacı (cihazda), Yeni etiketleri (14 gün), planlayıcı (hatırlatma 2 günde bir, öneri 3 günde bir, bilgi; günde en çok bir sistem mesajı), arama (`katla()` Türkçe karakter katlama).
+  - `cekirdek/rehber-arayuz.js`: tur, yenilikler penceresi, ipucu şeridi, rozetler (`data-kutu-rozet`), `kutuDugmesi`.
+  - `moduller/rehber`: `/kutu`, `/ara`, `/kilavuz`, `/harita`. Ayarlar › Rehber ve ipuçları.
+  - Kilit: `ekran({ kilitKapsami })` (kutu = kisiler). Bağlan "Arkadaşlar" sekmesi korunur ve `?sekme=arkadaslar` ile açılır.
+- **Şema:** 18 (`v.rehber`).
 
 ## v0.18.0
 

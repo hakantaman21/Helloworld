@@ -233,7 +233,7 @@ function ciz(kok, b) {
       orta: h('label', { class: 'b-ht-arama anl-arama' }, ikon('ara', 18),
         h('input', { type: 'search', placeholder: t('ht.ara'), 'aria-label': t('ht.anAra'), onInput: (e) => { arama = e.target.value.trim().toLocaleLowerCase(); yenile(); } })),
       sag: [
-        htIkon('zil', t('ht.bildirimler'), () => { sekme = 'takip'; yenile(); duyur(t('ht.bildirimOzet', { n: kendiYorumSayisi })); }, { rozet: kendiYorumSayisi || null }),
+        htIkon('zil', t('ht.bildirimler'), () => b.git('/kutu?kat=anlar'), { rozet: kendiYorumSayisi || null }),
         htIkon('kalem', t('anlar.paylasBaslik'), () => { yaziyor = true; paylasCiz(); paylasGirdi.focus(); }),
       ],
     }),

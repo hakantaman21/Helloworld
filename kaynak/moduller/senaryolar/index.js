@@ -1,12 +1,15 @@
 // Senaryolar: 6 yaşam alanı, seviye filtresi, koçun önerisi; alan içinde senaryo listesi.
 import './senaryolar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, altGezinme, ustBaslik, durumKutusu, yerlestir } from '../../cekirdek/arayuz.js';
+import { h, ikon, altGezinme, ustBaslik, durumKutusu, yerlestir, goreliZaman } from '../../cekirdek/arayuz.js';
 import { t, yerel, aktifDil } from '../../cekirdek/metin.js';
 import { al } from '../../cekirdek/depo.js';
 import { oneriSenaryo, SEVIYE_SIRASI } from '../../cekirdek/oneri.js';
 import senaryolar from '../../veri/senaryolar/index.js';
 import alanlar from '../../veri/alanlar.js';
+import { senaryoIsareti, raporAc } from '../../cekirdek/senaryo-kart.js';
+import { istatistik } from '../../cekirdek/senaryo-istatistik.js';
+import { basiliTut } from '../../cekirdek/kisi-eylemleri.js';
 
 // v0.16.0: C1 içerik eklendi; beş seviyenin tamamı seçilebilir.
 const GOSTERILEN_SEVIYELER = SEVIYE_SIRASI;
@@ -24,7 +27,8 @@ function seviyeSecici(aktif, degisti) {
 
 function senaryoSatiri(s, b) {
   const tamam = Boolean(al().tamamlananSenaryolar[s.kimlik]);
-  return h('button', { class: 'b-kart b-kart-satir b-kart-tiklanir', type: 'button', onClick: () => b.git(`/gorusme?tur=senaryo&id=${s.kimlik}`) },
+  const ist = istatistik(s.kimlik);
+  return basiliTut(h('button', { class: 'b-kart b-kart-satir b-kart-tiklanir', type: 'button', onClick: () => b.git(`/gorusme?tur=senaryo&id=${s.kimlik}`) },
     h('span', { class: tamam ? 'b-ikon-daire b-ikon-daire-iyi' : 'b-ikon-daire b-ikon-daire-vurgu' }, ikon(tamam ? 'onay' : 'oynat', 18, 2.5)),
     h('span', { class: 'snr-satir-metin' },
       h('span', { class: 'snr-satir-baslik' }, yerel(s.baslik)),
@@ -32,8 +36,10 @@ function senaryoSatiri(s, b) {
       // v0.14.0: süre adım sayısından tahmin edilir; başarı ölçütü (görev) satırda yazar.
       h('span', { class: 'b-kucuk' }, `${s.seviye} · ${t('senaryolar.sureDk', { n: (s.adimlar || []).length + 2 })} · ${yerel(s.roller.koc)}${tamam ? ' · ' + t('senaryolar.tamamlandi') : ''}`),
       h('span', { class: 'b-kucuk snr-gorev' }, `${t('senaryolar.basari')}: ${yerel(s.gorev.aciklama)}`),
+      // v0.21.0: denenen senaryo ötekilerden ayrılır; son kullanım ve başarı oranı satırda.
+      ist.deneme ? h('span', { class: 'b-kucuk' }, senaryoIsareti(s.kimlik), ' ', t('snk.ozet', { son: goreliZaman(ist.son), n: ist.deneme, oran: ist.oran })) : null,
     ),
-  );
+  ), () => raporAc(s, { git: b.git }));
 }
 
 function anaEkran(kok, b) {

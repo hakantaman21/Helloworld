@@ -8,6 +8,9 @@ import { benimGizlilik, gizlilikAyarla, GIZLILIK_SECENEKLERI, haberTercihleri, h
 import { paketlerCiz, kilitGrubu } from './paketler.js';
 import { aktifPaket, yeniKisiSiniri, bugunYeniKisiler } from '../../cekirdek/paketler.js';
 import { kilitEtkin, kilitAyari } from '../../cekirdek/kilit.js';
+import { rehberAyari, rehberAyarla, kullanimiSil, ipuclariniSifirla, okunmamisSayisi } from '../../cekirdek/rehber.js';
+import { turBaslat, yolYeniEtiketi } from '../../cekirdek/rehber-arayuz.js';
+import { IKON_PAKETLERI, TASARIM_IKON, ikonOgesi, ikonPaketiSecimi, aktifIkonPaketi } from '../../cekirdek/ikon.js';
 import { t, yerel, dilAyarla, ARAYUZ_DILLERI } from '../../cekirdek/metin.js';
 import { ILGI_ALANLARI, ILGI_SINIRI } from '../../veri/ilgi-alanlari.js';
 import { al, degistir, sifirla, disaAktarMetni, iceAktarHazirla, iceAktarUygula } from '../../cekirdek/depo.js';
@@ -70,6 +73,17 @@ function paketSecici(etiketId, aktif, degisti) {
       type: 'button', class: 'ayr-paket', role: 'radio', 'aria-checked': String(k === aktif), 'data-paket': k, onClick: () => degisti(k),
     }, h('span', { class: 'ayr-paket-ornek', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')),
       h('b', null, t(`ayarlar.paketAd.${k}`)), h('small', null, t(`ayarlar.paketAlt.${k}`)))));
+}
+
+// v0.20.0 İkon paketi seçici: her seçenek o paketle çizilmiş üç örnek ikon gösterir. Otomatik: tasarım paketini izler.
+function ikonPaketSecici(etiketId, aktif, degisti) {
+  const ornek = (pk) => h('span', { class: 'ayr-ikon-ornek', 'aria-hidden': 'true' }, ['kitap', 'sohbet', 'kupa'].map((ad) => ikonOgesi(ad, 28, { paket: pk })));
+  const otoPaket = TASARIM_IKON[al().profil.ayarlar.tasarimPaketi] || 'klasik';
+  return h('div', { class: 'ayr-ikonlar', role: 'radiogroup', 'aria-labelledby': etiketId },
+    ['otomatik', ...IKON_PAKETLERI].map((k) => h('button', {
+      type: 'button', class: 'ayr-ikon-paket', role: 'radio', 'aria-checked': String(k === aktif), onClick: () => degisti(k),
+    }, ornek(k === 'otomatik' ? otoPaket : k), h('b', null, t(`ikonPaketi.ad.${k}`)),
+    k === 'otomatik' ? h('small', null, t('ikonPaketi.simdi', { ad: t(`ikonPaketi.ad.${otoPaket}`) })) : null)));
 }
 
 // Süzgeç biçimi seçici: her seçenek, o biçimde çizilmiş küçük bir seçili-sekme önizlemesi gösterir.
@@ -256,6 +270,7 @@ function ciz(kok, b) {
       satir(t('ayarlar.gorunum'), (id) => bolumlu(id, ['dengeli', 'kompakt'].map((k) => [k, t(`ayarlar.gorunumSecenek.${k}`)]), a.gorunum || 'dengeli', (k) => ayarKaydet((pr) => { pr.ayarlar.gorunum = k; }))),
       satir(t('ayarlar.yaziBoyutu'), (id) => bolumlu(id, ['normal', 'buyuk', 'cokbuyuk'].map((k) => [k, t(`ayarlar.yaziSecenek.${k}`)]), a.yaziBoyutu || 'normal', (k) => ayarKaydet((pr) => { pr.ayarlar.yaziBoyutu = k; }))),
       satir(t('ayarlar.paket'), (id) => paketSecici(id, a.tasarimPaketi || 'akilli', (k) => { const pk = TASARIM_PAKETLERI[k]; ayarKaydet((pr) => { Object.assign(pr.ayarlar, pk, { tasarimPaketi: k }); }, true); ciz(kok, b); }), { aciklama: t('ayarlar.paketAciklama'), altta: true }),
+      satir(t('ikonPaketi.baslik'), (id) => ikonPaketSecici(id, ikonPaketiSecimi(), (k) => { ayarKaydet((pr) => { pr.ayarlar.ikonPaketi = k; }); b.git('/ayarlar?grup=gorunum', { degistir: true }); }), { aciklama: t('ikonPaketi.aciklama'), altta: true }),
       h('details', { class: 'ayr-acilir ayr-gelismis', open: a.tasarimPaketi === 'ozel' },
         h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('ayarlar.gelismis')), h('small', { class: 'ayr-ozel-isaret' }, a.tasarimPaketi === 'ozel' ? t('ayarlar.ozelGorunum') : '')),
       satir(t('ayarlar.secimRengi'), (id) => renkSecici(id, 'secim', ['altin', 'mavi', 'yesil', 'mercan', 'mor', 'turkuaz'], a.secimRengi || 'altin', (k) => { ayarKaydet((pr) => { pr.ayarlar.secimRengi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.secimRengiAciklama'), altta: true }),
@@ -264,7 +279,7 @@ function ciz(kok, b) {
       satir(t('ayarlar.suzgecBicimi'), (id) => suzgecSecici(id, a.suzgecBicimi || 'klasik', (k) => { ayarKaydet((pr) => { pr.ayarlar.suzgecBicimi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.suzgecBicimiAciklama'), altta: true }),
       ),
       h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => {
-        ayarKaydet((pr) => { Object.assign(pr.ayarlar, TASARIM_PAKETLERI.akilli, { tasarimPaketi: 'akilli', gorunum: 'dengeli', yaziBoyutu: 'normal' }); });
+        ayarKaydet((pr) => { Object.assign(pr.ayarlar, TASARIM_PAKETLERI.akilli, { tasarimPaketi: 'akilli', gorunum: 'dengeli', yaziBoyutu: 'normal', ikonPaketi: 'otomatik' }); });
         ciz(kok, b);
       } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.varsayilanaDon')), ikon('degis', 18)),
       satir(t('ayarlar.ortaDugme'), (id) => bolumlu(id, ['pratik', 'arama', 'senaryo', 'telaffuz'].map((k) => [k, t(`ayarlar.ortaSecenek.${k}`)]), a.ortaDugme || 'pratik', (k) => ayarKaydet((pr) => { pr.ayarlar.ortaDugme = k; })), { aciklama: t('ayarlar.ortaDugmeAciklama'), altta: true }),
@@ -275,6 +290,19 @@ function ciz(kok, b) {
       h('p', { class: 'ayr-not' }, t('paket.ozetMetin', { ad: yerel(aktifPaket().ad), n: bugunYeniKisiler().length, s: yeniKisiSiniri() || '∞' })),
       h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => b.git('/paketler') }, h('span', { class: 'ayr-satir-etiket' }, t('paket.paketleriGor')), ikon('sag', 18))),
     grup('kilit', 'kilit', t('ayarlar.grup.kilit'), kilitGrubu(b, () => b.git('/ayarlar?grup=kilit', { degistir: true }))),
+    // v0.19.0 Rehber: ipucu, hatırlatma, bilgilendirme ve öneri anahtarları; tur; cihazdaki kullanım bilgisini silme.
+    grup('rehber', 'ipucu', t('ayarlar.grup.rehber'),
+      h('p', { class: 'ayr-not ayr-not-kutu' }, t('rehber.ayar.aciklama')),
+      ...['ipucu', 'hatirlatma', 'bilgi', 'oneri'].map((k) => anahtar(t(`rehber.ayar.${k}`), rehberAyari()[k], (v) => { rehberAyarla(k, v); duyur(t('ayarlar.kaydedildi'), 1500); }, t(`rehber.ayar.${k}Aciklama`))),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => b.git('/kutu') }, h('span', { class: 'ayr-satir-etiket' }, t('rehber.kutu.baslik')), ikon('sag', 18)),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => b.git('/kilavuz') }, h('span', { class: 'ayr-satir-etiket' }, t('rehber.kilavuz.baslik')), ikon('sag', 18)),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => turBaslat(b.git) }, h('span', { class: 'ayr-satir-etiket' }, t('rehber.ayar.turBaslat')), ikon('oynat', 18)),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => { ipuclariniSifirla(); duyur(t('rehber.ayar.ipuclariSifirlandi')); } }, h('span', { class: 'ayr-satir-etiket' }, t('rehber.ayar.ipuclariniSifirla')), ikon('degis', 18)),
+      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme ayr-tehlike', onClick: async () => {
+        if (!(await onayIste({ metin: t('rehber.ayar.kullanimSilOnay'), evet: t('rehber.ayar.kullanimSil'), hayir: t('genel.vazgec') }))) return;
+        kullanimiSil(); duyur(t('rehber.ayar.kullanimSilindi'));
+      } }, h('span', { class: 'ayr-satir-etiket' }, t('rehber.ayar.kullanimSil')), ikon('kapat', 18)),
+    ),
     grup('gizlilik', 'yedek', t('ayarlar.grup.gizlilik'),
       h('p', { class: 'ayr-not ayr-not-kutu' }, t('ayarlar.gizlilikMetni')),
       // v0.17.0 Karşılıklı gizlilik (WhatsApp mantığı): kapattığın bilgiyi başkalarında da göremezsin.
@@ -334,20 +362,21 @@ function ciz(kok, b) {
   );
   // HelloTalk düzeni: ana sayfada renkli simgeli kategori listesi; dokununca yalnız o grup açılır (az kaydırma).
   const gruplar = [...kok.querySelectorAll('.ayr-grup')];
-  const baslikYazi = kok.querySelector('.b-ht-baslik span');
+  const baslikYazi = kok.querySelector('.b-ht-baslik > span:not(.b-ikon3d)');
   const ozet = {
     profil: `${p.ad || t('misafir.ad')} · ${p.seviye}`,
     dil: `${(p.anaDil || 'tr').toUpperCase()} → ${(p.ogrenilenDil || 'en').toUpperCase()} · ${(a.arayuzDili || 'tr').toUpperCase()}`,
     bildirim: `${a.sabahSaati} · ${a.aksamSaati}`,
     koc: t(`ayarlar.duzeltmeSecenek.${a.duzeltmeYogunlugu}`),
-    gorunum: `${t(`ayarlar.temaSecenek.${a.tema}`)} · ${t(`ayarlar.yaziSecenek.${a.yaziBoyutu || 'normal'}`)}`,
+    gorunum: `${t(`ayarlar.temaSecenek.${a.tema}`)} · ${t(`ayarlar.yaziSecenek.${a.yaziBoyutu || 'normal'}`)} · ${t(`ikonPaketi.ad.${aktifIkonPaketi()}`)}`,
     gizlilik: t('ayarlar.gizlilikOzet'),
     paket: yerel(aktifPaket().ad),
     kilit: kilitEtkin() ? t(`kilit.kapsamSecenek.${kilitAyari().kapsam}`) : t('ayarlar.kapali'),
     test: testModuAcik() ? t('ayarlar.acik') : t('ayarlar.kapali'),
+    rehber: okunmamisSayisi() ? t('rehber.ayar.ozet', { n: okunmamisSayisi() }) : t('rehber.ayar.ozetBos'),
   };
-  const KATEGORILER = [['profil'], ['paket', 'kilit'], ['bildirim', 'gizlilik'], ['koc', 'dil'], ['gorunum'], ['test']];
-  const RENK = { profil: 1, paket: 5, kilit: 3, bildirim: 4, gizlilik: 6, koc: 5, dil: 2, gorunum: 6, test: 2 };
+  const KATEGORILER = [['profil'], ['paket', 'kilit'], ['bildirim', 'gizlilik'], ['koc', 'dil'], ['gorunum', 'rehber'], ['test']];
+  const RENK = { profil: 1, paket: 5, kilit: 3, bildirim: 4, gizlilik: 6, koc: 5, dil: 2, gorunum: 6, rehber: 3, test: 2 };
   const menu = h('nav', { class: 'ayr-menu', 'aria-label': t('ayarlar.baslik') },
     KATEGORILER.map((kume) => {
       const varolan = kume.filter((k) => gruplar.some((g) => g.id === `ayr-g-${k}`));
@@ -356,8 +385,8 @@ function ciz(kok, b) {
         const g = gruplar.find((x) => x.id === `ayr-g-${k}`);
         const simge = g.querySelector('.ayr-grup-baslik .b-ikon3d');
         return h('button', { type: 'button', class: 'ayr-menu-satir', onClick: () => b.git(`/ayarlar?grup=${k}`) },
-          h('span', { class: `ayr-menu-simge b-kutu-${RENK[k]}` }, simge ? Object.assign(simge.cloneNode(true), { className: 'b-ikon3d ayr-menu-ikon' }) : null),
-          h('span', { class: 'ayr-menu-metin' }, h('b', null, g.querySelector('.ayr-grup-baslik').textContent), h('small', null, ozet[k] || '')),
+          h('span', { class: `ayr-menu-simge b-kutu-${RENK[k]}` }, simge ? (() => { const c = simge.cloneNode(true); c.classList.add('ayr-menu-ikon'); return c; })() : null),
+          h('span', { class: 'ayr-menu-metin' }, h('b', null, g.querySelector('.ayr-grup-baslik').textContent, yolYeniEtiketi(`/ayarlar?grup=${k}`)), h('small', null, ozet[k] || '')),
           ikon('sag', 18));
       }));
     }));

@@ -1,3 +1,31 @@
+## 0.22.0 — 17.10.2026 · v0.19–v0.21 depoya aktarıldı, yasa uyumu
+
+- v0.19.0, v0.20.0 ve v0.21.0 Hakan'a dosya olarak teslim edilmişti; bu sürümde kaynak ağacına (`kaynak/`) aktarıldı ve robotun bütün yasalarına uyduruldu.
+- Dokunma alanları en az 48 px (kutu, arama, kılavuz, tur, ipucu şeridi, "Genişlet" düğmeleri).
+- İkon paketlerinin bütün renkleri jetonlarda (`--renk-ikon-*`, `--renk-glif-*`); glif zemini `::before` + ton döndürme.
+- Uygulama turu kendi katman jetonunda (`--z-tur`); ortak bileşen stilleri `stiller/bilesenler-rehber.css` ("b-" önekiyle). Modüller birbirinin sınıfını kullanmıyor (ekosistem kendi anahtar/satır stillerini taşıyor).
+
+## 0.21.0 — 17.10.2026 · Konu odaları ve senaryo raporu
+
+- Pratik › Konu odaları: "Tümü"nde her kategori bir yatay şerit; ekranda iki kare kart, kaydırarak seçilir. "Genişlet": Tümü'ndeyken kategori tam sayfa açılır (seviyeye göre gruplu geniş sohbet kartları); tek kategori seçiliyken senaryolar alta geniş kartlar olarak açılır, "Daralt" ile kapanır. Seçim, açık kategoriler ve şerit kaydırması geri dönünce korunur.
+- Denenen senaryolar işaretli: "Tamamlandı" / "Denendi" (Pratik, Öğren, Senaryolar).
+- Geniş kartta son kullanım, deneme sayısı ve başarı oranı; basılı tutunca (ya da "Rapor") kullanım raporu: başarı oranı, son kullanım, ilk deneme, deneme/tamamlama, toplam süre, cümle, düzeltme/cümle, son görüşmeler (karneye gider).
+- Senaryo başına kalıcı özet (şema 19); eski görüşmelerden ve tamamlananlardan geriye dönük doldurulur.
+
+## 0.20.0 — 17.10.2026 · İkon paketleri, uygulama ailesi, B1
+
+- 4 ikon paketi (Klasik 3B, Buz cam, Neon, Yumuşak kil; Otomatik = tasarım paketine uyar). 3B görsel yalnız anlamı birebir tutan yerde; diğerleri paketin vurgusunu taşıyan glif rozeti. Aynı ekranda tekrar eden kart ikonları kendiliğinden ayrışır.
+- Uygulama ailemiz: English Prime ve Yoldaş tanıtımı; ücretli üyeye diğerlerinde indirim teklifi, diğer uygulamada üyeye helloworld paketlerinde indirimli fiyat (ödeme bağlanana kadar yalnız gösterim). Adresler ve indirim oranı düzenleme modunda.
+- 5 yeni B1 senaryosu: ürün iadesi, eczane, gürültülü komşu, hafta sonu planı, ödev için ek süre.
+
+## 0.19.0 — 17.10.2026 · Rehberlik
+
+- Bildirim ve mesaj kutusu: 6 kategori, toplu seç/sil/okundu, kategori temizleme; arkadaşlık isteği kutudan kabul/ret. Okunmamış sayısı profil fotoğrafında ve zilde.
+- İlk girişte uygulama turu (gerçek öğeler üstünde); güncellemeden sonra yenilikler penceresi ve "Yeni" etiketleri.
+- Eksik (zorunlu olmayan) profil bilgisi hatırlatmaları, bilgilendirme mesajları, az kullanılan bölümler için öneriler (yalnız cihazda; günde en çok bir sistem mesajı).
+- Uygulamada arama (40 özellik), ipuçları ve kılavuz, uygulama haritası, ekran ipucu şeridi; Ayarlar › Rehber ve ipuçları.
+- Düzeltme: Bağlan "Arkadaşlar" sekmesi geri dönünce sıfırlanıyordu. Kilit kapsamı ekran tanımında bildirilebiliyor (kutu = kişiler ve sohbetler).
+
 ## 0.18.0 — 17.10.2026 · Paketler, günlük sınır, uygulama kilidi
 
 - Paketler (Ayarlar › Üyelik ve paketler): Ücretsiz · Plus · Premium; her pakette günlük yeni kişi sınırı ve özellikler. Yalnız gerçekten çalışan özellikler listelenir.
