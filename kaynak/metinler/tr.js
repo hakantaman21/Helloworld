@@ -930,4 +930,5 @@ export default {
     yildonumu: { baslik: 'helloworld’de {n}. yılın kutlu olsun!', metin: 'Bir yıl daha birlikte pratik yaptık. Teşekkürler, {ad}!' },
     ayDonumu: { baslik: 'helloworld’de {n}. ayın!', metin: 'Düzenli pratik fark yaratır. Böyle devam, {ad}!' },
   },
+  pwa: { yeniSurum: 'Yeni sürüm hazır: {s}', yeniSurumAlt: 'Düzeltmeleri almak için dokun (birkaç saniye sürer).' },
 };

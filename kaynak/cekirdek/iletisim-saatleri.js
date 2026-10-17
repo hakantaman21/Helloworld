@@ -4,6 +4,7 @@
 // Saatler HER ZAMAN kişinin kendi saat diliminde yorumlanır. Saf işlevler: sunucuda da aynen kullanılabilir.
 import { al, degistir } from './depo.js';
 import { TEST_SOSYAL } from '../veri/test-profiller.js';
+import { kuyruga } from './sunucu.js';
 
 const TUM_GUNLER = [0, 1, 2, 3, 4, 5, 6]; // 0 = Pazar (Date.getDay)
 export const VARSAYILAN_SAATLER = Object.freeze({
@@ -54,6 +55,7 @@ export function benimSaatlerim() {
 }
 export function saatleriAyarla(tur, deger) {
   degistir((v) => { const k = benimSaatlerim(); v.profil.ayarlar.bildirimSaatleri = { ...k, [tur]: { ...k[tur], ...deger } }; });
+  kuyruga('ayar', { bildirimSaatleri: benimSaatlerim() });
 }
 export function saatleriSifirla() { degistir((v) => { delete v.profil.ayarlar.bildirimSaatleri; }); }
 // Uygulamanın kendi önerileri, hatırlatmaları ve tebrikleri şu an gönderilebilir mi (cihaz saatiyle).

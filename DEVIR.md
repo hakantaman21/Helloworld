@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.26.0 · `deneme`'de (Hakan onayı bekliyor). Canlıda v0.25.1 (PR #22). Adres: helloworld-gules.vercel.app. Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.26.1 · `deneme`'de (Hakan onayı bekliyor). Canlıda v0.25.1 (PR #22). Adres: helloworld-gules.vercel.app. Canlıya alma yalnız Hakan onayıyla.
 - **v0.19–v0.21 notu:** Bu üç sürüm Hakan'a önce tek dosya olarak teslim edildi (ikinci Claude hesabı, depo erişimi yokken); v0.22.0'da kaynak ağacına aktarıldı. Ayrıntılı devir: aşağıdaki kayıtlar ve issue #1.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
@@ -17,6 +17,14 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.26.1
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026
+- **Neden:** Hakan (17:57): yönetim için ayrı uygulama sorusu (3 uygulama × 2 = kaos), sunucu sonrası için mimariyi şimdiden hazırla, yapılamayanları issue'ya not et; binlerce sanal kullanıcıyla stres dahil tüm sınamalar; senaryo şeridi kaydırırken sayfa kayıyor.
+- **Ne:** yeni sürüm uyarısı (`pwa.js`); `sunucu.js` + giden kutusu (şema 21) + `hesap.js` + `veri/sunucu-ayari.js`; `sunucu/` (README, SOZLESME, sema.sql, YONETIM-MERKEZI); `araclar/stres-sinama.mjs` derleme kapısına eklendi.
+- **Kaydırma:** gerçek dokunmatik öykünmede (CDP) bütün yatay alanlar doğru; hata v0.25.1'de düzelmişti, telefondaki eski sürümden kaynaklanıyordu → yeni sürüm uyarısı bunun için.
+- **Şema:** 21. **Durum:** `deneme`'de.
 
 ## v0.26.0
 

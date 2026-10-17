@@ -1,7 +1,7 @@
 // Y7: Veri şeması göçleri. Şema değişince yeni bir numara eklenir, GUNCEL_SEMA bir artar.
 // Her göç bir önceki sürümün verisini alır, yenisini döndürür. Göçten önce depo otomatik yedek alır.
 
-export const GUNCEL_SEMA = 20;
+export const GUNCEL_SEMA = 21;
 
 export const gocler = {
   // 0 → 1: ilk kurulum (boş depo)
@@ -206,4 +206,6 @@ export const gocler = {
     }));
     return { ...eski, destek: { kayitlar: eskiler } };
   },
+  // 20 → 21 (v0.26.0): sunucuya gidecek işlerin giden kutusu (cekirdek/sunucu.js). Başta boş.
+  21: (eski) => (Array.isArray(eski.giden) ? eski : { ...eski, giden: [] }),
 };

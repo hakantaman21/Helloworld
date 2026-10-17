@@ -929,4 +929,5 @@ export default {
     yildonumu: { baslik: 'Happy {n}-year anniversary on helloworld!', metin: 'Another year of practising together. Thank you, {ad}!' },
     ayDonumu: { baslik: '{n} months on helloworld!', metin: 'Regular practice makes the difference. Keep going, {ad}!' },
   },
+  pwa: { yeniSurum: 'New version ready: {s}', yeniSurumAlt: 'Tap to get the fixes (takes a few seconds).' },
 };

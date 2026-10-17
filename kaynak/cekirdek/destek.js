@@ -7,6 +7,7 @@ import { yeniKimlik } from './kimlik.js';
 import { kutuyaEkle } from './rehber.js';
 import { NEDEN_ONEMI, ACIL_SOZCUKLER, SPAM_SOZCUKLER, TEST_YANITLARI } from '../veri/destek-kurallari.js';
 import { testModuAcik } from './test-modu.js';
+import { kuyruga } from './sunucu.js';
 
 const TEST_YANIT_GECIKMESI = 8000;
 
@@ -36,6 +37,7 @@ export function acikKayitSayisi() { return v().kayitlar.filter((k) => GERI_ALINA
 export function destekGonder({ tur, kategori = null, metin = '', hedef = null }) {
   const kayit = { kimlik: yeniKimlik('d'), tur, kategori, metin: String(metin).slice(0, 2000), hedef, zaman: Date.now(), durum: 'alindi', ...onemSiniflandir({ tur, kategori, metin }), yanitlar: [] };
   degistir((x) => { const d = x.destek || { kayitlar: [] }; x.destek = { ...d, kayitlar: [kayit, ...d.kayitlar].slice(0, DESTEK_SINIRI) }; });
+  kuyruga('destek', kayit);
   // TEST modunda yönetici yanıtı benzetimi (akış denensin diye; gerçek değildir, yanıt "TEST ·" ile başlar).
   if (testModuAcik() && kayit.yol !== 'otomatik') setTimeout(() => yanitEkle(kayit.kimlik, TEST_YANITLARI[tur] || TEST_YANITLARI.gorus), TEST_YANIT_GECIKMESI);
   return kayit;
@@ -50,6 +52,7 @@ export function geriAl(kimlik) {
   const k = v().kayitlar.find((x) => x.kimlik === kimlik);
   if (!k || !GERI_ALINABILIR.includes(k.durum)) return false;
   guncelle(kimlik, (x) => ({ ...x, durum: 'geriAlindi', geriAlinma: Date.now() }));
+  kuyruga('destekGeriAl', { kimlik });
   return true;
 }
 

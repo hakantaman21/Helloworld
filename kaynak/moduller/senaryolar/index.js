@@ -83,11 +83,9 @@ function anaEkran(kok, b) {
 }
 
 function alanEkrani(kok, b) {
-  const alan = alanlar.find((a) => a.kimlik === b.p.id);
-  if (!alan) {
-    yerlestir(kok, durumKutusu('hata', t('genel.hata'), { metin: t('genel.geri'), fn: () => b.geri('/senaryolar') }));
-    return null;
-  }
+  // v0.26.1: eski/yanlış bağlantı (bilinmeyen alan) hata kutusu göstermez; Senaryolar listesine yönlenir.
+  const alan = alanlar.find((a) => a.kimlik === (b.p.id || b.p.alan));
+  if (!alan) { b.git('/senaryolar', { degistir: true }); return null; }
   kok.classList.add('b-ekran-gezinmeli');
   const seviye = secilenSeviye || (GOSTERILEN_SEVIYELER.includes(al().profil.seviye) ? al().profil.seviye : 'A1');
   const liste = senaryolar.filter((s) => s.alan === alan.kimlik && s.seviye === seviye);

@@ -10,6 +10,7 @@ import { al, degistir } from './depo.js';
 import { TEST_PROFILLERI, TEST_SOSYAL } from '../veri/test-profiller.js';
 import { kisiErisilebilir, erisilebilirler } from './test-erisim.js';
 import { t } from './metin.js';
+import { kuyruga } from './sunucu.js';
 
 export const SABIT_SINIRI = 3;
 export const GIZLILIK_SECENEKLERI = ['herkes', 'arkadaslar', 'kimse'];
@@ -79,6 +80,7 @@ export function kisiTercihleri(kimlik) {
 }
 export function kisiTercihAyarla(kimlik, tur, acik) {
   guncelle((t) => { t.kisiTercih = { ...(t.kisiTercih || {}), [kimlik]: { ...kisiTercihleri(kimlik), [tur]: acik } }; });
+  kuyruga('kisiTercih', { kimlik, tercih: kisiTercihleri(kimlik) });
 }
 export function askiBitisi(kimlik, simdi = Date.now()) {
   const b = (tst().askida || {})[kimlik];
@@ -87,8 +89,9 @@ export function askiBitisi(kimlik, simdi = Date.now()) {
 export function askidaMi(kimlik) { return Boolean(askiBitisi(kimlik)); }
 export function arkadasligiAskiyaAl(kimlik, gun) {
   guncelle((t) => { t.askida = { ...(t.askida || {}), [kimlik]: Date.now() + gun * 86400000 }; });
+  kuyruga('arkadaslik', { kimlik, islem: 'aski', bitis: askiBitisi(kimlik) });
 }
-export function askiyiKaldir(kimlik) { guncelle((t) => { const a = { ...(t.askida || {}) }; delete a[kimlik]; t.askida = a; }); }
+export function askiyiKaldir(kimlik) { guncelle((t) => { const a = { ...(t.askida || {}) }; delete a[kimlik]; t.askida = a; }); kuyruga('arkadaslik', { kimlik, islem: 'askiKaldir' }); }
 // Bu kişiden şu türde bildirim/haber gelsin mi (genel tercih + kişi tercihi + askı).
 export function kisidenAl(kimlik, tur) {
   if (askidaMi(kimlik)) return false;
@@ -166,7 +169,7 @@ export function guvendeDurumu(kayit, simdi = Date.now()) {
   return simdi - zaman < GUVENDE_SAAT * 3600000 ? { zaman, bitis: zaman + GUVENDE_SAAT * 3600000 } : null;
 }
 export function benGuvendeyim() { return guvendeDurumu(al().profil.guvende); }
-export function guvendeAyarla(acik) { degistir((v) => { v.profil.guvende = acik ? Date.now() : null; }); }
+export function guvendeAyarla(acik) { degistir((v) => { v.profil.guvende = acik ? Date.now() : null; }); kuyruga('hesap', { guvende: al().profil.guvende }); }
 export function kisiGuvende(kimlik) { return guvendeDurumu((TEST_SOSYAL[kimlik] || {}).guvende); }
 
 // ---- Mesaj durumu (✓ gönderildi · ✓✓ iletildi · okundu) ----

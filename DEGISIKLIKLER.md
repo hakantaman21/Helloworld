@@ -1,3 +1,9 @@
+## 0.26.1 — 17.10.2026 · Sunucu hazırlığı, yeni sürüm uyarısı, kapsamlı stres sınaması
+
+- **Yeni sürüm uyarısı** (`pwa.js`): ana ekrana eklenmiş uygulama arka planda açık kalınca yeni sürümü yüklemiyordu; düzeltilmiş hata (şeridi kaydırırken sekme değişmesi) telefonda sürüyordu. Uygulama öne gelince ve 30 dakikada bir sunucudaki sürüm okunur; daha yeniyse üstte "Yeni sürüm hazır" şeridi çıkar, dokununca yenilenir.
+- **Sunucu hazırlığı:** `cekirdek/sunucu.js` adaptörü ve giden kutusu (`v.giden`, şema 21): destek kaydı, geri alma, hesap durumu (`cekirdek/hesap.js`), bildirim saatleri, kişi tercihi, arkadaşlık askısı ve güvende bildirimi şimdiden kuyruğa yazılır; sunucu adresi (`veri/sunucu-ayari.js`) girilince sırayla, tekil kimlikle gönderilir. `sunucu/` klasörü: sözleşme, Postgres/Supabase şeması (3 uygulama tek veritabanı, RLS), tek yönetim merkezi önerisi.
+- **Stres sınaması** (`araclar/stres-sinama.mjs`, derlemede çalışır): binlerce sanal kullanıcı, değişmezler, saat dilimi, sayı türü, gramer, göç ve yedek bozma sınamaları.
+
 ## 0.26.0 — 17.10.2026 · Destek merkezi, iletişim saatleri, arkadaşa özel tercihler, arama ve davet
 
 Hakan'ın 17.10 (15:44–16:23) istek listesinden eksik kalanlar. Şema 20.

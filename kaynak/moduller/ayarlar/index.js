@@ -23,6 +23,7 @@ import { destek, soyle, ingilizceSesler } from '../../cekirdek/ses/ses-hatti.js'
 import { testModuAcik, testModuAyarla, testVerileriniSil, engellenenler, testEngelKaldir } from '../../cekirdek/test-modu.js';
 import { benimSaatlerim, saatleriAyarla, saatleriSifirla, SAAT_TURLERI } from '../../cekirdek/iletisim-saatleri.js';
 import { benGuvendeyim, guvendeAyarla } from '../../cekirdek/arkadaslik.js';
+import { hesabiAskiyaAl, hesabiAc } from '../../cekirdek/hesap.js';
 
 const DILLER = ['tr', 'en', 'es', 'ar', 'de', 'fr', 'ru', 'pt', 'fa', 'ko', 'ja', 'diger'];
 
@@ -429,9 +430,9 @@ function ciz(kok, b) {
       } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.sil')), ikon('kapat', 18)),
       // v0.26.0 Hesabı askıya al: profilin görünmez, kimse yazamaz, bildirimler durur; istediğin an geri açarsın.
       h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: async () => {
-        if (p.hesapAskida) { degistir((v) => { v.profil.hesapAskida = null; }); duyur(t('hesap.acildi')); ciz(kok, b); return; }
+        if (p.hesapAskida) { hesabiAc(); duyur(t('hesap.acildi')); ciz(kok, b); return; }
         if (!(await onayIste({ baslik: t('hesap.askiBaslik'), metin: t('hesap.askiMetin'), evet: t('hesap.askiyaAl'), hayir: t('genel.vazgec') }))) return;
-        degistir((v) => { v.profil.hesapAskida = Date.now(); }); duyur(t('hesap.askiyaAlindi'), 5000); ciz(kok, b);
+        hesabiAskiyaAl(); duyur(t('hesap.askiyaAlindi'), 5000); ciz(kok, b);
       } }, h('span', { class: 'ayr-satir-etiket' }, t(p.hesapAskida ? 'hesap.yenidenAc' : 'hesap.askiyaAl')), ikon(p.hesapAskida ? 'oynat' : 'saat', 18)),
     ),
 
