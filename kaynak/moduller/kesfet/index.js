@@ -241,7 +241,7 @@ function eslesmeKarti(sonuc, b, { sonraki, kapat, yenile }) {
 
 function testsizCiz(kok, b) {
   yerlestir(kok,
-    basBant(htUst({ baslik: t('ht.ortakBul') })),
+    basBant(htUst({ sol: benDugmesi(b), baslik: t('ht.ortakBul') })),
     afisKaydirici([
       { ikon: 'baglanti', renk: 4, etiket: t('pano.nasilEtiket'), baslik: t('pano.nasilBaslik'), alt: t('pano.nasilAlt') },
       { ikon: 'kilit', renk: 2, etiket: t('pano.guvenEtiket'), baslik: t('pano.guvenBaslik'), alt: t('pano.guvenAlt') },
