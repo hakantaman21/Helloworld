@@ -419,6 +419,22 @@ export function htIkon(icerik, etiket, onClick, { rozet } = {}) {
 }
 
 // Yatay kayan metin sekmeleri (Güncel / Senin için ...) veya hap sekmeler (tur: 'hap').
+// v0.26.0 Ortak süzgeç satırı (Sohbet, Bağlan, Dil Anları): temel haplar + "Gelişmiş" açılır alanı (içeriği çağıran verir).
+// gelismisSayi: gelişmiş alanda seçili süzgeç sayısı (düğmede rozet). Açık/kapalı durumu durum nesnesinde saklanır.
+export function suzgecSatiri({ secenekler, aktif, degisti, etiket, gelismis = null, durum = {}, gelismisSayi = 0 }) {
+  const alan = gelismis ? h('div', { class: 'b-suzgec-gelismis', hidden: !durum.acik }, gelismis) : null;
+  const dugme = gelismis ? h('button', { type: 'button', class: 'b-suzgec-gelismis-dugme', 'aria-expanded': String(Boolean(durum.acik)) },
+    ikon('suzgec', 16), t('suzgec.gelismis'), gelismisSayi ? h('span', { class: 'b-suzgec-sayi' }, String(gelismisSayi)) : null) : null;
+  if (dugme) dugme.addEventListener('click', () => { durum.acik = alan.hidden; alan.hidden = !durum.acik; dugme.setAttribute('aria-expanded', String(durum.acik)); });
+  return h('div', { class: 'b-suzgec-satir' }, h('div', { class: 'b-suzgec-ust' }, sekmeler(secenekler, aktif, degisti, { tur: 'hap', etiket }), dugme), alan);
+}
+// Açılıp kapanan hap (gelişmiş süzgeçlerde tek seçenek).
+export function acKapaHap(etiket, acik, degisti) {
+  const d = h('button', { type: 'button', class: 'b-suzgec-hap', 'aria-pressed': String(Boolean(acik)) }, etiket);
+  d.addEventListener('click', () => { const yeni = d.getAttribute('aria-pressed') !== 'true'; d.setAttribute('aria-pressed', String(yeni)); degisti(yeni); });
+  return d;
+}
+
 export function sekmeler(secenekler, aktif, degisti, { tur = 'metin', etiket } = {}) {
   const kap = h('div', { class: `b-sekmeler b-sekmeler-${tur}`, role: 'group', 'aria-label': etiket || null });
   secenekler.forEach(([id, ad]) => {

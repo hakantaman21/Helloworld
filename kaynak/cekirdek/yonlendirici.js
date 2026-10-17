@@ -69,7 +69,11 @@ function ciz() {
   try {
     aktifTemizle = ekran.ciz(kap, { p: parametreler, git, geri }) || null;
     // Ana sekmelerde (alt menülü ekranlar) en üstte ince marka şeridi.
-    if (kap.classList.contains('b-ekran-gezinmeli')) kap.prepend(markaSeridi());
+    if (kap.classList.contains('b-ekran-gezinmeli')) {
+      // v0.26.0 Hesap askıdaysa ana sekmelerin en üstünde açıkça söylenir; tek dokunuşla ayara gidilir.
+      if (veri.profil.hesapAskida) kap.prepend(h('button', { type: 'button', class: 'b-aski-serit', onClick: () => git('/ayarlar?grup=gizlilik') }, h('b', null, t('hesap.seritBaslik')), h('span', null, t('hesap.seritAlt'))));
+      kap.prepend(markaSeridi());
+    }
     // v0.4.0: HelloTalk düzeninde her ana sekme kendi ince üst çubuğunu (htUst) çizer; ortak şerit kaldırıldı.
   } catch (hata) {
     console.error('[yonlendirici]', id, hata);

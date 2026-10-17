@@ -16,8 +16,9 @@ import { SURUM } from './surum.js';
 import { tarihAnahtari } from './zaman.js';
 import { OZELLIKLER, YENILIKLER, HARITA_GRUPLARI } from '../veri/rehber-dizini.js';
 import { testModuAcik, testSohbetOzetleri, okunmamis, okunduIsaretle, testAnlari, anYorumlari, testProfiliHam } from './test-modu.js';
-import { gelenIstekler, arkadasHaberleri, arkadasYap, istekReddet } from './arkadaslik.js';
+import { gelenIstekler, arkadasHaberleri, arkadasYap, istekReddet, kisidenAl } from './arkadaslik.js';
 import { vadesiGelenler } from './hafiza.js';
+import { uygulamaBildirimiUygun } from './iletisim-saatleri.js';
 
 const GUN = 86400000;
 const YENI_SURESI = 14 * GUN;
@@ -31,6 +32,7 @@ const KATEGORILER = [
   { kimlik: 'ogrenme', ikon: 'hafiza', renk: 3 },
   { kimlik: 'hesap', ikon: 'profil', renk: 6 },
   { kimlik: 'uygulama', ikon: 'ipucu', renk: 5 },
+  { kimlik: 'destek', ikon: 'kalem', renk: 2 },
 ];
 const AYAR_VARSAYILAN = { ipucu: true, hatirlatma: true, bilgi: true, oneri: true };
 
@@ -128,7 +130,8 @@ function kutuKaynagiEkle(kat, fn) { KAYNAKLAR.push({ kat, fn }); }
 const mesajMetni = (m) => (m.metin ? String(m.metin) : m.foto || m.fotolar ? t('rehber.kutu.foto') : '…');
 kutuKaynagiEkle('mesaj', () => {
   const sinir = Date.now() - 7 * GUN;
-  return testSohbetOzetleri().filter((o) => o.son.kim === 'o' && Number(o.son.zaman || 0) > sinir).map((o) => ({
+  // v0.26.0: kişinin mesaj bildirimi kapalıysa ya da arkadaşlık askıdaysa kutuya düşmez (sohbet yine Sohbetler'de durur).
+  return testSohbetOzetleri().filter((o) => o.son.kim === 'o' && Number(o.son.zaman || 0) > sinir && kisidenAl(o.profil.kimlik, 'mesaj')).map((o) => ({
     kaynak: `mesaj:${o.profil.kimlik}:${o.son.zaman}`, profil: o.profil, baslik: o.profil.ad, metin: mesajMetni(o.son), zaman: Number(o.son.zaman),
     yol: `/mesaj?k=${o.profil.kimlik}`, okundu: !okunmamis(o), okunduYap: () => okunduIsaretle(o.profil.kimlik),
   }));
@@ -239,6 +242,7 @@ const PROFIL_ALANLARI = [
   { alan: 'ilgi', ikon: 'yildiz', dolu: (p) => (p.ilgiler || []).length > 0, yol: '/ayarlar?bolum=ilgi' },
   { alan: 'hedef', ikon: 'hedef', dolu: (p) => Boolean(p.dilHedefi), yol: '/ayarlar?grup=dil' },
   { alan: 'kapak', ikon: 'gorunum', dolu: (p) => Boolean(p.kapak), yol: '/profil' },
+  { alan: 'dogumGunu', ikon: 'hediye', dolu: (p) => Boolean(p.dogumGunu), yol: '/ayarlar?grup=profil' },
 ];
 const HATIRLATMA_ARALIGI = 2 * GUN;
 const ALAN_EN_COK = 3;
@@ -284,6 +288,8 @@ function planla() {
 
     // Günde en çok bir sistem mesajı; kullanıcı bir şeyi bugün zaten aldıysa sessiz kal.
     if (y.plan.sonSistem === bugun) return;
+    // v0.26.0: uygulama bildirimleri kullanıcının seçtiği saat/gün dışında üretilmez; hesap askıdaysa hiç üretilmez.
+    if (!uygulamaBildirimiUygun(simdi) || p.hesapAskida) return;
     const ekle = (oge) => { y.kutu = [kutuOgesi(oge), ...y.kutu].slice(0, KUTU_SINIRI); y.plan = { ...y.plan, sonSistem: bugun }; };
 
     // 2) Eksik profil bilgisi hatırlatması (zorunlu alanlar hariç; kurulumdan 1 gün sonra; 2 günde bir; alan başına en çok 3 kez).

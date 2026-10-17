@@ -37,6 +37,8 @@ import telaffuz from './moduller/telaffuz/index.js';
 import mesaj from './moduller/mesaj/index.js';
 import rehberModulu from './moduller/rehber/index.js';
 import ekosistemModulu from './moduller/ekosistem/index.js';
+import destekModulu from './moduller/destek/index.js';
+import { kutlamalariBaslat } from './cekirdek/kutlamalar.js';
 import { ikonBaslat } from './cekirdek/ikon.js';
 import { ekosistemBaslat } from './cekirdek/ekosistem.js';
 import { rehberBaslat, kutuyaEkle } from './cekirdek/rehber.js';
@@ -56,13 +58,15 @@ function uygulamayiBaslat() {
   if (!al().profil.ayarlar.arayuzDili) degistir((v) => { v.profil.ayarlar.arayuzDili = tarayiciDili(); });
   dilAyarla(al().profil.ayarlar.arayuzDili);
   temaBaslat();
-  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar, mesaj, telaffuz, rehberModulu, ekosistemModulu]) kaydet(m, KAPALI_MODULLER);
+  for (const m of [karsilama, sohbetler, kesfet, dilAnlari, bugun, arama, karne, senaryolar, hafiza, gelisim, ayarlar, mesaj, telaffuz, rehberModulu, ekosistemModulu, destekModulu]) kaydet(m, KAPALI_MODULLER);
   // v0.20.0 İkon paketi ve benzersiz ikonlar; uygulama ailesi üyelik paylaşımı.
   ikonBaslat();
   ekosistemBaslat();
   // v0.19.0 Rehberlik: ilk ekran çizilmeden önce dinlemeye başlar (ilk ekran da kullanım sayılır, tur/yenilikler açılabilir).
   rehberBaslat();
   rehberArayuzBaslat();
+  // v0.26.0 Hoş geldin, doğum günü ve üyelik yıldönümü mesajları (bildirim saatleri içinde).
+  kutlamalariBaslat();
 
   dinle('arama:geldi', ({ tur }) => {
     if (MESGUL_EKRANLAR.includes(aktifEkran())) return;

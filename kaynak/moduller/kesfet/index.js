@@ -95,10 +95,19 @@ function suzgecUygula(liste, f) {
   });
 }
 
+// v0.26.0 Bağlan'da serbest arama: ad, kullanıcı adı, ülke, meslek, ilgi alanı ve tanıtımda (Türkçe karakter duyarsız).
+let kesfetArama = '';
+const katlaMetin = (m) => String(m || '').toLocaleLowerCase('tr').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u0131/g, 'i');
+function aramaUyar(k) {
+  if (!kesfetArama) return true;
+  const alan = [k.ad, k.kullanici, yerel(k.ulke), yerel(k.meslek), yerel(k.tanitim), ...(k.ilgi || []).map((i) => yerel(i))].join(' ');
+  return katlaMetin(alan).includes(katlaMetin(kesfetArama));
+}
+
 function suz(liste, d, f) {
   const ben = al().profil;
   const benimSeviye = SEVIYE_SIRASI.indexOf(ben.seviye);
-  let sonuc = suzgecUygula(liste, f);
+  let sonuc = suzgecUygula(liste, f).filter(aramaUyar);
   if (d.dil === 'hedef') sonuc = sonuc.filter((k) => k.anaDil === (ben.ogrenilenDil || 'en'));
   if (d.dil === 'benimDilim') sonuc = sonuc.filter((k) => ben.anaDil && k.ogrenilenDil === ben.anaDil);
   if (d.sekme === 'cevrimici') sonuc = sonuc.filter((k) => aktiflik(k).cevrimici);
@@ -348,6 +357,8 @@ function ciz(kok, b) {
     }),
     sekmeler([['tum', t('kesfet.suzgec.tum')], ['uygun', t('ht.sanaUygun')], ['cevrimici', t('ht.cevrimici')], ['yeni', t('ht.yeni')], ['arkadaslar', gelenIstekler().length ? `${t('arkadas.arkadaslar')} · ${gelenIstekler().length}` : t('arkadas.arkadaslar')]], durum.sekme, (id) => { durum.sekme = id; kullanildi(`kesfet:${id}`); yenile(); }, { etiket: t('kesfet.filtreBaslik') })),
     pano,
+    h('label', { class: 'b-arama-satir kft-ara' }, ikon('ara', 18),
+      h('input', { type: 'search', value: kesfetArama, placeholder: t('kesfet.araOrnek'), 'aria-label': t('kesfet.ara'), onInput: (e) => { kesfetArama = e.currentTarget.value.trim(); yenile(); } })),
     sekmeler([
       ['hedef', t(`diller.${ben.ogrenilenDil || 'en'}`)],
       ['benimDilim', t('ht.dilimiOgrenen', { dil: t(`diller.${ben.anaDil || 'tr'}`) })],

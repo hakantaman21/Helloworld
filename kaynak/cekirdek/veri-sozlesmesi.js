@@ -23,6 +23,8 @@ export const EK = {
   aramaDurumu: sozluk(NESNE),
   tamamlananSenaryolar: sozluk(null),
   senaryoIst: sozluk(NESNE),
+  destek: { kayitlar: dizi(NESNE) },
+  giden: dizi(NESNE),
   demoArsivi: { hafiza: dizi(NESNE), gorusmeler: dizi(NESNE), gunluk: sozluk(NESNE) },
   rehber: { kutu: dizi(NESNE), durum: sozluk(NESNE), kullanim: sozluk(NESNE), gorulenIpucu: dizi(METIN), sonAramalar: dizi(METIN) },
   test: {

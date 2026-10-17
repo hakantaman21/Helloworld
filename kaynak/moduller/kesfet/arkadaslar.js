@@ -1,13 +1,33 @@
 // v0.17.0 Bağlan › Arkadaşlar sekmesi: gelen istekler, arkadaş haberleri (tercihlere göre), arkadaşlarım, bekleyen istekler.
 // Yalnız TEST kişileri; haberler test verisidir ve TEST rozeti taşır.
-import { h, ikon, testAvatar, testEtiketi, goreliZaman, durumKutusu } from '../../cekirdek/arayuz.js';
+import { h, ikon, testAvatar, testEtiketi, goreliZaman, durumKutusu, yerlestir } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { duyur } from '../../cekirdek/duyuru.js';
 import { gelenIstekler, arkadasYap, istekReddet, arkadasHaberleri, arkadaslarim, haberTercihleri, gonderilenIstekler } from '../../cekirdek/arkadaslik.js';
 import { testProfili } from '../../cekirdek/test-modu.js';
 import { TEST_PROFILLERI } from '../../veri/test-profiller.js';
+import { rehberDestekleniyor, rehberdenSec, smsAdresi, davetPaylas, davetAdresi } from '../../cekirdek/davet.js';
 
-const HABER_IKON = { an: 'kalem', seviye: 'yildiz', seri: 'saat', foto: 'kamera', ilgi: 'begen', yardim: 'ampul' };
+const HABER_IKON = { an: 'kalem', seviye: 'yildiz', seri: 'saat', foto: 'kamera', ilgi: 'begen', yardim: 'ampul', dogumgunu: 'yildiz', guvende: 'kalkan' };
+
+// v0.26.0 Davet: rehberden çoklu seçim → SMS; ya da paylaşım menüsü / bağlantıyı kopyala.
+function davetBolumu() {
+  const metin = () => t('davet.smsMetin', { adres: davetAdresi() });
+  const sonuc = h('div', { class: 'kft-davet-sonuc' });
+  return h('section', { class: 'b-platform kft-ark-bolum kft-davet' },
+    h('h2', { class: 'b-grup-etiket kft-ark-baslik' }, h('span', null, t('davet.baslik'))),
+    h('p', { class: 'b-kucuk' }, t('davet.rehberAciklama')),
+    h('div', { class: 'kft-davet-dugmeler' },
+      rehberDestekleniyor() ? h('button', { type: 'button', class: 'b-dugme b-dugme-ana', onClick: async () => {
+        const kisiler = await rehberdenSec();
+        if (!kisiler.length) return;
+        yerlestir(sonuc, h('p', { class: 'b-kucuk' }, t('davet.secildi', { n: kisiler.length, adlar: kisiler.slice(0, 3).map((k) => k.ad).join(', ') })),
+          h('a', { class: 'b-dugme b-dugme-ana', href: smsAdresi(kisiler.map((k) => k.tel), metin()) }, ikon('mektup', 18), t('davet.smsGonder', { n: kisiler.length })));
+      } }, ikon('kisi', 18), t('davet.rehberden')) : null,
+      h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve', onClick: async () => { const r = await davetPaylas(t('davet.metin')); if (r === 'kopyalandi') duyur(t('davet.kopyalandi')); } }, ikon('paylas', 18), t('davet.dugme'))),
+    sonuc,
+    h('p', { class: 'b-kucuk kft-davet-not' }, rehberDestekleniyor() ? t('davet.gizlilik') : t('davet.rehberYok')));
+}
 
 export function arkadasPaneli(b, yenile, satir) {
   const gelen = gelenIstekler();
@@ -34,6 +54,8 @@ export function arkadasPaneli(b, yenile, satir) {
 
     h('section', { class: 'kft-ark-bolum-duz' }, baslik(t('arkadas.arkadaslarim'), arkadaslar.length),
       arkadaslar.length ? arkadaslar.map((k) => satir(k)) : durumKutusu('bos', t('arkadas.arkadasYok'))),
+
+    davetBolumu(),
 
     bekleyen.length ? h('section', { class: 'b-platform kft-ark-bolum' }, baslik(t('arkadas.bekleyenIstekler'), bekleyen.length),
       bekleyen.map((p) => h('div', { class: 'kft-ark-istek' }, testAvatar(p, 36), h('span', { class: 'kft-ark-bekle' }, h('b', null, p.ad), h('small', null, t('arkadas.yanitBekleniyor')))))) : null,

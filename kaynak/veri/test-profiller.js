@@ -120,14 +120,17 @@ export const TEST_YORUM_KALIPLARI = [
 // v0.17.0 TEST sosyal verisi (gerçek değil): her test kişisinin gizlilik ayarları, kendi arkadaşları, sana arkadaşlık
 // isteği gönderip göndermediği ve arkadaşı olunca görülecek haberleri. Haber türleri: an · seviye · seri · foto · ilgi · yardim.
 // Gizlilik değerleri: 'herkes' | 'arkadaslar' | 'kimse'; okundu: true/false. Karşılıklılık kuralları cekirdek/arkadaslik.js'te.
+// v0.26.0 TEST: bir kişinin doğum günü her zaman "bugün" (özellik test modunda görünsün diye; gerçek veri değildir).
+const bugunAyGun = (() => { const d = new Date(); return `${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
+
 export const TEST_SOSYAL = {
-  'test-lucia': { gizlilik: { arkadasListesi: 'herkes', sonGorulme: 'herkes', okundu: true }, arkadaslar: ['test-tom', 'test-marie', 'test-emma'],
+  'test-lucia': { gizlilik: { arkadasListesi: 'herkes', sonGorulme: 'herkes', okundu: true }, guvende: { saatOnce: 5 }, arkadaslar: ['test-tom', 'test-marie', 'test-emma'],
     haberler: [
       { tur: 'an', saatOnce: 3, an: 'an-2', metin: { tr: 'Yeni bir Dil Anı paylaştı: ev yapımı paella', en: 'Shared a new Moment: homemade paella' } },
       { tur: 'seri', saatOnce: 9, metin: { tr: '30 günlük seriye ulaştı', en: 'Reached a 30-day streak' } },
       { tur: 'foto', saatOnce: 30, metin: { tr: 'Kapak fotoğrafını değiştirdi', en: 'Changed the cover photo' } },
     ] },
-  'test-kenji': { gizlilik: { arkadasListesi: 'arkadaslar', sonGorulme: 'herkes', okundu: false }, arkadaslar: ['test-yuna', 'test-priya'],
+  'test-kenji': { gizlilik: { arkadasListesi: 'arkadaslar', sonGorulme: 'herkes', okundu: false }, bildirimSaatleri: { bas: '09:00', bit: '22:00' }, arkadaslar: ['test-yuna', 'test-priya'],
     haberler: [
       { tur: 'yardim', saatOnce: 1, an: 'an-1', metin: { tr: 'Bir cümlesi için düzeltme istiyor', en: 'Is asking for a correction on a sentence' } },
       { tur: 'seviye', saatOnce: 20, metin: { tr: 'A1 seviyesinden A2 seviyesine geçti', en: 'Moved up from A1 to A2' } },
@@ -146,7 +149,7 @@ export const TEST_SOSYAL = {
     haberler: [{ tur: 'an', saatOnce: 26, an: 'an-6', metin: { tr: 'Telaffuz üzerine bir soru paylaştı', en: 'Shared a pronunciation question' } }] },
   'test-carlos': { gizlilik: { arkadasListesi: 'herkes', sonGorulme: 'herkes', okundu: true }, arkadaslar: ['test-amira'],
     haberler: [{ tur: 'yardim', saatOnce: 5, an: 'an-3', metin: { tr: 'İş görüşmesi cümleleri için yardım istiyor', en: 'Is asking for help with job interview sentences' } }] },
-  'test-emma': { gizlilik: { arkadasListesi: 'herkes', sonGorulme: 'herkes', okundu: true }, arkadaslar: ['test-lucia', 'test-tom'],
+  'test-emma': { gizlilik: { arkadasListesi: 'herkes', sonGorulme: 'herkes', okundu: true }, dogumGunu: bugunAyGun, arkadaslar: ['test-lucia', 'test-tom'],
     haberler: [
       { tur: 'yardim', saatOnce: 2, an: 'an-7', metin: { tr: 'Türkçe cümlesi için düzeltme istiyor', en: 'Is asking for a correction on her Turkish' } },
       { tur: 'seviye', saatOnce: 70, metin: { tr: 'Türkçede A2 seviyesine geçti', en: 'Moved up to A2 in Turkish' } },
