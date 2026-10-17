@@ -307,6 +307,7 @@ export default {
   depo: {
     yazilamadi: 'Your last change could not be saved on this device (storage full or blocked). Back up via Settings › Privacy and data › Download my data.',
     bozukKayit: 'The previous save could not be read, so the app started fresh. The damaged save was kept separately, not deleted.',
+    onarildi: 'Part of your save was damaged; that part was reset to its default and everything else was kept. The save from before the repair was kept separately.',
   },
   kesfet: {
     suzgec: { tum: 'All', anaDil: 'Native English', seviye: 'Near my level', degisim: 'Learning Turkish' },
@@ -346,6 +347,9 @@ export default {
     reddet: 'Not now',
     ac: 'Answer',
     ertelendi: 'Okay, I’ll call you again in 10 minutes.',
+    kacirildiBaslik: 'Missed call · {koc}',
+    kacirildiMetin: { sabah: 'Your morning talk is waiting. Tap when you’re ready and we’ll start.', aksam: 'Your evening talk is waiting. Tap when you’re ready and we’ll start.' },
+    ertelemeBitti: 'You’ve used today’s snoozes, so I won’t call again today. Start whenever you’re ready from Practice.',
     reddedildi: 'Okay. You can start any time from the Practice tab.',
     bildirimBaslik: '{koc} is calling',
     bildirimMetin: { sabah: 'Your morning call is ready. Tap to answer.', aksam: 'Your evening call is ready. Tap to answer.' },
@@ -461,7 +465,7 @@ export default {
   senaryolar: {
     sureDk: '~{n} min', basari: 'Success criterion',
     baslik: 'Scenarios',
-    alt: '9 areas of life, including technology and AI, from A1 to B2',
+    alt: '{alan} areas of life, including technology and AI · levels {enAlt}–{enUst}',
     seviyeEtiket: 'Level',
     oneri: 'COACH’S PICK',
     oneriAlt: '{alan} · {seviye} · 5 min · Coach: {rol}',

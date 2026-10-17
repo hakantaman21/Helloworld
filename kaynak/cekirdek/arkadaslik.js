@@ -8,6 +8,7 @@
 // Okundu bilgisi: iki taraf da açıksa okundu (mavi ✓✓) görünür; biri kapalıysa ikisi de yalnız "iletildi"yi görür.
 import { al, degistir } from './depo.js';
 import { TEST_PROFILLERI, TEST_SOSYAL } from '../veri/test-profiller.js';
+import { kisiErisilebilir, erisilebilirler } from './test-erisim.js';
 
 export const SABIT_SINIRI = 3;
 export const GIZLILIK_SECENEKLERI = ['herkes', 'arkadaslar', 'kimse'];
@@ -31,12 +32,13 @@ export function haberTercihiAyarla(tur, acik) {
 }
 
 // ---- Arkadaşlık durumu ----
-export function arkadaslarim() { return tst().arkadaslar || []; }
-export function arkadasMi(kimlik) { return arkadaslarim().includes(kimlik); }
+// v0.24.0: listeler erişim politikasından geçer (test modu kapalıyken ya da kişi engelliyken görünmez);
+// arkadaşlık ilişkisinin kendisi (arkadasMi) kayıtta korunur — test modu yeniden açılınca geri gelir.
+export function arkadaslarim() { return erisilebilirler(tst().arkadaslar); }
+export function arkadasMi(kimlik) { return (tst().arkadaslar || []).includes(kimlik); }
 export function gelenIstekler() {
-  const t = tst();
-  const red = t.reddedilenIstekler || [];
-  return TEST_PROFILLERI.filter((p) => (TEST_SOSYAL[p.kimlik] || {}).istekGonderir && !arkadasMi(p.kimlik) && !red.includes(p.kimlik) && !(t.engelli || []).includes(p.kimlik));
+  const red = tst().reddedilenIstekler || [];
+  return TEST_PROFILLERI.filter((p) => (TEST_SOSYAL[p.kimlik] || {}).istekGonderir && kisiErisilebilir(p.kimlik) && !arkadasMi(p.kimlik) && !red.includes(p.kimlik));
 }
 // 'arkadas' | 'gonderildi' | 'gelen' | 'yok'
 export function arkadasDurumu(kimlik) {
@@ -103,17 +105,14 @@ export function okunduGorunur(kimlik) { return benimGizlilik().okundu !== false 
 export function onunArkadaslari(kimlik) {
   const liste = [...((TEST_SOSYAL[kimlik] || {}).arkadaslar || [])];
   if (arkadasMi(kimlik)) liste.unshift('ben');
-  const engelli = tst().engelli || [];
-  return liste.filter((k) => !engelli.includes(k));
+  return erisilebilirler(liste);
 }
 
 // ---- Arkadaş haberleri (yalnız arkadaşların; tercihlere göre süzülür; en yeni üstte) ----
 export function arkadasHaberleri() {
   const tercih = haberTercihleri();
-  const engelli = tst().engelli || [];
   const simdi = Date.now();
   return arkadaslarim()
-    .filter((k) => !engelli.includes(k))
     .flatMap((k) => ((TEST_SOSYAL[k] || {}).haberler || []).map((hb, i) => ({ ...hb, kimlik: `${k}-${i}`, kisi: TEST_PROFILLERI.find((p) => p.kimlik === k), zaman: simdi - hb.saatOnce * 3600000 })))
     .filter((hb) => hb.kisi && tercih[hb.tur])
     .sort((a, b) => b.zaman - a.zaman);

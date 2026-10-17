@@ -8,6 +8,8 @@ import { aktifDil } from './metin.js';
 import { ilgiKimligi } from '../veri/ilgi-alanlari.js';
 import { sonGorulmeGorunurluk } from './arkadaslik.js';
 import { duzeltmeleriBul, tumunuDuzelt } from './dil/duzeltme-motoru.js';
+import { kisiErisilebilir, erisilebilirler } from './test-erisim.js';
+import { yeniKimlik } from './kimlik.js';
 
 const MESAJ_SINIRI = 200;
 
@@ -28,13 +30,12 @@ export function testModuAyarla(acik) {
 }
 
 export function testProfilleri() {
-  const engelli = test().engelli || [];
-  return testModuAcik() ? TEST_PROFILLERI.filter((p) => !engelli.includes(p.kimlik)) : [];
+  return erisilebilirler(TEST_PROFILLERI, (p) => p.kimlik);
 }
 
 // v0.16.0 Gerçek engelleme: engellenen kişi yalnız listeden değil, doğrudan adresle de açılmaz (profil, mesaj, selam).
 export function testProfili(kimlik) {
-  if (!testModuAcik() || (test().engelli || []).includes(kimlik)) return null;
+  if (!kisiErisilebilir(kimlik)) return null;
   return TEST_PROFILLERI.find((p) => p.kimlik === kimlik) || null;
 }
 
@@ -74,7 +75,10 @@ export function testSohbetOzetleri() {
     .sort((a, b) => b.son.zaman - a.son.zaman);
 }
 
+// v0.24.0: yazma noktasında erişim politikası — engellenen kişiye/kişiden (gecikmeli otomatik yanıt dahil) ya da test modu
+// kapalıyken mesaj kaydedilmez. Döner: kaydedildi mi.
 export function testMesajEkle(kimlik, mesaj) {
+  if (!kisiErisilebilir(kimlik)) return false;
   degistir((v) => {
     const t = { ...test() };
     t.sohbetler = { ...(t.sohbetler || {}) };
@@ -84,6 +88,7 @@ export function testMesajEkle(kimlik, mesaj) {
     t.sohbetler[kimlik] = s;
     v.test = t;
   });
+  return true;
 }
 
 // Gönderim öncesi düzeltme önerisi (isteğe bağlı): yerel kurallarla, ağ çağrısı yok.
@@ -121,9 +126,8 @@ const SAAT = 3600000;
 // Akış: kullanıcının kendi gönderileri + test gönderileri, en yeni üstte. Engellenen yazarlar gizlenir.
 export function testAnlari() {
   if (!testModuAcik()) return [];
-  const engelli = test().engelli || [];
   const simdi = Date.now();
-  const tohum = TEST_ANLARI.filter((a) => !engelli.includes(a.yazar)).map((a) => ({ ...a, zaman: simdi - a.saatOnce * SAAT, profil: TEST_PROFILLERI.find((p) => p.kimlik === a.yazar) }));
+  const tohum = erisilebilirler(TEST_ANLARI, (a) => a.yazar).map((a) => ({ ...a, zaman: simdi - a.saatOnce * SAAT, profil: TEST_PROFILLERI.find((p) => p.kimlik === a.yazar) }));
   const benim = (test().anlar || []).map((a) => ({ ...a, benim: true }));
   return [...benim, ...tohum].sort((a, b) => b.zaman - a.zaman);
 }
@@ -138,13 +142,14 @@ export function anBegen(kimlik) {
   testGuncelle((t) => { const b = new Set(t.begeniler || []); if (b.has(kimlik)) b.delete(kimlik); else b.add(kimlik); t.begeniler = [...b]; });
 }
 
+// v0.24.0: hazır ve sonradan kaydedilen yorumlar aynı erişim süzgecinden geçer (engellenen yazar hiçbir yerde görünmez).
 export function anYorumlari(kimlik) {
-  const engelli = test().engelli || [];
-  const hazir = (TEST_HAZIR_YORUMLAR[kimlik] || []).filter((y) => !engelli.includes(y.yazar)).map((y) => ({ ...y, hazir: true }));
-  return [...hazir, ...((test().yorumlar || {})[kimlik] || [])];
+  const hazir = (TEST_HAZIR_YORUMLAR[kimlik] || []).map((y) => ({ ...y, hazir: true }));
+  return erisilebilirler([...hazir, ...((test().yorumlar || {})[kimlik] || [])], (y) => y.yazar);
 }
 
 export function anYorumEkle(kimlik, yorum) {
+  if (!kisiErisilebilir(yorum.yazar)) return;
   testGuncelle((t) => { t.yorumlar = { ...(t.yorumlar || {}) }; t.yorumlar[kimlik] = [...(t.yorumlar[kimlik] || []), { ...yorum, zaman: Date.now() }].slice(-50); });
 }
 
@@ -155,7 +160,7 @@ export function anDuzelt(kimlik, kaynak, dogru) {
 }
 
 export function anPaylas(metin, fotolar = []) {
-  const kimlik = 'benim-' + Date.now().toString(36);
+  const kimlik = yeniKimlik('benim');
   testGuncelle((t) => { t.anlar = [{ kimlik, yazar: 'ben', metin: String(metin).slice(0, 500), fotolar: fotolar.slice(0, 9), zaman: Date.now() }, ...(t.anlar || [])].slice(0, 50); });
   return kimlik;
 }
@@ -164,7 +169,6 @@ export function anPaylas(metin, fotolar = []) {
 export function anOtomatikYorum(kimlik) {
   const sira = (test().anlar || []).length;
   const k = TEST_YORUM_KALIPLARI[sira % TEST_YORUM_KALIPLARI.length];
-  if ((test().engelli || []).includes(k.yazar)) return;
   anYorumEkle(kimlik, { yazar: k.yazar, metin: k.metin, otomatik: true });
 }
 

@@ -1,3 +1,18 @@
+## 0.24.0 — 17.10.2026 · Dış sınamaların (ChatGPT, Grok, Gemini) doğrulanan bulguları
+
+Üç asistanın v0.22.0 sınama raporu güncel koda karşı yeniden çalıştırıldı; tekrar eden her bulgu kökünden düzeltildi.
+
+- **Veri sözleşmesi** (`cekirdek/veri-sozlesmesi.js`): açılış, geri yükleme ve sekmeler arası eşitleme aynı kurala bağlandı. Sürümü güncel ama bozuk kayıt (ör. `profil: null`) artık uygulamayı düşürmez; bozuk bölüm varsayılana döner, geri kalan veri korunur, ham kayıt `kk:bozuk`'ta saklanır ve kullanıcıya söylenir. Geri yüklemede iç içe alanlar da denetlenir (`hafiza: null`, `test.sohbetler.x.mesajlar: null` gibi yedekler reddedilir, istisna fırlatmaz).
+- **İki sekme:** bir sekmenin değişikliği diğerininkini ezmez; her yazma diskteki güncel veriye uygulanır, `storage` olayıyla bellek eşitlenir.
+- **Erişim politikası** (`cekirdek/test-erisim.js`): engellenen kişi ve test modu kapalıyken test kişileri her okuma ve yazma noktasında aynı kuralla süzülür: sonradan yazılan yorumlar, arkadaşlık istekleri, bildirim kutusu, gecikmeli otomatik yanıtlar.
+- **Benzersiz kimlik** (`cekirdek/kimlik.js`): aynı milisaniyede üretilen kimlikler çakışmaz (gönderi, hata kaydı, görüşme, fotoğraf).
+- **Koç oturumu:** bitmiş oturuma gelen geç/çift cevap sağlayıcıya iletilmez (adaptör düzeyinde, her sağlayıcı için).
+- **Arama ve erteleme:** erteleme günlük iki aramalık sınırı geri açmaz; her arama için günde en çok iki erteleme. Uygulama kapalıyken vakti geçen arama açılışta ekranın önüne geçmez, bildirimlerde "Cevapsız arama" olur.
+- **Misafir girişi:** pencere kapanırken yapılan yönlendirme artık karşılama ekranına geri zıplamaz (yönlendirici, katmanın geçmiş kaydı geri alınırken yönlendirmeyi bekletir; bütün pencereler için). Kurulum bitince karşılamaya dönülmez.
+- **Düzeltme motoru:** fiil tabloları kuralla üretilir (düzenli fiiller, 3. tekil biçimler); "Did you went", "arrive to … yesterday", bağlaçla gelen öznesiz fiil ("…and buy bread") yakalanır; düşünce fiillerine dokunulmaz ("I think he left yesterday" doğru kalır).
+- **İletişim süzgeci:** yıl/yıl aralığı, tarih, ondalık, sürüm numarası ve tutar telefon sayılmaz.
+- Senaryolar alt başlığı katalogdan hesaplanır (alan sayısı ve seviye aralığı; artık C1 dahil).
+
 ## 0.23.0 — 17.10.2026 · Önizlemede boş ekran düzeltmesi
 
 - Uygulama, tarayıcı geçmişinin yasak olduğu korumalı önizlemelerde (ör. Claude uygulamasındaki dosya önizlemesi) boş ekranda kalıp kırmızı `SecurityError` veriyordu. Yönlendirici artık bu durumda adresi bellekte tutar; gezinme, menü ve geri düğmesi çalışır. Böyle önizlemelerde kayıt yapılamaz; uygulama bunu bildirir.

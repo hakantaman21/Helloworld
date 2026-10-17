@@ -44,10 +44,41 @@ export function fotoIzni(mesajlar) {
 }
 
 // Telefon: en az 7 rakam (boşluk, tire, nokta, parantez ve + ayırıcı olabilir). E-posta: ad@alan.uzanti.
-const TELEFON = /(?:\+?\d[\s().-]*){7,}/;
+// v0.24.0: rakam dizisi bulunduktan sonra sayının türü ayırt edilir; telefon OLMAYAN sayılar engellenmez:
+// yıl ya da yıl aralığı (2019-2024, 1995 2018), tarih (17.10.2026, 2026-10-17), ondalık (3.1415926535),
+// sürüm numarası (1.22.0.3456), binlik ayırıcılı tutar (1.250.000). 15 rakamdan uzun diziler de telefon sayılmaz.
+const RAKAM_DIZISI = /\+?\d[\d\s().-]*\d/g;
 const EPOSTA = /[^\s@]+@[^\s@]+\.[a-z]{2,}/i;
+const yilMi = (g) => /^(19|20)\d\d$/.test(g);
+
+export function sayiTuru(aday) {
+  const ham = String(aday).trim();
+  const rakam = ham.replace(/\D/g, '');
+  if (rakam.length < 7) return 'kisa';
+  if (rakam.length > 15) return 'uzun';
+  if (ham.startsWith('+')) return 'telefon';
+  const gruplar = ham.split(/[\s().-]+/).filter(Boolean);
+  const ayiricilar = ham.replace(/[\d+]/g, '');
+  const yalnizNokta = /^\.+$/.test(ayiricilar);
+  if (gruplar.every(yilMi) && gruplar.length <= 3) return 'yil';
+  if (gruplar.length === 3) {
+    const [a, b, c] = gruplar;
+    const gunAy = (x, y) => +x >= 1 && +x <= 31 && +y >= 1 && +y <= 12;
+    if (c.length === 4 && yilMi(c) && a.length <= 2 && b.length <= 2 && (gunAy(a, b) || gunAy(b, a))) return 'tarih';
+    if (a.length === 4 && yilMi(a) && b.length <= 2 && c.length <= 2 && gunAy(c, b)) return 'tarih';
+  }
+  if (yalnizNokta && gruplar.length === 2) return 'ondalik';
+  if (yalnizNokta && gruplar.slice(1).some((g) => g.length === 1)) return 'surum';
+  if (/^[.,]+$/.test(ayiricilar) && gruplar[0].length <= 3 && gruplar.slice(1).every((g) => g.length === 3) && rakam.length < 10) return 'tutar';
+  return 'telefon';
+}
+
+export function telefonVar(metin) {
+  return (String(metin).match(RAKAM_DIZISI) || []).some((aday) => sayiTuru(aday) === 'telefon');
+}
+
 export function iletisimBilgisiVar(metin) {
-  return TELEFON.test(String(metin)) || EPOSTA.test(String(metin));
+  return telefonVar(metin) || EPOSTA.test(String(metin));
 }
 
 // baslangic: sohbetin ilk mesajının zamanı (eski mesajlar listeden düşse de saklanır).

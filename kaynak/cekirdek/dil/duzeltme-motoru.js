@@ -5,69 +5,112 @@
 
 const AP = '[\\x27\\u2019]';
 
-const GECMIS = {
-  go: 'went', goes: 'went', eat: 'ate', eats: 'ate', buy: 'bought', buys: 'bought', have: 'had', has: 'had',
-  see: 'saw', sees: 'saw', take: 'took', takes: 'took', come: 'came', comes: 'came', get: 'got', gets: 'got',
-  make: 'made', makes: 'made', drink: 'drank', drinks: 'drank', meet: 'met', meets: 'met', pay: 'paid', pays: 'paid',
-  sleep: 'slept', drive: 'drove', write: 'wrote', speak: 'spoke', find: 'found', give: 'gave', leave: 'left',
-  feel: 'felt', do: 'did', does: 'did', visit: 'visited', watch: 'watched', play: 'played', work: 'worked',
-  cook: 'cooked', walk: 'walked', study: 'studied', stay: 'stayed', call: 'called', want: 'wanted', like: 'liked',
-  need: 'needed', travel: 'traveled', is: 'was', am: 'was', are: 'were', wake: 'woke', run: 'ran', swim: 'swam',
+// v0.24.0 Fiil tabloları elle iki kez yazılmaz: düzensiz fiiller + düzenli fiiller listesinden geçmiş (GECMIS) ve
+// ters (YALIN) tablo kurallarla üretilir; 3. tekil (-s/-es/-ies) biçimleri de eklenir. Yeni fiil tek yere bir kez yazılır.
+// Bilerek DIŞARIDA: düşünce/aktarma fiilleri (think, know, hope, believe, remember, say, tell, hear…) — "I think he left
+// yesterday" doğru bir cümledir, "I thought" yapmak yanlış öğretir. Biçimi değişmeyenler (put, cut, read, let…) da yok.
+const DUZENSIZ = {
+  go: 'went', eat: 'ate', buy: 'bought', have: 'had', see: 'saw', take: 'took', come: 'came', get: 'got', make: 'made',
+  drink: 'drank', meet: 'met', pay: 'paid', sleep: 'slept', drive: 'drove', write: 'wrote', speak: 'spoke', find: 'found',
+  give: 'gave', leave: 'left', feel: 'felt', do: 'did', wake: 'woke', run: 'ran', swim: 'swam', begin: 'began',
+  bring: 'brought', catch: 'caught', choose: 'chose', forget: 'forgot', keep: 'kept', lose: 'lost', sell: 'sold',
+  send: 'sent', sit: 'sat', spend: 'spent', stand: 'stood', teach: 'taught', win: 'won', fly: 'flew', fall: 'fell',
+  sing: 'sang', become: 'became', build: 'built', ride: 'rode', wear: 'wore', break: 'broke', grow: 'grew', draw: 'drew',
 };
+const DUZENLI = ['arrive', 'live', 'love', 'move', 'start', 'finish', 'open', 'close', 'clean', 'help', 'ask', 'answer',
+  'listen', 'talk', 'try', 'use', 'wait', 'enjoy', 'learn', 'plan', 'stop', 'decide', 'invite', 'change', 'order', 'book',
+  'return', 'rent', 'miss', 'pass', 'hate', 'check', 'visit', 'watch', 'play', 'work', 'cook', 'walk', 'study', 'stay',
+  'call', 'want', 'like', 'need', 'travel', 'rain', 'dance', 'laugh', 'cry', 'carry', 'shop', 'chat', 'look', 'fix',
+  'borrow', 'join', 'explain', 'prepare', 'practice', 'practise', 'relax', 'repair', 'climb', 'visit', 'paint', 'pray'];
+const CIFT_UNSUZ = new Set(['stop', 'plan', 'shop', 'chat', 'prefer']);
 
-const YALIN = {
-  went: 'go', ate: 'eat', bought: 'buy', had: 'have', saw: 'see', took: 'take', came: 'come', got: 'get',
-  made: 'make', drank: 'drink', met: 'meet', paid: 'pay', slept: 'sleep', drove: 'drive', wrote: 'write',
-  spoke: 'speak', found: 'find', gave: 'give', left: 'leave', felt: 'feel', did: 'do', visited: 'visit',
-  watched: 'watch', played: 'play', worked: 'work', cooked: 'cook', walked: 'walk', studied: 'study',
-  stayed: 'stay', called: 'call', wanted: 'want', liked: 'like', needed: 'need', woke: 'wake', ran: 'run',
-};
-
-const UCUNCU_FIILLER = ['go', 'want', 'like', 'work', 'live', 'have', 'do', 'eat', 'drink', 'play', 'watch', 'need',
-  'love', 'study', 'read', 'make', 'take', 'get', 'come', 'know', 'think', 'speak', 'cook', 'drive', 'wake', 'sleep'];
+function duzenliGecmis(f) {
+  if (CIFT_UNSUZ.has(f)) return f + f.slice(-1) + 'ed';
+  if (f.endsWith('e')) return f + 'd';
+  if (/[^aeiou]y$/.test(f)) return f.slice(0, -1) + 'ied';
+  return f + 'ed';
+}
 
 function ucuncuTekilHali(fiil) {
   if (fiil === 'have') return 'has';
   if (fiil === 'do') return 'does';
   if (fiil === 'go') return 'goes';
-  if (/(ch|sh|ss|x)$/.test(fiil)) return fiil + 'es';
+  if (/(ch|sh|ss|x|o)$/.test(fiil)) return fiil + 'es';
   if (/[^aeiou]y$/.test(fiil)) return fiil.slice(0, -1) + 'ies';
   return fiil + 's';
 }
 
-const GECMIS_ISARETI = /\b(yesterday|last (night|week|month|year|weekend|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|ago)\b/i;
-// Cümleyi yan cümlelere böler; geçmiş zaman işareti yalnız geçtiği yan cümleyi etkiler.
-// v0.16.0: although/though/whereas/while/unless/if de yan cümle sınırı ("I work today although I was sick yesterday" bozulmaz).
-const AYIRAC = /(\s*(?:,|;|\band\b|\bbut\b|\bso\b|\bbecause\b|\bthen\b|\balthough\b|\bthough\b|\bwhereas\b|\bwhile\b|\bunless\b|\bif\b)\s*)/i;
-function yanCumlelerde(c, fn) {
-  return c.split(AYIRAC).map((parca, i) => (i % 2 === 1 ? parca : fn(parca))).join('');
+const GECMIS = { is: 'was', am: 'was', are: 'were' };
+const YALIN = {};
+for (const [yalin, gecmis] of [...Object.entries(DUZENSIZ), ...DUZENLI.map((f) => [f, duzenliGecmis(f)])]) {
+  GECMIS[yalin] = gecmis;
+  GECMIS[ucuncuTekilHali(yalin)] = gecmis;
+  YALIN[gecmis] = yalin;
 }
 
-const OZNE = '(I|we|you|they|he|she|it|my (?:mother|father|mom|dad|friend|brother|sister|wife|husband|son|daughter|boss|teacher))';
+const UCUNCU_FIILLER = ['go', 'want', 'like', 'work', 'live', 'have', 'do', 'eat', 'drink', 'play', 'watch', 'need',
+  'love', 'study', 'read', 'make', 'take', 'get', 'come', 'know', 'think', 'speak', 'cook', 'drive', 'wake', 'sleep'];
+
+
+const GECMIS_ISARETI = /\b(yesterday|last (night|week|month|year|weekend|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|ago)\b/i;
+// Yan cümle sınırları (baglamliYanCumleler kullanır).
+// v0.16.0: although/though/whereas/while/unless/if de yan cümle sınırı ("I work today although I was sick yesterday" bozulmaz).
+const AYIRAC = /(\s*(?:,|;|\band\b|\bbut\b|\bso\b|\bbecause\b|\bthen\b|\balthough\b|\bthough\b|\bwhereas\b|\bwhile\b|\bunless\b|\bif\b)\s*)/i;
+
+const AILE = '(?:mother|father|mom|dad|friend|friends|brother|sister|wife|husband|son|daughter|boss|teacher|parents|family)';
+const OZNE = `(I|we|you|they|he|she|it|my ${AILE})`;
+// did/didn't ile özne arasına giren sahiplik: "Did your brother went" de yakalanır.
+const SORU_OZNESI = `(?:I|we|you|they|he|she|it|(?:my|your|his|her|our|their) ${AILE})`;
+// Geçmiş zaman bağlamı bağlaçla sonraki yan cümleye taşınır ("Yesterday I went there and buy bread" → bought);
+// zıtlık/koşul bildirenlerde (although, while, if…) ve şimdiki/gelecek zaman işareti olan yan cümlede taşınmaz.
+const BAGLAMI_TASIYAN = /^\s*(?:,|;|and|then|so|but|because)\s*$/i;
+const SIMDI_ISARETI = /\b(today|now|tomorrow|tonight|every|usually|always|often|nowadays|these days|next|at the moment)\b/i;
+const YARDIMCI_ONCESI = `(?<!\\b(?:did|do|does|didn${AP}t|can|will|would|could|should|must|might|let|to)\\s)`;
 
 const ING_YALIN = { going: 'go', eating: 'eat', drinking: 'drink', buying: 'buy', having: 'have', doing: 'do', seeing: 'see', getting: 'get', taking: 'take', watching: 'watch', playing: 'play' };
+
+// Yan cümleleri geçmiş zaman bağlamıyla dolaştırır. gecmis: bu yan cümle geçmişi anlatıyor mu; tasinan: bağlam
+// önceki yan cümleden mi geldi (kendi işareti yok). Present perfect (since/ever/have + ortaç) bağlamı keser:
+// "I have not seen him since yesterday." doğrudur; "had" yapmak yanlış öğretir (v0.13.0).
+const PERFECT = new RegExp(`\\b(have|has|haven${AP}t|hasn${AP}t)(\\s+not)?\\s+(been|\\w+ed|\\w+en|seen|done|gone|had|made|got|known|met|bought|left|lost|told|found|come|become|run|sent|spent|heard|said|read|written|eaten)\\b`, 'i');
+function baglamliYanCumleler(cumle, fn) {
+  const parcalar = cumle.split(AYIRAC);
+  let baglam = false;
+  for (let i = 0; i < parcalar.length; i += 2) {
+    const c = parcalar[i];
+    const tasinan = !GECMIS_ISARETI.test(c) && baglam && BAGLAMI_TASIYAN.test(parcalar[i - 1] || '') && !SIMDI_ISARETI.test(c);
+    const gecmis = (GECMIS_ISARETI.test(c) || tasinan) && !/\b(since|ever|never|already|yet|just)\b/i.test(c) && !PERFECT.test(c);
+    baglam = gecmis;
+    parcalar[i] = fn(c, { gecmis, tasinan });
+  }
+  return parcalar.join('');
+}
 
 export const KURALLAR = [
   {
     id: 'gecmis-zaman',
     aciklama: 'duzeltme.gecmisZaman',
     uygula(cumle) {
-      return yanCumlelerde(cumle, (c) => {
-      if (!GECMIS_ISARETI.test(c)) return c;
-      // v0.13.0: "since/for … ever/never/already/just" ya da have/has + ortaç (present perfect) varsa zamana dokunma.
-      // Örnek: "I have not seen him since yesterday." doğrudur; "had" yapmak yanlış öğretir.
-      if (/\b(since|ever|never|already|yet|just)\b/i.test(c)) return c;
-      if (new RegExp(`\\b(have|has|haven${AP}t|hasn${AP}t)(\\s+not)?\\s+(been|\\w+ed|\\w+en|seen|done|gone|had|made|got|known|met|bought|left|lost|told|found|come|become|run|sent|spent|heard|said|read|written|eaten)\\b`, 'i').test(c)) return c;
-      const desen = new RegExp(`(?<!\\b(?:did|do|does|didn${AP}t|can|will|would|could|should|must|might|let|to)\\s)\\b${OZNE}\\s+(\\w+)\\b`, 'gi');
-      return c.replace(desen, (tum, ozne, fiil) => {
-        const gecmis = GECMIS[fiil.toLowerCase()];
-        if (!gecmis) return tum;
-        if (/^(am|is|are)$/i.test(fiil)) {
-          const tekil = /^(I|he|she|it)$/i.test(ozne) || /^my /i.test(ozne);
-          return `${ozne} ${tekil ? 'was' : 'were'}`;
+      return baglamliYanCumleler(cumle, (c, { gecmis, tasinan }) => {
+        if (!gecmis) return c;
+        const desen = new RegExp(`${YARDIMCI_ONCESI}\\b${OZNE}\\s+(\\w+)\\b`, 'gi');
+        let yeni = c.replace(desen, (tum, ozne, fiil) => {
+          const g = GECMIS[fiil.toLowerCase()];
+          if (!g) return tum;
+          if (/^(am|is|are)$/i.test(fiil)) {
+            const tekil = /^(I|he|she|it)$/i.test(ozne) || /^my /i.test(ozne);
+            return `${ozne} ${tekil ? 'was' : 'were'}`;
+          }
+          return `${ozne} ${g}`;
+        });
+        // v0.24.0 Ortak özne: bağlaçtan sonra öznesiz gelen fiil (and buy bread / then go home) öncekinin zamanını alır.
+        if (tasinan) {
+          yeni = yeni.replace(/^(\s*)((?:also|then|later|finally)\s+)?(\w+)\b/i, (tum, bosluk, zarf, fiil) => {
+            const g = GECMIS[fiil.toLowerCase()];
+            return g && !/^(am|is|are)$/i.test(fiil) ? `${bosluk}${zarf || ''}${g}` : tum;
+          });
         }
-        return `${ozne} ${gecmis}`;
-      });
+        return yeni;
       });
     },
   },
@@ -75,9 +118,10 @@ export const KURALLAR = [
     id: 'did-yalin',
     aciklama: 'duzeltme.didGecmis',
     uygula(c) {
-      return c.replace(new RegExp(`\\b(didn${AP}t|did not|did)\\s+(\\w+)\\b`, 'gi'), (tum, did, fiil) => {
+      // v0.24.0: soru biçiminde özne araya girse de ("Did you went", "Didn't your sister came") yakalanır.
+      return c.replace(new RegExp(`\\b(didn${AP}t|did not|did)(\\s+${SORU_OZNESI})?(\\s+not)?\\s+(\\w+)\\b`, 'gi'), (tum, did, ozne, degil, fiil) => {
         const yalin = YALIN[fiil.toLowerCase()];
-        return yalin ? `${did} ${yalin}` : tum;
+        return yalin ? `${did}${ozne || ''}${degil || ''} ${yalin}` : tum;
       });
     },
   },
@@ -85,8 +129,8 @@ export const KURALLAR = [
     id: 'ucuncu-tekil',
     aciklama: 'duzeltme.ucuncuTekil',
     uygula(cumle) {
-      return yanCumlelerde(cumle, (c) => {
-      if (GECMIS_ISARETI.test(c)) return c;
+      return baglamliYanCumleler(cumle, (c, { gecmis }) => {
+      if (gecmis || GECMIS_ISARETI.test(c)) return c;
       const desen = new RegExp(`(?<!\\b(?:does|did|can|will|would|could|should|must|might|let|to|make|makes|help|helps)\\s)\\b(he|she|it|my (?:mother|father|mom|dad|friend|brother|sister|wife|husband|son|daughter|boss|teacher))\\s+(${UCUNCU_FIILLER.join('|')})\\b`, 'gi');
       return c.replace(desen, (tum, ozne, fiil) => `${ozne} ${ucuncuTekilHali(fiil.toLowerCase())}`);
       });

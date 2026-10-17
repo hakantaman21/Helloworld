@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.23.0 · `deneme`'de (Hakan onayı bekliyor). Canlıda v0.22.0 (`main`, helloworld-gules.vercel.app; PR #19, Hakan onayı 17.10.2026 13:19, Vercel üretim derlemesi başarılı). `deneme` = `main`. Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.24.0 · `deneme`'de (Hakan onayı bekliyor; v0.23.0 dahil). Canlıda v0.22.0 (`main`, helloworld-gules.vercel.app; PR #19, Hakan onayı 17.10.2026 13:19, Vercel üretim derlemesi başarılı). `deneme` = `main`. Canlıya alma yalnız Hakan onayıyla.
 - **v0.19–v0.21 notu:** Bu üç sürüm Hakan'a önce tek dosya olarak teslim edildi (ikinci Claude hesabı, depo erişimi yokken); v0.22.0'da kaynak ağacına aktarıldı. Ayrıntılı devir: aşağıdaki kayıtlar ve issue #1.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
@@ -17,6 +17,15 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.24.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026
+- **Neden:** Hakan (17.10): ChatGPT, Grok ve Gemini'nin v0.22.0 sanal kullanıcı sınamalarını derle, değerlendir, mimarimize uyarla.
+- **Yöntem:** Raporlar iddia olarak alındı, güncel koda karşı yeniden üretildi. ChatGPT'nin betikleri (core/extended/final-checks) v0.23.0'a karşı aynen koşuldu: 12 bulgunun hepsi tekrar etti. Grok/Gemini'nin misafir geri zıplaması tarayıcıda, gramer ve iletişim süzgeci bulguları motor düzeyinde üretildi. Düzeltmeden sonra aynı betikler yeniden koşuldu: kalan tek "başarısız" bilinçli (test modu kapalıyken test kişisine mesaj yazılmıyor).
+- **Ne:** yeni çekirdek modüller `veri-sozlesmesi.js` (açılış onarımı + sıkı geri yükleme; yeni koleksiyon eklerken `EK`'e bir satır), `test-erisim.js` (engel/test modu politikası tek yerde), `kimlik.js`; `depo.js` sekmeler arası eşitleme; `ai/adaptor.js` oturum kapanışı; `zamanlayici.js` erteleme ve cevapsız arama; `yonlendirici.js` katman geri alınırken yönlendirmeyi bekletme + kurulu kullanıcıda karşılamayı kapatma; `dil/duzeltme-motoru.js` kuralla üretilen fiil tabloları ve bağlam taşıma; `topluluk-kurallari.js` sayı türü ayrımı. `araclar/duzeltme-sinama.mjs`'ye yeni doğru/yanlış cümleler ve iletişim süzgeci örnekleri eklendi.
+- **Karar bekleyen (Hakan):** Bugün ekranının sadeleşmesi (Grok: üçe bölünsün), Karne'de "Hata Hafızama ekle" düğmesi (Gemini; demo dürüstlük ilkesiyle tartılmalı), ayarların "hazır görünüm + ince ayar" diye ikiye ayrılması (ChatGPT).
+- **Şema:** 19 (değişmedi; `aramaDurumu[gün].erteleme` alanı tembel eklenir). **Durum:** `deneme`'de.
 
 ## v0.23.0
 

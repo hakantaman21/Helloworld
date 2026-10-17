@@ -2,6 +2,7 @@
 // ve yalnız bu cihazda saklanır; sunucuya gönderilmez. En çok FOTO_SINIRI fotoğraf.
 // v0.14.0: resimler localStorage'da değil IndexedDB'de durur (kota). Profilde yalnız "mdy:<kimlik>" başvurusu tutulur;
 // açılışta hepsi belleğe alınır (medyaHazirla), ekran fotoAdresi() ile çizer. IndexedDB yoksa eski yol (veri adresi) sürer.
+import { yeniKimlik } from './kimlik.js';
 import { al, degistir } from './depo.js';
 
 const DB_ADI = 'helloworld-medya';
@@ -35,7 +36,7 @@ function islem(kip, fn) {
   });
 }
 async function medyaYaz(veri) {
-  const kimlik = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
+  const kimlik = yeniKimlik();
   const tamam = await islem('readwrite', (d) => d.put(veri, kimlik));
   if (!tamam) return veri;
   onbellek.set(kimlik, veri);

@@ -308,6 +308,7 @@ export default {
   depo: {
     yazilamadi: 'Son değişikliğin bu cihaza kaydedilemedi (depolama dolu ya da kapalı). Ayarlar › Gizlilik ve veriler › Verilerimi indir ile yedek al.',
     bozukKayit: 'Önceki kayıt okunamadı; uygulama temiz başladı. Bozuk kayıt silinmedi, ayrı saklandı.',
+    onarildi: 'Kaydının bir bölümü bozuktu; o bölüm varsayılana döndürüldü, geri kalan her şey korundu. Onarımdan önceki kayıt ayrı saklandı.',
   },
   kesfet: {
     suzgec: { tum: 'Tümü', anaDil: 'Ana dili İngilizce', seviye: 'Seviyeme yakın', degisim: 'Türkçe öğrenenler' },
@@ -347,6 +348,9 @@ export default {
     reddet: 'Şimdi değil',
     ac: 'Aç',
     ertelendi: 'Tamam, 10 dakika sonra tekrar arayacağım.',
+    kacirildiBaslik: 'Cevapsız arama · {koc}',
+    kacirildiMetin: { sabah: 'Sabah konuşman seni bekliyor. Uygun olduğunda dokun, hemen başlayalım.', aksam: 'Akşam konuşman seni bekliyor. Uygun olduğunda dokun, hemen başlayalım.' },
+    ertelemeBitti: 'Bugünkü erteleme hakkın doldu; bu aramayı bugün tekrar yapmayacağım. Hazır olunca Pratik’ten başlatabilirsin.',
     reddedildi: 'Tamam. Bugün kartından istediğin zaman başlayabilirsin.',
     bildirimBaslik: '{koc} arıyor',
     bildirimMetin: { sabah: 'Sabah araması hazır. Açmak için dokun.', aksam: 'Akşam araması hazır. Açmak için dokun.' },
@@ -462,7 +466,7 @@ export default {
   senaryolar: {
     sureDk: '~{n} dk', basari: 'Başarı ölçütü',
     baslik: 'Senaryolar',
-    alt: 'Teknoloji ve yapay zekâ dahil 9 yaşam alanı, A1’den B2’ye',
+    alt: 'Teknoloji ve yapay zekâ dahil {alan} yaşam alanı · {enAlt}–{enUst} seviyeleri',
     seviyeEtiket: 'Seviye',
     oneri: 'KOÇUN ÖNERİSİ',
     oneriAlt: '{alan} · {seviye} · 5 dk · Koç: {rol}',

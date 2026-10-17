@@ -27,7 +27,7 @@ export const gelenArama = ekran({
         h('button', { class: 'ara-gelen-kucuk', onClick: () => b.git(`/gorusme?tur=${tur}&yazili=1`, { degistir: true }) }, t('arama.yazili')),
         h('button', {
           class: 'ara-gelen-kucuk',
-          onClick: () => { ertele(tur); duyur(t('arama.ertelendi')); b.geri(); },
+          onClick: () => { duyur(t(ertele(tur) ? 'arama.ertelendi' : 'arama.ertelemeBitti')); b.geri(); },
         }, t('arama.ertele')),
       ),
       h('div', { class: 'ara-gelen-dugmeler' },
