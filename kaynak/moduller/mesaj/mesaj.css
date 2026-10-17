@@ -184,7 +184,7 @@
   .msj-alt-takip[data-durum="arkadas"] { color: var(--renk-iyi-metin); }
   .msj-alt-takip[data-durum="gonderildi"] { color: var(--renk-soluk); }
   /* v0.26.0 Kapakta yerel saat; güvende/askıda etiketleri; kişi tercihleri; iletişim saati şeridi */
-  .msj-kapak-saat { position: absolute; left: var(--bosluk-3); bottom: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--renk-zemin) 70%, transparent); color: var(--renk-murekkep); font-size: calc(13px * var(--yazi-olcek)); box-shadow: 0 2px 8px var(--renk-golge); }
+  .msj-kapak-saat { position: absolute; left: var(--bosluk-3); right: auto; bottom: 10px; width: max-content; max-width: calc(50% - 64px); overflow: hidden; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--renk-zemin) 70%, transparent); color: var(--renk-murekkep); font-size: calc(13px * var(--yazi-olcek)); box-shadow: 0 2px 8px var(--renk-golge); }
   .msj-kapak-saat b { font-size: calc(15px * var(--yazi-olcek)); }
   .msj-kapak-saat small { color: var(--renk-soluk); }
   .msj-guvende, .msj-askida { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; font-size: calc(12.5px * var(--yazi-olcek)); font-weight: 700; }
