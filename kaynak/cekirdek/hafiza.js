@@ -50,6 +50,28 @@ export function hafizayaEkle(kayitlar) {
   return eklenen;
 }
 
+// v0.24.0 Elle ekleme (Karne): kullanıcının KENDİ seçtiği düzeltme hafızaya girer. Demo koçta görüşme kanıtı
+// kendiliğinden yazılmaz (v0.3 dürüstlük kararı); ama kullanıcının bilerek seçtiği kalıbı tekrar etmek istemesi
+// ölçüm değil, kendi tercihidir. Elle eklenen kayıt 'karne-elle' kaynağıyla işaretlenir ve yalnız o kaldırılabilir.
+const ELLE = 'karne-elle';
+const ayniKayit = (h, tur, dogru) => h.durum === 'aktif' && h.tur === tur && String(h.dogru).toLowerCase() === String(dogru).toLowerCase();
+// 'yok' | 'elle' (buradan eklendi, geri alınabilir) | 'var' (başka yoldan zaten hafızada)
+export function hafizaDurumu(dogru, tur = 'gramer') {
+  const k = (al().hafiza || []).find((h) => ayniKayit(h, tur, dogru));
+  return !k ? 'yok' : k.kaynak === ELLE ? 'elle' : 'var';
+}
+// Döner: yeni durum ('elle' | 'yok' | 'var').
+export function hafizayaElleDegistir({ dogru, kullanici, seviye, kuralId, baglam = null, tur = 'gramer' }) {
+  const durum = hafizaDurumu(dogru, tur);
+  if (durum === 'var') return 'var';
+  if (durum === 'elle') {
+    degistir((v) => { v.hafiza = v.hafiza.filter((h) => !(ayniKayit(h, tur, dogru) && h.kaynak === ELLE)); });
+    return 'yok';
+  }
+  hafizayaEkle([kayitOlustur({ tur, dogru, kullanici, baglam, seviye, kaynak: ELLE, kuralId })]);
+  return 'elle';
+}
+
 export function vadesiGelenler(bugun = tarihAnahtari()) {
   return al().hafiza.filter((k) => k.durum === 'aktif' && k.sonrakiTekrar <= bugun);
 }

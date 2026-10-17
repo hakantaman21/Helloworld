@@ -1,4 +1,22 @@
 @layer moduller {
+  /* v0.24.0 Günün planı: Pratik'in en üstünde tek baskın eylem */
+  .bgn-plan { display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 22px; background: linear-gradient(165deg, var(--renk-yuzey-ust), var(--renk-yuzey)); box-shadow: inset 0 1px 0 var(--renk-kabartma-isik), inset 0 0 0 1px var(--renk-cizgi), 0 10px 22px var(--renk-golge); }
+  .bgn-plan-selam { margin: 0; font-size: calc(13px * var(--yazi-olcek)); color: var(--renk-soluk); }
+  .bgn-plan-selam b { color: var(--renk-murekkep); }
+  .bgn-plan-ust { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+  .bgn-plan-etiket { display: inline-flex; align-items: center; gap: 6px; font-size: calc(12px * var(--yazi-olcek)); font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--renk-baslik); }
+  .bgn-plan-sayac { font-size: calc(12px * var(--yazi-olcek)); font-weight: 700; color: var(--renk-soluk); }
+  .bgn-plan-baslik { margin: 0; font-size: calc(21px * var(--yazi-olcek)); line-height: 1.2; }
+  .bgn-plan-alt { margin: 0; font-size: calc(14px * var(--yazi-olcek)); color: var(--renk-soluk); }
+  .bgn-plan-adimlar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 4px; }
+  .bgn-plan-adim { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 48px; padding: 0 6px; border: 0; border-radius: var(--kose-tam); background: var(--renk-yuzey-ikinci); color: var(--renk-soluk); font: inherit; font-size: calc(13px * var(--yazi-olcek)); font-weight: 700; cursor: pointer; box-shadow: inset 0 0 0 1px var(--renk-cizgi); }
+  .bgn-plan-adim-isaret { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--renk-yuzey); font-size: calc(12px * var(--yazi-olcek)); box-shadow: inset 0 0 0 1px var(--renk-cizgi-guclu); }
+  .bgn-plan-adim[data-durum="tamam"] { color: var(--renk-iyi-metin); background: var(--renk-iyi-acik); }
+  .bgn-plan-adim[data-durum="tamam"] .bgn-plan-adim-isaret { background: var(--renk-iyi); color: var(--renk-yuzey); box-shadow: none; }
+  .bgn-plan-adim[data-durum="siradaki"] { color: var(--renk-vurgu-acik-metin); background: var(--renk-vurgu-acik); box-shadow: inset 0 0 0 2px var(--renk-vurgu); }
+  .bgn-plan-adim[data-durum="siradaki"] .bgn-plan-adim-isaret { background: var(--renk-vurgu); color: var(--renk-vurgu-uzerinde); box-shadow: none; }
+  .bgn-plan-adim:focus-visible { outline: 2px solid var(--renk-vurgu); outline-offset: 2px; }
+  .bgn-plan-dugme { margin-top: 4px; }
   .bgn-oge-metin { display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0; }
   .bgn-oge-baslik { font-size: calc(15px * var(--yazi-olcek)); font-weight: 700; }
   .bgn-siradaki { font-size: calc(12px * var(--yazi-olcek)); font-weight: 800; color: var(--renk-vurgu-metin); }

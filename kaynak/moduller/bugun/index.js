@@ -2,7 +2,7 @@
 import { kutuDugmesi } from '../../cekirdek/rehber-arayuz.js';
 import './bugun.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d, htUst, testAvatar, sekmeler, afisKaydirici, testEtiketi, enUsteKaydir, ustBaslik } from '../../cekirdek/arayuz.js';
+import { h, ikon, altGezinme, yerlestir, yzEtiketi, ikon3d, htUst, testAvatar, sekmeler, testEtiketi, enUsteKaydir, ustBaslik } from '../../cekirdek/arayuz.js';
 import { benDugmesi } from '../../cekirdek/yan-menu.js';
 import { testModuAcik, testModuAyarla, testProfilleri, aktiflik } from '../../cekirdek/test-modu.js';
 import tumSenaryolar from '../../veri/senaryolar/index.js';
@@ -28,20 +28,36 @@ function alanAdi(kimlik) {
   return alan ? t(alan.metin) : '';
 }
 
-function donguOgesi({ baslik, alt, durum, onClick }) {
-  const daireSinifi = durum === 'tamam' ? 'b-ikon-daire b-ikon-daire-iyi' : durum === 'siradaki' ? 'b-ikon-daire b-ikon-daire-vurgu' : 'b-ikon-daire';
-  const ikonAdi = durum === 'tamam' ? 'onay' : durum === 'siradaki' ? 'oynat' : 'saat';
-  return h('button', {
-    class: `bgn-satir${durum === 'siradaki' ? ' bgn-satir-vurgu' : ''}`,
-    type: 'button',
-    onClick,
-  },
-    h('span', { class: daireSinifi }, ikon(ikonAdi, 18, 2.5)),
-    h('span', { class: 'bgn-oge-metin' },
-      h('span', { class: 'bgn-oge-baslik' }, baslik),
-      h('span', { class: 'b-kucuk' }, alt),
-    ),
-    durum === 'siradaki' ? h('span', { class: 'bgn-siradaki' }, t('bugun.siradaki')) : null,
+// v0.24.0 Sade Pratik: günün planı tek kartta, sayfanın en üstünde. Sıradaki adım tek baskın eylemdir ("Şimdi başla");
+// üç adım (sabah · senaryo · akşam) kartın içinde küçük adımlar olarak durur, her biri ayrıca başlatılabilir.
+// Yarım kalan konuşma varsa kartın asıl eylemi odur. Eskiden bu bilgi sayfanın en altındaki "Günün döngüsü"ndeydi.
+function planKarti({ v, gun, sira, oneri, vadesi, yarim, baslat, senaryoyaGit, git }) {
+  const ayar = v.profil.ayarlar;
+  const ADIMLAR = ['sabah', 'senaryo', 'aksam'];
+  const tamamSayisi = ADIMLAR.filter((a) => gun[a]).length;
+  let baslik; let alt; let eylem; let dugme = t('bugun.plan.basla');
+  if (yarim) { baslik = t('bugun.devamBaslik'); alt = t('bugun.devamAlt', { baslik: yarim.baslik }); eylem = () => git(`/gorusme?${yarim.sorgu}&devam=1`); dugme = t('bugun.plan.devam'); }
+  else if (sira === 'sabah') { baslik = t('bugun.sabahBaslik'); alt = t('bugun.bekliyor', { saat: ayar.sabahSaati }); eylem = () => baslat('sabah'); }
+  else if (sira === 'senaryo') { baslik = yerel(oneri.baslik); alt = t('bugun.senaryoAlt', { alan: alanAdi(oneri.alan) }); eylem = senaryoyaGit; }
+  else if (sira === 'aksam') { baslik = t('bugun.aksamBaslik'); alt = t('bugun.aksamAlt', { saat: ayar.aksamSaati, n: Math.min(vadesi.length, 3) }); eylem = () => baslat('aksam'); }
+  else { baslik = t('bugun.plan.bittiBaslik'); alt = t('bugun.siradaMetin.tamam'); eylem = senaryoyaGit; dugme = t('bugun.plan.serbest'); }
+  const durumu = (a) => (gun[a] ? 'tamam' : !yarim && sira === a ? 'siradaki' : 'bekliyor');
+  return h('section', { class: 'bgn-plan', 'aria-labelledby': 'bgn-plan-baslik' },
+    h('p', { class: 'bgn-plan-selam' },
+      h('b', null, t(`bugun.selam.${gunBolumu()}`, { ad: v.profil.ad })), ' · ',
+      new Date().toLocaleDateString(aktifDil() === 'tr' ? 'tr-TR' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }),
+      ' · ', t('bugun.seviye', { s: v.profil.seviye })),
+    h('div', { class: 'bgn-plan-ust' },
+      h('span', { class: 'bgn-plan-etiket' }, yzEtiketi(), t('bugun.plan.baslik')),
+      h('span', { class: 'bgn-plan-sayac' }, t('bugun.plan.ilerleme', { n: tamamSayisi }))),
+    h('h2', { class: 'bgn-plan-baslik', id: 'bgn-plan-baslik' }, baslik),
+    h('p', { class: 'bgn-plan-alt' }, alt),
+    h('div', { class: 'bgn-plan-adimlar', role: 'list' }, ADIMLAR.map((a, i) => h('button', {
+      type: 'button', role: 'listitem', class: 'bgn-plan-adim', 'data-durum': durumu(a),
+      'aria-label': `${t(`bugun.plan.adim.${a}`)} · ${t(`bugun.plan.durum.${durumu(a)}`)}`,
+      onClick: () => (a === 'senaryo' ? senaryoyaGit() : baslat(a)),
+    }, h('span', { class: 'bgn-plan-adim-isaret', 'aria-hidden': 'true' }, gun[a] ? ikon('onay', 14, 3) : String(i + 1)), t(`bugun.plan.adim.${a}`)))),
+    h('button', { type: 'button', class: 'b-dugme b-dugme-ana bgn-plan-dugme', onClick: eylem }, ikon('oynat', 18, 2.5), dugme),
   );
 }
 
@@ -69,20 +85,6 @@ function ciz(kok, b) {
   const testler = testModuAcik() ? testProfilleri() : [];
   // v0.12.0: konu odaları tüm senaryolardan üretilir; yaşam alanına göre süzülür (Günlük, Seyahat, İş, Sağlık, Teknoloji ve YZ…).
   const ODALAR = tumSenaryolar.map((s, i) => ({ id: s.kimlik, alan: s.alan, seviye: s.seviye, baslik: yerel(s.baslik), renk: (i % 6) + 1 }));
-  const odayaGit = (o) => b.git(`/gorusme?tur=senaryo&id=${o.id}`);
-  let odaSira = ODALAR.findIndex((o) => o.seviye === v.profil.seviye);
-  if (odaSira < 0) odaSira = 0;
-  const hizliOda = h('div', { class: 'bgn-hizli-oda' });
-  function hizliOdaCiz() {
-    const o = ODALAR[odaSira % ODALAR.length];
-    yerlestir(hizliOda,
-      h('span', { class: 'bgn-hizli-etiket' }, t('odalar.hizliEtiket')),
-      h('b', { class: 'bgn-hizli-baslik' }, o.baslik, ' · ', o.seviye),
-      h('div', { class: 'bgn-hizli-eylem' },
-        h('button', { type: 'button', class: 'bgn-hizli-degistir', 'aria-label': t('odalar.degistir'), onClick: () => { odaSira += 1; hizliOdaCiz(); } }, ikon('degis', 20)),
-        h('button', { type: 'button', class: 'b-dugme b-dugme-ana bgn-hizli-katil', onClick: () => odayaGit(o) }, ikon('mikrofon', 18), t('odalar.hizliKatil'))));
-  }
-  hizliOdaCiz();
   // v0.21.0: "Tümü"nde her kategori bir yatay şerit (ekranda iki kare kart; kaydırarak seç). "Genişlet":
   //   Tümü seçiliyken → kategori tam sayfa açılır (/odalar?alan=…), geniş sohbet kartlarıyla;
   //   tek kategori seçiliyken → senaryolar şeridin yerine alta geniş kartlar olarak açılır ("Daralt" ile kapanır).
@@ -115,15 +117,6 @@ function ciz(kok, b) {
   odaListeCiz();
   // Üç sekme (HelloTalk Ses · Canlı · Öğren karşılığı): AI sohbet · Gerçek sohbet · Öğren.
   const pratikSekmeleri = sekmeler([['ai', t('pratik.sekme.ai')], ['gercek', t('pratik.sekme.gercek')], ['ogren', t('pratik.sekme.ogren')]], pratikSekme, (id) => { pratikSekme = id; pratikSekmeGoster(); enUsteKaydir(); }, { etiket: t('gezinme.pratik') });
-
-  // En üstte kayan tanıtım afişleri: uygulamanın kendi özelliklerini tanıtır, dokununca ilgili yere götürür.
-  const afisler = afisKaydirici([
-    { ikon: 'telaffuz', renk: 1, etiket: t('pratik.afis.1.etiket'), baslik: t('pratik.afis.1.baslik'), alt: t('pratik.afis.1.alt'), dugme: t('pratik.afis.1.dugme'), git: senaryoyaGit },
-    { ikon: 'baglanti', renk: 4, etiket: t('pratik.afis.2.etiket'), baslik: t('pratik.afis.2.baslik'), alt: t('pratik.afis.2.alt'), dugme: t('pratik.afis.2.dugme'), git: () => b.git('/kesfet') },
-    { ikon: 'kitap', renk: 3, etiket: t('pratik.afis.3.etiket'), baslik: t('pratik.afis.3.baslik'), alt: t('pratik.afis.3.alt'), dugme: t('pratik.afis.3.dugme'), git: () => b.git('/gelisim') },
-    { ikon: 'anlar', renk: 6, etiket: t('pratik.afis.4.etiket'), baslik: t('pratik.afis.4.baslik'), alt: t('pratik.afis.4.alt'), dugme: t('pratik.afis.4.dugme'), git: () => b.git('/dil-anlari') },
-    { ikon: 'kupa', renk: 5, etiket: t('pratik.afis.5.etiket'), baslik: t('pratik.afis.5.baslik'), alt: t('pratik.afis.5.alt'), dugme: t('pratik.afis.5.dugme'), git: () => b.git('/gelisim') },
-  ], { etiket: t('pratik.afisEtiket') });
 
   // Gerçek sohbet: şu an aktif dil ortakları (test modunda TEST rozetli sanal kullanıcılar), renkli 2 sütunlu kartlar.
   const aktifler = testler.slice().sort((x, y) => aktiflik(x).dk - aktiflik(y).dk).slice(0, 6);
@@ -164,14 +157,6 @@ function ciz(kok, b) {
   );
   function pratikSekmeGoster() { kok.querySelectorAll('[data-psekme]').forEach((c) => { c.hidden = c.dataset.psekme !== pratikSekme; }); }
 
-  let siradaMetni;
-  if (sira === 'sabah') siradaMetni = t('bugun.siradaMetin.sabah', { saat: ayar.sabahSaati });
-  else if (sira === 'senaryo') siradaMetni = t('bugun.siradaMetin.senaryo', { ad: yerel(oneri.baslik) });
-  else if (sira === 'aksam') siradaMetni = t('bugun.siradaMetin.aksam', { saat: ayar.aksamSaati });
-  else siradaMetni = t('bugun.siradaMetin.tamam');
-
-  const durumu = (tur) => (gun[tur] ? 'tamam' : sira === tur ? 'siradaki' : 'bekliyor');
-
   yerlestir(kok, 
     htUst({
       sol: benDugmesi(b),
@@ -179,11 +164,7 @@ function ciz(kok, b) {
       sag: [h('span', { class: 'bgn-seri', title: t('bugun.seri', { n: seri }) }, ikon3d('seri', 22), String(seri)), kutuDugmesi(b.git)],
     }),
     pratikSekmeleri,
-    afisler,
-    h('p', { class: 'bgn-selam' },
-      h('b', null, t(`bugun.selam.${gunBolumu()}`, { ad: v.profil.ad })), ' · ',
-      new Date().toLocaleDateString(aktifDil() === 'tr' ? 'tr-TR' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }),
-      ' · ', t('bugun.seviye', { s: v.profil.seviye })),
+    planKarti({ v, gun, sira, oneri, vadesi, yarim, baslat, senaryoyaGit, git: b.git }),
     h('nav', { class: 'b-uygulamalar bgn-uygulamalar', 'aria-label': t('bugun.yollarBaslik') },
       [['senaryo', t('ht.merkez.senaryolar'), () => b.git('/senaryolar'), 1, 0],
         ['telaffuz', t('ht.merkez.telaffuz'), () => b.git('/telaffuz'), 5, 0],
@@ -197,47 +178,14 @@ function ciz(kok, b) {
     ogrenBolumu,
     h('section', { class: 'bgn-odalar', 'aria-labelledby': 'bgn-oda-baslik' },
       h('div', { class: 'bgn-dongu-ust' }, h('h2', { class: 'bgn-dongu-baslik', id: 'bgn-oda-baslik' }, t('odalar.baslik')), h('span', { class: 'b-kucuk' }, t('odalar.alt'))),
-      hizliOda,
       sekmeler([['tum', t('sohbetler.tumFiltre')], ...alanlar.filter((a) => ODALAR.some((o) => o.alan === a.kimlik)).map((a) => [a.kimlik, t(a.metin)])], odaDurumu.alan, (id) => { odaDurumu.alan = id; odaListeCiz(); }, { tur: 'hap', etiket: t('odalar.kategori') }),
       odaListe,
       h('p', { class: 'b-kucuk bgn-oda-not' }, yzEtiketi(), ' ', t('odalar.not')),
-    ),
-    yarim ? h('button', { class: 'bgn-satir bgn-satir-vurgu', type: 'button', onClick: () => b.git(`/gorusme?${yarim.sorgu}&devam=1`) },
-      h('span', { class: 'b-ikon-daire b-ikon-daire-vurgu' }, ikon('oynat', 18, 2.5)),
-      h('span', { class: 'bgn-oge-metin' },
-        h('span', { class: 'bgn-oge-baslik' }, t('bugun.devamBaslik')),
-        h('span', { class: 'b-kucuk' }, t('bugun.devamAlt', { baslik: yarim.baslik })),
-      ),
-    ) : null,
-    h('section', { class: 'bgn-dongu', 'aria-labelledby': 'bgn-dongu' },
-      h('div', { class: 'bgn-dongu-ust' },
-        h('h2', { class: 'bgn-dongu-baslik', id: 'bgn-dongu' }, t('bugun.donguBaslik')),
-        h('span', { class: 'b-kucuk', role: 'status' }, siradaMetni),
-      ),
-      donguOgesi({
-        baslik: t('bugun.sabahBaslik'),
-        alt: gun.sabah ? t('bugun.tamamlandi') : t('bugun.bekliyor', { saat: ayar.sabahSaati }),
-        durum: durumu('sabah'),
-        onClick: () => baslat('sabah'),
-      }),
-      donguOgesi({
-        baslik: gun.senaryo && bugunkuSenaryo() ? yerel(bugunkuSenaryo().baslik) : yerel(oneri.baslik),
-        alt: gun.senaryo ? t('bugun.tamamlandi') : t('bugun.senaryoAlt', { alan: alanAdi(oneri.alan) }),
-        durum: durumu('senaryo'),
-        onClick: senaryoyaGit,
-      }),
-      donguOgesi({
-        baslik: t('bugun.aksamBaslik'),
-        alt: gun.aksam ? t('bugun.tamamlandi') : t('bugun.aksamAlt', { saat: ayar.aksamSaati, n: Math.min(vadesi.length, 3) }),
-        durum: durumu('aksam'),
-        onClick: () => baslat('aksam'),
-      }),
     ),
     altGezinme('/bugun'),
   );
   [...kok.children].forEach((c) => {
     if (c === pratikSekmeleri || c.classList.contains('b-ht-ust') || c.classList.contains('b-gezinme')) return;
-    if (c === afisler) return;
     c.dataset.psekme = c === gercekBolumu ? 'gercek' : (c === ogrenBolumu || c.classList.contains('bgn-uygulamalar')) ? 'ogren' : 'ai';
   });
   pratikSekmeGoster();

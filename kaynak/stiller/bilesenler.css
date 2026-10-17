@@ -534,7 +534,7 @@
   .b-afis-noktalar i.b-afis-nokta-etkin { width: 18px; background: var(--renk-vurgu); }
 
   /* Yatay kayan kart sırası (Öğren bölümü) */
-  .b-kart-sirasi { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; margin: 0 calc(var(--bosluk-4) * -1); padding: 2px var(--bosluk-4) 8px; }
+  .b-kart-sirasi { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; margin: 0 calc(var(--bosluk-4) * -1); padding: 2px var(--bosluk-4) 8px; scroll-padding-inline: var(--bosluk-4); }
   .b-kart-sirasi::-webkit-scrollbar { display: none; }
 
   /* Sekme geçiş canlandırması (kaydırarak geçiş) */
