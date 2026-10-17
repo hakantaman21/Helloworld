@@ -242,6 +242,11 @@ const OZELLIKLER = [
 
 // Güncellemeden sonra bir kez gösterilen "Yenilikler" (en yeni başta). Yalnız kullanıcının önceki sürümünden yeni olanlar gösterilir.
 const YENILIKLER = [
+  { surum: '0.25.0', maddeler: [
+    { ozellik: 'bugun', metin: { tr: 'Pratik sadeleşti: günün planı en üstte tek kartta; sıradaki adım tek dokunuşla başlıyor.', en: 'Practice is simpler: today\'s plan sits on one card at the top; the next step starts with one tap.' } },
+    { ozellik: 'karne', metin: { tr: 'Karnedeki her düzeltmeyi "Hata Hafızama ekle" ile tekrar listene alabilirsin.', en: 'Add any report-card correction to your Error Memory with one tap.' } },
+    { ozellik: 'gorunum', metin: { tr: 'Görünüm ayarlarında canlı önizleme; ayrıntılar "İnce ayar"da, varsayılana dönüş geri alınabilir.', en: 'Live preview in Appearance; details live under "Fine-tune", and a reset can be undone.' } },
+  ] },
   { surum: '0.24.0', maddeler: [
     { ozellik: 'koc-arama', metin: { tr: 'Uygulama kapalıyken vakti geçen koç araması artık açılışta ekranın önüne geçmiyor; bildirimlerde "Cevapsız arama" olarak bekliyor. Erteleme günde en çok iki kez.', en: 'A coach call that came due while the app was closed no longer jumps in front when you open it; it waits in notifications as a missed call. Snooze works up to twice a day.' } },
     { ozellik: 'mesaj-oneri', metin: { tr: 'Düzeltme önerileri güçlendi: "Did you went", "arrive to", "…and buy bread" gibi kalıplar yakalanıyor.', en: 'Better correction tips: patterns like "Did you went", "arrive to" and "…and buy bread" are now caught.' } },

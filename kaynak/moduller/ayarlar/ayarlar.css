@@ -171,6 +171,14 @@
   .ayr-geri-yukle { position: relative; cursor: pointer; }
   .ayr-dosya { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
   .ayr-gelismis > .ayr-satir { margin-top: 6px; }
+  /* v0.24.0 Canlı görünüm önizlemesi (gerçek bileşenler; dokunulamaz) */
+  .ayr-onizleme { pointer-events: none; user-select: none; margin: var(--bosluk-2) 0 var(--bosluk-3); border-radius: var(--yaricap-buyuk, 18px); overflow: hidden; background: var(--renk-zemin); box-shadow: inset 0 0 0 1px var(--renk-cizgi); }
+  .ayr-onizleme-bant { margin: 0; }
+  .ayr-onizleme-govde { padding: var(--bosluk-3); }
+  .ayr-onizleme-kart { display: flex; flex-direction: row; align-items: center; gap: var(--bosluk-3); margin: 0; }
+  .ayr-onizleme-metin { flex: 1; min-width: 0; }
+  .ayr-onizleme-metin p { margin: 2px 0 0; }
+  .ayr-onizleme-dugme { flex: none; width: auto; padding: 0 18px; }
   .ayr-ozel-isaret { color: var(--renk-vurgu-metin); font-weight: 800; }
 }
 

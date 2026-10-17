@@ -5,7 +5,7 @@
 
 ## Şu anki durum
 
-- **Sürüm:** v0.24.0 · `deneme`'de (Hakan onayı bekliyor; v0.23.0 dahil). Canlıda v0.22.0 (`main`, helloworld-gules.vercel.app; PR #19, Hakan onayı 17.10.2026 13:19, Vercel üretim derlemesi başarılı). `deneme` = `main`. Canlıya alma yalnız Hakan onayıyla.
+- **Sürüm:** v0.25.1 · canlıya alınıyor (Hakan: "Yayına al", 17.10 17:22; Pratik sadeleştirmesi dahil). (`main`, helloworld-gules.vercel.app; PR #19, Hakan onayı 17.10.2026 13:19, Vercel üretim derlemesi başarılı). `deneme` = `main`. Canlıya alma yalnız Hakan onayıyla.
 - **v0.19–v0.21 notu:** Bu üç sürüm Hakan'a önce tek dosya olarak teslim edildi (ikinci Claude hesabı, depo erişimi yokken); v0.22.0'da kaynak ağacına aktarıldı. Ayrıntılı devir: aşağıdaki kayıtlar ve issue #1.
 - **Çalışma kuralı:** Yeni iş `deneme`'den açılan dalda; aynı dalda aynı anda tek yazan (issue #1, madde 4). Vercel ücretsiz planı günde 100 dağıtım: küçük işleri tek commit'te topla.
 - **Ortak çalışma:** https://github.com/hakantaman21/Helloworld/issues/1 · ayrıntılı ChatGPT devri: `DEVIR_2026-10-16_CHATGPT.md`.
@@ -17,6 +17,21 @@
 - **Açık kararlar:** arka uç hizmeti · yapay zekâ sağlayıcıları · paketler ve kotalar · sesli mesaj ve Y12 · yapay zekâ partnerin adı.
 
 ## Sürüm kayıtları
+
+## v0.25.1
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026
+- **Neden:** Hakan (17:22): senaryo şeridini yatay kaydırınca ekran diğer menüye kayıyor; karnede "Ölçülmedi" kutudan taşıyor; "Yayına al".
+- **Ne:** `arayuz.js` › `sekmeKaydirmaBaslat`: yatay kayabilen kabı ölçerek bulur (`yatayKayar`), sınıf listesi yalnız yazı alanları ve katmanlar için kalır. `karne` sözcük değerli ölçü kutusu (`krn-olcu-deger-metin`); `gelisim` değer kutularında taşma koruması.
+- **Şema:** 19. **Durum:** canlı (PR ile).
+
+## v0.25.0
+
+- **Yapan:** Claude (Opus 5.5, ikinci hesap), 17.10.2026
+- **Neden:** Hakan (17.10, 17:06): v0.24 canlıya; Bugün sadeleştirmesi için önizleme; Karne "Hata Hafızama ekle" Claude'un kararına; görünüm ayarları daha iyi ve kullanıcı dostuysa.
+- **Ne:** Pratik › AI sohbet en üstte tek plan kartı (`bugun/index.js` › `planKarti`), afişler, hızlı oda ve alttaki döngü listesi kaldırıldı · `b-kart-sirasi` kaydırma yakalaması düzeltildi · Karne'de elle hafızaya ekleme (`hafiza.js` › `hafizaDurumu`, `hafizayaElleDegistir`) · Ayarlar › Görünüm canlı önizleme + İnce ayar + geri alınabilir sıfırlama.
+- **Karar (Karne):** Demo kanıtının hafızaya kendiliğinden yazılmaması kuralı korunur; kullanıcının bilerek seçtiği düzeltme ölçüm değil kendi tercihidir, eklenir. Kaynak `karne-elle`, yalnız o geri alınabilir.
+- **Şema:** 19. **Durum:** `deneme`'de; Pratik değişikliği önizleme onayı bekliyor.
 
 ## v0.24.0
 

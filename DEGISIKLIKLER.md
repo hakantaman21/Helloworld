@@ -1,3 +1,17 @@
+## 0.25.1 — 17.10.2026 · Yatay şerit kaydırması sekme değiştiriyordu; karnede taşan değer
+
+- **Kaydırma çakışması (Hakan, 17:22):** Konu odalarının yatay şeridini kaydırırken alt menü sekmesi değişiyordu. Kök neden: sekme kaydırma hareketi yatay alanları elle tutulan bir sınıf listesinden tanıyordu; v0.21'de eklenen şerit listede yoktu. Artık dokunulan yerden yukarı doğru gerçekten yatay kayabilen bir kap (taşan içerik + `overflow-x: auto/scroll`) aranıyor; bundan sonra eklenecek her yatay şerit de kendiliğinden korunuyor.
+- **Karne:** "Ölçülmedi" gibi sözcük değerler büyük sayı yazısıyla kutudan taşıyordu; sözcük değerler daha küçük yazılıyor ve kutuya sığacak biçimde bölünüyor. Gelişim ekranındaki değer kutularına da aynı taşma koruması eklendi.
+
+## 0.25.0 — 17.10.2026 · Pratik sadeleşti, Karne'den hafızaya ekleme, görünüm ayarları
+
+Hakan'ın v0.24 kararları (17.10, 17:06): 2) Bugün sadeleştirmesi önizlemeyle gösterilsin, 3) Karne düğmesi Claude'un kararına, 4) daha iyi ve kullanıcı dostuysa görünüm ayarları.
+
+- **Pratik › AI sohbet:** en üstte tek "Bugünkü planın" kartı: selam, sıradaki adım, üç adım (sabah · senaryo · akşam) ve tek "Şimdi başla". Yarım kalan konuşma varsa kartın asıl eylemi o olur. Kaldırılanlar: tanıtım afişleri (rehber/kılavuz bu işi yapıyor), "Seviyene uygun · Şimdi katıl" satırı (plan kartıyla tekrar ediyordu), en alttaki "Günün döngüsü" listesi (karta taşındı). Konu odaları aynen kaldı.
+- **Yatay kart sıraları** (`b-kart-sirasi`): ilk kart ekranın sol kenarına yapışıyordu (kaydırma yakalaması iç boşluğu yok sayıyordu); ortak bileşende `scroll-padding-inline` ile bütün sıralar düzeldi.
+- **Karne › Hata Hafızama ekle:** her düzeltme kullanıcının kendi seçimiyle hafızaya eklenip çıkarılabilir (`hafiza.js` › `hafizayaElleDegistir`, kaynak `karne-elle`). Demo koç kanıtı yine kendiliğinden yazılmaz; demo notu buna göre güncellendi.
+- **Ayarlar › Görünüm:** üstte gerçek bileşenlerden canlı önizleme; ilk düzeyde tasarım paketi, tema, yazı boyutu; kart yerleşimi, ikon paketi ve renkler "İnce ayar"da; "Varsayılana döndür" tek dokunuşla geri alınabilir.
+
 ## 0.24.0 — 17.10.2026 · Dış sınamaların (ChatGPT, Grok, Gemini) doğrulanan bulguları
 
 Üç asistanın v0.22.0 sınama raporu güncel koda karşı yeniden çalıştırıldı; tekrar eden her bulgu kökünden düzeltildi.

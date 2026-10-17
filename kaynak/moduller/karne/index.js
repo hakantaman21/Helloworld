@@ -4,7 +4,7 @@ import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
 import { h, ikon, durumKutusu, farkCiz, yerlestir } from '../../cekirdek/arayuz.js';
 import { t, yerel } from '../../cekirdek/metin.js';
 import { al, degistir } from '../../cekirdek/depo.js';
-import { itirazEt } from '../../cekirdek/hafiza.js';
+import { itirazEt, hafizaDurumu, hafizayaElleDegistir } from '../../cekirdek/hafiza.js';
 import { siradaki } from '../../cekirdek/gunluk.js';
 import { oneriSenaryo } from '../../cekirdek/oneri.js';
 import { soyle, destek } from '../../cekirdek/ses/ses-hatti.js';
@@ -20,20 +20,42 @@ function telaffuzSeviyesi(puan) {
   return { sinif: 'krn-isaret-kotu', ikon: 'dalgaCizgi', etiket: t('karne.seviye.kotu') };
 }
 
+// v0.25.1: değer sayı değil de sözcükse ("Ölçülmedi", "Not measured") büyük sayı yazısıyla kutudan taşıyordu;
+// sözcük değerler daha küçük ve satıra sığacak biçimde yazılır (kutu ne kadar dar olursa olsun).
+const SAYISAL = /^[\d\s.,:%+\-–/]+(dk|sn|min|s|%)?$/i;
 function olcu(deger, etiket, not) {
+  const metin = !SAYISAL.test(String(deger).trim());
   return h('div', { class: 'b-kart krn-olcu' },
-    h('span', { class: 'krn-olcu-deger' }, deger),
+    h('span', { class: `krn-olcu-deger${metin ? ' krn-olcu-deger-metin' : ''}` }, deger),
     h('span', { class: 'b-kucuk' }, etiket),
     not ? h('span', { class: 'krn-olcu-not' }, not) : null,
   );
 }
 
-function duzeltmeKarti(d, kaldir) {
+// v0.24.0 Düzeltmeyi kullanıcı kendi seçimiyle Hata Hafızası'na ekler/çıkarır (aralıklı tekrara girer).
+function hafizaDugmesi(d, g) {
+  const dugme = h('button', { type: 'button', class: 'b-dugme b-dugme-cerceve krn-hafiza-dugme' });
+  const ciz = (durum) => {
+    dugme.setAttribute('aria-pressed', String(durum !== 'yok'));
+    dugme.disabled = durum === 'var';
+    yerlestir(dugme, ikon(durum === 'yok' ? 'arti' : 'onay', 18, 2.2), t(durum === 'yok' ? 'karne.hafizayaEkle' : 'karne.hafizada'));
+  };
+  ciz(hafizaDurumu(d.dogru));
+  dugme.addEventListener('click', () => {
+    const yeni = hafizayaElleDegistir({ dogru: d.dogru, kullanici: d.kullanici, seviye: g.seviye, baglam: g.baslik || null, kuralId: d.kuralId });
+    ciz(yeni);
+    duyur(t(yeni === 'elle' ? 'karne.hafizayaEklendi' : 'karne.hafizadanCikarildi'), 1800);
+  });
+  return dugme;
+}
+
+function duzeltmeKarti(d, kaldir, g) {
   const kart = h('article', { class: 'b-kart krn-duzeltme' },
     farkCiz(d.segmentler),
     h('p', { class: 'b-kucuk' }, t(d.aciklama)),
     h('div', { class: 'b-cipler' },
       destek.sentez ? h('button', { class: 'b-dugme', onClick: () => soyle(d.dogru, 'yavas') }, ikon('ses', 18), t('karne.tekrarEt')) : null,
+      hafizaDugmesi(d, g),
       h('button', {
         class: 'b-dugme b-dugme-cerceve',
         onClick: () => {
@@ -103,7 +125,7 @@ function ciz(kok, b) {
       return;
     }
     const gosterilen = hepsi ? liste : liste.slice(0, sinir);
-    yerlestir(duzeltmeListesi, ...gosterilen.map((d) => duzeltmeKarti(d, kaldir)));
+    yerlestir(duzeltmeListesi, ...gosterilen.map((d) => duzeltmeKarti(d, kaldir, g)));
     tumuDugmesi.hidden = liste.length <= sinir;
     tumuDugmesi.textContent = hepsi ? t('karne.azGoster') : t('karne.tumunuGor', { n: liste.length });
   }
@@ -172,7 +194,7 @@ function ciz(kok, b) {
       telaffuzIcerik,
     ),
     h('div', { class: g.eklenenHafiza ? 'b-kart krn-hafiza' : 'b-kart' },
-      g.eklenenHafiza ? t('karne.hafizaEklendi', { n: g.eklenenHafiza }) : t('karne.hafizaYok')),
+      g.eklenenHafiza ? t('karne.hafizaEklendi', { n: g.eklenenHafiza }) : t(demo ? 'karne.hafizaDemo' : 'karne.hafizaYok')),
     g.kulturelNot ? h('div', { class: 'b-kart' }, h('span', { class: 'b-ust-etiket' }, t('karne.kulturelNot')), h('p', null, yerel(g.kulturelNot)),
       g.kulturelNot.en ? defterDugmesi(g.kulturelNot.en, t('karne.kulturelNot'), t('karne.notuKaydet')) : null) : null,
     h('div', { class: 'b-yigin krn-son' },

@@ -2,7 +2,7 @@
 // her satır solda etiket, sağda denetim. Kontrol kullanıcıda (Anayasa bölüm 3): veriler indirilebilir ve silinebilir.
 import './ayarlar.css';
 import { ekran, DORT_DURUM } from '../../cekirdek/modul-kaydi.js';
-import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar, enUsteKaydir, testEtiketi } from '../../cekirdek/arayuz.js';
+import { h, ikon, ikon3d, ustBaslik, onayIste, yerlestir, dilCifti, logo, kurallarSeridi, benAvatar, enUsteKaydir, testEtiketi, basBant, htUst } from '../../cekirdek/arayuz.js';
 import { fotografEkle, medyaDisaAktar, medyaIceAktar, medyaSil } from '../../cekirdek/fotograf.js';
 import { benimGizlilik, gizlilikAyarla, GIZLILIK_SECENEKLERI, haberTercihleri, haberTercihiAyarla, HABER_TURLERI } from '../../cekirdek/arkadaslik.js';
 import { paketlerCiz, kilitGrubu } from './paketler.js';
@@ -98,6 +98,24 @@ function suzgecSecici(etiketId, aktif, degisti) {
       },
     }, h('span', { class: 'ayr-suzgec-ornek', 'aria-hidden': 'true' }, 'Aa'), t(`ayarlar.suzgecAd.${k}`))));
 }
+
+// v0.24.0 Canlı önizleme: gerçek bileşenlerden (üst bant, süzgeç sekmeleri, kart, ana düğme) küçük bir örnek.
+// Ayar değişince renk/biçim jetonları zaten bütün uygulamaya uygulanır; örnek de anında değişir, ayrı kopya yoktur.
+function gorunumOnizleme() {
+  const sekme = (anahtar, secili) => h('span', { class: 'b-sekme', 'aria-pressed': String(secili) }, t(anahtar));
+  const bant = basBant(htUst({ baslik: t('gezinme.pratik') }),
+    h('div', { class: 'b-sekmeler b-sekmeler-metin' }, sekme('ayarlar.onizleme.sekme1', true), sekme('ayarlar.onizleme.sekme2', false)));
+  bant.classList.add('ayr-onizleme-bant');
+  return h('div', { class: 'ayr-onizleme', 'aria-hidden': 'true', inert: '' },
+    bant,
+    h('div', { class: 'ayr-onizleme-govde' },
+      h('div', { class: 'b-kart ayr-onizleme-kart' }, ikon3d('sohbet', 36),
+        h('div', { class: 'ayr-onizleme-metin' }, h('b', null, t('ayarlar.onizleme.kartBaslik')), h('p', { class: 'b-kucuk' }, t('ayarlar.onizleme.kartAlt'))),
+        h('span', { class: 'b-dugme b-dugme-ana ayr-onizleme-dugme' }, t('ayarlar.onizleme.dugme')))),
+  );
+}
+const GORUNUM_ALANLARI = ['tema', 'gorunum', 'yaziBoyutu', 'tasarimPaketi', 'ikonPaketi', 'secimRengi', 'zemin', 'bantRengi', 'suzgecBicimi'];
+let oncekiGorunum = null; // "Varsayılana dön"den önceki görünüm (tek adım geri alma)
 
 let satirSayac = 0;
 // Satır: solda etiket (+ isteğe bağlı açıklama), sağda denetim. altta: true ise denetim tam genişlikte alta iner.
@@ -265,23 +283,34 @@ function ciz(kok, b) {
       destek.tanima ? anahtar(t('ayarlar.yazili'), a.yaziliMod, (v) => ayarKaydet((pr) => { pr.ayarlar.yaziliMod = v; })) : null,
     ),
 
+    // v0.24.0 Görünüm: üstte canlı önizleme; ilk düzeyde hazır görünüm, tema ve yazı boyutu; ayrıntılar "İnce ayar"da.
+    // "Varsayılana dön" bir dokunuşla geri alınabilir.
     grup('gorunum', 'gorunum', t('ayarlar.grup.gorunum'),
-      satir(t('ayarlar.tema'), (id) => bolumlu(id, ['sistem', 'acik', 'koyu'].map((k) => [k, t(`ayarlar.temaSecenek.${k}`)]), a.tema, (k) => ayarKaydet((pr) => { pr.ayarlar.tema = k; })), { altta: true }),
-      satir(t('ayarlar.gorunum'), (id) => bolumlu(id, ['dengeli', 'kompakt'].map((k) => [k, t(`ayarlar.gorunumSecenek.${k}`)]), a.gorunum || 'dengeli', (k) => ayarKaydet((pr) => { pr.ayarlar.gorunum = k; }))),
-      satir(t('ayarlar.yaziBoyutu'), (id) => bolumlu(id, ['normal', 'buyuk', 'cokbuyuk'].map((k) => [k, t(`ayarlar.yaziSecenek.${k}`)]), a.yaziBoyutu || 'normal', (k) => ayarKaydet((pr) => { pr.ayarlar.yaziBoyutu = k; }))),
+      gorunumOnizleme(),
       satir(t('ayarlar.paket'), (id) => paketSecici(id, a.tasarimPaketi || 'akilli', (k) => { const pk = TASARIM_PAKETLERI[k]; ayarKaydet((pr) => { Object.assign(pr.ayarlar, pk, { tasarimPaketi: k }); }, true); ciz(kok, b); }), { aciklama: t('ayarlar.paketAciklama'), altta: true }),
-      satir(t('ikonPaketi.baslik'), (id) => ikonPaketSecici(id, ikonPaketiSecimi(), (k) => { ayarKaydet((pr) => { pr.ayarlar.ikonPaketi = k; }); b.git('/ayarlar?grup=gorunum', { degistir: true }); }), { aciklama: t('ikonPaketi.aciklama'), altta: true }),
+      satir(t('ayarlar.tema'), (id) => bolumlu(id, ['sistem', 'acik', 'koyu'].map((k) => [k, t(`ayarlar.temaSecenek.${k}`)]), a.tema, (k) => ayarKaydet((pr) => { pr.ayarlar.tema = k; })), { altta: true }),
+      satir(t('ayarlar.yaziBoyutu'), (id) => bolumlu(id, ['normal', 'buyuk', 'cokbuyuk'].map((k) => [k, t(`ayarlar.yaziSecenek.${k}`)]), a.yaziBoyutu || 'normal', (k) => ayarKaydet((pr) => { pr.ayarlar.yaziBoyutu = k; })), { altta: true }),
       h('details', { class: 'ayr-acilir ayr-gelismis', open: a.tasarimPaketi === 'ozel' },
-        h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('ayarlar.gelismis')), h('small', { class: 'ayr-ozel-isaret' }, a.tasarimPaketi === 'ozel' ? t('ayarlar.ozelGorunum') : '')),
+        h('summary', { class: 'ayr-acilir-baslik' }, h('span', null, t('ayarlar.inceAyar')), h('small', { class: 'ayr-ozel-isaret' }, a.tasarimPaketi === 'ozel' ? t('ayarlar.ozelGorunum') : t('ayarlar.inceAyarAlt'))),
+      satir(t('ayarlar.gorunum'), (id) => bolumlu(id, ['dengeli', 'kompakt'].map((k) => [k, t(`ayarlar.gorunumSecenek.${k}`)]), a.gorunum || 'dengeli', (k) => ayarKaydet((pr) => { pr.ayarlar.gorunum = k; })), { aciklama: t('ayarlar.gorunumAciklama'), altta: true }),
+      satir(t('ikonPaketi.baslik'), (id) => ikonPaketSecici(id, ikonPaketiSecimi(), (k) => { ayarKaydet((pr) => { pr.ayarlar.ikonPaketi = k; }); b.git('/ayarlar?grup=gorunum', { degistir: true }); }), { aciklama: t('ikonPaketi.aciklama'), altta: true }),
       satir(t('ayarlar.secimRengi'), (id) => renkSecici(id, 'secim', ['altin', 'mavi', 'yesil', 'mercan', 'mor', 'turkuaz'], a.secimRengi || 'altin', (k) => { ayarKaydet((pr) => { pr.ayarlar.secimRengi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.secimRengiAciklama'), altta: true }),
       satir(t('ayarlar.zeminRengi'), (id) => renkSecici(id, 'zemin', ['varsayilan', 'notr', 'mavi', 'mor', 'yesil'], a.zemin || 'varsayilan', (k) => { ayarKaydet((pr) => { pr.ayarlar.zemin = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.zeminRengiAciklama'), altta: true }),
       satir(t('ayarlar.bantRengi'), (id) => renkSecici(id, 'bant', ['yesil', 'gece', 'mor', 'bordo', 'antrasit', 'sayfa'], a.bantRengi || 'sayfa', (k) => { ayarKaydet((pr) => { pr.ayarlar.bantRengi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.bantRengiAciklama'), altta: true }),
       satir(t('ayarlar.suzgecBicimi'), (id) => suzgecSecici(id, a.suzgecBicimi || 'klasik', (k) => { ayarKaydet((pr) => { pr.ayarlar.suzgecBicimi = k; pr.ayarlar.tasarimPaketi = 'ozel'; }, true); ozelIsaretle(); }), { aciklama: t('ayarlar.suzgecBicimiAciklama'), altta: true }),
       ),
-      h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => {
-        ayarKaydet((pr) => { Object.assign(pr.ayarlar, TASARIM_PAKETLERI.akilli, { tasarimPaketi: 'akilli', gorunum: 'dengeli', yaziBoyutu: 'normal', ikonPaketi: 'otomatik' }); });
-        ciz(kok, b);
-      } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.varsayilanaDon')), ikon('degis', 18)),
+      oncekiGorunum
+        ? h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => {
+          const geri = oncekiGorunum; oncekiGorunum = null;
+          ayarKaydet((pr) => { GORUNUM_ALANLARI.forEach((k) => { if (k in geri) pr.ayarlar[k] = geri[k]; else delete pr.ayarlar[k]; }); });
+          ciz(kok, b);
+        } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.gorunumGeriAl')), ikon('sol', 18))
+        : h('button', { type: 'button', class: 'ayr-satir ayr-satir-dugme', onClick: () => {
+          const su = al().profil.ayarlar;
+          oncekiGorunum = Object.fromEntries(GORUNUM_ALANLARI.filter((k) => k in su).map((k) => [k, su[k]]));
+          ayarKaydet((pr) => { Object.assign(pr.ayarlar, TASARIM_PAKETLERI.akilli, { tasarimPaketi: 'akilli', gorunum: 'dengeli', yaziBoyutu: 'normal', ikonPaketi: 'otomatik' }); });
+          ciz(kok, b);
+        } }, h('span', { class: 'ayr-satir-etiket' }, t('ayarlar.varsayilanaDon')), ikon('degis', 18)),
       satir(t('ayarlar.ortaDugme'), (id) => bolumlu(id, ['pratik', 'arama', 'senaryo', 'telaffuz'].map((k) => [k, t(`ayarlar.ortaSecenek.${k}`)]), a.ortaDugme || 'pratik', (k) => ayarKaydet((pr) => { pr.ayarlar.ortaDugme = k; })), { aciklama: t('ayarlar.ortaDugmeAciklama'), altta: true }),
     ),
 
