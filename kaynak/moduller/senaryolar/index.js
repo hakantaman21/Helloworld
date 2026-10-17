@@ -11,6 +11,13 @@ import { senaryoIsareti, raporAc } from '../../cekirdek/senaryo-kart.js';
 import { istatistik } from '../../cekirdek/senaryo-istatistik.js';
 import { basiliTut } from '../../cekirdek/kisi-eylemleri.js';
 
+// v0.24.0 Alt başlık katalogdan hesaplanır (alan sayısı, en düşük ve en yüksek seviye); yeni senaryo eklenince kendiliğinden doğru kalır.
+function katalogOzeti() {
+  const seviyeler = senaryolar.map((s) => SEVIYE_SIRASI.indexOf(s.seviye)).filter((i) => i >= 0);
+  const alanSayisi = new Set(senaryolar.map((s) => s.alan)).size;
+  return t('senaryolar.alt', { alan: alanSayisi, enAlt: SEVIYE_SIRASI[Math.min(...seviyeler)], enUst: SEVIYE_SIRASI[Math.max(...seviyeler)] });
+}
+
 // v0.16.0: C1 içerik eklendi; beş seviyenin tamamı seçilebilir.
 const GOSTERILEN_SEVIYELER = SEVIYE_SIRASI;
 let secilenSeviye = null; // ekranlar arasında hatırlanır (oturum boyunca)
@@ -51,7 +58,7 @@ function anaEkran(kok, b) {
   const seviyedekiler = senaryolar.filter((s) => s.seviye === seviye);
 
   yerlestir(kok, 
-    ustBaslik({ tabela: t('gezinme.pratik'), baslik: t('senaryolar.baslik'), alt: t('senaryolar.alt'), ikon: 'senaryo', geri: () => b.geri('/bugun') }),
+    ustBaslik({ tabela: t('gezinme.pratik'), baslik: t('senaryolar.baslik'), alt: katalogOzeti(), ikon: 'senaryo', geri: () => b.geri('/bugun') }),
     seviyeSecici(seviye, (s) => { secilenSeviye = s; anaEkran(kok, b); }),
     h('button', { class: 'b-kart b-kart-vurgulu b-kart-tiklanir snr-oneri', type: 'button', onClick: () => b.git(`/gorusme?tur=senaryo&id=${oneri.kimlik}`) },
       h('span', { class: 'b-ust-etiket snr-oneri-etiket' }, t('senaryolar.oneri')),

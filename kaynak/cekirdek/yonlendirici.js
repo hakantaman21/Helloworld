@@ -27,8 +27,14 @@ function ciz() {
   const { id, parametreler, adres } = coz();
   const veri = al();
 
-  if ((!veri.profil.kurulumTamam || !veri.profil.yasOnayi) && id !== 'karsilama' && id !== 'gorusme' && id !== 'karne') {
+  const kurulu = veri.profil.kurulumTamam && veri.profil.yasOnayi;
+  if (!kurulu && id !== 'karsilama' && id !== 'gorusme' && id !== 'karne') {
     git('/karsilama', { degistir: true });
+    return;
+  }
+  // v0.24.0: kurulum bittiyse karşılama ekranına (geri tuşu, eski bağlantı) dönülmez; ana ekran açılır.
+  if (kurulu && id === 'karsilama') {
+    git('/bugun', { degistir: true });
     return;
   }
 
@@ -82,6 +88,18 @@ function ciz() {
 const KATMAN = '.b-alt-pencere-perde, .b-katman, .b-perde';
 let katmanDerinligi = 0;
 let yoksay = 0;
+// v0.24.0 Katman kapanınca geçmişte geri gidilir (history.go, eşzamansız). O sırada bir sayfaya gidilirse (pencere
+// "Tamam"ına basınca yönlendirme gibi) geri gitme yeni sayfanın kaydını yer ve kullanıcı eski sayfaya zıplar
+// (misafir girişi → karşılama). Bu yüzden geri gitme sürerken yönlendirme bekletilir, bitince yapılır.
+let bekleyenGit = null;
+let bekleyenZamanlayici = null;
+function bekleyeniCalistir() {
+  clearTimeout(bekleyenZamanlayici);
+  bekleyenZamanlayici = null;
+  const b = bekleyenGit;
+  bekleyenGit = null;
+  if (b) b();
+}
 const aciklar = () => [...document.querySelectorAll(KATMAN)];
 
 function katmanKapat(el) {
@@ -132,7 +150,15 @@ function katmanIzle() {
       const fark = katmanDerinligi - n;
       katmanDerinligi = n;
       // Kapanırken başka sayfaya gidildiyse (kayıt bizim değilse) geri alma; ölü kayıt popstate'te atlanır.
-      if (!bellekModu() && history.state && history.state.katman) { try { yoksay += 1; history.go(-fark); } catch { yoksay -= 1; } }
+      if (!bellekModu() && history.state && history.state.katman) {
+        try {
+          yoksay += 1;
+          history.go(-fark);
+          // popstate gelmezse (tarayıcı geri gitmeyi yutarsa) bekleyen yönlendirme yine de yapılır.
+          clearTimeout(bekleyenZamanlayici);
+          bekleyenZamanlayici = setTimeout(() => { yoksay = 0; bekleyeniCalistir(); }, 400);
+        } catch { yoksay -= 1; }
+      }
     }
   }).observe(document.body, { childList: true, subtree: true });
 
@@ -143,7 +169,7 @@ function katmanIzle() {
   });
 
   window.addEventListener('popstate', (e) => {
-    if (yoksay > 0) { yoksay -= 1; return; }
+    if (yoksay > 0) { yoksay -= 1; if (yoksay === 0) bekleyeniCalistir(); return; }
     const hedef = (e.state && e.state.katman) || 0;
     const acik = aciklar();
     if (acik.length > hedef) {
@@ -187,6 +213,7 @@ function bellekteGit(yol, degistir) {
 
 export function git(yol, secenek = {}) {
   if (bellekModu()) { bellekteGit(yol, secenek.degistir); return; }
+  if (yoksay > 0) { bekleyenGit = () => git(yol, secenek); return; }
   try {
     if (secenek.degistir) {
       history.replaceState(null, '', '#' + yol);
@@ -204,6 +231,7 @@ export function git(yol, secenek = {}) {
 
 export function geri(yedekYol = '/bugun') {
   if (bellekModu()) { bellekteGit(gecmis.length > 1 ? gecmis[gecmis.length - 2] : yedekYol, gecmis.length <= 1); return; }
+  if (yoksay > 0) { bekleyenGit = () => geri(yedekYol); return; }
   if (gecmis.length > 1) { try { history.back(); return; } catch { /* izin yok */ } }
   git(yedekYol, { degistir: true });
 }

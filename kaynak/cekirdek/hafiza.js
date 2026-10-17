@@ -1,4 +1,5 @@
 // Hata Hafızası: ekosistemle ortak kayıt formatı (Anayasa bölüm 8). Kaydın sahibi onu üreten uygulamadır.
+import { yeniKimlik } from './kimlik.js';
 import { al, degistir } from './depo.js';
 import { tarihAnahtari, gunEkle } from './zaman.js';
 
@@ -7,14 +8,12 @@ export const TEKRAR_ARALIKLARI = [1, 3, 7, 14];
 export const OGRENILDI_SERISI = 4;
 export const OGRENILDI_GUN = 2;
 
-function yeniKimlik() {
-  return 'h' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-}
+const hafizaKimligi = () => yeniKimlik('h');
 
 export function kayitOlustur({ tur, dogru, kullanici, baglam, seviye, kaynak, kuralId }) {
   const bugun = tarihAnahtari();
   return {
-    id: yeniKimlik(),
+    id: hafizaKimligi(),
     tur,
     dogru,
     kullanici,

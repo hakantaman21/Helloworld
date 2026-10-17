@@ -1,4 +1,5 @@
 // Bir görüşme bitince sonucunu depoya işler: günlük döngü, dakika, kelimeler, Hata Hafızası, karne.
+import { yeniKimlik } from './kimlik.js';
 import { al, degistir } from './depo.js';
 import { gunuGuncelle } from './gunluk.js';
 import { kayitOlustur, hafizayaEkle, tekrarSonucu } from './hafiza.js';
@@ -50,7 +51,7 @@ export function sonucuIsle(ozet) {
     if (ozet.tur === 'senaryo' && ozet.gorevTamam) v.tamamlananSenaryolar[ozet.senaryoId] = tarihAnahtari();
     // v0.21.0: senaryo başına kalıcı özet (rapor, işaret, başarı oranı)
     if (ozet.tur === 'senaryo' && konustu) senaryoOzetiIsle(v, ozet);
-    const kayit = { ...ozet, kimlik: `g-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`, tarih: tarihAnahtari(), eklenenHafiza: eklenen };
+    const kayit = { ...ozet, kimlik: yeniKimlik('g'), tarih: tarihAnahtari(), eklenenHafiza: eklenen };
     v.sonGorusme = kayit;
     v.gorusmeler.unshift(kayit);
     v.gorusmeler = v.gorusmeler.slice(0, SAKLANAN_GORUSME);

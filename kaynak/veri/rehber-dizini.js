@@ -242,6 +242,11 @@ const OZELLIKLER = [
 
 // Güncellemeden sonra bir kez gösterilen "Yenilikler" (en yeni başta). Yalnız kullanıcının önceki sürümünden yeni olanlar gösterilir.
 const YENILIKLER = [
+  { surum: '0.24.0', maddeler: [
+    { ozellik: 'koc-arama', metin: { tr: 'Uygulama kapalıyken vakti geçen koç araması artık açılışta ekranın önüne geçmiyor; bildirimlerde "Cevapsız arama" olarak bekliyor. Erteleme günde en çok iki kez.', en: 'A coach call that came due while the app was closed no longer jumps in front when you open it; it waits in notifications as a missed call. Snooze works up to twice a day.' } },
+    { ozellik: 'mesaj-oneri', metin: { tr: 'Düzeltme önerileri güçlendi: "Did you went", "arrive to", "…and buy bread" gibi kalıplar yakalanıyor.', en: 'Better correction tips: patterns like "Did you went", "arrive to" and "…and buy bread" are now caught.' } },
+    { ozellik: 'sohbetler', metin: { tr: 'Yıl, tarih, fiyat ya da sürüm numarası içeren mesajlar artık telefon numarası sanılıp engellenmiyor.', en: 'Messages with years, dates, prices or version numbers are no longer mistaken for phone numbers.' } },
+  ] },
   { surum: '0.21.0', maddeler: [
     { ozellik: 'odalar', metin: { tr: 'Konu odaları yeniden düzenlendi: kategori başına yatay şerit, "Genişlet" ile geniş kartlar; denediğin senaryolar işaretli.', en: 'Topic rooms reorganised: a horizontal strip per category, wide cards with "Expand"; scenarios you tried are marked.' } },
     { ozellik: 'senaryolar', metin: { tr: 'Senaryo raporu: basılı tut → başarı oranı, son kullanım, deneme ve süre.', en: 'Scenario report: long-press → success rate, last use, tries and time.' } },

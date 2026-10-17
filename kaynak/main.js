@@ -6,7 +6,7 @@ import './stiller/bilesenler.css';
 import './stiller/tema-koyu.css';
 import './stiller/erisim.css';
 
-import { yukle, al, degistir, bozukKayitVardi } from './cekirdek/depo.js';
+import { yukle, al, degistir, bozukKayitVardi, kayitOnarildi } from './cekirdek/depo.js';
 import { kaydet } from './cekirdek/modul-kaydi.js';
 import { baslat, git, aktifEkran } from './cekirdek/yonlendirici.js';
 import { adresOku } from './cekirdek/adres.js';
@@ -39,7 +39,7 @@ import rehberModulu from './moduller/rehber/index.js';
 import ekosistemModulu from './moduller/ekosistem/index.js';
 import { ikonBaslat } from './cekirdek/ikon.js';
 import { ekosistemBaslat } from './cekirdek/ekosistem.js';
-import { rehberBaslat } from './cekirdek/rehber.js';
+import { rehberBaslat, kutuyaEkle } from './cekirdek/rehber.js';
 import { rehberArayuzBaslat } from './cekirdek/rehber-arayuz.js';
 // v0.19.0–v0.21.0 ortak bileşen stilleri: modül stillerinden sonra gelsin diye modüllerden sonra yüklenir.
 import './stiller/bilesenler-rehber.css';
@@ -68,6 +68,10 @@ function uygulamayiBaslat() {
     if (MESGUL_EKRANLAR.includes(aktifEkran())) return;
     git(`/gelen-arama?tur=${tur}`);
   });
+  // v0.24.0 Uygulama kapalıyken vakti geçen arama ekranın önüne geçmez; bildirim kutusunda "cevapsız arama" olur.
+  dinle('arama:kacirildi', ({ tur, tarih }) => {
+    kutuyaEkle({ kaynak: `arama:${tarih}:${tur}`, kat: 'ogrenme', tur: 'arama', ikon: 'bildirim', baslik: { m: 'arama.kacirildiBaslik', d: { koc: t('koc.ad') } }, metin: { m: `arama.kacirildiMetin.${tur}` }, yol: `/gorusme?tur=${tur}` });
+  });
 
   // v0.13.0 Kayıt güvenliği: yazılamayan değişiklik ve okunamayan eski kayıt kullanıcıya söylenir.
   let sonYazmaUyarisi = 0;
@@ -82,18 +86,20 @@ function uygulamayiBaslat() {
 
   baslat(document.getElementById('uygulama'));
   if (bozukKayitVardi()) duyur(t('depo.bozukKayit'), 9000);
+  else if (kayitOnarildi()) duyur(t('depo.onarildi'), 9000);
   // v0.14.0: fotoğraflar IndexedDB'den arka planda belleğe alınır; ekranlar beklemez. Fotoğraf varsa açık ekran bir kez yenilenir.
   // v0.16.0: fotoğraflar geç yüklenince ekran yeniden çizilir — ama kullanıcı o an yazı yazıyorsa taslağı gitmesin diye
   // yazı alanından çıkana kadar beklenir.
   const yaziyor = () => { const a = document.activeElement; return !!a && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && !['button', 'checkbox', 'radio', 'range', 'file'].includes(a.type)) || a.isContentEditable); };
-  medyaHazirla().then((yuklendi) => {
-    if (!yuklendi) return;
+  // Açık ekranı yeniden çizer; kullanıcı o an yazı yazıyorsa taslağı gitmesin diye yazı alanından çıkana kadar bekler.
+  const ekraniYenile = () => {
     const adres = adresOku();
     const yenile = () => { if (adresOku() === adres) git(adres, {}); };
     if (!yaziyor()) { yenile(); return; }
     const bekle = () => { setTimeout(() => { if (yaziyor()) return; document.removeEventListener('focusout', bekle); yenile(); }, 0); };
     document.addEventListener('focusout', bekle);
-  });
+  };
+  medyaHazirla().then((yuklendi) => { if (yuklendi) ekraniYenile(); });
   zamanlayiciBaslat();
   sekmeKaydirmaBaslat(git);
   // Orta Pratik düğmesi: basılı tutunca hızlı işlemler; "atanabilir" olanlar dokunma kısayolu olarak seçilebilir.
